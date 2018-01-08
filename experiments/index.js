@@ -21,7 +21,11 @@ function getLeaves(nestingNode) {
 function nestChildren(groupOrder, children, depth) {
   return R.chain(function(child) {
     if (child.key === 'Unknown') {
-      return R.chain(getLeaves, child.values);
+      return {
+        groupValue: 'Unknown',
+        type: groupOrder[depth].join('_'),
+        children: R.chain(getLeaves, child.values)
+      }
     }
     return [nestingToHierarchy(groupOrder, child, depth + 1)]
   }, children)
@@ -73,8 +77,6 @@ function toggleSmall() {
 
 
 function makeHierarchy() {
-  // var groupOrder = rotate([ ['netmask'], ['os', 'os'], ['role', 'role']], offset);
-
   d3.select('#groupOrder').text(R.join(' > ', R.map(R.join('_'), groupOrder)));
 
   var deepNest = R.reduce(function(nest, currentKey) {
@@ -82,13 +84,14 @@ function makeHierarchy() {
   }, d3.nest())
 
   var nest = deepNest(groupOrder).entries(DATA);
-
-  return nestingToHierarchy(groupOrder, nest, 0);
+  var hierarchy = nestingToHierarchy(groupOrder, nest, 0);
+  return hierarchy;
 }
 
 function render() {
 
   var width = document.documentElement.clientWidth;
+
   var height = document.documentElement.clientHeight;
 
   // State
@@ -131,15 +134,35 @@ function render() {
   function update(hierarchy) {
     var root = d3.hierarchy(hierarchy)
       .count()
-      .sort(function(a, b) {
-        if (a.children && b.children) {
-          return b.value - a.value;
-        } else if (!a.children && !b.children) {
-          return a.data["IP"].localeCompare(b.data["IP"]);
-        } else {
-          return a.children ? -1 : 1;
+      .sort(composeComparators([
+        function sortByUnknown(a, b) {
+          if (a.data.groupValue === 'Unknown') {
+            return b.data.groupValue === 'Unknown' ? 0 : 1;
+          } else {
+            return b.data.groupValue === 'Unknown' ? -1: 0;
+          }
+        },
+        function sortByCount(a, b) {
+          return (b.value || 0) - (a.value || 0)
+        },
+        function sortByName(a, b) {
+          return (a.data.groupValue || "").localeCompare(b.data.groupValue || "")
+        },
+        function sortByIp(a, b) {
+          return (a.data["IP"] || "").localeCompare(b.data["IP"] || "");
         }
-      })
+      ]))
+      // .sort(function(a, b) {
+      //   if (a.children && b.children) {
+      //     return b.value - a.value;
+      //   } else if (!a.children && !b.children) {
+      //     return a.data["IP"].localeCompare(b.data["IP"]);
+      //   } else {
+      //     return a.children ? -1 : 1;
+      //   }
+      // })
+
+    console.log(root);
 
     var pack = packWithLabel()
       .size([ width, height ])
@@ -259,7 +282,7 @@ function render() {
       });
 
       node.attr('hidden', function(d) {
-        if (!hideSmall) {
+        if (!hideSmall || d.parent && d.parent.data.groupValue === 'Unknown') {
           return null;
         }
         if (d.r * 2 * k < 1) {

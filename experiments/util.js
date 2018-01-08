@@ -75,19 +75,19 @@ function appendCircle(node) {
     .attr('stroke-width', '0px')
 
   circle.filter(function(d) { return d.depth > 0 && d.height > 0 })
-    .attr('fill', 'black')
-    .attr('fill-opacity', 0.1)
+    .attr('fill', function(d) { return d.data.groupValue === 'Unknown' ? 'red' : 'black' })
+    .attr('fill-opacity', function(d) { return d.data.groupValue === 'Unknown' ? 0.5 : 0.1 })
     .attr('stroke-width', 1)
 }
 
 
 
-function groupName(d) {
+var groupName = function(d) {
   return R.reject(R.isNil, [
     d.parent ? groupName(d.parent) : null,
     d.data.uid || d.data.groupValue || 'root'
   ]).join('_');
-}
+};
 
 function datumKey(datum) {
   // return the key used to identify data
@@ -121,5 +121,18 @@ function walkTree(root, path) {
     return root;
   } else {
     return walkTree(next, remain);
+  }
+}
+
+window.composeComparators = function(comparators) {
+  return function(a, b) {
+    return R.reduceWhile(
+      function(acc) { return acc === 0 },
+      function(acc, comparator) {
+        return comparator(a, b);
+      },
+      0,
+      comparators
+    );
   }
 }
