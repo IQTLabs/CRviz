@@ -62,6 +62,16 @@ function rotateChildren() {
 }
 
 
+var hideSmall = true;
+
+function toggleSmall() {
+  hideSmall = !hideSmall;
+  d3.select('#hideSmall').text(function() {
+    return hideSmall ? 'Show small' : 'Hide small';
+  });
+}
+
+
 function makeHierarchy() {
   // var groupOrder = rotate([ ['netmask'], ['os', 'os'], ['role', 'role']], offset);
 
@@ -105,6 +115,12 @@ function render() {
       changePlacement();
       update(makeHierarchy());
     });
+
+  d3.select('#hideSmall')
+    .on('click', function() {
+      toggleSmall();
+      update(makeHierarchy());
+    })
 
   var g = svg.append("g");
 
@@ -243,6 +259,9 @@ function render() {
       });
 
       node.attr('hidden', function(d) {
+        if (!hideSmall) {
+          return null;
+        }
         if (d.r * 2 * k < 1) {
           return true;
         }
