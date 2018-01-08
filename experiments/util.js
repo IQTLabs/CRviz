@@ -53,15 +53,15 @@ function appendCircle(node) {
     .attr('fill', 'black')
     .attr('fill-opacity', 0.5)
 
-  // node
-  //   .filter(function(d) { return d.depth >= 1 && d.height > 0; })
-  //   .append('text')
-  //   .attr('class', 'label')
-  //   .attr('font-family', 'monospace')
-  //   .attr('font-size', '12px')
-  //   .attr('fill', 'white')
-  //   .attr('text-anchor', 'middle')
-  //   .text(function(d) { return d.data.groupValue + " | "+ d.value })
+  node
+    .filter(function(d) { return d.depth >= 1 && d.height > 0; })
+    .append('text')
+    .attr('class', 'label')
+    .attr('font-family', 'monospace')
+    .attr('font-size', '12px')
+    .attr('fill', 'white')
+    .attr('text-anchor', 'middle')
+    .text(function(d) { return d.data.groupValue + " | "+ d.value })
 
   circle.filter(function(d) { return d.height === 0 })
     .attr('class', function() { return 'devices' })

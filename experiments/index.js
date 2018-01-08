@@ -110,6 +110,7 @@ function render() {
 
   var selectedNode = null;
   var currentView = null;
+  var currentVisible = null;
 
   function update(hierarchy) {
     var root = d3.hierarchy(hierarchy)
@@ -187,7 +188,7 @@ function render() {
 
       var visibleData = new Set(R.map(datumKey, visibleData));
 
-      var visibleNode = node.merge(nodeEnter)
+      var targetVisibleNode = node.merge(nodeEnter)
         .filter(function(datum) {
           return (visibleData.has(datumKey(datum)));
         })
@@ -200,8 +201,8 @@ function render() {
         .attr('hidden', true)
 
 
-      var nodeToAnimate = visibleNode.filter(function() {
-        return !this.hasAttribute('hidden');
+      var nodeToAnimate = currentVisible.filter(function() {
+        return targetVisibleNode.nodes().indexOf(this) > -1;
       })
 
       var interpolate = d3.interpolateZoom(view, newView);
@@ -213,14 +214,14 @@ function render() {
           }
         })
         .on('end', function() {
-          visibleNode
+          targetVisibleNode
             .attr('hidden', null)
             .filter(function() {
               return Math.max(parseFloat(this.style.opacity), 0) === 0
             })
             .transition().duration(500)
             .style('opacity', 1)
-          zoomTo(visibleNode, newView);
+          zoomTo(targetVisibleNode, newView);
         });
     }
 
@@ -230,6 +231,7 @@ function render() {
       var k = Math.min(width, height) / newView[2];
       var center = [width / 2, height / 2];
 
+      currentVisible = node;
       view = newView;
 
       var k = Math.min(width, height) / view[2];
@@ -279,21 +281,17 @@ function render() {
         })
         .attr('pointer-events', 'none')
         .attr('hidden', function calcLabelOpacity(d) {
+          var styles = getComputedStyle(this);
           var $this = d3.select(this);
           var radius = d.r * k;
-          var height = 14;
-          var width = this.getComputedTextLength();
+          var measured = measureText(this);
+          var height = measured[1];
+          var width = measured[0];
           var bottom = parseFloat($this.attr('y')) + height;
           var chordLength = 1.9 * Math.sqrt(radius * radius - bottom * bottom)
           if (width <= chordLength && height <= d.labelSize * k) {
-            if (d.data.groupValue === '10.102.78.0/24') {
-              console.log('show', width, chordLength, height, d.labelSize * k)
-            }
             return null;
           } else {
-            if (d.data.groupValue === '10.102.78.0/24') {
-              console.log('hide', width, chordLength, height, d.labelSize * k)
-            }
             return true;
           }
         })
