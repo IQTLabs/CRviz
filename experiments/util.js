@@ -37,6 +37,7 @@ function appendCircle(node) {
   var circle = node
     .append("circle")
     .attr("r", function(d) { return d.r; })
+    .attr("data-labelSize", function(d) { return d.labelSize; })
     .on('mouseover', function() {
       d3.select(this)
         .attr('stroke', 'black')
@@ -57,11 +58,7 @@ function appendCircle(node) {
     .filter(function(d) { return d.depth >= 1 && d.height > 0; })
     .append('text')
     .attr('class', 'label')
-    .attr('font-family', 'monospace')
-    .attr('font-size', '12px')
-    .attr('fill', 'white')
-    .attr('text-anchor', 'middle')
-    .text(function(d) { return d.data.groupValue + " | "+ d.value })
+    // .text(function(d) { return d.data.groupValue + " | "+ d.value })
 
   circle.filter(function(d) { return d.height === 0 })
     .attr('class', function() { return 'devices' })
@@ -136,3 +133,5 @@ window.composeComparators = function(comparators) {
     );
   }
 }
+
+

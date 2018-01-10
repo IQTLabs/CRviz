@@ -152,17 +152,6 @@ function render() {
           return (a.data["IP"] || "").localeCompare(b.data["IP"] || "");
         }
       ]))
-      // .sort(function(a, b) {
-      //   if (a.children && b.children) {
-      //     return b.value - a.value;
-      //   } else if (!a.children && !b.children) {
-      //     return a.data["IP"].localeCompare(b.data["IP"]);
-      //   } else {
-      //     return a.children ? -1 : 1;
-      //   }
-      // })
-
-    console.log(root);
 
     var pack = packWithLabel()
       .size([ width, height ])
@@ -282,10 +271,7 @@ function render() {
       });
 
       node.attr('hidden', function(d) {
-        if (!hideSmall || d.parent && d.parent.data.groupValue === 'Unknown') {
-          return null;
-        }
-        if (d.r * 2 * k < 1) {
+        if (d.r * 2 * k < 2) {
           return true;
         }
         return null;
@@ -322,20 +308,16 @@ function render() {
           return d.r * k - (d.labelSize * k) / 2;
         })
         .attr('pointer-events', 'none')
-        .attr('hidden', function calcLabelOpacity(d) {
-          var styles = getComputedStyle(this);
+        .text(function calcLabelOpacity(d) {
+          var labelText = d.data.groupValue;
           var $this = d3.select(this);
           var radius = d.r * k;
-          var measured = measureText(this);
-          var height = measured[1];
-          var width = measured[0];
-          var bottom = parseFloat($this.attr('y')) + height;
-          var chordLength = 1.9 * Math.sqrt(radius * radius - bottom * bottom)
-          if (width <= chordLength && height <= d.labelSize * k) {
-            return null;
-          } else {
-            return true;
-          }
+          var bottom = parseFloat($this.attr('y'));
+          var chordLength = 2 * Math.sqrt(radius * radius - bottom * bottom)
+          return fitText(this, labelText, chordLength * 0.75);
+        })
+        .attr('hidden', function(d) {
+          return (d.labelSize * k) > measureText(this)[1] ? null : true;
         })
     }
   }
