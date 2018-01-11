@@ -29,6 +29,20 @@ function searchQuadtree(quadtree, bound) {
   return result;
 }
 
+function nodesInView(quadtree, width, height, view) {
+  var hRatio = Math.max(width / height, 1)
+  var vRatio = Math.max(height / width, 1)
+
+  var searchBound = [
+    newView[0] - (newView[2] * hRatio / 2),
+    newView[1] - (newView[2] * vRatio/ 2),
+    newView[0] + (newView[2] * hRatio / 2),
+    newView[1] + (newView[2] * vRatio/ 2),
+  ];
+
+  var visibleData = searchQuadtree(quadtree, searchBound);
+}
+
 function viewFromFocus(d) {
   return [d.x, d.y, d.r * 2 * 1.25]
 }

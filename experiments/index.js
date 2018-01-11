@@ -94,9 +94,6 @@ function render() {
 
   var height = document.documentElement.clientHeight;
 
-  // State
-  var view = null;
-
   var svg = d3.select("svg")
     .attr('width', width)
     .attr('height', height)
@@ -131,8 +128,8 @@ function render() {
     .attr('class', 'tooltip')
 
   var selectedNode = null;
-  var currentView = null;
   var currentVisible = null;
+  var currentView = null;
 
   function update(hierarchy) {
     var root = d3.hierarchy(hierarchy)
@@ -208,18 +205,19 @@ function render() {
 
     if (selectedNode) {
       selectedNode = walkTree(packedRoot, R.map(datumKey, R.reverse(selectedNode.ancestors())))
+      console.log('selectedNode', selectedNode);
     } else {
       selectedNode = packedRoot;
     }
 
-    zoomTo(
-      node.transition().duration(500),
-      viewFromFocus(selectedNode));
-    zoomTo(nodeEnter, viewFromFocus(selectedNode));
+    zoomTo(node.transition().duration(500), viewFromFocus(selectedNode));
+    zoom(selectedNode);
 
-    function zoom(d) {
-      selectedNode = d;
+    // zoomTo(
+    //   nodeEnter.merge(node.transition().duration(500)),
+    //   viewFromFocus(selectedNode));
 
+    function zoom(d, animate) {
       var newView = viewFromFocus(d);
 
       var hRatio = Math.max(width / height, 1)
@@ -234,6 +232,7 @@ function render() {
 
       var visibleData = searchQuadtree(quadtree, searchBound);
 
+
       visibleData = R.chain(function(node) {
         return [node].concat(node.ancestors());
       }, visibleData);
@@ -246,6 +245,7 @@ function render() {
           return (visibleData.has(datumKey(datum)));
         })
 
+      // out of view nodes
       var hiddenNode = node.merge(nodeEnter)
         .filter(function(datum) {
           return !(visibleData.has(datumKey(datum)));
@@ -253,29 +253,39 @@ function render() {
         .style('opacity', 0)
         .attr('hidden', true)
 
+      selectedNode = d;
+      if (!currentView) {
+        zoomTo(targetVisibleNode, newView);
+        currentView = newView;
+        currentVisible = targetVisibleNode;
+        // debugger;
+      } else {
 
-      var nodeToAnimate = currentVisible.filter(function() {
-        return targetVisibleNode.nodes().indexOf(this) > -1;
-      })
-
-      var interpolate = d3.interpolateZoom(view, newView);
-      d3.transition()
-        .duration(interpolate.duration)
-        .tween('zoom', function() {
-          return function(t) {
-            zoomTo(nodeToAnimate, interpolate(t))
-          }
-        })
-        .on('end', function() {
-          targetVisibleNode
-            .attr('hidden', null)
-            .filter(function() {
-              return Math.max(parseFloat(this.style.opacity), 0) === 0
-            })
-            .transition().duration(500)
-            .style('opacity', 1)
-          zoomTo(targetVisibleNode, newView);
+        var nodeToAnimate = currentVisible.filter(function(d) {
+          return visibleData.has(datumKey(d));
         });
+
+        var interpolate = d3.interpolateZoom(currentView, newView);
+        d3.transition()
+          .duration(interpolate.duration)
+          .tween('zoom', function() {
+            return function(t) {
+              zoomTo(nodeToAnimate, interpolate(t))
+            }
+          })
+          .on('end', function() {
+            targetVisibleNode
+              .attr('hidden', null)
+              .filter(function() {
+                return Math.max(parseFloat(this.style.opacity), 0) === 0
+              })
+              .transition().duration(500)
+              .style('opacity', 1)
+            zoomTo(targetVisibleNode, newView);
+            currentView = newView;
+            currentVisible = targetVisibleNode;
+          });
+      }
     }
 
     // Scale and translate the given node(s) for the 'zoom' and 'pan'
@@ -284,16 +294,20 @@ function render() {
       var k = Math.min(width, height) / newView[2];
       var center = [width / 2, height / 2];
 
-      currentVisible = node;
-      view = newView;
-
+      // currentVisible = node.selection ? node.selection() : node;
+      // currentView = newView;
+      var view = newView;
       var k = Math.min(width, height) / view[2];
 
       var center = [width / 2, height / 2];
 
-      node.attr("transform", function(d) {
-        return "translate(" + ((d.x - view[0]) * k + center[0]) + "," + ((d.y - view[1]) * k + center[1]) + ")";
-      });
+      node
+        .filter(function(d) {
+          return d.r * 2 * k >= 2;
+        })
+        .attr("transform", function(d) {
+          return "translate(" + ((d.x - view[0]) * k + center[0]) + "," + ((d.y - view[1]) * k + center[1]) + ")";
+        });
 
       node.attr('hidden', function(d) {
         if (d.r * 2 * k < 2) {
@@ -329,6 +343,9 @@ function render() {
       var k = Math.min(width, height) / newView[2];
 
       node.select('.label')
+        .attr('data-y', function(d) {
+          return d.r * k - (d.labelSize * k) / 2;
+        })
         .attr('y', function calcLabelPos(d) {
           return d.r * k - (d.labelSize * k) / 2;
         })
@@ -337,7 +354,7 @@ function render() {
           var labelText = d.data.groupValue;
           var $this = d3.select(this);
           var radius = d.r * k;
-          var bottom = parseFloat($this.attr('y'));
+          var bottom = parseFloat($this.attr('data-y'));
           var chordLength = 2 * Math.sqrt(radius * radius - bottom * bottom)
           return fitText(this, labelText, chordLength * 0.75);
         })
