@@ -126,6 +126,9 @@ function render() {
     })
 
   var g = svg.append("g");
+  var tooltip = d3.select('body')
+    .append('pre')
+    .attr('class', 'tooltip')
 
   var selectedNode = null;
   var currentView = null;
@@ -171,11 +174,33 @@ function render() {
       .attr('data-key', datumKey )
       .attr('data-row', R.prop('row'))
 
-    appendCircle(nodeEnter, function(d) {
-      zoom(d);
-    });
+    appendCircle(nodeEnter);
 
     node.merge(nodeEnter)
+      .on('mouseover', d3Debounce(function(d) {
+        if (d.depth === 0) {
+          return;
+        }
+        d3.select(this)
+          .select('circle')
+          .attr('stroke', 'black')
+          .attr('stroke-opacity', '0.5');
+
+        if (d.height === 0) {
+          tooltip.text(JSON.stringify(d.data, null, '  '));
+        } else {
+          tooltip.text(d.data.groupValue + " | " + d.value);
+        }
+        tooltip.style('display', 'block')
+               .style('top', d3.event.pageY + 5 + "px")
+               .style('left', d3.event.pageX + 5 + "px")
+      }, 200))
+      .on('mouseout', function(d) {
+        tooltip.style('display', 'none')
+        d3.select(this)
+          .select('circle')
+          .attr('stroke', 'transparent')
+      })
       .on('click', function(d) {
         zoom(d);
         d3.event.stopPropagation();

@@ -34,18 +34,23 @@ function viewFromFocus(d) {
 }
 
 function appendCircle(node) {
-  var circle = node
-    .append("circle")
-    .attr("r", function(d) { return d.r; })
-    .attr("data-labelSize", function(d) { return d.labelSize; })
+  node
     .on('mouseover', function() {
       d3.select(this)
+        .select('circle')
         .attr('stroke', 'black')
         .attr('stroke-opacity', '0.5');
     })
     .on('mouseout', function() {
-      d3.select(this).attr('stroke', 'transparent')
+      d3.select(this)
+        .select('circle')
+        .attr('stroke', 'transparent')
     });
+
+  var circle = node
+    .append("circle")
+    .attr("r", function(d) { return d.r; })
+    .attr("data-labelSize", function(d) { return d.labelSize; })
 
   node
     .filter(function(d) { return d.depth >= 1 && d.height > 0; })
@@ -121,7 +126,23 @@ function walkTree(root, path) {
   }
 }
 
-window.composeComparators = function(comparators) {
+function d3Debounce(fn, delay) {
+  var timer = null;
+  return function() {
+    var context = this,
+      args = arguments,
+      evt = d3.event;
+    clearTimeout(timer);
+    timer = setTimeout(function() {
+      var orig = d3.event;
+      d3.event = evt;
+      fn.apply(context, args);
+      d3.event = orig;
+    }, delay);
+  };
+}
+
+function composeComparators(comparators) {
   return function(a, b) {
     return R.reduceWhile(
       function(acc) { return acc === 0 },
