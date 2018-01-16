@@ -47,45 +47,50 @@ function viewFromFocus(d) {
   return [d.x, d.y, d.r * 2 * 1.25]
 }
 
-function appendCircle(node) {
-  node
-    .on('mouseover', function() {
-      d3.select(this)
-        .select('circle')
-        .attr('stroke', 'black')
-        .attr('stroke-opacity', '0.5');
-    })
-    .on('mouseout', function() {
-      d3.select(this)
-        .select('circle')
-        .attr('stroke', 'transparent')
-    });
+function appendCircle(node, zoom) {
+
+  var nodeEnter = node.enter().append('g')
+
+  nodeEnter.merge(nodeEnter)
+    .attr('transform', function(d) {
+    return 'translate(' + [d.x, d.y].join(',') + ')';
+  });
 
   var circle = node
-    .append("circle")
+    .select('circle').merge(nodeEnter.append("circle"))
     .attr("r", function(d) { return d.r; })
+    .attr("stroke-width", function(d) { return d.r * 0.01; })
     .attr("data-labelSize", function(d) { return d.labelSize; })
 
   node
+    .select('.label-shape').merge(nodeEnter.append('path'))
     .filter(function(d) { return d.depth >= 1 && d.height > 0; })
-    .append('path')
     .attr('class', 'label-shape')
     .attr('fill', 'black')
     .attr('fill-opacity', 0.5)
+    .attr('d', function(d) {
+      var top = (d.r - d.labelSize);
+      var radius = d.r;
+
+      var startX = 0 - Math.sqrt(radius * radius - top * top);
+      var startY = top;
+
+      var startAngle = Math.PI / 2 + Math.acos(top / radius);
+      var endAngle = Math.PI / 2 - Math.acos(top / radius);
+
+      var shape = d3.path();
+      shape.arc(0, 0, radius, startAngle, endAngle, true);
+      shape.closePath();
+      return shape.toString();
+    })
 
   node
+    .merge(nodeEnter.append('text'))
     .filter(function(d) { return d.depth >= 1 && d.height > 0; })
-    .append('text')
     .attr('class', 'label')
-    // .text(function(d) { return d.data.groupValue + " | "+ d.value })
 
-  circle.filter(function(d) { return d.height === 0 })
-    .attr('class', function() { return 'devices' })
-    .attr('fill', 'black')
-    .attr('fill-opacity', '1')
-    .attr('stroke-width', '0px')
-
-  circle.filter(function(d) { return d.depth === 0 })
+  circle
+    .filter(function(d) { return d.depth === 0 })
     .attr('fill', 'transparent')
     .attr('fill-opacity', '0.1')
     .attr('stroke-width', '0px')
@@ -93,10 +98,29 @@ function appendCircle(node) {
   circle.filter(function(d) { return d.depth > 0 && d.height > 0 })
     .attr('fill', function(d) { return d.data.groupValue === 'Unknown' ? 'red' : 'black' })
     .attr('fill-opacity', function(d) { return d.data.groupValue === 'Unknown' ? 0.5 : 0.1 })
-    .attr('stroke-width', 1)
+
+  node.merge(nodeEnter)
+    .on('click', function(d) {
+      zoom(d);
+      d3.event.stopPropagation();
+    })
+
+  return node.merge(nodeEnter);
 }
 
+var showTooltip = debounce(function(tooltip, d, event) {
+  if (tooltip) {
+    tooltip.style('display', 'block')
+      .style('top', event.pageY + 5 + "px")
+      .style('left', event.pageX + 5 + "px")
 
+    if (d.height > 0) {
+      tooltip.text(d.data.groupValue + " | " + d.value);
+    } else {
+      tooltip.text(JSON.stringify(d.data, null, ' ' ));
+    }
+  }
+}, 500);
 
 var groupName = function(d) {
   return R.reject(R.isNil, [
@@ -156,6 +180,21 @@ function d3Debounce(fn, delay) {
   };
 }
 
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+};
+
 function composeComparators(comparators) {
   return function(a, b) {
     return R.reduceWhile(
@@ -168,5 +207,3 @@ function composeComparators(comparators) {
     );
   }
 }
-
-

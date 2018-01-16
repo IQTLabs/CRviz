@@ -27,8 +27,6 @@ window.packWithLabel = function() {
     if (radius) {
       root.eachBefore(radiusLeaf(radius))
         .eachAfter(packChildren(padding, 0.5))
-        // .eachBefore(addChildrenLabelSize)
-        // .eachAfter(packChildren(padding, 1))
         .eachBefore(translateChild(1));
     } else {
       root.eachBefore(radiusLeaf(defaultRadius))
@@ -37,6 +35,8 @@ window.packWithLabel = function() {
         .eachAfter(packChildren(padding, root.r / Math.min(dx, dy)))
         .eachBefore(translateChild(Math.min(dx, dy) / (2 * root.r)));
     }
+
+    console.log(root);
     return root;
   }
 
