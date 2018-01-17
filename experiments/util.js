@@ -51,10 +51,11 @@ function appendCircle(node, zoom) {
 
   var nodeEnter = node.enter().append('g')
 
-  nodeEnter.merge(nodeEnter)
+  nodeEnter.merge(node.transition().duration(500))
+    .attr('display', 'none')
     .attr('transform', function(d) {
-    return 'translate(' + [d.x, d.y].join(',') + ')';
-  });
+      return 'translate(' + [d.x, d.y].join(',') + ')';
+    });
 
   var circle = node
     .select('circle').merge(nodeEnter.append("circle"))
@@ -84,9 +85,11 @@ function appendCircle(node, zoom) {
       return shape.toString();
     })
 
-  node
-    .merge(nodeEnter.append('text'))
-    .filter(function(d) { return d.depth >= 1 && d.height > 0; })
+  var isInternalNode = function(d) {
+    return d.depth >= 1 && d.height > 0;
+  }
+
+  nodeEnter.filter(isInternalNode).append('text')
     .attr('class', 'label')
 
   circle
@@ -120,7 +123,7 @@ var showTooltip = debounce(function(tooltip, d, event) {
       tooltip.text(JSON.stringify(d.data, null, ' ' ));
     }
   }
-}, 500);
+}, 100);
 
 var groupName = function(d) {
   return R.reject(R.isNil, [

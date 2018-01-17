@@ -107,6 +107,9 @@ function translateChild(k) {
 
     if (node.labelSize) {
       node.labelSize *= k;
+      var bottom = node.r - node.labelSize / 2; // distance from center to the line one which labelText should live
+      node.labelX = bottom;
+      node.labelWidth = 2 * Math.sqrt(node.r * node.r - bottom * bottom);
     }
 
     if (parent) {
@@ -114,7 +117,6 @@ function translateChild(k) {
       node.y = parent.y + k * node.y;
       if (parent.labelSize) {
         node.y -= parent.labelSize / 2;
-        node.y -= 0;
       }
     }
   };

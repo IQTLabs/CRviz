@@ -13,7 +13,7 @@
       ];
   });
 
-  var getFontSpec = function(element) {
+  window.getFontSpec = function(element) {
     var style = getComputedStyle(element);
     var family = style.getPropertyValue('font-family')
     var size = style.getPropertyValue('font-size')
@@ -21,17 +21,17 @@
     return  size + " " + family;
   }
 
-  window.measureText = function measureText(element) {
+  window.measureText = function measureText(fontSpec, text) {
     // var fontSpec = getFontSpec(textElement);
-    var fontSpec = '12px sans-serif';
-    return measure(fontSpec, element.textContent);
+    // var fontSpec = '12px sans-serif';
+    return measure(fontSpec, text);
   }
 
   // return the substring of textElement that fits inside the specify width
-  window.fitText = function fitText(textElement, text, width) {
+  window.fitText = function fitText(fontSpec, text, width) {
     var original = text;
     // var fontSpec = getFontSpec(textElement);
-    var fontSpec = '12px sans-serif';
+    // var fontSpec = '12px sans-serif';
     var textLength = measure(fontSpec, text)[0];
 
     while (textLength >= width && text.length > 0) {

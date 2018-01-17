@@ -54,7 +54,6 @@ function rotate(array, offset) {
 }
 
 
-// var groupOrder = [['netmask']].concat(rotate([ ['os', 'os'], ['role', 'role']], offset));
 var groupOrder = [['netmask'], ['os', 'os'], ['role', 'role']];
 
 function rotateAll() {
@@ -92,7 +91,7 @@ function render() {
 
   var width = document.documentElement.clientWidth;
 
-  var height = document.documentElement.clientHeight;
+  var height = document.documentElement.clientHeight - document.getElementById('controls').clientHeight;
 
   var svg = d3.select("svg")
     .attr('width', width)
@@ -141,6 +140,7 @@ function render() {
   var currentVisible = null;
   var currentView = null;
   var currentHover = null;
+
 
   function update(hierarchy) {
 
@@ -209,7 +209,6 @@ function render() {
           .attr('stroke', 'black')
           .attr('stroke-width', 1 / k)
           .attr('stroke-opacity', '0.5');
-
       })
       .on('mouseout', function(d) {
         showTooltip(null, d, d3.event);
@@ -226,6 +225,9 @@ function render() {
     } else {
       selectedNode = packedRoot;
     }
+
+    var labelFontSpec = getFontSpec(d3.select('.label').nodes()[0]);
+    var labelMinHeight  = measureText(labelFontSpec, 'M')[0] * 0.75;
 
     zoom(selectedNode);
 
@@ -244,7 +246,6 @@ function render() {
           - selectedNode.y
         )
 
-      console.log('k', k);
       zoomBehavior.transform(
         rootG.transition().duration(1000),
         newTransform
@@ -289,186 +290,45 @@ function render() {
 
     function zoomTo(transform) {
       g.attr('transform', transform);
-
-      var bound = boundFromTransform(transform);
-
       d3.select(currentHover)
         .select('circle')
         .attr('stroke-width', 1 / transform.k + 'px');
+
+      var bound = boundFromTransform(transform);
+
 
       var nodeInView = node
         .filter(function(d) {
           var isInView = boundOverlap(bound, boundFromNode(d));
           return isInView;
         })
-        nodeInView.style('display', function(d) {
-          if (d.r * transform.k < 1) {
-            return 'none';
-          } else {
-            return null;
-          }
-        });
-    }
 
-    // zoomBehavior.extent(
+      nodeInView.attr('display', function(d) {
+        if (d.r * transform.k < 1) {
+          return 'none';
+        } else {
+          return null;
+        }
+      });
 
-    // )
-    // zoomTo(node.transition().duration(500), viewFromFocus(selectedNode));
-    // zoom(selectedNode);
-
-    // function zoom(d) {
-    //   var newView;
-    //   if (Array.isArray(d)) {
-    //     selectedNode = null;
-    //     newView = d;
-    //   } else {
-    //     selectedNode = d;
-    //     newView = viewFromFocus(d);
-    //   }
-
-    //   var hRatio = Math.max(width / height, 1)
-    //   var vRatio = Math.max(height / width, 1)
-
-    //   var searchBound = [
-    //     newView[0] - (newView[2] * hRatio / 2),
-    //     newView[1] - (newView[2] * vRatio/ 2),
-    //     newView[0] + (newView[2] * hRatio / 2),
-    //     newView[1] + (newView[2] * vRatio/ 2),
-    //   ];
-
-    //   var visibleData = searchQuadtree(quadtree, searchBound);
-
-
-    //   visibleData = R.chain(function(node) {
-    //     return [node].concat(node.ancestors());
-    //   }, visibleData);
-
-
-    //   var visibleData = new Set(R.map(datumKey, visibleData));
-
-    //   var targetVisibleNode = node.merge(nodeEnter)
-    //     .filter(function(datum) {
-    //       return (visibleData.has(datumKey(datum)));
-    //     })
-
-    //   // out of view nodes
-    //   var hiddenNode = node.merge(nodeEnter)
-    //     .filter(function(datum) {
-    //       return !(visibleData.has(datumKey(datum)));
-    //     })
-    //     .style('opacity', 0)
-    //     .attr('hidden', true)
-
-    //   if (!currentView) {
-    //     zoomTo(targetVisibleNode, newView);
-    //     currentView = newView;
-    //     currentVisible = targetVisibleNode;
-    //     // debugger;
-    //   } else {
-
-    //     var nodeToAnimate = currentVisible.filter(function(d) {
-    //       return visibleData.has(datumKey(d));
-    //     });
-
-    //     var interpolate = d3.interpolateZoom(currentView, newView);
-    //     d3.transition()
-    //       .duration(interpolate.duration)
-    //       .tween('zoom', function() {
-    //         return function(t) {
-    //           zoomTo(nodeToAnimate, interpolate(t))
-    //         }
-    //       })
-    //       .on('end', function() {
-    //         targetVisibleNode
-    //           .attr('hidden', null)
-    //           .filter(function() {
-    //             return Math.max(parseFloat(this.style.opacity), 0) === 0
-    //           })
-    //           .transition().duration(500)
-    //           .style('opacity', 1)
-    //         zoomTo(targetVisibleNode, newView);
-    //         currentView = newView;
-    //         currentVisible = targetVisibleNode;
-    //       });
-    //   }
-    // }
-
-    // Scale and translate the given node(s) for the 'zoom' and 'pan'
-    // effect.
-    // function zoomTo(node, newView) {
-      // var k = Math.min(width, height) / newView[2];
-      // var center = [width / 2, height / 2];
-
-      // // currentVisible = node.selection ? node.selection() : node;
-      // // currentView = newView;
-      // var view = newView;
-      // var k = Math.min(width, height) / view[2];
-
-      // var center = [width / 2, height / 2];
-
-      // node
-      //   .filter(function(d) {
-      //     return d.r * 2 * k >= 2;
-      //   })
-      //   .attr("transform", function(d) {
-      //     return "translate(" + ((d.x - view[0]) * k + center[0]) + "," + ((d.y - view[1]) * k + center[1]) + ")";
-      //   });
-
-      // node.attr('hidden', function(d) {
-      //   if (d.r * 2 * k < 2) {
-      //     return true;
-      //   }
-      //   return null;
-      // });
-
-      // node.select('circle')
-      //   .attr("r", function(d) { return d.r * k; })
-
-      // displayLabel(node, newView);
-
-      // node.select('.label-shape')
-      //   .attr('d', function(d) {
-      //     var top = (d.r - d.labelSize) * k;
-      //     var radius = d.r * k;
-
-      //     var startX = 0 - Math.sqrt(radius * radius - top * top);
-      //     var startY = top;
-
-      //     var startAngle = Math.PI / 2 + Math.acos(top / radius);
-      //     var endAngle = Math.PI / 2 - Math.acos(top / radius);
-
-      //     var shape = d3.path();
-      //     shape.arc(0, 0, radius, startAngle, endAngle, true);
-      //     shape.closePath();
-      //     return shape.toString();
-      //   })
-    // }
-
-    function displayLabel(node, newView) {
-      var k = Math.min(width, height) / newView[2];
-
-      node.select('.label')
-        .attr('data-y', function(d) {
-          return d.r * k - (d.labelSize * k) / 2;
+      nodeInView.select('.label')
+        .attr('display', function d(d) {
+          return d.labelSize * transform.k > labelMinHeight ? 'inline' : 'none';
         })
-        .attr('y', function calcLabelPos(d) {
-          return d.r * k - (d.labelSize * k) / 2;
+        .filter(function(d) {
+          return d.labelSize * transform.k > labelMinHeight
         })
-        .attr('pointer-events', 'none')
-        .text(function calcLabelOpacity(d) {
-          var labelText = d.data.groupValue;
-          var $this = d3.select(this);
-          var radius = d.r * k;
-          var bottom = parseFloat($this.attr('data-y'));
-          var chordLength = 2 * Math.sqrt(radius * radius - bottom * bottom)
-          return fitText(this, labelText, chordLength * 0.75);
+        .text(function setLabelText(d) {
+          var labelText = d.data.groupValue + " | " + d.value;
+          return fitText(labelFontSpec, labelText, d.labelWidth * transform.k * 0.75);
         })
-        .attr('hidden', function(d) {
-          return (d.labelSize * k) > measureText(this)[1] ? null : true;
+        .attr('transform', function moveLabel(d) {
+          return d3.zoomIdentity
+            .translate(0, d.labelX)
+            .scale(1 / transform.k)
         })
     }
   }
-
   changePlacement();
   update(makeHierarchy());
 }

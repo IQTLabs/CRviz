@@ -13,9 +13,6 @@ body {
   font-family: sans-serif;
 }
 
-svg {
-  transform-origin: 50% 50%;
-}
 .tooltip {
   position: absolute;
   font-family: monospace;
@@ -26,6 +23,7 @@ svg {
 }
 
 .label {
+  pointer-events: none;
   fill: white;
   text-anchor: middle;
   dominant-baseline: central;
@@ -34,7 +32,7 @@ svg {
     </style>
   </head>
   <body>
-    <div style='float: right; padding-right: 2em;'>
+    <div id='controls' style='float: right; padding-right: 2em;'>
       <span id='groupOrder' style='padding-right: 2em;'></span>
       <button id='rotate' title='Rotate all grouping one to the left'>Rotate all</button>
       <button id='rotateChildren' title='Keep the top level grouping, rotate everthing else one to the left'>Rotate children</button>
