@@ -31,9 +31,12 @@ window.packWithLabel = function() {
     } else {
       root.eachBefore(radiusLeaf(defaultRadius))
         .eachAfter(packChildren(constantZero, 1))
+        // .eachBefore(addChildrenLabelSize)
         .eachAfter(packChildren(padding, root.r / Math.min(dx, dy)))
         .eachBefore(translateChild(Math.min(dx, dy) / (2 * root.r)));
     }
+
+    console.log(root);
     return root;
   }
 
@@ -60,6 +63,14 @@ function radiusLeaf(radius) {
   };
 }
 
+function calculateLabelSize(children) {
+  var ratio = 0.25;
+  // var radius = R.reduce(R.min, 0, R.map(R.prop('r'), children));
+  var radius = R.mean(R.map(R.prop('r'), children));
+  var labelSize = 2 * ratio * radius / (1 - ratio);
+  return labelSize;
+}
+
 function packChildren(padding, k) {
   return function(node) {
     if (children = node.children) {
@@ -69,20 +80,22 @@ function packChildren(padding, k) {
           paddingSize = padding(node) * k || 0,
           e;
 
+      var subgroups = R.filter(function(n) { return n.height > 0 }, children);
+
+      if (!R.isEmpty(subgroups)) {
+        var labelSize = calculateLabelSize(subgroups);
+        R.forEach(function(node) {
+          node.labelSize = labelSize;
+          node.r += labelSize / 2;
+        }, subgroups);
+      }
+
       if (paddingSize) for (i = 0; i < n; ++i) children[i].r += paddingSize;
       packSiblings(children);
       e = d3.packEnclose(children).r;
       if (paddingSize) for (i = 0; i < n; ++i) children[i].r -= paddingSize;
 
       node.r = e + paddingSize;
-
-      if (node.depth > 0) {
-        var ratio = 0.15;
-        var expandAmt = 2 * ratio * node.r;
-        var expandedRadius = node.r + expandAmt;
-        node.labelSize = expandAmt * 2;
-        node.r = expandedRadius;
-      }
     }
   };
 }
@@ -94,6 +107,9 @@ function translateChild(k) {
 
     if (node.labelSize) {
       node.labelSize *= k;
+      var bottom = node.r - node.labelSize / 2; // distance from center to the line one which labelText should live
+      node.labelX = bottom;
+      node.labelWidth = 2 * Math.sqrt(node.r * node.r - bottom * bottom);
     }
 
     if (parent) {
@@ -101,7 +117,6 @@ function translateChild(k) {
       node.y = parent.y + k * node.y;
       if (parent.labelSize) {
         node.y -= parent.labelSize / 2;
-        node.y -= 0;
       }
     }
   };
