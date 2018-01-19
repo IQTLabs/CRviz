@@ -65,8 +65,8 @@ function radiusLeaf(radius) {
 
 function calculateLabelSize(children) {
   var ratio = 0.25;
-  // var radius = R.reduce(R.min, 0, R.map(R.prop('r'), children));
-  var radius = R.mean(R.map(R.prop('r'), children));
+  var radius = R.reduce(R.max, 0, R.map(R.prop('r'), children));
+  // var radius = R.mean(R.map(R.prop('r'), children));
   var labelSize = 2 * ratio * radius / (1 - ratio);
   return labelSize;
 }

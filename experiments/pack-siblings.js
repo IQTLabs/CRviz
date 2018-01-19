@@ -15,7 +15,7 @@
       }, row)
     }, rows);
 
-    window.placeRows(rows);
+    placeRowsRigid(rows);
 
     var enclosing = d3.packEnclose(circles);
     R.forEach(function(circle) {
@@ -168,14 +168,5 @@
       var last = items[len - 3]
       return middleOut(items.slice(0, len - 1)).concat([[last, current]])
     }
-  }
-
-  var placements = [placeRowsRigid, placeRowsCompact]
-  var placementName = ['Rigid', 'Compact']
-  var offset = 0
-  window.changePlacement = function() {
-    window.placeRows = placements[offset];
-    d3.select('#placementName').text(placementName[offset]);
-    offset = (offset + 1) % placements.length;
   }
 }())
