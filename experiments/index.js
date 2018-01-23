@@ -77,14 +77,9 @@
   function render() {
 
     var svg = d3.select("svg")
-    // .attr('width', 500)
-    // .attr('height', 500)
 
     var width = svg.node().clientWidth;
     var height = svg.node().clientHeight;
-
-    // var width = 500;
-    // var height = 500;
 
     var tooltip = d3.select('body')
       .append('pre')
@@ -92,16 +87,14 @@
 
     var rootG = svg
       .append('g')
-      // .attr('transform', 'translate(' + [width / 2, height / 2].join(',') + ')');
 
-    // var boundOverlay = rootG.append('rect')
-    //   // .attr('x', -Math.min(width, height)  / 2)
-    //   // .attr('y', -Math.min(width, height)  / 2)
-    //   // .attr('width', Math.min(width, height))
-    //   // .attr('height', Math.min(width, height))
-    //   .attr('fill', 'red')
-    //   .attr('fill-opacity', 0.2)
-
+    var rect = rootG // Ensure the bound of rootG is always within the viewport
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('fill', 'transparent')
+      .attr('width', width)
+      .attr('height', height)
 
     var g = rootG
       .append('g')
