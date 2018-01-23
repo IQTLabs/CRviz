@@ -24,6 +24,8 @@ window.packWithLabel = function() {
 
   function pack(root) {
     root.x = dx / 2, root.y = dy / 2;
+    // root.x = 0;
+    // root.y = 0;
     if (radius) {
       root.eachBefore(radiusLeaf(radius))
         .eachAfter(packChildren(padding, 0.5))
@@ -36,7 +38,6 @@ window.packWithLabel = function() {
         .eachBefore(translateChild(Math.min(dx, dy) / (2 * root.r)));
     }
 
-    console.log(root);
     return root;
   }
 

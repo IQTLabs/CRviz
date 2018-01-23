@@ -94,8 +94,8 @@ function appendCircle(node, zoom) {
 
   circle
     .filter(function(d) { return d.depth === 0 })
-    .attr('fill', 'transparent')
-    .attr('fill-opacity', '0.1')
+    .attr('fill', 'red')
+    .attr('fill-opacity', '0')
     .attr('stroke-width', '0px')
 
   circle.filter(function(d) { return d.depth > 0 && d.height > 0 })

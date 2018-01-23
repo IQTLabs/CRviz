@@ -71,18 +71,20 @@
 
     var nest = deepNest(groupOrder).entries(DATA);
     var hierarchy = nestingToHierarchy(groupOrder, nest, 0);
-    console.log(hierarchy);
     return hierarchy;
   }
 
   function render() {
 
     var svg = d3.select("svg")
-    // .attr('width', width)
-    // .attr('height', height)
+    // .attr('width', 500)
+    // .attr('height', 500)
 
     var width = svg.node().clientWidth;
     var height = svg.node().clientHeight;
+
+    // var width = 500;
+    // var height = 500;
 
     var tooltip = d3.select('body')
       .append('pre')
@@ -90,14 +92,19 @@
 
     var rootG = svg
       .append('g')
-      .attr('transform', 'translate(' + [width / 2, height / 2].join(',') + ')');
+      // .attr('transform', 'translate(' + [width / 2, height / 2].join(',') + ')');
+
+    // var boundOverlay = rootG.append('rect')
+    //   // .attr('x', -Math.min(width, height)  / 2)
+    //   // .attr('y', -Math.min(width, height)  / 2)
+    //   // .attr('width', Math.min(width, height))
+    //   // .attr('height', Math.min(width, height))
+    //   .attr('fill', 'red')
+    //   .attr('fill-opacity', 0.2)
+
 
     var g = rootG
       .append('g')
-
-    var boundOverlay = g.append('rect')
-      .attr('fill', 'red')
-      .attr('fill-opacity', 0.2)
 
     var selectedNode = null;
     var currentVisible = null;
@@ -114,7 +121,7 @@
           zoomTo(d3.event.transform);
         })
 
-      zoomBehavior.interpolate(d3.interpolate);
+      zoomBehavior.interpolate(d3.interpolateZoom);
 
       rootG.call(zoomBehavior);
 
@@ -137,13 +144,36 @@
         ]))
 
       var pack = packWithLabel()
-      // .size([ width, height ])
+        // .size([ width, height ])
         .padding(function(d) {
-          return 0.001;
-          // return Math.log(d.height) * 0.1 + 1;
+          return 0.001
         });
 
       var packedRoot = pack(root);
+
+      var r = packedRoot.r;
+      var x = packedRoot.x;
+      var y = packedRoot.y;
+
+      var scaleExtent = [
+        Math.min(width, height) / (packedRoot.r * 2 * 1.25),
+        Math.min(width, height) / (packedRoot.leaves()[0].r * 2 * 1.25)
+      ]
+
+      zoomBehavior
+        .translateExtent(
+          [
+            [
+              x - (width / 2 / scaleExtent[0]) * 2,
+              y - (height / 2 / scaleExtent[0]) * 2
+            ],
+            [
+              x + (width / 2 / scaleExtent[0]) * 2,
+              y + (height / 2 / scaleExtent[0]) * 2
+            ]
+          ]
+        )
+        .scaleExtent(scaleExtent)
 
       var quadtree = d3.quadtree(packedRoot.descendants(), R.prop('x'), R.prop('y'));
 
@@ -209,8 +239,8 @@
         var newTransform = transform
           .scale(k)
           .translate(
-            - selectedNode.x,
-            - selectedNode.y
+            - selectedNode.x + width / 2 / k,
+            - selectedNode.y + height / 2 / k
           )
 
         zoomBehavior.transform(
@@ -220,19 +250,15 @@
       }
 
       function boundFromTransform(transform) {
-        var centerX =  0 - transform.x / transform.k
-        var centerY =  0 - transform.y / transform.k
-
-        var size = Math.min(width, height) / transform.k;
-        var aspectRatio = width / height;
+        var size = Math.min(width, height);
         var boundWidth = size * Math.max(width / height, 1);
         var boundHeight = size * Math.max(height / width, 1);
 
         var bound = [
-          centerX - boundWidth / 2,
-          centerY - boundHeight / 2,
-          centerX + boundWidth / 2,
-          centerY + boundHeight / 2
+          -transform.x / transform.k,
+          -transform.y / transform.k,
+          (-transform.x + boundWidth) / transform.k,
+          (-transform.y + boundHeight) / transform.k,
         ];
         return bound;
       }
@@ -263,7 +289,6 @@
 
         var bound = boundFromTransform(transform);
 
-
         var nodeInView = node
           .filter(function(d) {
             var isInView = boundOverlap(bound, boundFromNode(d));
@@ -287,7 +312,7 @@
           })
           .text(function setLabelText(d) {
             var labelText = d.data.groupValue + " | " + d.value;
-            return fitText(labelFontSpec, labelText, d.labelWidth * transform.k * 0.75);
+            return fitText(labelFontSpec, labelText, d.labelWidth * transform.k * 0.9);
           })
           .attr('transform', function moveLabel(d) {
             return d3.zoomIdentity

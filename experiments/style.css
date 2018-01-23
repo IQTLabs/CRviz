@@ -39,6 +39,7 @@ svg {
 }
 
 .label {
+  font-family: monospace;
   pointer-events: none;
   fill: white;
   text-anchor: middle;
