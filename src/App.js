@@ -4,6 +4,10 @@ import { Provider } from 'react-redux';
 
 import configureStore from './configure-store';
 
+import style from './App.module.css';
+
+console.log(style);
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -39,7 +43,14 @@ class App extends Component {
   render() {
     return (
       <Provider store={ this.store }>
-        <div className="App">App</div>
+        <div className={ style.appContainer }>
+          <div className={ style.controls }>
+            controls
+          </div>
+          <div className={ style.canvas }>
+            canvas
+          </div>
+        </div>
       </Provider>
     );
   }
