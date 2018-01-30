@@ -1,11 +1,15 @@
 import {
   default as controls,
   setHierarchy,
+  addToHierarchy,
+  removeFromHierarchy,
   showNodes,
   colorBy,
   selectControls
 } from "./controls";
 import { combineReducers } from "redux";
+
+import { concat, reduce } from "ramda";
 
 const reducer = combineReducers({ controls });
 

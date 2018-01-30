@@ -3,7 +3,7 @@ import { toPairs, is, map, chain, concat } from "ramda";
 
 const defaultState = {
   dataset: [],
-  configuration: {}
+  configuration: null
 };
 
 /**

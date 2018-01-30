@@ -9,6 +9,7 @@ const defaultState = {
 // ACTIONS
 
 const setHierarchy = createAction("SET_HIERARCHY");
+const addToHierarchy = createAction("ADD_TO_HIERARCHY");
 const showNodes = createAction("SHOW_NODES");
 const colorBy = createAction("COLOR_BY");
 
@@ -24,4 +25,4 @@ const reducer = handleActions(
 const selectControls = (state) => state.controls;
 
 export default reducer;
-export { setHierarchy, showNodes, colorBy, selectControls };
+export { setHierarchy, addToHierarchy, showNodes, colorBy, selectControls };

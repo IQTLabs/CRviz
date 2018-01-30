@@ -2,11 +2,10 @@ import React, { Component } from "react";
 
 import { Provider } from 'react-redux';
 
+import HierarchySelector from 'features/hierarchy-selector/HierarchySelector';
+
 import configureStore from './configure-store';
-
 import style from './App.module.css';
-
-console.log(style);
 
 class App extends Component {
   constructor(props) {
@@ -45,7 +44,8 @@ class App extends Component {
       <Provider store={ this.store }>
         <div className={ style.appContainer }>
           <div className={ style.controls }>
-            controls
+            <h1>Hierarchy</h1>
+            <HierarchySelector />
           </div>
           <div className={ style.canvas }>
             canvas
