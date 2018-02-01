@@ -11,8 +11,9 @@ cache:
   - node_modules
 
 addons:
-  packages:
-  - sshpass
+  apt:
+    packages:
+    - sshpass
 
 script:
 - npm run test
