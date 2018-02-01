@@ -1,0 +1,31 @@
+language: node_js
+node_js:
+- '8'
+
+dist: trusty
+sudo: false
+
+cache:
+  yarn: true
+  directories:
+  - node_modules
+
+addons:
+  packages:
+  - sshpass
+
+script:
+- npm run test
+- npm run build
+
+deploy:
+- provider: script
+  skip_cleanup: true
+  script: sshpass -e scp -rp $TRAVIS_BUILD_DIR/* $SSH_USER@52.191.199.105:/var/www/app/
+  on:
+    branch: master
+
+env:
+  global:
+  - secure: l809r6oqFcZWtXnIhdnqZNJDGimA85anxmjhRkG4qeePINreTfs87DoZMhduvJS6D2ScurvfLGfZsYiajD4HLgojZTN5Qg0tcVgmcoUHL4Ajjo59NIO/0DxRznUcoy9lIAQHvqm3XOY6pEFF7DrvIyDdFlRhGdEXN7RyBGJNJuNgE4UPm42EV/ADTDVuhBkoBgY/tp20V32rmbuVSXIjSXd55zUJ58zeAh24TA2JTGR5WAmWUgx4+5+Vo/H8xJfYThKeA4kEOPLEr/DAbj4fYTjk/Bf3vziQI2qrZ3yO3HATmzIqCmpMxP7dKQZ0Z/YR6GN7S2swAN2e7r37JN5rSELBATO3YTKj8GX5FhptBz7XqT+DcBEOOshwkKXBvOsS0rLRNXR9Ey+Sp/1ED3aUuOrgPufKZydyFXs7CZaosq028GDqPZEgGqxjn4IXhRauLFkoGdBTanynpijAfev46IwugZRxUULMNtNq1b0C9tnKIcOIClGTqnMxaoOXZFt8TPwkizFIyeZrEH1ZDVBJejxmC3QPyrtihxIcWuY5Wlcx1zuudf93Fd9pKMREmgpPmHE0aABl+OZZGS6j3yrFSZVUa8qI4Q8gWZxCW7JtD/JVEv8w++LQI+ZNezDndTX8e2egJZBi3to/+yEycmZVpoIMrvvKVRCqHNoU87qL1Ew=
+  - secure: YiTex5ppl7goOWVLu0LVnJegsXNTOoTpByEcDEY9cPYvejZdwt1Omvfxc+RI1P66AUcF687ha5H1xtRsM1JJ9LlfqWwHKHLho7fDN2SJ3KvCfoI/25xW6z1WEBVedyrH14qiE+uJWHO4VMJgFRyKFVul5/jXM+thknlR/T/WHxOAdhfePJPhQps9IzyJ/+Er2ns5gehxyIQWFC7LuwHhseuPFODk0Q9u8iwLT5Wj7qIshZCdhLZcDEex/y3KeGxlln83Qz+1SzE/FqXKTCkaEJh5tfV8eefkXLtw0Wr/Pbw0xTvFOZ5f47OvEQjOfFwouGnRlDFkK+miyYlRo5x35wIxxiqSrgUBjLkrzpVXdxUUuo2cLooD3+mdXxy4TwDPYnJRl1bCAg3so7ohyga9pdkN/7jypwl8iMrPQIRd+5LlauQ+akyI+UuTtbYzp1rLRNKQhoK/LMXF9/uK4XOgfAVXppBxAv1p3rBg9byrxk7IdTtKFP3oLPjmRQIvHJ7EfnyFKjWv41JTv2TZRVWhuS/0GQdiFogmQ5CmWJYR6ij7C7qF7btDMzexWkWAKwZknRn7wCzcvmjh1cF2B0ySeY61VY4xL8nC8tOrLIuYVJE1HVmQAomdduzB75gkUb7FHXW0PsXeZ4GE76E5cNYzruhV+bucx9Yyl5xO+WQf7S4=
