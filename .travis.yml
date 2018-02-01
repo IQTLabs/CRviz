@@ -14,6 +14,7 @@ addons:
   apt:
     packages:
     - sshpass
+  ssh_known_hosts: 52.191.199.105
 
 script:
 - npm run test
