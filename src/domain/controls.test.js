@@ -1,9 +1,8 @@
 import {
   default as controls,
   setHierarchy,
-  addToHierarchy,
-  removeFromHierarchy,
   showNodes,
+  useDarkTheme,
   colorBy,
   selectControls
 } from "./controls";
@@ -22,7 +21,8 @@ describe("Controls reducer", () => {
 
       expect(selectControls(result)).toEqual({
         hierarchy: hierarchy,
-        showNodes: true,
+        shouldShowNodes: true,
+        darkTheme: false,
         colorBy: null
       });
     });
@@ -32,13 +32,27 @@ describe("Controls reducer", () => {
     it("set showNodes to false", () => {
       const action = showNodes(false);
       const result = reducer({}, action);
-      expect(selectControls(result).showNodes).toEqual(false);
+      expect(selectControls(result).shouldShowNodes).toEqual(false);
     });
 
     it("set showNodes to true", () => {
       const action = showNodes(true);
       const result = reducer({}, action);
-      expect(selectControls(result).showNodes).toEqual(true);
+      expect(selectControls(result).shouldShowNodes).toEqual(true);
+    });
+  });
+
+  describe("useDarkTheme", () => {
+    it("set useDarkTheme to false", () => {
+      const action = useDarkTheme(false);
+      const result = reducer({}, action);
+      expect(selectControls(result).darkTheme).toEqual(false);
+    });
+
+    it("set useDarkTheme to true", () => {
+      const action = useDarkTheme(true);
+      const result = reducer({}, action);
+      expect(selectControls(result).darkTheme).toEqual(true);
     });
   });
 
