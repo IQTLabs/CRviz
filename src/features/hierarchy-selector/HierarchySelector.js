@@ -27,11 +27,15 @@ function HierarchySelector({ configuration, controls, setHierarchy }) {
   return (
     <div className={style.container}>
       <FieldList fields={hierarchy} onChange={setHierarchy} />
-      <NewField
-        isFirst={hierarchy.length === 0}
-        availableFields={availableFields}
-        onAdd={(field) => setHierarchy(append(field, hierarchy))}
-      />
+
+      {
+        availableFields.length > 0 &&
+          <NewField
+            isFirst={hierarchy.length === 0}
+            availableFields={availableFields}
+            onAdd={(field) => setHierarchy(append(field, hierarchy))}
+          />
+      }
     </div>
   );
 }
