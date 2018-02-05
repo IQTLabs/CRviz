@@ -3,14 +3,19 @@
   height: 100%;
   display: flex;
   flex-direction: row;
-  align-items: stretch;
+  flex-wrap: wrap;
+  align-content: flex-start;
 }
 
 .controls {
-  flex: 0 400px;
-  background-color: #eee;
+  flex: 1;
+  max-width: 300px;
+  padding: 0.5rem;
 }
 
 .canvas {
   flex: 1;
+  min-width: 300px;
+  min-height: 300px;
+  background-color: #E6E7E9;
 }
