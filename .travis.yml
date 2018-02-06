@@ -23,7 +23,7 @@ script:
 deploy:
 - provider: script
   skip_cleanup: true
-  script: sshpass -e scp -rp $TRAVIS_BUILD_DIR/* $SSH_USER@52.191.199.105:/var/www/app/
+  script: sshpass -e scp -rp $TRAVIS_BUILD_DIR/build/* $SSH_USER@52.191.199.105:/var/www/app/
   on:
     branch: master
 
