@@ -13,29 +13,29 @@ import { hierarchy as d3Hierarchy } from "d3-hierarchy";
  * }
  */
 
-const toHierarchy = (data, hierarchy) => {
-  const nesting = nestHierarchy(hierarchy).entries(data);
-  const result = entriesToHierarchy("root", null, hierarchy, nesting);
+const toHierarchy = (data, hierarchyConfig) => {
+  const nesting = nestHierarchy(hierarchyConfig).entries(data);
+  const result = entriesToHierarchy("root", null, hierarchyConfig, nesting);
   return d3Hierarchy(result);
 };
 
 /**
- * Create the D3 nest function that will nest data given the hierarchy.
+ * Create the D3 nest function that will nest data given the hierarchyConfig.
  */
-const nestHierarchy = (hierarchy) => {
+const nestHierarchy = (hierarchyConfig) => {
   return reduce(
     (nest, field) => {
       return nest.key((d) => path(field.path, d));
     },
     nest(),
-    hierarchy
+    hierarchyConfig
   );
 };
 
 /**
  * Convert nest entries into the format accepted by d3.hierarchy
  */
-const entriesToHierarchy = (fieldValue, field, hierarchy, entries) => {
+const entriesToHierarchy = (fieldValue, field, hierarchyConfig, entries) => {
   return {
     fieldValue,
     field,
@@ -44,8 +44,8 @@ const entriesToHierarchy = (fieldValue, field, hierarchy, entries) => {
       if (entry.values) {
         return entriesToHierarchy(
           entry.key,
-          head(hierarchy),
-          tail(hierarchy),
+          head(hierarchyConfig),
+          tail(hierarchyConfig),
           entry.values
         );
       } else {

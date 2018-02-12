@@ -5,35 +5,35 @@ import { connect } from "react-redux";
 import { append, compose, differenceWith, eqBy, join, prop } from "ramda";
 
 import { selectConfiguration } from "domain/dataset";
-import { setHierarchy, selectControls } from "domain/controls";
+import { setHierarchyConfig, selectControls } from "domain/controls";
 
 import FieldList from "./FieldList";
 import NewField from "./NewField";
 import style from "./HierarchySelector.module.css";
 
-function HierarchySelector({ configuration, controls, setHierarchy }) {
+function HierarchySelector({ configuration, controls, setHierarchyConfig }) {
   if (configuration === null) {
     return null;
   }
 
-  const hierarchy = controls.hierarchy;
+  const hierarchyConfig = controls.hierarchyConfig;
 
   const availableFields = differenceWith(
     eqBy(compose(join("."), prop("path"))),
     configuration.fields,
-    hierarchy
+    hierarchyConfig
   );
 
   return (
     <div className={style.container}>
-      <FieldList fields={hierarchy} onChange={setHierarchy} />
+      <FieldList fields={hierarchyConfig} onChange={setHierarchyConfig} />
 
       {
         availableFields.length > 0 &&
           <NewField
-            isFirst={hierarchy.length === 0}
+            isFirst={hierarchyConfig.length === 0}
             availableFields={availableFields}
-            onAdd={(field) => setHierarchy(append(field, hierarchy))}
+            onAdd={(field) => setHierarchyConfig(append(field, hierarchyConfig))}
           />
       }
     </div>
@@ -45,7 +45,7 @@ HierarchySelector.propTypes = {
     fields: PropTypes.array.isRequired
   }),
   controls: PropTypes.shape({
-    hierarchy: PropTypes.array.isRequired
+    hierarchyConfig: PropTypes.array.isRequired
   })
 };
 
@@ -55,7 +55,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  setHierarchy
+  setHierarchyConfig
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HierarchySelector);

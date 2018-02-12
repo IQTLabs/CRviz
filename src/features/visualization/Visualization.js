@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { selectDataset, selectConfiguration } from "domain/dataset";
 import { selectControls } from "domain/controls";
 
+import data from './fake-data';
 import d3Viz from './d3-viz';
 
 class Visualization extends React.PureComponent {
@@ -18,9 +19,8 @@ class Visualization extends React.PureComponent {
 
   updateFromProps() {
     this.viz.update({
-      x: this.props.x,
-      y: this.props.y,
-      r: this.props.r
+      hierarchyConfig: this.props.controls.hierarchyConfig,
+      data: data
     });
   }
 
