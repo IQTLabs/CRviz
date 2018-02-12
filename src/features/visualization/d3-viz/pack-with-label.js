@@ -1,5 +1,5 @@
 import { packEnclose } from "d3-hierarchy";
-import  packGrid from "./pack-grid";
+import packGrid from "./pack-grid";
 
 /**
  * An adaptation of the circle packing algorithm to reserve spacing at the
@@ -39,7 +39,9 @@ const packWithLabel = () => {
   const pack = (root) => {
     root.x = options.size[0] / 2;
     root.y = options.size[1] / 2;
-    const { radius, size, padding, labelRatio, packSiblings } = options;
+    const { radius, size, labelRatio, packSiblings } = options;
+    const padding =
+      options.padding === "function" ? options.padding : () => options.padding;
 
     if (radius) {
       root
@@ -52,9 +54,17 @@ const packWithLabel = () => {
       root
         .eachBefore(radiusLeaf((d) => Math.sqrt(d.value)))
         .eachAfter(packChildren(packSiblings, labelRatio, () => 0, 1))
-        .eachAfter(packChildren(packSiblings, labelRatio, padding, root.r / Math.min(...size)))
+        .eachAfter(
+          packChildren(
+            packSiblings,
+            labelRatio,
+            padding,
+            root.r / Math.min(...size)
+          )
+        )
         .eachBefore(translateChild(Math.min(...size) / (2 * root.r)));
     }
+    return root;
   };
 
   /**
@@ -107,7 +117,9 @@ const packChildren = (packSiblings, labelRatio, padding, k) => (node) => {
   // Calculate the label size of the largest non-leaf children
   // and expand their radii accordingly to make space for label.
   if (nonleafChildren.length > 0) {
-    const labelSize = Math.max(...nonleafChildren.map(getLabelSize(labelRatio)));
+    const labelSize = Math.max(
+      ...nonleafChildren.map(getLabelSize(labelRatio))
+    );
     nonleafChildren.forEach((node) => {
       node.labelSize = labelSize;
       node.r += labelSize / 2;
@@ -115,10 +127,6 @@ const packChildren = (packSiblings, labelRatio, padding, k) => (node) => {
   }
 
   const paddingSize = padding(node) * k || 0;
-
-  if (node.data.name === 'a') {
-    debugger;
-  }
 
   // Padding is implemented by adding it to the children's radii, pack,
   // then returning the radii to their original value.
@@ -134,9 +142,7 @@ const packChildren = (packSiblings, labelRatio, padding, k) => (node) => {
   }
 
   node.r = enclosingRadius + paddingSize;
-
 };
-
 
 // Set the the node's children's positions to be inside the node and above the
 // space reserved for labeling.
