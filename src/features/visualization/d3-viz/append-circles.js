@@ -29,6 +29,10 @@ const appendCircles = ({ root, packedData }) => {
     .attr("stroke-width", (d) => 1)
     .attr("vector-effect", 'non-scaling-stroke');
 
+  circles
+    .filter((d) => d.depth === 0)
+    .attr("fill", "transparent");
+
   circles.filter((d) => d.depth === 0).classed([className("rootCircle")], true);
   circles.filter(isInternal).classed([className("groupCircle")], true);
   circles.filter((d) => d.height === 0).classed([className("leafCircle")], true);

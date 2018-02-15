@@ -52,6 +52,7 @@ function d3Viz(rootNode) {
 
     if (selectedNode) {
       selectedNode = findLowestAncestors(selectedNode, hierarchy);
+      console.log(selectedNode);
     } else {
       selectedNode = hierarchy;
     }
@@ -111,7 +112,7 @@ const composeComparators = (comparators) =>  (a, b) => (
 const findLowestAncestors = (node, hierarchy) => {
   const path = reverse(node.ancestors());
   const findChild = (parent, child) => (
-    find((c) => datumKey(c) === datumKey(child) ,parent.children)
+    find((c) => datumKey(c) === datumKey(child), parent.children || [])
   );
 
   return reduce((last, child) => findChild(last, child) || reduced(last), node, tail(path))
