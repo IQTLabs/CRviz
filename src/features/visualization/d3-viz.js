@@ -1,9 +1,12 @@
 import { select, selectAll } from 'd3-selection';
 import { reduceWhile } from 'ramda';
 
+import { zoomIdentity } from "d3-zoom";
+
 import packWithLabel from './d3-viz/pack-with-label';
 import toHierarchy from './d3-viz/to-hierarchy';
 import appendCircles from './d3-viz/append-circles';
+import setupZoom from './d3-viz/setup-zoom';
 
 function d3Viz(rootNode) {
 
@@ -15,7 +18,14 @@ function d3Viz(rootNode) {
     .attr('width', width)
     .attr('height', height);
 
-  const zoomRoot = svg.append('g').attr('transform', 'scale(700)');
+  const zoomRoot = svg.append('g');
+  zoomRoot
+    .append('rect')
+    .attr('x', 0)
+    .attr('y', 0)
+    .attr('fill', 'transparent')
+    .attr('width', width)
+    .attr('height', height)
 
   const circleRoot = zoomRoot.append('g');
 
@@ -25,10 +35,19 @@ function d3Viz(rootNode) {
     const pack = packWithLabel().padding(0.001);
     pack(hierarchy);
 
-    appendCircles({
+    const nodes = appendCircles({
       root: circleRoot,
       packedData: hierarchy
     });
+
+    const zoom = setupZoom({
+      zoomRoot: zoomRoot,
+      nodeRoot: circleRoot,
+      nodes: nodes,
+      width: width,
+      height: height,
+      packedData: hierarchy
+    })
   }
 
   return {

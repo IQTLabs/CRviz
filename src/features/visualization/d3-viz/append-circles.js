@@ -1,56 +1,62 @@
 import { path } from "d3-path";
 
-const appendCircles = ({ root, packedData, onHover, onClick }) => {
-  const gs = root.selectAll("g").data(packedData.descendants(), datumKey);
+const appendCircles = ({ root, packedData }) => {
+  const className = (name) => `viz-${name}`;
 
-  gs.exit().remove();
+  const nodes = root
+    .selectAll(`g.${className('circle')}`)
+    .data(packedData.descendants(), datumKey);
 
-  const gsEnter = gs.enter().append("g");
+  nodes.exit().remove();
 
-  gsEnter.merge(gs).attr("transform", function(d) {
+  const nodesEnter = nodes.enter()
+    .append("g")
+    .classed([className('circle')], true)
+
+  nodesEnter.merge(nodes).attr("transform", function(d) {
     return `translate(${[d.x, d.y].join(",")})`;
-  });
+  }).order();
 
-  const circles = gs.select("circle").merge(gsEnter.append("circle"));
+  const circles = nodes.select("circle").merge(nodesEnter.append("circle"));
 
   const isInternal = (d) => d.depth > 0 && d.height > 0;
 
   circles
     .attr("r", (d) => d.r)
     .attr("fill", "rgba(0,0,0,0.2)")
-    .attr("stroke-width", (d) => d.r * 0.01);
+    .attr("stroke-width", (d) => 1)
+    .attr("vector-effect", 'non-scaling-stroke');
 
-  circles.on('click', onClick);
-  circles.on('hover', onHover);
+  circles.filter((d) => d.depth === 0).classed([className("rootCircle")], true);
+  circles.filter(isInternal).classed([className("groupCircle")], true);
+  circles.filter((d) => d.height === 0).classed([className("leafCircle")], true);
 
-  circles.filter((d) => d.depth === 0).attr("class", "rootCircle");
-  circles.filter(isInternal).attr("class", "groupCircle");
-  circles.filter((d) => d.height === 0).attr("class", "leafCircle");
-
-  const labelShapes = gs.select("path").merge(gsEnter.append("path"));
+  const labelShapes = nodes.select("path").merge(nodesEnter.append("path"));
 
   labelShapes
     .filter((d) => d.labelSize)
-    .attr("class", "labelShape")
+    .attr("class", className("labelShape"))
+    .attr("fill", "rgba(0, 0, 0, 0.2)")
     .attr("d", (d) => {
-      var top = d.r - d.labelSize;
-      var radius = d.r;
+      const   top = d.r - d.labelSize;
+      const radius = d.r;
 
-      var startAngle = Math.PI / 2 + Math.acos(top / radius);
-      var endAngle = Math.PI / 2 - Math.acos(top / radius);
+      const startAngle = Math.PI / 2 + Math.acos(top / radius);
+      const endAngle = Math.PI / 2 - Math.acos(top / radius);
 
-      var shape = path();
+      const shape = path();
       shape.arc(0, 0, radius, startAngle, endAngle, true);
       shape.closePath();
       return shape.toString();
     });
 
-  const labels = gs
+  const labelEnter = nodesEnter
     .filter(isInternal)
-    .select("text")
-    .merge(gsEnter.append("text"));
+    .append("text")
+    .attr('text-anchor', 'middle')
+    .style('pointer-events', 'none')
 
-  labels.attr("class", "label");
+  return nodes.merge(nodesEnter);
 };
 
 const datumKey = (datum) => {
