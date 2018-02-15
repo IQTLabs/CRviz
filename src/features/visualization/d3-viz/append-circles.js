@@ -1,5 +1,7 @@
 import { path } from "d3-path";
 
+import datumKey from './datum-key';
+
 const appendCircles = ({ root, packedData }) => {
   const className = (name) => `viz-${name}`;
 
@@ -50,24 +52,13 @@ const appendCircles = ({ root, packedData }) => {
       return shape.toString();
     });
 
-  const labelEnter = nodesEnter
+  nodesEnter
     .filter(isInternal)
     .append("text")
     .attr('text-anchor', 'middle')
     .style('pointer-events', 'none')
 
   return nodes.merge(nodesEnter);
-};
-
-const datumKey = (datum) => {
-  if (datum.depth === 0) {
-    return datum.data.fieldValue;
-  }
-  if (datum.height > 0) {
-    return [datum.data.field.path.join("."), datum.data.fieldValue].join(".");
-  } else {
-    return datum.data.uid;
-  }
 };
 
 export default appendCircles;

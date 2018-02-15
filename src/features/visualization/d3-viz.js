@@ -1,12 +1,11 @@
-import { select, selectAll } from 'd3-selection';
-import { reduceWhile } from 'ramda';
-
-import { zoomIdentity } from "d3-zoom";
+import { select } from 'd3-selection';
+import { find, reverse, reduced, reduce, tail, reduceWhile } from 'ramda';
 
 import packWithLabel from './d3-viz/pack-with-label';
 import toHierarchy from './d3-viz/to-hierarchy';
 import appendCircles from './d3-viz/append-circles';
 import setupZoom from './d3-viz/setup-zoom';
+import datumKey from './d3-viz/datum-key';
 
 function d3Viz(rootNode) {
 
@@ -29,6 +28,8 @@ function d3Viz(rootNode) {
 
   const circleRoot = zoomRoot.append('g');
 
+  let selectedNode = null;
+
   function update({ hierarchyConfig, data }) {
 
     const hierarchy = makeHierarchy(data, hierarchyConfig);
@@ -48,6 +49,19 @@ function d3Viz(rootNode) {
       height: height,
       packedData: hierarchy
     })
+
+    if (selectedNode) {
+      selectedNode = findLowestAncestors(selectedNode, hierarchy);
+    } else {
+      selectedNode = hierarchy;
+    }
+
+    zoom.zoomTo(selectedNode);
+
+    nodes.on('click.select', (d) => {
+      selectedNode = d;
+      zoom.zoomTo(d);
+    });
   }
 
   return {
@@ -89,6 +103,18 @@ const composeComparators = (comparators) =>  (a, b) => (
     0,
     comparators
   )
-)
+);
+
+/**
+ * Find the lowest ancestors of a node (or it self) that exists in a tree.
+ */
+const findLowestAncestors = (node, hierarchy) => {
+  const path = reverse(node.ancestors());
+  const findChild = (parent, child) => (
+    find((c) => datumKey(c) === datumKey(child) ,parent.children)
+  );
+
+  return reduce((last, child) => findChild(last, child) || reduced(last), node, tail(path))
+}
 
 export default d3Viz;

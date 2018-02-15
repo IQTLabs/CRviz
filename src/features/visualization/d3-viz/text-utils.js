@@ -1,4 +1,4 @@
-import { memoizeWith, slice } from "ramda";
+import { memoizeWith } from "ramda";
 
 const context = document.createElement("canvas").getContext("2d");
 
@@ -19,33 +19,6 @@ const measureText = memoizeWith(memoizeKey, (font, text) => {
     Math.floor(context.measureText("M").width)
   ];
 });
-
-// const fitText = (font, text, width) => {
-//   let measured = measureText(font, text)[0];
-
-//   if (measured <= width) {
-//     return text;
-//   }
-
-//   let high = text.length - 1;
-//   let low = 0;
-
-//   const ellipsis = String.fromCharCode(8230);
-
-//   while (high > low) {
-//     const mid = low + Math.floor((high - low) / 2);
-//     const newText = slice(0, mid + 1, text) + ellipsis;
-//     measured = measureText(font, newText)[0];
-
-//     if (measured < width) {
-//       low = mid;
-//     } else {
-//       high = mid - 1;
-//     }
-//   }
-
-//   return slice(0, high, text) + ellipsis;
-// };
 
 const fitText = (font, text, width) => {
   var original = text;
