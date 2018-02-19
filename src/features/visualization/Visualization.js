@@ -21,6 +21,7 @@ class Visualization extends React.PureComponent {
   updateFromProps() {
     this.viz.update({
       hierarchyConfig: this.props.controls.hierarchyConfig,
+      fields: this.props.configuration.fields,
       data: data
     });
   }

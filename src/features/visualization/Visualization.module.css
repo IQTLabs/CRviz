@@ -1,6 +1,7 @@
 .viz {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .viz :global(.viz-rootNode) circle {
@@ -20,4 +21,11 @@
 
 .viz :global(.viz-groupingNode) text {
   font-family: monospace;
+}
+
+.viz :global(.viz-tooltip) {
+  background-color: white;
+  border: 1px solid black;
+  padding: 1rem;
+  white-space: nowrap;
 }

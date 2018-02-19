@@ -1,10 +1,11 @@
-import { select } from 'd3-selection';
+import { select, event as d3Event } from 'd3-selection';
 import { find, reverse, reduced, reduce, tail, reduceWhile } from 'ramda';
 
 import packWithLabel from './d3-viz/pack-with-label';
 import toHierarchy from './d3-viz/to-hierarchy';
 import appendCircles from './d3-viz/append-circles';
 import setupZoom from './d3-viz/setup-zoom';
+import setupTooltip from './d3-viz/setup-tooltip';
 import datumKey from './d3-viz/datum-key';
 
 function d3Viz(rootNode) {
@@ -14,8 +15,10 @@ function d3Viz(rootNode) {
   const height = rootNode.clientHeight;
 
   const svg = root.append('svg')
-    .style('width', '100%')
-    .style('height', '100%')
+    .style('width', `${width}px`)
+    .style('height', `${height}px`)
+
+  const tooltip = root.append('div').classed('viz-tooltip', true);
 
   const zoomRoot = svg.append('g');
   zoomRoot
@@ -26,29 +29,35 @@ function d3Viz(rootNode) {
     .attr('width', width)
     .attr('height', height)
 
-  const circleRoot = zoomRoot.append('g');
+  const nodeRoot = zoomRoot.append('g');
 
   let selectedNode = null;
 
-  function update({ hierarchyConfig, data }) {
+  function update({ hierarchyConfig, fields, data }) {
 
     const hierarchy = makeHierarchy(data, hierarchyConfig);
     const pack = packWithLabel().padding(0.001);
     pack(hierarchy);
 
     const nodes = appendCircles({
-      root: circleRoot,
+      root: nodeRoot,
       packedData: hierarchy
     });
 
     const zoom = setupZoom({
       zoomRoot: zoomRoot,
-      nodeRoot: circleRoot,
+      nodeRoot: nodeRoot,
       nodes: nodes,
       width: width,
       height: height,
       packedData: hierarchy
-    })
+    });
+
+    setupTooltip({
+      tooltip: tooltip,
+      fields: fields,
+      nodeRoot: nodeRoot
+    });
 
     if (selectedNode) {
       selectedNode = findLowestAncestors(selectedNode, hierarchy);
@@ -58,9 +67,9 @@ function d3Viz(rootNode) {
 
     zoom.zoomTo(selectedNode);
 
-    nodes.on('click.select', (d) => {
-      selectedNode = d;
-      zoom.zoomTo(d);
+    nodeRoot.on('click.select', () => {
+      const datum = select(d3Event.target).datum();
+      zoom.zoomTo(datum);
     });
   }
 

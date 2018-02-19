@@ -1,5 +1,5 @@
 import { zoom } from "d3-zoom";
-import { select, event as d3Event } from "d3-selection";
+import { event as d3Event } from "d3-selection";
 import { zoomIdentity } from "d3-zoom";
 import { measureText, fitText, getFont } from "./text-utils";
 
@@ -14,9 +14,7 @@ const setupZoom = ({
   const zoomBehavior = zoom();
   zoomBehavior.on("zoom", () => {
     const event = d3Event;
-    window.requestAnimationFrame(() => {
-      zoomToTransform(event.transform)
-    });
+    zoomToTransform(event.transform)
   });
   zoomRoot.call(zoomBehavior);
 
