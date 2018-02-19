@@ -1,41 +1,32 @@
 import { path } from "d3-path";
 
-import datumKey from './datum-key';
+import datumKey from "./datum-key";
 
 const appendCircles = ({ root, packedData }) => {
   const className = (name) => `viz-${name}`;
 
   const nodes = root
-    .selectAll(`g.${className('circle')}`)
+    .selectAll(`g.${className("node")}`)
     .data(packedData.descendants(), datumKey);
 
   nodes.exit().remove();
 
-  const nodesEnter = nodes.enter()
-    .append("g")
-    .classed([className('circle')], true)
+  const nodesEnter = nodes.enter().append("g");
 
-  nodesEnter.merge(nodes).attr("transform", function(d) {
-    return `translate(${[d.x, d.y].join(",")})`;
-  }).order();
-
-  const circles = nodes.select("circle").merge(nodesEnter.append("circle"));
+  nodesEnter
+    .merge(nodes)
+    .classed(className("node"), true)
+    .classed(className("rootNode"), (d) => d.depth === 0)
+    .classed(className("groupingNode"), (d) => d.depth > 0 && d.height > 0)
+    .classed(className("leafNode"), (d) => d.height === 0)
+    .attr("transform", (d) => `translate(${[d.x, d.y].join(",")})`)
+    .order();
 
   const isInternal = (d) => d.depth > 0 && d.height > 0;
 
-  circles
-    .attr("r", (d) => d.r)
-    .attr("fill", "rgba(0,0,0,0.2)")
-    .attr("stroke-width", (d) => 1)
-    .attr("vector-effect", 'non-scaling-stroke');
+  const circles = nodes.select("circle").merge(nodesEnter.append("circle"));
 
-  circles
-    .filter((d) => d.depth === 0)
-    .attr("fill", "transparent");
-
-  circles.filter((d) => d.depth === 0).classed([className("rootCircle")], true);
-  circles.filter(isInternal).classed([className("groupCircle")], true);
-  circles.filter((d) => d.height === 0).classed([className("leafCircle")], true);
+  circles.attr("r", (d) => d.r).attr("vector-effect", "non-scaling-stroke");
 
   const labelShapes = nodes.select("path").merge(nodesEnter.append("path"));
 
@@ -44,7 +35,7 @@ const appendCircles = ({ root, packedData }) => {
     .attr("class", className("labelShape"))
     .attr("fill", "rgba(0, 0, 0, 0.2)")
     .attr("d", (d) => {
-      const   top = d.r - d.labelSize;
+      const top = d.r - d.labelSize;
       const radius = d.r;
 
       const startAngle = Math.PI / 2 + Math.acos(top / radius);
@@ -59,8 +50,8 @@ const appendCircles = ({ root, packedData }) => {
   nodesEnter
     .filter(isInternal)
     .append("text")
-    .attr('text-anchor', 'middle')
-    .style('pointer-events', 'none')
+    .attr("text-anchor", "middle")
+    .style("pointer-events", "none");
 
   return nodes.merge(nodesEnter);
 };

@@ -14,8 +14,8 @@ function d3Viz(rootNode) {
   const height = rootNode.clientHeight;
 
   const svg = root.append('svg')
-    .attr('width', width)
-    .attr('height', height);
+    .style('width', '100%')
+    .style('height', '100%')
 
   const zoomRoot = svg.append('g');
   zoomRoot
@@ -52,7 +52,6 @@ function d3Viz(rootNode) {
 
     if (selectedNode) {
       selectedNode = findLowestAncestors(selectedNode, hierarchy);
-      console.log(selectedNode);
     } else {
       selectedNode = hierarchy;
     }

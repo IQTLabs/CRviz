@@ -1,0 +1,23 @@
+.viz {
+  width: 100%;
+  height: 100%;
+}
+
+.viz :global(.viz-rootNode) circle {
+  fill: transparent;
+}
+
+.viz :global(.viz-groupingNode) circle {
+  fill: black;
+  fill-opacity: 0.2;
+  vector-effects: preserve-stroke;
+  stroke-width: 1px;
+}
+
+.viz :global(.viz-groupingNode):hover circle {
+  stroke: black;
+}
+
+.viz :global(.viz-groupingNode) text {
+  font-family: monospace;
+}

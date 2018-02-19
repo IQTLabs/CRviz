@@ -152,8 +152,8 @@ const translateChild = (k) => (node) => {
 
   if (node.labelSize) {
     node.labelSize *= k;
-    node.labelX = node.r - node.labelSize / 2;
-    node.labelWidth = 2 * Math.sqrt(node.r ** 2 - node.labelX ** 2);
+    node.labelY = node.r - node.labelSize / 2;
+    node.labelWidth = 2 * Math.sqrt(node.r ** 2 - node.labelY ** 2);
   }
 
   if (parent) {

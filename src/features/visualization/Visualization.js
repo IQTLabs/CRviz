@@ -8,6 +8,7 @@ import { selectControls } from "domain/controls";
 
 import data from './fake-data';
 import d3Viz from './d3-viz';
+import styles from './Visualization.module.css';
 
 class Visualization extends React.PureComponent {
 
@@ -29,7 +30,7 @@ class Visualization extends React.PureComponent {
   }
 
   render() {
-    return <div style={{ width: '100%', height: '100%' }}></div>;
+    return <div className={ styles.viz }></div>;
   }
 }
 

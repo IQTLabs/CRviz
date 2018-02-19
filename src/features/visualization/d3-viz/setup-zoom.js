@@ -14,7 +14,9 @@ const setupZoom = ({
   const zoomBehavior = zoom();
   zoomBehavior.on("zoom", () => {
     const event = d3Event;
-    zoomToTransform(event.transform)
+    window.requestAnimationFrame(() => {
+      zoomToTransform(event.transform)
+    });
   });
   zoomRoot.call(zoomBehavior);
 
@@ -53,7 +55,7 @@ const setupZoom = ({
 
     nodesInView
       .call(hideSmall, transform)
-      .call(fitLabels, transform, labelFont, labelHeight);
+      .call(fitLabels, transform, labelFont, labelHeight, bound);
   };
 
   const zoomTo = (datum, animate = true) => {
@@ -82,14 +84,14 @@ const hideSmall = (nodes, transform) => {
   nodes.attr("visibility", (d) => (d.r * transform.k < 1 ? "hidden" : "visible"));
 };
 
-const fitLabels = (nodes, transform, labelFont, labelHeight) => {
+const fitLabels = (nodes, transform, labelFont, labelHeight, viewBound) => {
   const fitVertically = (d) => {
     return d.labelSize * transform.k >= labelHeight;
   };
 
   nodes
     .select("text")
-    .attr("visibility", (d) => (fitVertically(d) ? "visible" : "hidden"))
+    .style("visibility", (d) => (fitVertically(d) ? "visible" : "hidden"))
     .filter(fitVertically)
     .text((datum) => {
       const { data: { fieldValue }, value: count } = datum;
@@ -103,7 +105,7 @@ const fitLabels = (nodes, transform, labelFont, labelHeight) => {
     })
     .attr("transform", function scaleLabel(d) {
       return zoomIdentity
-        .translate(0, d.labelX)
+        .translate(0, d.labelY)
         .scale(1 / transform.k);
     })
 };
