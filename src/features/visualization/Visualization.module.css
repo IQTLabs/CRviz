@@ -15,8 +15,19 @@
   stroke-width: 1px;
 }
 
+.viz :global(.viz-unknown) circle {
+  fill: red;
+  fill-opacity: 0.5;
+  vector-effects: preserve-stroke;
+  stroke-width: 1px;
+}
+
 .viz :global(.viz-groupingNode):hover circle {
   stroke: black;
+}
+
+.viz :global(.viz-unknown):hover circle {
+  stroke: rgb(155, 0, 0);
 }
 
 .viz :global(.viz-groupingNode) text {

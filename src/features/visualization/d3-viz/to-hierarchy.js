@@ -1,4 +1,4 @@
-import { head, tail, map, reduce, path } from "ramda";
+import { chain, head, tail, map, reduce, path } from "ramda";
 import { nest } from "d3-collection";
 import { hierarchy as d3Hierarchy } from "d3-hierarchy";
 
@@ -36,10 +36,17 @@ const nestHierarchy = (hierarchyConfig) => {
  * Convert nest entries into the format accepted by d3.hierarchy
  */
 const entriesToHierarchy = (fieldValue, field, hierarchyConfig, entries) => {
+  if (fieldValue === 'Unknown') {
+    return {
+      fieldValue,
+      field,
+      children: chain(getLeaves, entries)
+    }
+  }
+
   return {
     fieldValue,
     field,
-
     children: map((entry) => {
       if (entry.values) {
         return entriesToHierarchy(
@@ -54,5 +61,13 @@ const entriesToHierarchy = (fieldValue, field, hierarchyConfig, entries) => {
     }, entries)
   };
 };
+
+const getLeaves = (entry) => {
+  if (entry.values) {
+    return chain(getLeaves, entry.values)
+  } else {
+    return [entry]
+  }
+}
 
 export default toHierarchy;

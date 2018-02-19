@@ -18,6 +18,7 @@ const appendCircles = ({ root, packedData }) => {
     .classed(className("node"), true)
     .classed(className("rootNode"), (d) => d.depth === 0)
     .classed(className("groupingNode"), (d) => d.depth > 0 && d.height > 0)
+    .classed(className("unknown"), (d) => d.depth > 0 && d.height > 0 && d.data.fieldValue === 'Unknown')
     .classed(className("leafNode"), (d) => d.height === 0)
     .attr("transform", (d) => `translate(${[d.x, d.y].join(",")})`)
     .order();
