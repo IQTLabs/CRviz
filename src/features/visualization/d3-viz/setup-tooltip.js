@@ -5,6 +5,11 @@ const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
   nodeRoot.on("mousemove", () => {
     const event = d3Event;
     showTooltip(event, fields, tooltip);
+
+    tooltip
+      .style("position", "absolute")
+      .style("top", "0px")
+      .style("left", "0px");
   });
 };
 
@@ -17,9 +22,7 @@ const showTooltip = (event, fields, tooltip) => {
     tooltip.node().innerHTML = text;
     tooltip
       .style("display", "block")
-      .style("position", "absolute")
-      .style("left", `${event.x + 5}px`)
-      .style("top", `${event.y + 5}px`);
+      .style("transform", `translate3d(${ event.x + 1 }px, ${ event.y + 1 }px, 0)`)
   } else {
     tooltip.style("display", "none");
   }
