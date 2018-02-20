@@ -1,6 +1,6 @@
 import {
   default as controls,
-  setHierarchy,
+  setHierarchyConfig,
   showNodes,
   useDarkTheme,
   colorBy,
@@ -13,14 +13,14 @@ import { concat, reduce } from "ramda";
 const reducer = combineReducers({ controls });
 
 describe("Controls reducer", () => {
-  describe("setHierarchy", () => {
-    it("sets the hierarchy", () => {
-      const hierarchy = [{ path: ["uid"], displayName: "UID" }];
-      const action = setHierarchy(hierarchy);
+  describe("setHierarchyConfig", () => {
+    it("sets the hierarchy config", () => {
+      const hierarchyConfig = [{ path: ["uid"], displayName: "UID" }];
+      const action = setHierarchyConfig(hierarchyConfig);
       const result = reducer({}, action);
 
       expect(selectControls(result)).toEqual({
-        hierarchy: hierarchy,
+        hierarchyConfig: hierarchyConfig,
         shouldShowNodes: true,
         darkTheme: false,
         colorBy: null

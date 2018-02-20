@@ -8,27 +8,14 @@ import registerServiceWorker from "./registerServiceWorker";
 
 import configureStore from "./configure-store";
 
+import data from 'features/visualization/fake-data';
+
 const store = configureStore();
 
 store.dispatch({
   type: "SET_DATASET",
   payload: {
-    dataset: [
-      {
-        uid: "uid",
-        role: {
-          role: "workstation",
-          confidence: 91
-        }
-      },
-      {
-        uid: "uid2",
-        role: {
-          role: "workstation",
-          confidence: 91
-        }
-      }
-    ]
+    dataset: data
   }
 });
 
@@ -38,6 +25,7 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
+
 registerServiceWorker();
 
 if (module.hot) {

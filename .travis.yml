@@ -17,6 +17,7 @@ addons:
   ssh_known_hosts: 52.191.199.105
 
 script:
+- yarn install
 - npm run test
 - npm run build
 

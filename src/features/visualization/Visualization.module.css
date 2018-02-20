@@ -1,0 +1,42 @@
+.viz {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.viz :global(.viz-rootNode) circle {
+  fill: transparent;
+}
+
+.viz :global(.viz-groupingNode) circle {
+  fill: black;
+  fill-opacity: 0.2;
+  vector-effects: preserve-stroke;
+  stroke-width: 1px;
+}
+
+.viz :global(.viz-unknown) circle {
+  fill: red;
+  fill-opacity: 0.5;
+  vector-effects: preserve-stroke;
+  stroke-width: 1px;
+}
+
+.viz :global(.viz-groupingNode):hover circle {
+  stroke: black;
+}
+
+.viz :global(.viz-unknown):hover circle {
+  stroke: rgb(155, 0, 0);
+}
+
+.viz :global(.viz-groupingNode) text {
+  font-family: monospace;
+}
+
+.viz :global(.viz-tooltip) {
+  background-color: white;
+  border: 1px solid black;
+  padding: 1rem;
+  white-space: nowrap;
+}
