@@ -8,16 +8,7 @@ import registerServiceWorker from "./registerServiceWorker";
 
 import configureStore from "./configure-store";
 
-import data from 'features/visualization/fake-data';
-
 const store = configureStore();
-
-store.dispatch({
-  type: "SET_DATASET",
-  payload: {
-    dataset: data
-  }
-});
 
 ReactDOM.render(
   <Provider store={store}>
