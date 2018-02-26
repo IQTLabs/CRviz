@@ -5,8 +5,9 @@ import { measureText, fitText, getFont } from "./text-utils";
 
 const setupZoom = ({
   zoomRoot,
-  nodeRoot,
+  transformRoot,
   nodes,
+  labels,
   width,
   height,
   packedData
@@ -45,15 +46,22 @@ const setupZoom = ({
   const [labelFont, labelHeight] = getLabelStyle(nodes);
 
   const zoomToTransform = (transform) => {
-    nodeRoot.attr("transform", transform);
+    transformRoot
+      .style("transform", `translate(${ Math.floor(transform.x) }px, ${ Math.floor(transform.y) }px) scale(${ transform.k })`);
 
     const bound = viewBound(width, height, transform);
 
     const nodesInView = nodes.filter((d) => boundOverlap(bound, nodeBound(d)));
+    const labelsInView = labels.filter((d) => boundOverlap(bound, nodeBound(d)));
+    const labelsNotInView = labels.filter((d) => !boundOverlap(bound, nodeBound(d)));
 
     nodesInView
       .call(hideSmall, transform)
+
+    labelsInView
+      .style('visibility', 'visible')
       .call(fitLabels, transform, labelFont, labelHeight, bound);
+    labelsNotInView.style('visibility', 'hidden');
   };
 
   const zoomTo = (datum, animate = true) => {
@@ -82,13 +90,12 @@ const hideSmall = (nodes, transform) => {
   nodes.attr("visibility", (d) => (d.r * transform.k < 1 ? "hidden" : "visible"));
 };
 
-const fitLabels = (nodes, transform, labelFont, labelHeight, viewBound) => {
+const fitLabels = (labels, transform, labelFont, labelHeight, viewBound) => {
   const fitVertically = (d) => {
     return d.labelSize * transform.k >= labelHeight;
   };
 
-  nodes
-    .select("text")
+  labels
     .style("visibility", (d) => (fitVertically(d) ? "visible" : "hidden"))
     .filter(fitVertically)
     .text((datum) => {
@@ -103,8 +110,7 @@ const fitLabels = (nodes, transform, labelFont, labelHeight, viewBound) => {
     })
     .attr("transform", function scaleLabel(d) {
       return zoomIdentity
-        .translate(0, d.labelY)
-        .scale(1 / transform.k);
+        .translate(transform.applyX(d.x), transform.applyY(d.y + d.labelY))
     })
 };
 
@@ -141,8 +147,7 @@ const boundOverlap = (bound0, bound1) => {
   );
 };
 
-const getLabelStyle = (nodes) => {
-  const labels = nodes.select("text");
+const getLabelStyle = (labels) => {
   let font = null,
     height = null;
   if (labels.size() > 0) {

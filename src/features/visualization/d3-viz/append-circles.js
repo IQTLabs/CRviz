@@ -2,10 +2,10 @@ import { path } from "d3-path";
 
 import datumKey from "./datum-key";
 
-const appendCircles = ({ root, packedData }) => {
+const appendCircles = ({ nodeRoot, labelRoot, packedData }) => {
   const className = (name) => `viz-${name}`;
 
-  const nodes = root
+  const nodes = nodeRoot
     .selectAll(`g.${className("node")}`)
     .data(packedData.descendants(), datumKey);
 
@@ -27,7 +27,7 @@ const appendCircles = ({ root, packedData }) => {
 
   const circles = nodes.select("circle").merge(nodesEnter.append("circle"));
 
-  circles.attr("r", (d) => d.r).attr("vector-effect", "non-scaling-stroke");
+  circles.attr("r", (d) => d.r);
 
   const labelShapes = nodes.select("path").merge(nodesEnter.append("path"));
 
@@ -48,13 +48,15 @@ const appendCircles = ({ root, packedData }) => {
       return shape.toString();
     });
 
-  nodesEnter
-    .filter(isInternal)
-    .append("text")
-    .attr("text-anchor", "middle")
-    .style("pointer-events", "none");
+  const labels = labelRoot.selectAll(`text.${ className("label") }`)
+    .data(packedData.descendants().filter(isInternal));
 
-  return nodes.merge(nodesEnter);
+  const labelsEnter = labels.enter().append("text").classed(className("label"), true)
+
+  return [
+    nodes.merge(nodesEnter),
+    labels.merge(labelsEnter)
+  ];
 };
 
 export default appendCircles;

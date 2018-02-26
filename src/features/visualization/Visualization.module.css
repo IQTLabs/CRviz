@@ -11,15 +11,12 @@
 .viz :global(.viz-groupingNode) circle {
   fill: black;
   fill-opacity: 0.2;
-  vector-effects: preserve-stroke;
-  stroke-width: 1px;
+  stroke-width: 0px;
 }
 
 .viz :global(.viz-unknown) circle {
   fill: red;
   fill-opacity: 0.5;
-  vector-effects: preserve-stroke;
-  stroke-width: 1px;
 }
 
 .viz :global(.viz-groupingNode):hover circle {
@@ -39,4 +36,8 @@
   border: 1px solid black;
   padding: 1rem;
   white-space: nowrap;
+}
+
+.viz :global(.viz-label) {
+  text-anchor: middle;
 }
