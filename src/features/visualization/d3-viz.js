@@ -57,8 +57,7 @@ function d3Viz(rootNode) {
 
   let selectedNode = null;
 
-  function update({ hierarchyConfig, fields, data }) {
-
+  function update({ hierarchyConfig, fields, data, showNodes }) {
     const hierarchy = makeHierarchy(data, hierarchyConfig);
     const pack = packWithLabel()
       .padding(Math.floor(Math.min(width, height) / 500))
@@ -66,10 +65,11 @@ function d3Viz(rootNode) {
 
     pack(hierarchy);
 
-    const [ nodes, labels ]= appendCircles({
+    const [ nodes, labels, countLabels ]= appendCircles({
       nodeRoot: nodeRoot,
       labelRoot: labelRoot,
-      packedData: hierarchy
+      packedData: hierarchy,
+      showNodes: showNodes
     });
 
     const zoom = setupZoom({
@@ -77,6 +77,7 @@ function d3Viz(rootNode) {
       transformRoot: transformRoot,
       nodes: nodes,
       labels: labels,
+      countLabels: countLabels,
       width: width,
       height: height,
       packedData: hierarchy

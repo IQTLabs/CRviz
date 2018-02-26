@@ -40,4 +40,10 @@
 
 .viz :global(.viz-label) {
   text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.viz :global(.viz-countLabel) {
+  text-anchor: middle;
+  dominant-baseline: mathematical;
 }

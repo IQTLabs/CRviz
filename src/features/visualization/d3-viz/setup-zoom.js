@@ -1,5 +1,5 @@
 import { zoom } from "d3-zoom";
-import { event as d3Event } from "d3-selection";
+import { local, event as d3Event } from "d3-selection";
 import { zoomIdentity } from "d3-zoom";
 import { measureText, fitText, getFont } from "./text-utils";
 
@@ -8,6 +8,8 @@ const setupZoom = ({
   transformRoot,
   nodes,
   labels,
+  countLabels,
+  showNodes,
   width,
   height,
   packedData
@@ -43,7 +45,8 @@ const setupZoom = ({
 
   zoomBehavior.scaleExtent(scaleExtent).translateExtent(translateExtent);
 
-  const [labelFont, labelHeight] = getLabelStyle(nodes);
+  const [labelFont, labelHeight] = getLabelStyle(labels);
+  const [countLabelFont, countLabelHeight] = getLabelStyle(countLabels);
 
   const zoomToTransform = (transform) => {
     transformRoot
@@ -54,6 +57,8 @@ const setupZoom = ({
     const nodesInView = nodes.filter((d) => boundOverlap(bound, nodeBound(d)));
     const labelsInView = labels.filter((d) => boundOverlap(bound, nodeBound(d)));
     const labelsNotInView = labels.filter((d) => !boundOverlap(bound, nodeBound(d)));
+    const countLabelsInView = countLabels.filter((d) => boundOverlap(bound, nodeBound(d)));
+    const hiddenCountLabels = countLabels.filter((d) => !boundOverlap(bound, nodeBound(d)));
 
     nodesInView
       .call(hideSmall, transform)
@@ -61,7 +66,14 @@ const setupZoom = ({
     labelsInView
       .style('visibility', 'visible')
       .call(fitLabels, transform, labelFont, labelHeight, bound);
+
     labelsNotInView.style('visibility', 'hidden');
+
+    countLabelsInView
+      .style('visibility', 'visible')
+      .call(fitCounts, transform, countLabelFont, countLabelHeight, bound);
+
+    hiddenCountLabels.style("visibility", "hidden");
   };
 
   const zoomTo = (datum, animate = true) => {
@@ -90,23 +102,33 @@ const hideSmall = (nodes, transform) => {
   nodes.attr("visibility", (d) => (d.r * transform.k < 1 ? "hidden" : "visible"));
 };
 
+const fitCounts = (countLabels, transform, font, countHeight, viewBound) => {
+  const fitVertically = (d) => (d.r * 2 - d.labelSize) * transform.k * 0.75 >= countHeight;
+
+  countLabels
+    .style("visibility", (d) => fitVertically(d) ? "visible" : "hidden")
+    .filter(fitVertically)
+    .text((datum) => {
+      const labelText = datum.value;
+      const maxWidth = Math.floor(datum.r * 2 * 0.75 * transform.k);
+      return fitText(font, labelText, maxWidth);
+    })
+    .attr("transform", (d) => {
+      return zoomIdentity
+        .translate(transform.applyX(d.x), transform.applyY(d.y - (d.labelSize / 2)))
+    });
+};
+
 const fitLabels = (labels, transform, labelFont, labelHeight, viewBound) => {
-  const fitVertically = (d) => {
-    return d.labelSize * transform.k >= labelHeight;
-  };
+  const fitVertically = (d) => d.labelSize * transform.k >= labelHeight;
 
   labels
     .style("visibility", (d) => (fitVertically(d) ? "visible" : "hidden"))
     .filter(fitVertically)
     .text((datum) => {
-      const { data: { fieldValue }, value: count } = datum;
-      const labelText = `${fieldValue} (${count})`;
-      const fittedText = fitText(
-        labelFont,
-        labelText,
-        Math.floor(datum.labelSize * transform.k)
-      );
-      return fittedText;
+      const labelText = `${datum.data.fieldValue} (${datum.value})`;
+      const maxWidth = Math.floor(datum.labelSize * transform.k);
+      return fitText(labelFont, labelText, maxWidth);
     })
     .attr("transform", function scaleLabel(d) {
       return zoomIdentity

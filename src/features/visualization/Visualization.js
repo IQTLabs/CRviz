@@ -19,9 +19,12 @@ class Visualization extends React.PureComponent {
   }
 
   updateFromProps() {
+    console.log(this.props.controls);
+
     this.viz.update({
       hierarchyConfig: this.props.controls.hierarchyConfig,
       fields: this.props.configuration.fields,
+      showNodes: this.props.controls.shouldShowNodes,
       data: data
     });
   }
