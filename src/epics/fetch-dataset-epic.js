@@ -1,7 +1,5 @@
 import { createAction } from 'redux-actions';
 import { Observable } from 'rxjs';
-import 'rxjs/add/observable/dom/ajax';
-import 'rxjs/add/operator/delay';
 
 import { setDataset } from 'domain/dataset';
 import { setHierarchyConfig } from 'domain/controls';
@@ -25,6 +23,7 @@ const fetchDatasetEpic = (action$, store) => {
         .concat(Observable.of(setHierarchyConfig([])))
         // Ignore result if another request has started.
         .takeUntil(action$.ofType(fetchDataset.toString()))
+        // TODO: Handle network error
     });
 }
 
