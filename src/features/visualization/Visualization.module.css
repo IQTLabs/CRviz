@@ -21,6 +21,7 @@
 
 .viz :global(.viz-groupingNode):hover circle {
   stroke: black;
+  fill-opacity: 0.1;
 }
 
 .viz :global(.viz-unknown):hover circle {
