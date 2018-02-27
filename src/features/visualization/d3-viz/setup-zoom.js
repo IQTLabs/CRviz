@@ -1,5 +1,5 @@
 import { zoom } from "d3-zoom";
-import { local, event as d3Event } from "d3-selection";
+import { event as d3Event } from "d3-selection";
 import { zoomIdentity } from "d3-zoom";
 import { measureText, fitText, getFont } from "./text-utils";
 
