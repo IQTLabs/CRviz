@@ -14,40 +14,70 @@ function d3Viz(rootNode) {
   const width = rootNode.clientWidth;
   const height = rootNode.clientHeight;
 
-  const svg = root.append('svg')
-    .style('width', `${width}px`)
-    .style('height', `${height}px`)
+  /**
+   * Stationary div that receive mouse events for zooming.
+   */
+  const zoomRoot = root.append('div')
+    .style('width', '100%')
+    .style('height', '100%')
+
+  root.style('position', 'relative');
+
+  /**
+   * The container that is scaled and transformed.
+   *
+   * Use a div with CSS 3D transform to get hardware acceleration.
+   * SVG transform are not hardware accelerated.
+   */
+  const transformRoot = zoomRoot.append('div')
+    .style('position', 'absolute')
+    .style('top', 0)
+    .style('left', 0)
+    .style('width', width)
+    .style('height', height)
+    .style('transform-origin', 'top left')
+
+  /**
+   * Label are placed in a separate element so that they are not scaled
+   * together with the circles.
+   */
+  const labelRoot = zoomRoot.append('svg')
+    .style('position', 'absolute')
+    .style('pointer-events', 'none') // Let the underlying circles get mouse events.
+    .style('top', 0)
+    .style('left', 0)
+    .style('width', width)
+    .style('height', height)
+
+  const svg = transformRoot.append('svg').style('overflow', 'visible')
 
   const tooltip = root.append('div').classed('viz-tooltip', true);
 
-  const zoomRoot = svg.append('g');
-  zoomRoot
-    .append('rect')
-    .attr('x', 0)
-    .attr('y', 0)
-    .attr('fill', 'transparent')
-    .attr('width', width)
-    .attr('height', height)
-
-  const nodeRoot = zoomRoot.append('g');
+  const nodeRoot = svg.append('g');
 
   let selectedNode = null;
 
-  function update({ hierarchyConfig, fields, data }) {
-
+  function update({ hierarchyConfig, fields, data, showNodes }) {
     const hierarchy = makeHierarchy(data, hierarchyConfig);
-    const pack = packWithLabel().padding(0.001);
+    const pack = packWithLabel()
+      .padding(Math.floor(Math.min(width, height) / 500))
+      .size([width, height]);
+
     pack(hierarchy);
 
-    const nodes = appendCircles({
-      root: nodeRoot,
-      packedData: hierarchy
+    const [ nodes, labels, countLabels ]= appendCircles({
+      nodeRoot: nodeRoot,
+      labelRoot: labelRoot,
+      packedData: hierarchy,
+      showNodes: showNodes
     });
 
     const zoom = setupZoom({
       zoomRoot: zoomRoot,
-      nodeRoot: nodeRoot,
+      transformRoot: transformRoot,
       nodes: nodes,
+      labels: labels,
+      countLabels: countLabels,
       width: width,
       height: height,
       packedData: hierarchy

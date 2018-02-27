@@ -48,6 +48,12 @@ const configurationFor = (dataset, configuration = {}) => {
 
 // ACTIONS
 
+/**
+ * Payload: {
+ *   dataset: [], // Array of devices
+ *   configuration: {} // Configuration
+ * }
+*/
 const setDataset = createAction("SET_DATASET");
 
 // REDUCERS
@@ -56,7 +62,10 @@ const reducer = handleActions(
     [setDataset]: (state, { payload }) => ({
       ...state,
       dataset: payload.dataset,
-      configuration: configurationFor(payload.dataset, payload.configuration)
+      configuration: configurationFor(
+        payload.dataset || [],
+        payload.configuration || {}
+      )
     })
   },
   defaultState
