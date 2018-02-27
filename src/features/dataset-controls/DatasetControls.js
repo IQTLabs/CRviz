@@ -1,8 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
+import { isNil } from "ramda";
 
 import { fetchDataset } from "epics/fetch-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
+import { setDataset } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
@@ -32,11 +34,19 @@ class DatasetControls extends React.Component {
   };
 
   onSelected = (dataset) => {
-    this.props.fetchDataset(dataset.url);
-    this.setState({
-      selected: dataset,
-      selectedFile: null
-    });
+    if (isNil(dataset)) {
+      this.props.setDataset({ dataset: [], configuration: {} });
+      this.setState({
+        selected: null,
+        selectedFile: null
+      });
+    } else {
+      this.props.fetchDataset(dataset.url);
+      this.setState({
+        selected: dataset,
+        selectedFile: null
+      });
+    }
   }
 
   onUpload = (file) => {
@@ -74,7 +84,8 @@ class DatasetControls extends React.Component {
 
 const mapDispatchToProps = {
   fetchDataset,
-  uploadDataset
+  uploadDataset,
+  setDataset
 };
 
 export default connect(null, mapDispatchToProps)(DatasetControls);

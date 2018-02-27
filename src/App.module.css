@@ -13,6 +13,11 @@
   padding: 0.5rem;
 }
 
+.controls .section {
+  border-top: 2px dashed rgba(125, 125, 125, 0.5);
+  padding: 1rem 0;
+}
+
 .canvas {
   flex: 1;
   min-width: 300px;

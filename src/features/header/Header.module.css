@@ -1,0 +1,16 @@
+.header {
+  background: transparent;
+  height: auto;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 2rem;
+}
+
+.appName {
+  margin-left: 0.5rem;
+  font-size: 2em;
+  font-weight: bold;
+}
