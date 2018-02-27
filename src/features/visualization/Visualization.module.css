@@ -37,6 +37,7 @@
   border: 1px solid black;
   padding: 1rem;
   white-space: nowrap;
+  pointer-events: none;
 }
 
 .viz :global(.viz-label) {

@@ -18,12 +18,19 @@ const fetchDatasetEpic = (action$, store) => {
       const size = parseInt(url.match(/\/(\d+)$/)[1]);
 
       return Observable
+        // .ajax({ url: url, crossDomain: true, responseType: 'json' })
+        // .map((result) => result.response )
         .of(fakeData.slice(0, size)).delay(1000) // Fake AJAX call for now
         .map((data) => setDataset({ dataset: data }) )
         .concat(Observable.of(setHierarchyConfig([])))
+
         // Ignore result if another request has started.
         .takeUntil(action$.ofType(fetchDataset.toString()))
-        // TODO: Handle network error
+        .catch((error) => {
+          console.error(error);
+          alert("Failed to fetch dataset. Please try again later.");
+          return Observable.empty();
+        });
     });
 }
 
