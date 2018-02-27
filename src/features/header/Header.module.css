@@ -2,7 +2,9 @@
   background: transparent;
   height: auto;
   display: flex;
+  flex-wrap:  wrap;
   align-items: center;
+  margin-bottom: 2rem;
 }
 
 .logo {
@@ -13,4 +15,9 @@
   margin-left: 0.5rem;
   font-size: 2em;
   font-weight: bold;
+}
+
+.tagline {
+  width: 100%;
+  font-style: italic;
 }

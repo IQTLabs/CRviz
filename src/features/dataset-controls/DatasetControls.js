@@ -14,15 +14,15 @@ import style from "./DatasetControls.module.css";
 // Hard coded datasets
 const datasets = [
   {
-    name: "Small",
+    name: "Small (400 nodes)",
     url: "http://52.168.28.25:8080/v1/network/400"
   },
   {
-    name: "Medium",
+    name: "Medium (1400 nodes)",
     url: "http://52.168.28.25:8080/v1/network/1400"
   },
   {
-    name: "Large",
+    name: "Large (4000 nodes)",
     url: "http://52.168.28.25:8080/v1/network/4000"
   }
 ];
