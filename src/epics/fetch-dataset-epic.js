@@ -15,12 +15,11 @@ const fetchDatasetEpic = (action$, store) => {
     .ofType(fetchDataset.toString())
     .mergeMap((action) => {
       const url = action.payload
-      const size = parseInt(url.match(/\/(\d+)$/)[1]);
 
       return Observable
-        // .ajax({ url: url, crossDomain: true, responseType: 'json' })
-        // .map((result) => result.response )
-        .of(fakeData.slice(0, size)).delay(1000) // Fake AJAX call for now
+        .ajax({ url: url, crossDomain: true, responseType: 'json' })
+        .map((result) => result.response )
+        // .of(fakeData.slice(0, size)).delay(1000) // Fake AJAX call for now
         .map((data) => setDataset({ dataset: data }) )
         .concat(Observable.of(setHierarchyConfig([])))
 
