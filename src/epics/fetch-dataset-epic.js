@@ -4,8 +4,6 @@ import { Observable } from 'rxjs';
 import { setDataset } from 'domain/dataset';
 import { setHierarchyConfig } from 'domain/controls';
 
-import fakeData from 'features/visualization/fake-data';
-
 // ACTIONS
 const fetchDataset = createAction('FETCH_DATASET');
 

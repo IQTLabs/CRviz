@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import Header from 'features/header/Header';
-import HierarchySelector from 'features/hierarchy-selector/HierarchySelector';
+import HierarchySelector from 'features/dnd-hierarchy-selector/HierarchySelector';
 import MiscControls from 'features/misc-controls/MiscControls';
 import Visualization from 'features/visualization/Visualization';
 import DatasetControls from 'features/dataset-controls/DatasetControls';
