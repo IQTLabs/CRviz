@@ -129,7 +129,7 @@ const fitLabels = (labels, transform, labelFont, labelHeight, viewBound) => {
       const labelText = `${datum.data.fieldValue} (${datum.value})`;
       // We'll try to fit more text on the label at the expense
       // of possibly having labels extend outside of their area.
-      const maxWidth = Math.floor(datum.labelSize * transform.k * 1.1);
+      const maxWidth = Math.floor(datum.labelSize * transform.k * 1.2);
       return fitText(labelFont, labelText, maxWidth);
     })
     .attr("transform", function scaleLabel(d) {

@@ -22,13 +22,13 @@ function AvailableFieldList({
   return (
     <Droppable droppableId={droppableId} type="Field">
       {(provided, snapshot) => {
-
         const dragForeign = isDraggingForeign(dragState, fields, getFieldId);
 
         return (
           <div
             className={classNames(style.listContainer, {
-              [style.dragForeign]: dragForeign
+              [style.dragForeign]: dragForeign,
+              [style.isDraggingOver]: snapshot.isDraggingOver
             })}
             ref={provided.innerRef}
             {...provided.droppableProps}
@@ -63,11 +63,12 @@ function AvailableFieldList({
 }
 
 const isDraggingForeign = (dragState, fields, getFieldId) => {
-  return dragState &&
+  return (
+    dragState &&
     dragState.draggableId &&
-    !contains(dragState.draggableId, map(getFieldId, fields));
-}
-
+    !contains(dragState.draggableId, map(getFieldId, fields))
+  );
+};
 
 AvailableFieldList.defaultProps = {
   fields: []
@@ -76,7 +77,6 @@ AvailableFieldList.defaultProps = {
 const StyleProps = PropTypes.shape({
   listContainer: PropTypes.string.isRequired,
   field: PropTypes.string.isRequired,
-  groupBy: PropTypes.string.isRequired,
   fieldName: PropTypes.string.isRequired
 });
 
