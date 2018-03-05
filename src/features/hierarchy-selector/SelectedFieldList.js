@@ -53,21 +53,15 @@ class SelectedFieldList extends React.Component {
                 {...provided.droppableProps}
                 className={style.droppable}
               >
-                {!isEmpty(fields) &&
-                  fields.map((field, index) => {
-                    const id = getFieldId(field);
-                    return (
-                      <SelectedField
-                        style={style}
-                        draggableId={id}
-                        key={id}
-                        displayName={field.displayName}
-                        index={index}
-                        dragIndex={dragIndex(droppableId, dragState, index)}
-                        animated={field === this.state.toAnimate}
-                      />
-                    );
-                  })}
+                <List
+                  style={ style }
+                  fields={ fields }
+                  getFieldId={ getFieldId }
+                  droppableId={ droppableId }
+                  dragState={ dragState }
+                  toAnimate={ this.state.toAnimate }
+                />
+
                 {isEmpty(fields) && (
                   <div className={style.emptyPlaceholder}>
                     <span>Drop attribute here</span>
@@ -83,7 +77,7 @@ class SelectedFieldList extends React.Component {
   }
 }
 
-function List({ fields, getFieldId, style ,droppableId, dragState }) {
+function List({ fields, getFieldId, style ,droppableId, dragState, toAnimate }) {
   if (isEmpty(fields)) {
     return null;
   }
@@ -98,7 +92,7 @@ function List({ fields, getFieldId, style ,droppableId, dragState }) {
           displayName={field.displayName}
           index={index}
           dragIndex={dragIndex(droppableId, dragState, index)}
-          animated={field === this.state.toAnimate}
+          animated={field === toAnimate}
         />
       );
     })
