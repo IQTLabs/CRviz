@@ -59,9 +59,10 @@ function d3Viz(rootNode) {
 
   function update({ hierarchyConfig, fields, data, showNodes }) {
     const hierarchy = makeHierarchy(data, hierarchyConfig);
+
     const pack = packWithLabel()
-      .padding(Math.floor(Math.min(width, height) / 500))
-      .size([width, height]);
+      .size([width, height])
+      .padding((d) => d.height / hierarchy.height * 5)
 
     pack(hierarchy);
 

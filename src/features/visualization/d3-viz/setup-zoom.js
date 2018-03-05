@@ -103,7 +103,7 @@ const hideSmall = (nodes, transform) => {
 };
 
 const fitCounts = (countLabels, transform, font, countHeight, viewBound) => {
-  const fitVertically = (d) => (d.r * 2 - d.labelSize) * transform.k * 0.75 >= countHeight;
+  const fitVertically = (d) => (d.r * 2 - d.labelSize) * transform.k * 0.66 >= countHeight;
 
   countLabels
     .style("visibility", (d) => fitVertically(d) ? "visible" : "hidden")
@@ -127,7 +127,9 @@ const fitLabels = (labels, transform, labelFont, labelHeight, viewBound) => {
     .filter(fitVertically)
     .text((datum) => {
       const labelText = `${datum.data.fieldValue} (${datum.value})`;
-      const maxWidth = Math.floor(datum.labelSize * transform.k);
+      // We'll try to fit more text on the label at the expense
+      // of possibly having labels extend outside of their area.
+      const maxWidth = Math.floor(datum.labelSize * transform.k * 1.2);
       return fitText(labelFont, labelText, maxWidth);
     })
     .attr("transform", function scaleLabel(d) {

@@ -41,7 +41,7 @@ const packWithLabel = () => {
     root.y = options.size[1] / 2;
     const { radius, size, labelRatio, packSiblings } = options;
     const padding =
-      options.padding === "function" ? options.padding : () => options.padding;
+      typeof options.padding === "function" ? options.padding : () => options.padding;
 
     if (radius) {
       root

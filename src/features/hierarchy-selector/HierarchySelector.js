@@ -2,42 +2,137 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import { append, compose, differenceWith, eqBy, join, prop } from "ramda";
+import { DragDropContext} from 'react-beautiful-dnd';
+
+import {
+  compose,
+  differenceWith,
+  eqBy,
+  equals,
+  find,
+  findIndex,
+  identity,
+  insert,
+  isEmpty,
+  isNil,
+  join,
+  prop,
+  remove
+} from "ramda";
 
 import { selectConfiguration } from "domain/dataset";
 import { setHierarchyConfig, selectControls } from "domain/controls";
 
-import FieldList from "./FieldList";
-import NewField from "./NewField";
-import style from "./HierarchySelector.module.css";
+import SelectedFieldList from './SelectedFieldList';
+import AvailableFieldList from './AvailableFieldList';
 
-function HierarchySelector({ configuration, controls, setHierarchyConfig }) {
-  if (configuration === null) {
-    return null;
+import availableFieldListStyle from './AvailableFieldList.module.css';
+import selectedFieldListStyle from './SelectedFieldList.module.css';
+
+const SELECTED_FIELD_LIST_ID = 'SelectedFieldList';
+const AVAILABLE_FIELD_LIST_ID = 'AvailableFieldList';
+
+class HierarchySelector extends React.Component {
+
+  state = {
+    dragState: null
   }
 
-  const hierarchyConfig = controls.hierarchyConfig;
+  onDragStart = (dragStart) => {
+    this.setState({
+      dragState: dragStart
+    });
+  }
 
-  const availableFields = differenceWith(
-    eqBy(compose(join("."), prop("path"))),
-    configuration.fields,
-    hierarchyConfig
-  );
+  onDragUpdate = (dragUpdate) => {
+    this.setState({
+      dragState: dragUpdate
+    })
+  }
 
-  return (
-    <div className={style.container}>
-      <FieldList fields={hierarchyConfig} onChange={setHierarchyConfig} />
+  onDragEnd = (dropResult) => {
+    const { draggableId, destination } = dropResult;
+    this.setState({ dragState: null })
 
-      {
-        availableFields.length > 0 &&
-          <NewField
-            isFirst={hierarchyConfig.length === 0}
-            availableFields={availableFields}
-            onAdd={(field) => setHierarchyConfig(append(field, hierarchyConfig))}
+    if (destination === null) {
+      return;
+    } else if (destination.droppableId === SELECTED_FIELD_LIST_ID) {
+      this.updateHierarchy(draggableId, destination.index)
+    } else {
+      this.removeField(draggableId);
+    }
+  }
+
+  updateHierarchy = (fieldId, newIndex) => {
+    const { fields } = this.props.configuration;
+    const { hierarchyConfig } = this.props.controls;
+
+    const index = findFieldIndex(hierarchyConfig, fieldId);
+    if (index === newIndex) { return; }
+
+    const hasId = (id) => (field) => getFieldId(field) === id;
+    const field = find(hasId(fieldId), fields)
+
+    const removeOld = isNil(index) ? identity : remove(index, 1);
+    const addNew = insert(newIndex, field);
+    const updatedHierarchy = compose(addNew, removeOld)(hierarchyConfig)
+
+    this.props.setHierarchyConfig(updatedHierarchy)
+  }
+
+  removeField = (fieldId) => {
+    const { hierarchyConfig } = this.props.controls;
+    const { setHierarchyConfig } = this.props;
+    const index = findFieldIndex(hierarchyConfig, fieldId);
+
+    if (index !== null) {
+      setHierarchyConfig(remove(index, 1, hierarchyConfig ))
+    }
+  }
+
+  render() {
+    if (this.props.configuration === null) {
+      return null;
+    }
+
+    const hierarchyConfig = this.props.controls.hierarchyConfig;
+
+    if (isEmpty(this.props.configuration.fields)) {
+      return null;
+    }
+
+    const availableFields = differenceWith(
+      eqBy(getFieldId),
+      this.props.configuration.fields,
+      hierarchyConfig
+    );
+
+    return (
+      <div>
+        <DragDropContext
+          onDragStart={ this.onDragStart }
+          onDragUpdate={ this.onDragUpdate }
+          onDragEnd={ this.onDragEnd }>
+
+          <SelectedFieldList
+            style={ selectedFieldListStyle }
+            fields={ hierarchyConfig }
+            droppableId={ SELECTED_FIELD_LIST_ID }
+            getFieldId={ getFieldId }
+            dragState={ this.state.dragState }
           />
-      }
-    </div>
-  );
+          <AvailableFieldList
+            style={ availableFieldListStyle }
+            fields={ availableFields }
+            droppableId={ AVAILABLE_FIELD_LIST_ID }
+            getFieldId={ getFieldId }
+            dragState={ this.state.dragState }
+          />
+
+        </DragDropContext>
+      </div>
+    );
+  }
 }
 
 HierarchySelector.propTypes = {
@@ -48,6 +143,13 @@ HierarchySelector.propTypes = {
     hierarchyConfig: PropTypes.array.isRequired
   })
 };
+
+const findFieldIndex = (list, fieldId) => {
+  const matchId = compose(equals(fieldId), getFieldId)
+  const index = findIndex(matchId, list)
+  return index === -1 ? null : index;
+}
+const getFieldId = compose(join("."), prop("path"));
 
 const mapStateToProps = (state) => ({
   configuration: selectConfiguration(state),
