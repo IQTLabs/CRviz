@@ -16,6 +16,7 @@ import {
   isEmpty,
   isNil,
   join,
+  path,
   prop,
   remove
 } from "ramda";
@@ -25,12 +26,14 @@ import { setHierarchyConfig, selectControls } from "domain/controls";
 
 import SelectedFieldList from './SelectedFieldList';
 import AvailableFieldList from './AvailableFieldList';
+import DropTarget from './DropTarget';
 
 import availableFieldListStyle from './AvailableFieldList.module.css';
 import selectedFieldListStyle from './SelectedFieldList.module.css';
 
 const SELECTED_FIELD_LIST_ID = 'SelectedFieldList';
 const AVAILABLE_FIELD_LIST_ID = 'AvailableFieldList';
+const DROP_TARGET_ID = 'DropTarget';
 
 class HierarchySelector extends React.Component {
 
@@ -58,6 +61,8 @@ class HierarchySelector extends React.Component {
       return;
     } else if (destination.droppableId === SELECTED_FIELD_LIST_ID) {
       this.updateHierarchy(draggableId, destination.index)
+    } else if (destination.droppableId === (DROP_TARGET_ID)) {
+      this.updateHierarchy(draggableId, this.props.controls.hierarchyConfig.length);
     } else {
       this.removeField(draggableId);
     }
@@ -107,6 +112,8 @@ class HierarchySelector extends React.Component {
       hierarchyConfig
     );
 
+    const dragState = this.state.dragState;
+
     return (
       <div>
         <DragDropContext
@@ -114,13 +121,23 @@ class HierarchySelector extends React.Component {
           onDragUpdate={ this.onDragUpdate }
           onDragEnd={ this.onDragEnd }>
 
-          <SelectedFieldList
+          <div style={{ marginBottom: '2rem' }}>
+            <SelectedFieldList
+              style={ selectedFieldListStyle }
+              fields={ hierarchyConfig }
+              droppableId={ SELECTED_FIELD_LIST_ID }
+              getFieldId={ getFieldId }
+              dragState={ dragState }
+            />
+
+          <DropTarget
             style={ selectedFieldListStyle }
-            fields={ hierarchyConfig }
-            droppableId={ SELECTED_FIELD_LIST_ID }
-            getFieldId={ getFieldId }
-            dragState={ this.state.dragState }
+            isDropDisabled={ path(['source', 'droppableId'], dragState) === SELECTED_FIELD_LIST_ID }
+            droppableId= { DROP_TARGET_ID }
+            fields={ this.props.controls.hierarchyConfig }
           />
+        </div>
+
           <AvailableFieldList
             style={ availableFieldListStyle }
             fields={ availableFields }

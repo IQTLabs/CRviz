@@ -8,7 +8,7 @@ import { isEmpty, contains, map, sortBy } from "ramda";
 import { Droppable } from "react-beautiful-dnd";
 
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faTrash from "@fortawesome/fontawesome-free-solid/faTrashAlt";
+import faTrashAlt from "@fortawesome/fontawesome-free-solid/faTrashAlt";
 
 import AvailableField from "./AvailableField";
 
@@ -51,7 +51,7 @@ function AvailableFieldList({
             {dragForeign && (
               <div className={style.dragForeignContainer}>
                 <span>
-                  <FontAwesomeIcon icon={faTrash} />
+                  <FontAwesomeIcon icon={faTrashAlt} />
                 </span>
               </div>
             )}

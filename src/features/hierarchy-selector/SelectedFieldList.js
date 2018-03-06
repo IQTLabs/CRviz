@@ -1,50 +1,51 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { difference, isEmpty, isNil, path } from "ramda";
+import { findIndex, eqBy, differenceWith, isEmpty, isNil, path } from "ramda";
 
 import { Droppable } from "react-beautiful-dnd";
-import classNames from "classnames";
 
 import SelectedField from "./SelectedField";
 
 class SelectedFieldList extends React.Component {
   state = {
-    previousFields: [],
+    lastFields: [],
     toAnimate: null
   };
 
   componentDidMount() {
-    this.setState({ previousFields: this.props.fields });
+    this.setState({
+      lastFields: this.props.fields
+    });
   }
 
   componentWillReceiveProps(nextProps) {
-    const toAnimate = difference(
+    const { getFieldId } = nextProps;
+
+    // Find newly inserted item, if any
+    let toAnimate = differenceWith(
+      eqBy(getFieldId),
       nextProps.fields,
-      this.state.previousFields
+      this.state.lastFields
     )[0];
+
+    if (toAnimate) {
+      // Only animate item that are not inserted at the bottom using AffordanceDroppable
+      const newIndex = findIndex(eqBy(getFieldId, toAnimate), nextProps.fields);
+      toAnimate = newIndex < this.state.lastFields.length ? toAnimate : null;
+    }
+
     this.setState({
-      previousFields: nextProps.fields,
-      toAnimate
+      lastFields: nextProps.fields,
+      toAnimate: toAnimate
     });
   }
 
   render() {
-    const {
-      style,
-      fields,
-      getFieldId,
-      droppableId,
-      dragState
-    } = this.props;
+    const { style, fields, getFieldId, droppableId, dragState } = this.props;
 
+    const draggingOver = isDraggingOver(droppableId, dragState);
     return (
-      <div
-        className={classNames(style.listContainer, {
-          [style.isDragging]: dragState !== null,
-          [style.isEmpty]: isEmpty(fields),
-          [style.isDraggingOver]: isDraggingOver(droppableId, dragState)
-        })}
-      >
+      <div className={style.listContainer}>
         <Droppable droppableId={droppableId} type="Field">
           {(provided, snapshot) => {
             return (
@@ -54,20 +55,17 @@ class SelectedFieldList extends React.Component {
                 className={style.droppable}
               >
                 <List
-                  style={ style }
-                  fields={ fields }
-                  getFieldId={ getFieldId }
-                  droppableId={ droppableId }
-                  dragState={ dragState }
-                  toAnimate={ this.state.toAnimate }
+                  style={style}
+                  fields={fields}
+                  getFieldId={getFieldId}
+                  droppableId={droppableId}
+                  dragState={dragState}
+                  toAnimate={this.state.toAnimate}
                 />
 
-                {isEmpty(fields) && (
-                  <div className={style.emptyPlaceholder}>
-                    <span>Drop attribute here</span>
-                  </div>
-                )}
-                {provided.placeholder}
+                {draggingOver &&
+                  dragState.destination.index !== fields.length &&
+                  provided.placeholder}
               </div>
             );
           }}
@@ -77,43 +75,48 @@ class SelectedFieldList extends React.Component {
   }
 }
 
-function List({ fields, getFieldId, style ,droppableId, dragState, toAnimate }) {
+function List({
+  fields,
+  getFieldId,
+  style,
+  droppableId,
+  dragState,
+  toAnimate
+}) {
   if (isEmpty(fields)) {
     return null;
   }
-  return (
-    fields.map((field, index) => {
-      const id = getFieldId(field);
-      return (
-        <SelectedField
-          style={style}
-          draggableId={id}
-          key={id}
-          displayName={field.displayName}
-          index={index}
-          dragIndex={dragIndex(droppableId, dragState, index)}
-          animated={field === toAnimate}
-        />
-      );
-    })
-  );
+  return fields.map((field, index) => {
+    const id = getFieldId(field);
+    const animated = toAnimate && getFieldId(field) === getFieldId(toAnimate);
+
+    return (
+      <SelectedField
+        style={style}
+        draggableId={id}
+        key={id}
+        displayName={field.displayName}
+        index={index}
+        dragIndex={dragIndex(droppableId, dragState, index)}
+        animated={animated || false}
+      />
+    );
+  });
 }
 
 const isDraggingOver = (droppableId, dragState) => {
-  return !isNil(dragState) &&
-    path(["destination", "droppableId"], dragState) === droppableId;
-}
+  return (
+    !isNil(dragState) &&
+    path(["destination", "droppableId"], dragState) === droppableId
+  );
+};
 
 /**
- * react-beautiful-dnd does not update the component with the new indices during
- * drag, so we'll calculate our own.
+ * Calculate the potential indices during drag based on the current dragState.
+ *
+ * This is used to update the groupBy label on the fly.
  */
 const dragIndex = (droppableId, dragState, index) => {
-  // Only update the index if something is being dragged over this droppable.
-  // const destId = path(["destination", "droppableId"], dragState);
-  // if (isNil(destId) || destId !== droppableId) {
-  //   return index;
-  // }
   if (!isDraggingOver(droppableId, dragState)) {
     return index;
   }
@@ -128,7 +131,7 @@ const dragIndex = (droppableId, dragState, index) => {
     return index >= to ? index + 1 : index;
   }
 
-  // For item that is being dragged, the new index is the destination index.
+  // For an item that is being dragged, the new index is the destination index.
   if (index === from) {
     return to;
   }
@@ -153,7 +156,14 @@ SelectedFieldList.defaultProps = {
 SelectedFieldList.propTypes = {
   fields: PropTypes.array,
   droppableId: PropTypes.string.isRequired,
-  getFieldId: PropTypes.func.isRequired
+  getFieldId: PropTypes.func.isRequired,
+
+  style: PropTypes.shape({
+    listContainer: PropTypes.string.isRequired,
+    draggable: PropTypes.string.isRequired,
+    field: PropTypes.string.isRequired,
+    groupBy: PropTypes.string.isRequired
+  })
 };
 
 export default SelectedFieldList;
