@@ -1,49 +1,20 @@
 .listContainer {
   position: relative;
-  margin-bottom: 1rem;
-  border: 2px dashed transparent;
-  padding: 0.5rem;
+  transition: all 0.25s;
+  opacity: 1;
 }
 
-.listContainer.isEmpty {
-  border-color:rgba(0, 0, 0, 0.2);
-}
-
-.listContainer.isDragging {
-  border-color: rgba(0, 147, 0, 0.25);
-}
-
-.listContainer.isDraggingOver {
-  border-color: rgba(0, 147, 0, 0.75);
+.isDropDisabled {
+  opacity: 0.5;
 }
 
 .droppable {
   box-sizing: content-box;
-  min-height: 2.5rem;
-  padding-bottom: 1rem;
 /*
  * For some reason having border prevent this box from resizing by a tiny bit
  * when dragging into an empty container
  */
   border: 1px solid transparent;
-}
-
-.emptyPlaceholder {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.2;
-}
-
-.isDragging .emptyPlaceholder {
-  border-color: green;
-  color: green;
-  opacity: 0.5;
 }
 
 .draggable {
@@ -54,18 +25,12 @@
   height: 2rem;
   line-height: 2rem;
   display: flex;
-  align-items: center;
+  align-items: stretch;
 }
 
 @keyframes groupByEnter {
   0% { width: 0 }
   100% { width: 5.5rem }
-}
-
-@keyframes groupBySwap {
-  0% { opacity: 1 }
-  50% { opacity: 0 }
-  100% { opacity: 1 }
 }
 
 .groupBy {
@@ -74,24 +39,49 @@
   white-space: nowrap;
   overflow: hidden;
   width: 5.5rem;
+  display: flex;
+  align-items: center;
 }
+
 .animated {
+
   animation-name: groupByEnter;
   animation-fill-mode: both;
   animation-duration: 0.5s;
   animation-iteration-count: 1;
 }
 
-.fieldName {
+.fieldName, .dropTarget {
   flex: 1;
   background-color: rgb(235, 235, 235);
   height: 2rem;
   line-height: 2rem;
   padding: 0 0.5rem;
-  margin: 0.25rem 0.25rem;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  border: 2px dashed transparent;
+}
+
+.dropTarget {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed black;
+  background-color: transparent;
+  color: black;
+  opacity: 0.2;
+  padding: 0;
+}
+
+.dropTarget.isDraggingOver {
+  border-color: rgb(70, 176, 70);
+  color: rgb(70, 176, 70);
+  opacity: 1;
+  background-color: transparent;
 }
 
 .dragHandle {

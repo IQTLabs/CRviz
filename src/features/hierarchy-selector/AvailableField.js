@@ -15,6 +15,9 @@ function AvailableField({ style, displayName, index, draggableId }) {
               {...provided.dragHandleProps}
               style={{
                 ...provided.draggableProps.style,
+                // Disable animation of items moving out of the way when
+                // dragging. It implies the list is sortable, and it doesn't
+                // work well with multiline list anyway.
                 transform: snapshot.isDragging
                   ? provided.draggableProps.style.transform
                   : "none"
@@ -30,7 +33,8 @@ function AvailableField({ style, displayName, index, draggableId }) {
 }
 
 const StyleProps = PropTypes.shape({
-  draggableContainer: PropTypes.string.isRequired
+  draggableContainer: PropTypes.string.isRequired,
+  field: PropTypes.string.isRequired,
 });
 
 AvailableField.propTypes = {
