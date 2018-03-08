@@ -15,7 +15,7 @@ import style from "./DatasetControls.module.css";
 const datasets = [
   {
     name: "Small (400 nodes)",
-    url: "http://52.168.28.25:8080/v1/network/30"
+    url: "http://52.168.28.25:8080/v1/network/400"
   },
   {
     name: "Medium (1400 nodes)",

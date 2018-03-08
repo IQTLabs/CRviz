@@ -66,7 +66,7 @@ function d3Viz(rootNode) {
 
     const pack = packWithLabel()
       .size([width, height])
-      .padding((d) => d.height / hierarchy.height * 5)
+      .padding((d) => d.height / hierarchy.height * 15)
 
     pack(hierarchy);
 

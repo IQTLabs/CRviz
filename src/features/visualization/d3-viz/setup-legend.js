@@ -1,4 +1,5 @@
 import {
+  curry,
   contains,
   either,
   equals,
@@ -112,19 +113,27 @@ const extendColorScheme = (colorScheme, count) => {
     return colorScheme;
   }
 
+
   const extraColors = times((i) => {
-    const currentLayer = Math.floor(i / colorScheme.length) + 1;
     const previous = hcl(colorScheme[i % colorScheme.length])
-    const step = 1 / (extralayers + 1);
-    const nextColor = hcl(
-      previous.h,
-      Math.floor(previous.c * (currentLayer * step)),
-      previous.l// * (0.75 * currentLayer / extralayers)
-    );
+    const cGrowth = mirror((previous.c + 100) / 2)(expDecay(-0.4, 100, previous.c));
+    const lDecay = expDecay(-0.5, previous.l, Math.min(previous.l, previous.l / 2));
+
+    const c = cGrowth(i + 1);
+    const l = lDecay(i + 1);
+    const nextColor = hcl(previous.h, c, l);
     return nextColor.toString();
   }, count - colorScheme.length);
 
   return concat(colorScheme, extraColors)
 }
+
+const expDecay = curry((rate, max, min, t) => {
+  return (max - min) * Math.E**(rate * (t)) + min;
+});
+
+// Mirror a function f(x) over x = c
+
+const mirror = curry((c, f, x) => f(2 * c - x));
 
 export default setupLegend;
