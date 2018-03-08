@@ -36,7 +36,7 @@ const eachWithIndex = addIndex(forEach);
  * Assign x and y coordinates to rows of circles
  */
 const placeRows = (rows) => {
-  rows = orderRows(rows);
+  rows = middleOut(map(middleOut, rows));
 
   const maxRadii = map(maxRadius, rows);
   const ys = coordinatesForRadii(maxRadii);
@@ -74,12 +74,12 @@ const pickEven = (list) => addIndex(reject)((_, i) => i % 2 === 0, list);
 const pickOdd = (list) => addIndex(reject)((_, i) => i % 2 !== 0, list);
 
 /**
-/ Reorder rows from the middle out, alternating the direction up/down.
+/ Re-order items from the middle out, alternating in direction.
 /
 / Example:
-/ orderRows([1, 2, 3, 4, 5]) //=> [4, 2, 1, 3, 5]
+/ middleOut([1, 2, 3, 4, 5]) //=> [4, 2, 1, 3, 5]
 */
-const orderRows = (rows) => {
+const middleOut = (rows) => {
   const above = pickEven(rows);
   const below = pickOdd(rows);
   return concat(reverse(above), below);

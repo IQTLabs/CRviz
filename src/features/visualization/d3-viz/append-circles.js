@@ -39,7 +39,6 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes }) => {
   labelShapes
     .filter((d) => d.labelSize)
     .attr("class", className("labelShape"))
-    .attr("fill", "rgba(0, 0, 0, 0.2)")
     .attr("d", getLabelShape);
 
   const labels = labelRoot

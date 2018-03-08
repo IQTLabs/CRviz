@@ -22,6 +22,7 @@ class Visualization extends React.PureComponent {
       hierarchyConfig: this.props.controls.hierarchyConfig,
       fields: this.props.configuration.fields,
       showNodes: this.props.controls.shouldShowNodes,
+      coloredField: this.props.controls.colorBy,
       data: this.props.dataset
     });
   }
