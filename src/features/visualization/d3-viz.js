@@ -6,6 +6,7 @@ import toHierarchy from './d3-viz/to-hierarchy';
 import appendCircles from './d3-viz/append-circles';
 import setupZoom from './d3-viz/setup-zoom';
 import setupTooltip from './d3-viz/setup-tooltip';
+import setupLegend from './d3-viz/setup-legend';
 import datumKey from './d3-viz/datum-key';
 
 function d3Viz(rootNode) {
@@ -18,6 +19,7 @@ function d3Viz(rootNode) {
    * Stationary div that receive mouse events for zooming.
    */
   const zoomRoot = root.append('div')
+    .style('position', 'relative')
     .style('width', '100%')
     .style('height', '100%')
 
@@ -30,11 +32,12 @@ function d3Viz(rootNode) {
    * SVG transform are not hardware accelerated.
    */
   const transformRoot = zoomRoot.append('div')
+    .attr('data-node', 'transformRoot')
     .style('position', 'absolute')
     .style('top', 0)
     .style('left', 0)
-    .style('width', width)
-    .style('height', height)
+    .style('width', '100%')
+    .style('height', '100%')
     .style('transform-origin', 'top left')
 
   /**
@@ -46,18 +49,19 @@ function d3Viz(rootNode) {
     .style('pointer-events', 'none') // Let the underlying circles get mouse events.
     .style('top', 0)
     .style('left', 0)
-    .style('width', width)
-    .style('height', height)
+    .style('width', '100%')
+    .style('height', '100%')
 
   const svg = transformRoot.append('svg').style('overflow', 'visible')
 
   const tooltip = root.append('div').classed('viz-tooltip', true);
+  const legend = root.append('div').classed('viz-legend', true);
 
   const nodeRoot = svg.append('g');
 
   let selectedNode = null;
 
-  function update({ hierarchyConfig, fields, data, showNodes }) {
+  function update({ hierarchyConfig, fields, data, coloredField, showNodes }) {
     const hierarchy = makeHierarchy(data, hierarchyConfig);
 
     const pack = packWithLabel()
@@ -89,6 +93,14 @@ function d3Viz(rootNode) {
       fields: fields,
       nodeRoot: nodeRoot
     });
+
+    setupLegend({
+      legend: legend,
+      hierarchyConfig: hierarchyConfig,
+      nodes: nodes,
+      data: data,
+      coloredField: coloredField
+    })
 
     if (selectedNode) {
       selectedNode = findLowestAncestors(selectedNode, hierarchy);

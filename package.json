@@ -8,6 +8,7 @@
     "@fortawesome/react-fontawesome": "^0.0.17",
     "classnames": "^2.2.5",
     "d3": "^4.13.0",
+    "d3-scale-chromatic": "^1.2.0",
     "mini.css": "^2.3.7",
     "normalize.css": "^7.0.0",
     "ramda": "^0.25.0",
