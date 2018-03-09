@@ -86,6 +86,12 @@
   flex-direction: row;
   align-items: baseline;
   cursor: pointer;
+  user-select: none;
+}
+
+.viz :global(.viz-legendItem.viz-legendDisabled) {
+  opacity: 0.2;
+  filter: saturate(0);
 }
 
 .viz :global(.viz-legendColor) {

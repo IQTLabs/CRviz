@@ -1,9 +1,12 @@
+import { select, event as d3Event } from 'd3-selection';
+
 import {
   curry,
   contains,
   either,
   equals,
   fromPairs,
+  toPairs,
   identity,
   reject,
   map,
@@ -16,25 +19,8 @@ import {
   zip
 } from "ramda";
 
-import { schemeCategory10 as colorScheme } from "d3-scale-chromatic";
+import { schemePaired as colorScheme } from "d3-scale-chromatic";
 import { hcl } from "d3-color";
-
-
-// Picked from Google Material Design Color Scheme
-// const colorScheme = [
-//   "#EF5350",
-//   "#78909C",
-//   "#AB47BC",
-//   "#8D6E63",
-//   "#5C6BC0",
-//   "#FF7043",
-//   "#42A5F5",
-//   "#FFA726",
-//   "#26C6DA",
-//   "#FFEE58",
-//   "#26A69A",
-//   "#9CCC65"
-// ];
 
 function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField }) {
   if (!coloredField) {
@@ -57,22 +43,28 @@ function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField }) {
   )(data);
 
   const scheme = extendColorScheme(colorScheme, values.length);
-  const coloring = zip(values, scheme);
+
+  const configs = map((color) => ({ color, disabled: false }), scheme);
+  const coloring = zip(values, configs);
   const colorMap = fromPairs(coloring);
 
-  colorNodes({ nodes, colorMap, getValue, coloredField, isColoringGroup });
+  function update() {
+    colorNodes({ nodes, colorMap, getValue, coloredField, isColoringGroup });
+    updateLegend({ legend, colorMap, toggleValue })
+  }
 
-  updateLegend({ legend, coloring });
+  function toggleValue(value) {
+    colorMap[value].disabled = !colorMap[value].disabled;
+    update();
+  }
+
+  update();
 }
 
-/**
- * @param legend - the D3 element used to display the legend
- * @param coloring - array of tuples of [field value, color]
- */
-const updateLegend = ({ legend, coloring }) => {
+const updateLegend = ({ legend, colorMap, toggleValue }) => {
   const items = legend
     .selectAll("p.viz-legendItem")
-    .data(coloring, ([value, color]) => value  + color);
+    .data(toPairs(colorMap), ([value]) => value );
 
   items.exit().remove();
 
@@ -81,28 +73,50 @@ const updateLegend = ({ legend, coloring }) => {
   itemsEnter.append("span").classed("viz-legendLabel", true);
 
   items.merge(itemsEnter)
+    .classed("viz-legendDisabled", (d) => d[1].disabled);
+
+  items.merge(itemsEnter)
     .select(".viz-legendColor")
-    .style("background-color", ([value, color]) => color);
+    .style("background-color", ([value, { color }]) => color);
 
   items.merge(itemsEnter)
     .select(".viz-legendLabel")
-    .attr('title', ([value, color]) => value)
-    .text(([value, color]) => value);
+    .attr('title', ([value]) => value)
+    .text(([value]) => value);
+
+  legend.on('click.toggle', () => {
+    const datum = select(d3Event.target).datum();
+    if (datum) {
+      toggleValue(datum[0]);
+    }
+  })
 }
 
 const colorNodes = ({ nodes, colorMap, getValue, coloredField, isColoringGroup }) => {
   nodes
     .filter((d) => d.height === 0)
     .select("circle")
-    .style( "fill", (d) => isColoringGroup ? null: colorMap[getValue(d.data)]);
+    .style( "fill", (d) => {
+      const { color, disabled } = colorMap[getValue(d.data)] || {};
+      return !isColoringGroup && !disabled && color ? color : null;
+    });
 
   nodes
     .filter((d) => d.height > 0)
-    .classed("viz-coloredNode", (d) => equals(d.data.field, coloredField))
+    .classed("viz-coloredNode", (d) => {
+      const { disabled } = colorMap[getValue(d.data)] || {};
+      return !disabled &&
+        equals(d.data.field, coloredField) &&
+        d.data.fieldValue !== "Unknown";
+    })
     .select("circle")
     .style("fill", (d) => {
-      return isColoringGroup && equals(d.data.field, coloredField)
-        ? colorMap[getValue(d.data)]
+      const { color, disabled } = colorMap[getValue(d.data)] || {};
+      return isColoringGroup
+        && equals(d.data.field, coloredField)
+        && !disabled
+        && color
+        ? color
         : null;
     });
 }
