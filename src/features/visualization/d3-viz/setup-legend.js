@@ -16,7 +16,7 @@ import {
   zip
 } from "ramda";
 
-import { schemeSet1 as colorScheme } from "d3-scale-chromatic";
+import { schemeCategory10 as colorScheme } from "d3-scale-chromatic";
 import { hcl } from "d3-color";
 
 
