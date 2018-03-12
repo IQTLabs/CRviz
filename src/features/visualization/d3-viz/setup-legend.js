@@ -2,7 +2,6 @@ import { select, event as d3Event } from 'd3-selection';
 import { scaleLinear, scalePow } from 'd3-scale';
 
 import {
-  curry,
   contains,
   either,
   equals,
