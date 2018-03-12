@@ -1,0 +1,12 @@
+.checkboxContainer {
+  margin-left: 2.2rem;
+}
+
+.colorBy {
+  display: flex;
+  align-items: center;
+}
+
+.fieldSelect {
+  flex: 1;
+}

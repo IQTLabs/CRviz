@@ -1,0 +1,39 @@
+.dataControls {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+}
+
+.selectorContainer, .uploadContainer {
+  display: flex;
+  align-items: center;
+}
+
+.selector {
+  flex: 1;
+}
+
+.selector select {
+  width: 100%;
+  margin: 0;
+}
+
+.fileUpload {
+  flex: 1;
+  display: flex;
+  align-items: center
+}
+
+.fileUpload label {
+  flex: 0;
+  margin-right: 0;
+}
+
+.fileUpload span {
+  flex: 1;
+}
+
+.label {
+  font-weight: bold;
+  flex: 0 0 6rem;
+}

@@ -1,0 +1,44 @@
+{
+  "name": "visualizer",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.3",
+    "@fortawesome/fontawesome-free-solid": "^5.0.6",
+    "@fortawesome/react-fontawesome": "^0.0.17",
+    "classnames": "^2.2.5",
+    "d3": "^4.13.0",
+    "d3-scale-chromatic": "^1.2.0",
+    "mini.css": "^2.3.7",
+    "normalize.css": "^7.0.0",
+    "ramda": "^0.25.0",
+    "react": "^16.2.0",
+    "react-beautiful-dnd": "^5.0.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "react-scripts": "2.0.0-next.9754a231",
+    "redux": "^3.7.2",
+    "redux-actions": "^2.2.1",
+    "redux-observable": "^0.18.0",
+    "rxjs": "^5.5.6"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "development": [
+      "last 2 chrome versions",
+      "last 2 firefox versions",
+      "last 2 edge versions"
+    ],
+    "production": [
+      ">1%",
+      "last 4 versions",
+      "Firefox ESR",
+      "not ie < 11"
+    ]
+  }
+}

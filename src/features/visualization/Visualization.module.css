@@ -1,0 +1,161 @@
+.viz {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #E6E7E9;
+}
+
+.viz :global(.viz-node) circle {
+  stroke: transparent;
+  stroke-width: 0;
+}
+
+.viz :global(.viz-node) circle {
+  fill: black;
+}
+
+.viz :global(.viz-rootNode) circle {
+  fill: transparent;
+}
+
+.viz :global(.viz-groupingNode) circle {
+  opacity: 0.2;
+}
+
+.viz :global(.viz-groupingNode):hover circle {
+  opacity: 0.15;
+}
+
+.viz :global(.viz-groupingNode.viz-coloredNode) circle {
+  opacity: 1;
+}
+
+.viz :global(.viz-groupingNode.viz-coloredNode):hover circle {
+  opacity: 0.95;
+}
+
+.viz :global(.viz-unknown) circle {
+  fill: red;
+  opacity: 0.5;
+}
+
+.viz :global(.viz-unknown):hover circle {
+  opacity: 0.45;
+}
+
+.viz :global(.viz-label) {
+  fill: black;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.viz :global(.viz-labelShape) {
+  fill: black;
+  opacity: 0.25;
+}
+
+.viz :global(.viz-countLabel) {
+  text-anchor: middle;
+  dominant-baseline: mathematical;
+}
+
+
+
+.viz :global(.viz-tooltip) {
+  background-color: white;
+  border: 1px solid black;
+  padding: 1rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.viz :global(.viz-legend) {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  max-width: 15rem;
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.viz :global(.viz-legendItem) {
+  max-width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  cursor: pointer;
+  user-select: none;
+}
+
+.viz :global(.viz-legendItem.viz-legendDisabled) {
+  opacity: 0.2;
+  filter: saturate(0);
+}
+
+.viz :global(.viz-legendColor) {
+  width: 1rem;
+  height: 1rem;
+  display: inline-block;
+  flex: 0 0 1rem;
+  margin-right: 0.5rem;
+}
+
+.viz :global(.viz-legendLabel) {
+  flex: 1 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+:global(.darkTheme)  .viz {
+  background-color: #333333;
+}
+
+:global(.darkTheme) .viz :global(.viz-tooltip) {
+  background-color: rgb(130, 129, 129);
+  border: 1px solid rgb(100, 100, 100);
+  padding: 1rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+:global(.darkTheme) .viz :global(.viz-node) circle {
+  fill: white;
+}
+
+:global(.darkTheme) .viz :global(.viz-leafNode) circle {
+  fill: black;
+}
+
+:global(.darkTheme) .viz :global(.viz-rootNode) circle {
+  fill: transparent;
+}
+
+:global(.darkTheme) .viz :global(.viz-groupingNode) circle {
+  opacity: 0.5;
+}
+
+:global(.darkTheme) .viz :global(.viz-groupingNode):hover circle {
+  opacity: 0.4;
+}
+
+:global(.darkTheme) .viz :global(.viz-unknown) circle {
+  fill: red;
+}
+
+:global(.darkTheme) .viz :global(.viz-labelShape) {
+  fill: white;
+  opacity: 0.5;
+}
+
+:global(.darkTheme) .viz :global(.viz-groupingNode.viz-coloredNode) circle {
+  opacity: 1;
+}
+
+
+:global(.darkTheme) .viz :global(.viz-legend) {
+  background-color: rgba(0, 0, 0, 0.05);
+}

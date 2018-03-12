@@ -1,0 +1,57 @@
+.listContainer {
+  position: relative;
+}
+
+.draggableContainer {
+  display: inline-block;
+  padding: 0.25rem 0.25rem;
+}
+
+.dragForeignContainer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  top: 0;
+  left: 0;
+  border: 2px dashed rgba(255, 76, 76, 0.55);
+  background-color: rgba(255, 76, 76, 0.25);
+  color: red;
+  opacity: 0.5;
+}
+
+.isDraggingOver .dragForeignContainer {
+  opacity: 1;
+}
+
+.field {
+  display: inline-block;
+  background-color: rgb(235, 235, 235);
+  height: 2rem;
+  line-height: 2rem;
+  padding: 0 0.5rem;
+  box-sizing: padding-box;
+  /* margin: 0.25rem 0.25rem; */
+}
+
+.dragForeign .field {
+  opacity: 0.2;
+  filter: blur(2px);
+}
+
+.groupBy {
+  width: 0;
+  transition: width 0.5s;
+  overflow: hidden;
+}
+
+.fieldName {
+  display: inline-block;
+}
+
+:global(.darkTheme) .field {
+  background-color: rgb(130, 129, 129);
+}

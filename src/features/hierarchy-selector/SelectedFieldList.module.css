@@ -1,0 +1,103 @@
+.listContainer {
+  position: relative;
+  opacity: 1;
+}
+
+.isDropDisabled {
+  opacity: 0.5;
+}
+
+.droppable {
+  box-sizing: content-box;
+/*
+ * For some reason having border prevent this box from resizing by a tiny bit
+ * when dragging into an empty container
+ */
+  border: 1px solid transparent;
+}
+
+.draggable {
+  padding: 0.25rem 0;
+}
+
+.field {
+  height: 2rem;
+  line-height: 2rem;
+  display: flex;
+  align-items: stretch;
+}
+
+@keyframes groupByEnter {
+  0% { width: 0 }
+  100% { width: 5.5rem }
+}
+
+.groupBy {
+  font-weight: bold;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 5.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.animated {
+
+  animation-name: groupByEnter;
+  animation-fill-mode: both;
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+}
+
+.fieldName {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: rgb(235, 235, 235);
+  height: 2rem;
+  line-height: 2rem;
+  padding: 0 0.5rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  border: 2px dashed transparent;
+}
+
+.dropTarget {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed black;
+  background-color: transparent;
+  color: black;
+  opacity: 0.2;
+  padding: 0;
+  user-select: none;
+}
+
+.dropTarget.isDraggingOver {
+  border-color: rgb(70, 176, 70);
+  color: rgb(70, 176, 70);
+  opacity: 1;
+  background-color: transparent;
+}
+
+.dragHandle {
+  margin-right: 0.5rem;
+}
+
+:global(.darkTheme) .fieldName {
+  background-color: rgb(130, 129, 129);
+}
+
+:global(.darkTheme) .dropTarget {
+  color: white;
+  border-color: white;
+}
+
+:global(.darkTheme) .dropTarget.isDraggingOver {
+  border-color: rgb(70, 176, 70);
+  color: rgb(70, 176, 70);
+}
