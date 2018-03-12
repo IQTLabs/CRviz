@@ -2,6 +2,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  background-color: #E6E7E9;
 }
 
 .viz :global(.viz-node) circle {
@@ -9,12 +10,15 @@
   stroke-width: 0;
 }
 
+.viz :global(.viz-node) circle {
+  fill: black;
+}
+
 .viz :global(.viz-rootNode) circle {
   fill: transparent;
 }
 
 .viz :global(.viz-groupingNode) circle {
-  fill: black;
   opacity: 0.2;
 }
 
@@ -39,19 +43,8 @@
   opacity: 0.45;
 }
 
-.viz :global(.viz-groupingNode) text {
-  font-family: monospace;
-}
-
-.viz :global(.viz-tooltip) {
-  background-color: white;
-  border: 1px solid black;
-  padding: 1rem;
-  white-space: nowrap;
-  pointer-events: none;
-}
-
 .viz :global(.viz-label) {
+  fill: black;
   text-anchor: middle;
   dominant-baseline: central;
 }
@@ -66,6 +59,15 @@
   dominant-baseline: mathematical;
 }
 
+
+
+.viz :global(.viz-tooltip) {
+  background-color: white;
+  border: 1px solid black;
+  padding: 1rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
 
 .viz :global(.viz-legend) {
   position: absolute;
@@ -108,3 +110,53 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+:global(.darkTheme)  .viz {
+  background-color: #333333;
+}
+
+:global(.darkTheme) .viz :global(.viz-tooltip) {
+  background-color: rgb(130, 129, 129);
+  border: 1px solid rgb(100, 100, 100);
+  padding: 1rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+:global(.darkTheme) .viz :global(.viz-node) circle {
+  fill: white;
+}
+
+:global(.darkTheme) .viz :global(.viz-rootNode) circle {
+  fill: transparent;
+}
+
+:global(.darkTheme) .viz :global(.viz-groupingNode) circle {
+  opacity: 0.5;
+}
+
+:global(.darkTheme) .viz :global(.viz-groupingNode):hover circle {
+  opacity: 0.4;
+}
+
+:global(.darkTheme) .viz :global(.viz-leafNode) circle {
+  fill: black;
+}
+
+:global(.darkTheme) .viz :global(.viz-unknown) circle {
+  fill: red;
+}
+
+
+:global(.darkTheme) .viz :global(.viz-label) {
+  fill: white;
+}
+
+:global(.darkTheme) .viz :global(.viz-labelShape) {
+  fill: white;
+  opacity: 0.15;
+}
+
+:global(.darkTheme) .viz :global(.viz-groupingNode.viz-coloredNode) circle {
+  opacity: 1;
+}
+

@@ -26,6 +26,7 @@ function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField }) {
   if (!coloredField) {
     legend.style("display", "none");
     nodes.select('circle').style('fill', null);
+    nodes.classed('viz-coloredNode', false);
     return;
   } else {
     legend.style("display", null);
