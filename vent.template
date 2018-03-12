@@ -1,0 +1,12 @@
+[info]
+name = CRviz
+groups = visualization
+
+[service]
+uri_prefix1 = http://
+
+[settings]
+priority = 1
+
+[docker]
+publish_all_ports = True
