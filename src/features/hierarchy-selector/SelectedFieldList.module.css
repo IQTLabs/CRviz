@@ -1,6 +1,5 @@
 .listContainer {
   position: relative;
-  transition: all 0.25s;
   opacity: 1;
 }
 
@@ -51,8 +50,10 @@
   animation-iteration-count: 1;
 }
 
-.fieldName, .dropTarget {
+.fieldName {
   flex: 1;
+  display: flex;
+  align-items: center;
   background-color: rgb(235, 235, 235);
   height: 2rem;
   line-height: 2rem;
@@ -60,8 +61,6 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  display: flex;
-  align-items: center;
   border: 2px dashed transparent;
 }
 
@@ -75,6 +74,7 @@
   color: black;
   opacity: 0.2;
   padding: 0;
+  user-select: none;
 }
 
 .dropTarget.isDraggingOver {
@@ -86,4 +86,18 @@
 
 .dragHandle {
   margin-right: 0.5rem;
+}
+
+:global(.darkTheme) .fieldName {
+  background-color: rgb(130, 129, 129);
+}
+
+:global(.darkTheme) .dropTarget {
+  color: white;
+  border-color: white;
+}
+
+:global(.darkTheme) .dropTarget.isDraggingOver {
+  border-color: rgb(70, 176, 70);
+  color: rgb(70, 176, 70);
 }

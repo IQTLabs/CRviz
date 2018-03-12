@@ -8,7 +8,7 @@ import FieldSelect from 'components/FieldSelect';
 
 import style from "./MiscControls.module.css";
 
-function MiscControls({ controls, configuration, showNodes, colorBy }) {
+function MiscControls({ controls, configuration, showNodes, colorBy, useDarkTheme }) {
   const fields = configuration.fields;
   return (
     <div className={style.container}>
@@ -28,7 +28,7 @@ function MiscControls({ controls, configuration, showNodes, colorBy }) {
         <input
           type="checkbox"
           id="dark-theme-check"
-          checked={controls.useDarkTheme}
+          checked={controls.darkTheme}
           onChange={(evt) => useDarkTheme(evt.target.checked)}
         />
         <label htmlFor="dark-theme-check" className="switch">

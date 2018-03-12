@@ -51,3 +51,7 @@
 .fieldName {
   display: inline-block;
 }
+
+:global(.darkTheme) .field {
+  background-color: rgb(130, 129, 129);
+}

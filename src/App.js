@@ -1,4 +1,9 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import classNames from 'classnames';
+
+
+import { selectControls } from 'domain/controls';
 
 import Header from 'features/header/Header';
 import HierarchySelector from 'features/hierarchy-selector/HierarchySelector';
@@ -10,8 +15,15 @@ import style from './App.module.css';
 
 class App extends Component {
   render() {
+    const darkTheme = this.props.darkTheme;
+    console.log(darkTheme);
     return (
-      <div className={ style.appContainer }>
+      <div className={
+          classNames({
+            [style.appContainer]: true,
+            'darkTheme': darkTheme
+          })
+      }>
         <div className={ style.controls }>
           <Header />
           <DatasetControls />
@@ -32,4 +44,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  darkTheme: selectControls(state).darkTheme
+});
+
+export default connect(mapStateToProps)(App);
