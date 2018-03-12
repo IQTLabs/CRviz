@@ -126,6 +126,10 @@
   fill: white;
 }
 
+:global(.darkTheme) .viz :global(.viz-leafNode) circle {
+  fill: black;
+}
+
 :global(.darkTheme) .viz :global(.viz-rootNode) circle {
   fill: transparent;
 }
@@ -138,22 +142,13 @@
   opacity: 0.4;
 }
 
-:global(.darkTheme) .viz :global(.viz-leafNode) circle {
-  fill: black;
-}
-
 :global(.darkTheme) .viz :global(.viz-unknown) circle {
   fill: red;
 }
 
-
-:global(.darkTheme) .viz :global(.viz-label) {
-  fill: white;
-}
-
 :global(.darkTheme) .viz :global(.viz-labelShape) {
   fill: white;
-  opacity: 0.15;
+  opacity: 0.5;
 }
 
 :global(.darkTheme) .viz :global(.viz-groupingNode.viz-coloredNode) circle {

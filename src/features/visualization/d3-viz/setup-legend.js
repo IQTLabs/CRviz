@@ -1,4 +1,5 @@
 import { select, event as d3Event } from 'd3-selection';
+import { scaleLinear, scalePow } from 'd3-scale';
 
 import {
   curry,
@@ -19,8 +20,25 @@ import {
   zip
 } from "ramda";
 
-import { schemePaired as colorScheme } from "d3-scale-chromatic";
+// import { schemePaired as colorScheme } from "d3-scale-chromatic";
 import { hcl } from "d3-color";
+
+const colorScheme = [
+  "#a6cee3",
+  "#3366cc",
+  "#b2df8a",
+  "#33a02c",
+  "#fb9a99",
+  "#996699",
+  "#fdbf6f",
+  "#ff7f00",
+  "#cc99ff",
+  "#6a3d9a",
+  "#ffff99",
+  "#b15928",
+  "#ffcc99",
+  "#333399"
+];
 
 function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField }) {
   if (!coloredField) {
@@ -123,32 +141,41 @@ const colorNodes = ({ nodes, colorMap, getValue, coloredField, isColoringGroup }
 }
 
 const extendColorScheme = (colorScheme, count) => {
-  const extralayers = Math.floor(count / colorScheme.length);
-  if (extralayers === 0) {
+  const extraLayers = Math.floor(count / colorScheme.length);
+
+  if (extraLayers === 0) {
     return colorScheme;
   }
 
 
   const extraColors = times((i) => {
     const previous = hcl(colorScheme[i % colorScheme.length])
-    const cGrowth = mirror((previous.c + 100) / 2)(expDecay(-0.4, 100, previous.c));
-    const lDecay = expDecay(-0.5, previous.l, Math.min(previous.l, previous.l / 2));
+    const neighbor = hcl(colorScheme[(i + 1) % colorScheme.length])
+    const current = (i + colorScheme.length) / colorScheme.length;
 
-    const c = cGrowth(i + 1);
-    const l = lDecay(i + 1);
-    const nextColor = hcl(previous.h, c, l);
+    const hScale = scaleLinear()
+      .domain([0, extraLayers])
+      .range([previous.h, neighbor.h]);
+
+    const cScale = scalePow()
+      .exponent(5)
+      .domain([0, extraLayers])
+      .range([previous.c, 100]);
+
+    const lScale = scalePow()
+      .exponent(2)
+      .domain([0, extraLayers])
+      .range([previous.l, previous.l / 2]);
+
+    const h = hScale(current)
+    const c = cScale(current);
+    const l = lScale(current);
+
+    const nextColor = hcl(h, c, l);
     return nextColor.toString();
   }, count - colorScheme.length);
 
   return concat(colorScheme, extraColors)
 }
-
-const expDecay = curry((rate, max, min, t) => {
-  return (max - min) * Math.E**(rate * (t)) + min;
-});
-
-// Mirror a function f(x) over x = c
-
-const mirror = curry((c, f, x) => f(2 * c - x));
 
 export default setupLegend;
