@@ -15,9 +15,7 @@ import {
   insert,
   isEmpty,
   isNil,
-  join,
   path,
-  prop,
   remove
 } from "ramda";
 
