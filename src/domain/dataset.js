@@ -1,8 +1,21 @@
 import { createAction, handleActions } from "redux-actions";
-import { toPairs, is, map, chain, concat } from "ramda";
+import {
+  chain,
+  concat,
+  fromPairs,
+  identity,
+  is,
+  map,
+  path,
+  pipe,
+  sortBy,
+  toPairs,
+  uniq
+} from "ramda";
 
 const defaultState = {
   dataset: [],
+  values: {},
   configuration: {
     fields: []
   }
@@ -20,6 +33,11 @@ const pathsIn = (obj) =>
       is(Object, value) ? map(concat([key]), pathsIn(value)) : [[key]],
     toPairs(obj)
   );
+
+/**
+ * Return a string that uniquely identify the field
+ */
+const getFieldId = (field) => field.path.join(".")
 
 /**
  * Return all fields for an object
@@ -46,6 +64,19 @@ const configurationFor = (dataset, configuration = {}) => {
   };
 };
 
+
+const valuesFor = (dataset, configuration) => {
+  return fromPairs(map((field) => {
+    const values = pipe(
+      map(path(field.path)),
+      uniq,
+      sortBy(identity)
+    )(dataset);
+
+    return [getFieldId(field), values];
+  }, configuration.fields));
+};
+
 // ACTIONS
 
 /**
@@ -59,14 +90,18 @@ const setDataset = createAction("SET_DATASET");
 // REDUCERS
 const reducer = handleActions(
   {
-    [setDataset]: (state, { payload }) => ({
-      ...state,
-      dataset: payload.dataset,
-      configuration: configurationFor(
+    [setDataset]: (state, { payload }) => {
+      const dataset = payload.dataset;
+
+      const configuration = configurationFor(
         payload.dataset || [],
         payload.configuration || {}
-      )
-    })
+      );
+
+      const values = valuesFor(dataset, configuration);
+
+      return { ...state, dataset, values, configuration }
+    }
   },
   defaultState
 );
@@ -75,7 +110,8 @@ const reducer = handleActions(
 
 const selectDataset = (state) => state.dataset.dataset;
 const selectConfiguration = (state) => state.dataset.configuration;
+const selectValues = (state) => state.dataset.values;
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration };
+export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId };

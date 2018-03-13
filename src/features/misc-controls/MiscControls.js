@@ -1,14 +1,26 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { showNodes, useDarkTheme, colorBy, selectControls } from "domain/controls";
-import { selectConfiguration } from "domain/dataset";
+import {
+  showNodes,
+  useDarkTheme,
+  colorBy,
+  selectControls
+} from "domain/controls";
+import { selectConfiguration, selectValues, getFieldId } from "domain/dataset";
 
-import FieldSelect from 'components/FieldSelect';
+import FieldSelect from "components/FieldSelect";
 
 import style from "./MiscControls.module.css";
 
-function MiscControls({ controls, configuration, showNodes, colorBy, useDarkTheme }) {
+function MiscControls({
+  controls,
+  configuration,
+  values,
+  showNodes,
+  colorBy,
+  useDarkTheme
+}) {
   const fields = configuration.fields;
   return (
     <div className={style.container}>
@@ -36,14 +48,17 @@ function MiscControls({ controls, configuration, showNodes, colorBy, useDarkThem
         </label>
       </div>
 
-      <div className={ `input-group ${ style.colorBy }` }>
+      <div className={`input-group ${style.colorBy}`}>
         <label htmlFor="colorBy">Color by</label>
         <FieldSelect
-          className={ style.fieldSelect }
+          className={style.fieldSelect}
           name="colorBy"
-          onChange={ colorBy }
-          fields={ fields }
-          value={ controls.colorBy } />
+          onChange={colorBy}
+          fields={fields}
+          values={values}
+          getFieldId={getFieldId}
+          value={controls.colorBy}
+        />
       </div>
     </div>
   );
@@ -52,7 +67,8 @@ function MiscControls({ controls, configuration, showNodes, colorBy, useDarkThem
 const mapStateToProps = (state) => {
   return {
     controls: selectControls(state),
-    configuration: selectConfiguration(state)
+    configuration: selectConfiguration(state),
+    values: selectValues(state)
   };
 };
 

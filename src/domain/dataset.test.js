@@ -2,7 +2,8 @@ import {
   default as datasetReducer,
   setDataset,
   selectDataset,
-  selectConfiguration
+  selectConfiguration,
+  selectValues
 } from "./dataset";
 
 import { combineReducers } from 'redux';
@@ -46,6 +47,22 @@ describe("Dataset", () => {
             { path: ['role', 'confidence'], displayName: 'role.confidence' },
           ]
         })
+      });
+
+      it('find the unique values for each fields', () => {
+        const dataset = [
+          { uid: "uid1", role: { role: "role", confidence: 80 } },
+          { uid: "uid2", role: { role: "role", confidence: 82 } }
+        ];
+
+        const action = setDataset({ dataset });
+        const result = reducer({}, action);
+        expect(selectValues(result)).toEqual({
+          "uid": ["uid1", "uid2"],
+          "role.role": ["role"],
+          "role.confidence": [80, 82],
+        });
+
       })
     });
   });
