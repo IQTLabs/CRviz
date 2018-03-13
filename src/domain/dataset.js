@@ -37,7 +37,7 @@ const pathsIn = (obj) =>
 /**
  * Return a string that uniquely identify the field
  */
-const fieldId = (field) => field.path.join(".")
+const getFieldId = (field) => field.path.join(".")
 
 /**
  * Return all fields for an object
@@ -73,7 +73,7 @@ const valuesFor = (dataset, configuration) => {
       sortBy(identity)
     )(dataset);
 
-    return [fieldId(field), values];
+    return [getFieldId(field), values];
   }, configuration.fields));
 };
 
@@ -114,4 +114,4 @@ const selectValues = (state) => state.dataset.values;
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration, selectValues, fieldId };
+export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId };

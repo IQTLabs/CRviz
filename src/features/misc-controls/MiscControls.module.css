@@ -5,6 +5,11 @@
 .colorBy {
   display: flex;
   align-items: center;
+  white-space: nowrap;
+}
+
+.colorBy label {
+  flex: 0 0;
 }
 
 .fieldSelect {

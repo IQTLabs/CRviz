@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import classNames from "classnames";
 
-import { isEmpty, contains, map, sortBy } from "ramda";
+import { isEmpty, contains, map, sortBy, curry } from "ramda";
 
 import { Droppable } from "react-beautiful-dnd";
 
@@ -15,6 +15,7 @@ import AvailableField from "./AvailableField";
 function AvailableFieldList({
   style,
   fields,
+  values,
   getFieldId,
   droppableId,
   dragState
@@ -34,14 +35,15 @@ function AvailableFieldList({
             {...provided.droppableProps}
           >
             {!isEmpty(fields) &&
-              sortBy(getFieldId, fields).map((field, index) => {
+              sortBy(getCount(getFieldId, values), fields).map((field, index) => {
                 const id = getFieldId(field);
+                const count = values[id].length || 0;
                 return (
                   <AvailableField
                     style={style}
                     key={id}
                     draggableId={id}
-                    displayName={field.displayName}
+                    displayName={`${field.displayName} (${count})`}
                     index={index}
                     withPlaceholder={false}
                   />
@@ -61,6 +63,10 @@ function AvailableFieldList({
     </Droppable>
   );
 }
+
+const getCount = curry((getFieldId, values, field) => {
+  return values[getFieldId(field)].length;
+});
 
 const isDraggingForeign = (dragState, fields, getFieldId) => {
   return (
@@ -83,6 +89,7 @@ const StyleProps = PropTypes.shape({
 AvailableFieldList.propTypes = {
   style: StyleProps.isRequired,
   fields: PropTypes.array,
+  values: PropTypes.object,
   getFieldId: PropTypes.func.isRequired,
   droppableId: PropTypes.string.isRequired
 };

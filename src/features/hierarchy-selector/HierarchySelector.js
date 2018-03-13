@@ -21,7 +21,7 @@ import {
   remove
 } from "ramda";
 
-import { selectConfiguration } from "domain/dataset";
+import { selectConfiguration, selectValues, getFieldId } from "domain/dataset";
 import { setHierarchyConfig, selectControls } from "domain/controls";
 
 import SelectedFieldList from './SelectedFieldList';
@@ -112,6 +112,8 @@ class HierarchySelector extends React.Component {
       hierarchyConfig
     );
 
+    const values = this.props.values;
+
     const dragState = this.state.dragState;
 
     return (
@@ -141,6 +143,7 @@ class HierarchySelector extends React.Component {
           <AvailableFieldList
             style={ availableFieldListStyle }
             fields={ availableFields }
+            values={ values }
             droppableId={ AVAILABLE_FIELD_LIST_ID }
             getFieldId={ getFieldId }
             dragState={ this.state.dragState }
@@ -166,10 +169,10 @@ const findFieldIndex = (list, fieldId) => {
   const index = findIndex(matchId, list)
   return index === -1 ? null : index;
 }
-const getFieldId = compose(join("."), prop("path"));
 
 const mapStateToProps = (state) => ({
   configuration: selectConfiguration(state),
+  values: selectValues(state),
   controls: selectControls(state)
 });
 
