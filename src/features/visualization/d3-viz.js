@@ -1,5 +1,15 @@
 import { select, event as d3Event } from 'd3-selection';
-import { find, reverse, reduced, reduce, tail, reduceWhile } from 'ramda';
+import {
+  allPass,
+  eqProps,
+  find,
+  map,
+  reduce,
+  reduceWhile,
+  reduced,
+  reverse,
+  tail,
+} from 'ramda';
 
 import packWithLabel from './d3-viz/pack-with-label';
 import toHierarchy from './d3-viz/to-hierarchy';
@@ -59,62 +69,179 @@ function d3Viz(rootNode) {
 
   const nodeRoot = svg.append('g');
 
-  let selectedNode = null;
+  // State
+  let props = {
+    hierarchyConfig: null,
+    data: null,
+    fields: null,
+    width: null,
+    height: null,
+    showNodes: true,
+    coloredField: null,
+  };
 
-  function update({ hierarchyConfig, fields, data, coloredField, showNodes }) {
-    const hierarchy = makeHierarchy(data, hierarchyConfig);
+  const state = {
+    packedData: null,
+    nodes: null,
+    labels: null,
+    countLabels: null,
+    zoom: null,
+    selectedNode: null
+  }
+
+  // function update({ hierarchyConfig, data, fields, width, height, showNodes, coloredField }) {
+  function update(nextProps) {
+    let dataUpdated = false,
+        sizeUpdated = false;
+
+    // const { hierarchyConfig, data, fields, width, height, showNodes, coloredField } = nextProps;
+
+    dataUpdated = !allEqProps(['hierarchyConfig', 'data', 'fields'], props, nextProps);
+    sizeUpdated = !allEqProps(['width', 'height'], props, nextProps);
+
+    props = nextProps;
+
+    if (dataUpdated) {
+      repack(props, state)
+    }
+
+    rerender(props, state);
+
+    if (sizeUpdated || dataUpdated) {
+      resetZoom(props, state);
+    }
+  }
+
+  const repack = (props, state) => {
+    const hierarchy = makeHierarchy(props.data, props.hierarchyConfig);
 
     const pack = packWithLabel()
       .size([width, height])
       .padding((d) => d.height / hierarchy.height * 15)
 
-    pack(hierarchy);
+    state.packedData = pack(hierarchy);
 
-    const [ nodes, labels, countLabels ]= appendCircles({
+    if (state.selectedNode) {
+      state.selectedNode = findLowestAncestors(state.selectedNode, state.packedData);
+    } else {
+      state.selectedNode = state.packedData;
+    }
+  };
+
+  const allEqProps = (props, o1, o2) => {
+    return allPass(map(eqProps, props))(o1, o2);
+  }
+
+  const rerender = (props, state) => {
+    const [nodes, labels, countLabels] = appendCircles({
       nodeRoot: nodeRoot,
       labelRoot: labelRoot,
-      packedData: hierarchy,
-      showNodes: showNodes
-    });
-
-    const zoom = setupZoom({
-      zoomRoot: zoomRoot,
-      transformRoot: transformRoot,
-      nodes: nodes,
-      labels: labels,
-      countLabels: countLabels,
-      width: width,
-      height: height,
-      packedData: hierarchy
+      packedData: state.packedData,
+      showNodes: props.showNodes
     });
 
     setupTooltip({
       tooltip: tooltip,
-      fields: fields,
+      fields: props.fields,
       nodeRoot: nodeRoot
     });
 
     setupLegend({
       legend: legend,
-      hierarchyConfig: hierarchyConfig,
+      hierarchyConfig: props.hierarchyConfig,
       nodes: nodes,
-      data: data,
-      coloredField: coloredField
-    })
+      data: props.data,
+      coloredField: props.coloredField
+    });
 
-    if (selectedNode) {
-      selectedNode = findLowestAncestors(selectedNode, hierarchy);
-    } else {
-      selectedNode = hierarchy;
+    state.nodes = nodes;
+    state.labels = labels;
+    state.countLabels = countLabels;
+  };
+
+  const resetZoom = (props, state) => {
+    state.zoom = setupZoom({
+      zoomRoot: zoomRoot,
+      transformRoot: transformRoot,
+      nodes: state.nodes,
+      labels: state.labels,
+      countLabels: state.countLabels,
+      width: width,
+      height: height,
+      packedData: state.packedData
+    });
+
+    if (state.selectedNode) {
+      state.zoom.zoomTo(state.selectedNode);
     }
-
-    zoom.zoomTo(selectedNode);
 
     nodeRoot.on('click.select', () => {
       const datum = select(d3Event.target).datum();
-      zoom.zoomTo(datum);
+      state.zoom.zoomTo(datum);
     });
-  }
+  };
+
+
+  // Update
+  // Check which part of the state has changed
+
+  // pack - render - zoom
+
+  // render - zoom
+
+  // render
+
+  // function pack() {
+  //   const hierarchy = makeHierarchy(data, hierarchyConfig);
+
+  //   const pack = packWithLabel()
+  //     .size([width, height])
+  //     .padding((d) => d.height / hierarchy.height * 15)
+
+  //   pack(hierarchy);
+  // }
+
+  // function zoom111() {
+
+  //   render();
+
+  //   const zoom = setupZoom({
+  //     zoomRoot: zoomRoot,
+  //     transformRoot: transformRoot,
+  //     nodes: nodes,
+  //     labels: labels,
+  //     countLabels: countLabels,
+  //     width: width,
+  //     height: height,
+  //     packedData: hierarchy
+  //   });
+
+  //   zoom.zoomTo(selectedNode);
+  // }
+
+  // function render() {
+  //   const [ nodes, labels, countLabels ] = appendCircles({
+  //     nodeRoot: nodeRoot,
+  //     labelRoot: labelRoot,
+  //     packedData: hierarchy,
+  //     showNodes: showNodes
+  //   });
+
+  //   setupTooltip({
+  //     tooltip: tooltip,
+  //     fields: fields,
+  //     nodeRoot: nodeRoot
+  //   });
+
+  //   setupLegend({
+  //     legend: legend,
+  //     hierarchyConfig: hierarchyConfig,
+  //     nodes: nodes,
+  //     data: data,
+  //     coloredField: coloredField
+  //   })
+
+  // }
 
   return {
     update

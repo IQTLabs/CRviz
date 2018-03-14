@@ -1,4 +1,4 @@
-import { zoom } from "d3-zoom";
+import { zoom, zoomTransform } from "d3-zoom";
 import { event as d3Event } from "d3-selection";
 import { zoomIdentity } from "d3-zoom";
 import { measureText, fitText, getFont } from "./text-utils";
@@ -14,11 +14,17 @@ const setupZoom = ({
   height,
   packedData
 }) => {
+
+  // Find the current zoom transform if any
+  const oldTransform = zoomTransform(zoomRoot.node());
+
   const zoomBehavior = zoom();
+
   zoomBehavior.on("zoom", () => {
     const event = d3Event;
     zoomToTransform(event.transform)
   });
+
   zoomRoot.call(zoomBehavior);
 
   // Amount of space to leave around a node when zoomed into that node
@@ -92,6 +98,10 @@ const setupZoom = ({
     );
   }
 
+  if (oldTransform) {
+    zoomToTransform(oldTransform);
+  }
+
   return {
     zoomTo,
     zoomToTransform
@@ -132,7 +142,7 @@ const fitLabels = (labels, transform, labelFont, labelHeight, viewBound) => {
       const maxWidth = Math.floor(datum.labelSize * transform.k * 1.2);
       return fitText(labelFont, labelText, maxWidth);
     })
-    .attr("transform", function scaleLabel(d) {
+    .attr("transform", (d) => {
       return zoomIdentity
         .translate(transform.applyX(d.x), transform.applyY(d.y + d.labelY))
     })

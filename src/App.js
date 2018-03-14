@@ -16,7 +16,6 @@ import style from './App.module.css';
 class App extends Component {
   render() {
     const darkTheme = this.props.darkTheme;
-    console.log(darkTheme);
     return (
       <div className={
           classNames({
