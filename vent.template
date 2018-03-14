@@ -3,7 +3,7 @@ name = CRviz
 groups = visualization
 
 [service]
-uri_prefix1 = http://
+uri_prefix = http://
 
 [settings]
 priority = 1
