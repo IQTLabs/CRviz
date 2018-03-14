@@ -15,13 +15,20 @@ const setupZoom = ({
   packedData
 }) => {
 
+  const state = {
+    zoomTo: null,
+    zoomToTransform: null,
+    transform: zoomTransform(zoomRoot.node())
+  };
+
   // Find the current zoom transform if any
-  const oldTransform = zoomTransform(zoomRoot.node());
+  // const oldTransform = zoomTransform(zoomRoot.node());
 
   const zoomBehavior = zoom();
 
   zoomBehavior.on("zoom", () => {
     const event = d3Event;
+    state.transform = event.transform;
     zoomToTransform(event.transform)
   });
 
@@ -98,14 +105,14 @@ const setupZoom = ({
     );
   }
 
-  if (oldTransform) {
-    zoomToTransform(oldTransform);
+  if (state.transform) {
+    zoomToTransform(state.transform);
   }
 
-  return {
-    zoomTo,
-    zoomToTransform
-  }
+  state.zoomTo = zoomTo;
+  state.zoomToTransform = zoomToTransform;
+
+  return state;
 };
 
 const hideSmall = (nodes, transform) => {
