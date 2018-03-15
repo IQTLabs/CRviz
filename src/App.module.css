@@ -6,17 +6,25 @@
   flex-wrap: wrap;
   align-content: flex-start;
   background-color: #f8f8f8;
+  overflow-x: hidden;
+  background-color: #E6E7E9;
 }
 
 .appContainer:global(.darkTheme) {
-  background-color: #666666;
+  background-color: #333333;
   color: white;
 }
 
 .controls {
+  background-color: #f8f8f8;
   width: 19rem;
   padding: 0.5rem;
   transition: transform 0.25s;
+  transform: translateZ(0);
+}
+
+:global(.darkTheme) .controls {
+  background-color: #666666;
 }
 
 .controls .section {
@@ -27,6 +35,7 @@
 .canvas {
   flex: 1 1;
   transition: transform 0.25s;
+  transform: translateZ(0);
 }
 
 input[name=hideControls] {
@@ -38,10 +47,14 @@ label.hideControls {
   z-index: 10;
   top: 0;
   left: 16.5rem;
-  transition: left 0.25s;
-  background-color: inherit;
+  transition: transform 0.25s;
+  background-color: #f8f8f8;
   cursor: pointer;
   padding: 0;
+}
+
+:global(.darkTheme) label.hideControls {
+  background-color: #666666;
 }
 
 label.hideControls span {
@@ -56,7 +69,7 @@ label.hideControls span {
 }
 
 input[name=hideControls]:checked ~ label.hideControls {
-  left: 0.5rem;
+  transform: translate3d(-16.5rem, 0, 0);
 }
 
 input[name=hideControls]:checked ~ label.hideControls span {

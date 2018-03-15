@@ -2,7 +2,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #E6E7E9;
+  transform: translateZ(0);
 }
 
 .viz :global(.viz-node) circle {
@@ -58,8 +58,6 @@
   text-anchor: middle;
   dominant-baseline: mathematical;
 }
-
-
 
 .viz :global(.viz-tooltip) {
   background-color: white;
