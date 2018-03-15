@@ -17,8 +17,7 @@ const fetchDatasetEpic = (action$, store) => {
       return Observable
         .ajax({ url: url, crossDomain: true, responseType: 'json' })
         .map((result) => result.response )
-        // .of(fakeData.slice(0, size)).delay(1000) // Fake AJAX call for now
-        .map((data) => setDataset({ dataset: data }) )
+        .map((data) => setDataset({ dataset: data.dataset, configuration: data.configuration  }) )
         .concat(Observable.of(setHierarchyConfig([])))
 
         // Ignore result if another request has started.

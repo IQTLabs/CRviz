@@ -1,6 +1,6 @@
 
 /**
- * Return a string that can be used to compare two datum are the same.
+ * Return a string that can be used to check if two data are the same.
 */
 const datumKey = (datum) => {
   if (datum.depth === 0) {

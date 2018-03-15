@@ -16,7 +16,6 @@ import style from './App.module.css';
 class App extends Component {
   render() {
     const darkTheme = this.props.darkTheme;
-    console.log(darkTheme);
     return (
       <div className={
           classNames({
@@ -24,18 +23,26 @@ class App extends Component {
             'darkTheme': darkTheme
           })
       }>
+        <input name="hideControls" id="hideControls" type="checkbox" />
+        <label htmlFor="hideControls" className={ style.hideControls }>
+          { /* <FontAwesomeIcon icon={faChevron} /> */ }
+          <span>&lt;&lt;</span>
+        </label>
         <div className={ style.controls }>
-          <Header />
-          <DatasetControls />
+          <div className={ style.innerControls }>
+            <Header />
+            <DatasetControls />
 
-          <div className={ style.section }>
-            <HierarchySelector />
-          </div>
+            <div className={ style.section }>
+              <HierarchySelector />
+            </div>
 
-          <div className={ style.section }>
-            <MiscControls />
+            <div className={ style.section }>
+              <MiscControls />
+            </div>
           </div>
         </div>
+
         <div className={ style.canvas }>
           <Visualization />
         </div>
