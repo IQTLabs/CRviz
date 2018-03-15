@@ -131,12 +131,20 @@ function d3Viz(rootNode) {
 
     const pack = packWithLabel()
       .size([props.width, props.height])
-      .padding((d) => d.height / hierarchy.height * 15);
+
+    // Pack once without padding to calculate the radius of the leaf node
+    // then repack with new padding, similar to how d3-pack
+    // works when the size is not given.
+    //
+    // This way spacing between leaf nodes is consistent between visualizations.
+    //
+    // Doesn't seem to have a noticable performance impact.
+    const packed = pack(hierarchy);
+    const padding = packed.leaves()[0].r;
+    pack.padding((d) => padding * d.height);
 
     state.packedData = pack(hierarchy);
   };
-
-  const allEqProps = (props, o1, o2) => allPass(map(eqProps, props))(o1, o2);
 
   const rerender = (props, state) => {
     const [nodes, labels, countLabels] = appendCircles({
@@ -200,6 +208,8 @@ function d3Viz(rootNode) {
     update
   };
 }
+
+const allEqProps = (props, o1, o2) => allPass(map(eqProps, props))(o1, o2);
 
 const makeHierarchy = (data, hierarchyConfig) => {
   const hierarchy = toHierarchy(data, hierarchyConfig).count();

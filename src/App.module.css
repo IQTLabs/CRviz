@@ -5,6 +5,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-content: flex-start;
+  background-color: #f8f8f8;
 }
 
 .appContainer:global(.darkTheme) {
@@ -13,9 +14,9 @@
 }
 
 .controls {
-  flex: 1;
-  max-width: 300px;
+  width: 19rem;
   padding: 0.5rem;
+  transition: transform 0.25s;
 }
 
 .controls .section {
@@ -24,7 +25,49 @@
 }
 
 .canvas {
-  flex: 1;
-  min-width: 300px;
-  min-height: 300px;
+  flex: 1 1;
+  transition: transform 0.25s;
+}
+
+input[name=hideControls] {
+  display: none;
+}
+
+label.hideControls {
+  position:absolute;
+  z-index: 10;
+  top: 0;
+  left: 16.5rem;
+  transition: left 0.25s;
+  background-color: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+label.hideControls span {
+  transition: transform 0.5s;
+  width: 2.5rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  text-align: center;
+  display: block;
+  transform: scale(0.5, 1);
+  font-weight: bold;
+}
+
+input[name=hideControls]:checked ~ label.hideControls {
+  left: 0.5rem;
+}
+
+input[name=hideControls]:checked ~ label.hideControls span {
+  transform: rotate(-180deg) scale(0.5, 1);
+}
+
+input[name=hideControls]:checked ~ .controls {
+  transform: translate3d(-18.5rem, 0, 0);
+}
+
+input[name=hideControls]:checked ~ .canvas {
+  transform: translate3d(-18.5rem, 0, 0);
+  margin-right: -18.5rem;
 }
