@@ -8,14 +8,17 @@ import { setHierarchyConfig } from "domain/controls";
 const uploadDataset = createAction("UPLOAD_DATASET");
 
 // EPIC
-const fetchDatasetEpic = (action$, store) => {
+const uploadDatasetEpic = (action$, store) => {
   return action$
     .ofType(uploadDataset.toString())
     .mergeMap((action) => {
       const file = action.payload;
       return fromReader(file)
         .map(JSON.parse)
-        .map((data) => setDataset({ dataset: data }))
+        .map((data) => setDataset({
+          dataset: data.dataset,
+          configuration: data.configuration
+        }))
         .concat(Observable.of(setHierarchyConfig([])))
         .catch((error) => {
           if (error instanceof SyntaxError) {
@@ -50,5 +53,5 @@ const fromReader = (file) => {
   });
 }
 
-export default fetchDatasetEpic;
+export default uploadDatasetEpic;
 export { uploadDataset };
