@@ -43,6 +43,10 @@
   opacity: 0.45;
 }
 
+.viz :global(.viz-zoomMinutia) {
+  visibility: hidden;
+}
+
 .viz :global(.viz-label) {
   fill: black;
   text-anchor: middle;
