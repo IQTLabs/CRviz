@@ -21,7 +21,7 @@ function MiscControls({
   colorBy,
   useDarkTheme
 }) {
-  const fields = configuration.fields;
+  const fields = configuration.fields.filter((f) => f.groupable);
   return (
     <div className={style.container}>
       <div className={`${style.checkboxContainer} input-group`}>

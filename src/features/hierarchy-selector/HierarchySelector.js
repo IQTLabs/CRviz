@@ -106,7 +106,7 @@ class HierarchySelector extends React.Component {
 
     const availableFields = differenceWith(
       eqBy(getFieldId),
-      this.props.configuration.fields,
+      this.props.configuration.fields.filter((f) => f.groupable),
       hierarchyConfig
     );
 

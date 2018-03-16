@@ -6,9 +6,9 @@ import {
   selectValues
 } from "./dataset";
 
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 
-const reducer = combineReducers({ dataset: datasetReducer })
+const reducer = combineReducers({ dataset: datasetReducer });
 
 describe("Dataset", () => {
   describe("actions", () => {
@@ -20,19 +20,31 @@ describe("Dataset", () => {
         ];
         const configuration = {
           fields: [
-            { path: ["uid"], displayName: "UID" },
-            { path: ["role", "role"], displayName: "Role" }
+            { path: ["uid"], displayName: "UID", groupable: true },
+            { path: ["role", "role"], displayName: "Role", groupable: false }
           ]
         };
 
-        const action = setDataset({ dataset, configuration })
+        const action = setDataset({ dataset, configuration });
         const result = reducer({}, action);
 
-        expect(selectDataset(result)).toEqual(dataset)
-        expect(selectConfiguration(result)).toEqual(configuration)
+        const expectedConfiguration = {
+          fields: [
+            { path: ["uid"], displayName: "UID", groupable: true },
+            { path: ["role", "role"], displayName: "Role", groupable: false },
+            {
+              path: ["role", "confidence"],
+              displayName: "role.confidence",
+              groupable: true
+            }
+          ]
+        };
+
+        expect(selectDataset(result)).toEqual(dataset);
+        expect(selectConfiguration(result)).toEqual(expectedConfiguration);
       });
 
-      it('sets a default configuration', () => {
+      it("sets a default configuration", () => {
         const dataset = [
           { uid: "uid1", role: { role: "role", confidence: 80 } },
           { uid: "uid2", role: { role: "role", confidence: 80 } }
@@ -42,14 +54,22 @@ describe("Dataset", () => {
         const result = reducer({}, action);
         expect(selectConfiguration(result)).toEqual({
           fields: [
-            { path: ['uid'], displayName: 'uid' },
-            { path: ['role', 'role'], displayName: 'role.role' },
-            { path: ['role', 'confidence'], displayName: 'role.confidence' },
+            { path: ["uid"], displayName: "uid", groupable: true },
+            {
+              path: ["role", "role"],
+              displayName: "role.role",
+              groupable: true
+            },
+            {
+              path: ["role", "confidence"],
+              displayName: "role.confidence",
+              groupable: true
+            }
           ]
-        })
+        });
       });
 
-      it('find the unique values for each fields', () => {
+      it("find the unique values for each fields", () => {
         const dataset = [
           { uid: "uid1", role: { role: "role", confidence: 80 } },
           { uid: "uid2", role: { role: "role", confidence: 82 } }
@@ -58,12 +78,11 @@ describe("Dataset", () => {
         const action = setDataset({ dataset });
         const result = reducer({}, action);
         expect(selectValues(result)).toEqual({
-          "uid": ["uid1", "uid2"],
+          uid: ["uid1", "uid2"],
           "role.role": ["role"],
-          "role.confidence": [80, 82],
+          "role.confidence": [80, 82]
         });
-
-      })
+      });
     });
   });
 });

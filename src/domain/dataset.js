@@ -2,12 +2,15 @@ import { createAction, handleActions } from "redux-actions";
 import {
   chain,
   concat,
+  find,
   fromPairs,
   identity,
   is,
   map,
+  merge,
   path,
   pipe,
+  propEq,
   sortBy,
   toPairs,
   uniq
@@ -42,25 +45,41 @@ const getFieldId = (field) => field.path.join(".")
 /**
  * Return all fields for an object
  */
-const fieldsFor = (obj) => {
-  var paths = pathsIn(obj);
+const fieldsFor = (obj, overrides = []) => {
+  const paths = pathsIn(obj);
+  return map((path) => {
+    const override = find(propEq('path', path), overrides) || {};
+    return merge(
+      {
+        path: path,
+        displayName: path.join('.'),
+        groupable: true
+      },
+      override
+    )
+  }, paths);
 
-  return map(
-    (path) => ({
-      path: path,
-      displayName: path.join(".")
-    }),
-    paths
-  );
+  // var fields = difference(pathsIn(obj), map(prop('path'), overrides));
+  // return [
+  //   ...overrid,
+  //   ...map(
+  //     (path) => ({
+  //       path: path,
+  //       displayName: path.join("."),
+  //       groupable: true
+  //     }),
+  //     unspecified
+  //   )
+  // ];
 };
 
 /**
- * Returns a configuration with missing items populated
+ * Returns a configuration with any missing items populated
  */
 const configurationFor = (dataset, configuration = {}) => {
   return {
     ...configuration,
-    fields: configuration.fields || fieldsFor(dataset[0] || {})
+    fields: fieldsFor(dataset[0] || {}, configuration.fields)
   };
 };
 
