@@ -1,5 +1,4 @@
-import { select, event as d3Event } from 'd3-selection';
-import { scaleLinear, scalePow } from 'd3-scale';
+import { selectAll, select, event as d3Event } from 'd3-selection';
 
 import {
   contains,
@@ -12,32 +11,12 @@ import {
   map,
   path,
   pipe,
-  concat,
-  times,
   sortBy,
   uniq,
   zip
 } from "ramda";
 
-// import { schemePaired as colorScheme } from "d3-scale-chromatic";
-import { hcl } from "d3-color";
-
-const colorScheme = [
-  "#a6cee3",
-  "#3366cc",
-  "#b2df8a",
-  "#33a02c",
-  "#fb9a99",
-  "#996699",
-  "#fdbf6f",
-  "#ff7f00",
-  "#cc99ff",
-  "#6a3d9a",
-  "#ffff99",
-  "#b15928",
-  "#ffcc99",
-  "#333399"
-];
+import { colorScheme, extendColorScheme } from './color-scheme';
 
 function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField }) {
   if (!coloredField) {
@@ -51,6 +30,7 @@ function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField }) {
 
   const getValue = either(path(coloredField.path), path(["fieldValue"]));
 
+  // If coloring group, then don't color devices with the samme value
   const isColoringGroup = contains(coloredField, hierarchyConfig);
 
   const values = pipe(
@@ -62,9 +42,16 @@ function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField }) {
 
   const scheme = extendColorScheme(colorScheme, values.length);
 
-  const configs = map((color) => ({ color, disabled: false }), scheme);
+  const configs = scheme.map((color, index) => ({
+    color,
+    disabled: false,
+    className: `legend-color-${index}`
+  }));
+
   const coloring = zip(values, configs);
   const colorMap = fromPairs(coloring);
+
+  createStylesheet(coloring);
 
   function update() {
     colorNodes({ nodes, colorMap, getValue, coloredField, isColoringGroup });
@@ -110,13 +97,37 @@ const updateLegend = ({ legend, colorMap, toggleValue }) => {
   })
 }
 
+/**
+ * Having inline style trigger an expensive "recalculate style" in every frame
+ * during zooming (even if the style attribute is empty!).
+ *
+ * We work around this by creating a style element that contains a class for
+ * each item in the legend and assign those classes to each circle.
+*/
+const createStylesheet = (coloring) => {
+  const style = selectAll('style#coloring').data([coloring]);
+  const styleEnter = style.enter().append('style').attr('id', 'coloring');
+
+  const html = coloring.map(([ value, { color, className } ], index) => {
+    return `
+      .viz-node circle.${className} {
+        fill: ${color}
+      }
+    `
+  }).join("\n");
+
+  style.merge(styleEnter)
+    .html(html)
+}
+
 const colorNodes = ({ nodes, colorMap, getValue, coloredField, isColoringGroup }) => {
+
   nodes
     .filter((d) => d.height === 0)
     .select("circle")
-    .style( "fill", (d) => {
-      const { color, disabled } = colorMap[getValue(d.data)] || {};
-      return !isColoringGroup && !disabled && color ? color : null;
+    .attr('class', (d) => {
+      const { disabled, className } = colorMap[getValue(d.data)] || {};
+      return !isColoringGroup && !disabled && className ? className : null
     });
 
   nodes
@@ -128,53 +139,13 @@ const colorNodes = ({ nodes, colorMap, getValue, coloredField, isColoringGroup }
         d.data.fieldValue !== "Unknown";
     })
     .select("circle")
-    .style("fill", (d) => {
-      const { color, disabled } = colorMap[getValue(d.data)] || {};
+    .attr('class', (d) => {
+      const { disabled, className } = colorMap[getValue(d.data)] || {};
       return isColoringGroup
         && equals(d.data.field, coloredField)
         && !disabled
-        && color
-        ? color
-        : null;
+        && className;
     });
-}
-
-const extendColorScheme = (colorScheme, count) => {
-  const extraLayers = Math.floor(count / colorScheme.length);
-
-  if (extraLayers === 0) {
-    return colorScheme;
-  }
-
-
-  const extraColors = times((i) => {
-    const previous = hcl(colorScheme[i % colorScheme.length])
-    const neighbor = hcl(colorScheme[(i + 1) % colorScheme.length])
-    const current = (i + colorScheme.length) / colorScheme.length;
-
-    const hScale = scaleLinear()
-      .domain([0, extraLayers])
-      .range([previous.h, neighbor.h]);
-
-    const cScale = scalePow()
-      .exponent(5)
-      .domain([0, extraLayers])
-      .range([previous.c, 100]);
-
-    const lScale = scalePow()
-      .exponent(2)
-      .domain([0, extraLayers])
-      .range([previous.l, previous.l / 2]);
-
-    const h = hScale(current)
-    const c = cScale(current);
-    const l = lScale(current);
-
-    const nextColor = hcl(h, c, l);
-    return nextColor.toString();
-  }, count - colorScheme.length);
-
-  return concat(colorScheme, extraColors)
 }
 
 export default setupLegend;

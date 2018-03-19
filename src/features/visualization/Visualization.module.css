@@ -35,8 +35,8 @@
 }
 
 .viz :global(.viz-unknown) circle {
-  fill: red;
-  opacity: 0.5;
+  fill: #F18081;
+  opacity: 1;
 }
 
 .viz :global(.viz-unknown):hover circle {
