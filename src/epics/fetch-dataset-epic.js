@@ -2,7 +2,7 @@ import { createAction } from 'redux-actions';
 import { Observable } from 'rxjs';
 
 import { setDataset } from 'domain/dataset';
-import { setHierarchyConfig } from 'domain/controls';
+import { setHierarchyConfig, colorBy } from 'domain/controls';
 
 // ACTIONS
 const fetchDataset = createAction('FETCH_DATASET');
@@ -18,7 +18,7 @@ const fetchDatasetEpic = (action$, store) => {
         .ajax({ url: url, crossDomain: true, responseType: 'json' })
         .map((result) => result.response )
         .map((data) => setDataset({ dataset: data.dataset, configuration: data.configuration  }) )
-        .concat(Observable.of(setHierarchyConfig([])))
+        .concat(Observable.of(setHierarchyConfig([]), colorBy(null)))
 
         // Ignore result if another request has started.
         .takeUntil(action$.ofType(fetchDataset.toString()))

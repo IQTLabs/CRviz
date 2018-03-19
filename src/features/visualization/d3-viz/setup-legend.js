@@ -21,7 +21,7 @@ import { colorScheme, extendColorScheme } from './color-scheme';
 function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField }) {
   if (!coloredField) {
     legend.style("display", "none");
-    nodes.select('circle').style('fill', null);
+    nodes.select('circle').attr('class', null);
     nodes.classed('viz-coloredNode', false);
     return;
   } else {
@@ -111,7 +111,7 @@ const createStylesheet = (coloring) => {
   const html = coloring.map(([ value, { color, className } ], index) => {
     return `
       .viz-node circle.${className} {
-        fill: ${color}
+        fill: ${color} !important
       }
     `
   }).join("\n");

@@ -35,12 +35,12 @@
 }
 
 .viz :global(.viz-unknown) circle {
-  fill: #F18081;
+  fill: #ed4747;
   opacity: 1;
 }
 
 .viz :global(.viz-unknown):hover circle {
-  opacity: 0.45;
+  opacity: 0.75;
 }
 
 .viz :global(.viz-zoomMinutia) {
