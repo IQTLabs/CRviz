@@ -50,15 +50,16 @@ function MiscControls({
 
       <div className={`input-group ${style.colorBy}`}>
         <label htmlFor="colorBy">Color by</label>
-        <FieldSelect
-          className={style.fieldSelect}
-          name="colorBy"
-          onChange={colorBy}
-          fields={fields}
-          values={values}
-          getFieldId={getFieldId}
-          value={controls.colorBy}
-        />
+        <div className={style.fieldSelect}>
+          <FieldSelect
+            name="colorBy"
+            onChange={colorBy}
+            fields={fields}
+            values={values}
+            getFieldId={getFieldId}
+            value={controls.colorBy}
+          />
+        </div>
       </div>
     </div>
   );

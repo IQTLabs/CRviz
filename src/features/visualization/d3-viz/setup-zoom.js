@@ -18,11 +18,9 @@ const setupZoom = ({
   const state = {
     zoomTo: null,
     zoomToTransform: null,
+    // Find the current zoom transform if any
     transform: zoomTransform(zoomRoot.node())
   };
-
-  // Find the current zoom transform if any
-  // const oldTransform = zoomTransform(zoomRoot.node());
 
   const zoomBehavior = zoom();
 
@@ -58,10 +56,21 @@ const setupZoom = ({
 
   zoomBehavior.scaleExtent(scaleExtent).translateExtent(translateExtent);
 
+  // Assume everything is hidden by default.
+  //
+  // Note:
+  // This could have been done using inline style.
+  // The odd thing is, when using inline style, apparently each node's style is
+  // recalculated in every frame during zooming regardless of whether or not
+  // the inline style was changed.
+  //
+  // Using a class avoided this issue.
+  nodes.classed('viz-zoomMinutia', true);
+
   const [labelFont, labelHeight] = getLabelStyle(labels);
   const [countLabelFont, countLabelHeight] = getLabelStyle(countLabels);
 
-  const zoomToTransform = (transform) => {
+  function zoomToTransform(transform) {
     transformRoot
       .style("transform", `translate(${ Math.floor(transform.x) }px, ${ Math.floor(transform.y) }px) scale(${ transform.k })`);
 
@@ -89,7 +98,7 @@ const setupZoom = ({
     hiddenCountLabels.style("visibility", "hidden");
   };
 
-  const zoomTo = (datum, animate = true) => {
+  function zoomTo(datum, animate = true) {
     const size = datum.r * 2 * (1 + viewPadding);
     const k = Math.min(width, height) / size;
     const transform = zoomIdentity
@@ -116,7 +125,17 @@ const setupZoom = ({
 };
 
 const hideSmall = (nodes, transform) => {
-  nodes.attr("visibility", (d) => (d.r * transform.k < 1 ? "hidden" : "visible"));
+  const tooSmall = (d) => d.r * transform.k < 1;
+
+  nodes
+    .filter(":not(.viz-zoomMinutia)")
+    .filter((d) => tooSmall(d))
+    .classed("viz-zoomMinutia", true);
+
+  nodes
+    .filter(".viz-zoomMinutia")
+    .filter((d) => !tooSmall(d))
+    .classed("viz-zoomMinutia", false)
 };
 
 const fitCounts = (countLabels, transform, font, countHeight, viewBound) => {
