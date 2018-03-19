@@ -9,7 +9,7 @@ import {
 } from "domain/controls";
 import { selectConfiguration, selectValues, getFieldId } from "domain/dataset";
 
-import FieldSelect from "components/FieldSelect";
+import FieldSelect from "./FieldSelect";
 
 import style from "./MiscControls.module.css";
 
