@@ -1,5 +1,6 @@
 .listContainer {
   position: relative;
+  min-height: 2rem;
 }
 
 .draggableContainer {
