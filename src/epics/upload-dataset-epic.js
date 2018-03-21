@@ -9,7 +9,6 @@ const uploadDataset = createAction("UPLOAD_DATASET");
 // EPIC
 const uploadDatasetEpic = (action$, store) => {
   return action$
-    .do((d) => console.log(d))
     .ofType(uploadDataset.toString())
     .mergeMap((action) => {
       const file = action.payload;
