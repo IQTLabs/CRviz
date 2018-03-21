@@ -18,7 +18,7 @@ import {
 
 import { colorScheme, extendColorScheme } from './color-scheme';
 
-function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField }) {
+function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField, legendConfig }) {
   if (!coloredField) {
     legend.style("display", "none");
     nodes.select('circle').attr('class', null);
@@ -30,7 +30,7 @@ function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField }) {
 
   const getValue = either(path(coloredField.path), path(["fieldValue"]));
 
-  // If coloring group, then don't color devices with the samme value
+  // If coloring groupings, don't color devices with the same value
   const isColoringGroup = contains(coloredField, hierarchyConfig);
 
   const values = pipe(

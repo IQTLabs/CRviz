@@ -103,15 +103,17 @@ function d3Viz(rootNode) {
       ...nextProps,
       width: rootNode.clientWidth,
       height: rootNode.clientHeight
-    }
+    };
 
-    const  dataUpdated = !allEqProps(
+    const dataUpdated = !allEqProps(
       ["hierarchyConfig", "data", "fields"],
       props,
       nextProps
     );
 
     const sizeUpdated = !allEqProps(["width", "height"], props, nextProps);
+
+    const legendUpdated = !allEqProps(["coloredField"], props, nextProps);
 
     props = nextProps;
 
@@ -121,6 +123,10 @@ function d3Viz(rootNode) {
 
     rerender(props, state);
 
+    if (legendUpdated) {
+      resetLegend(props, state);
+    }
+
     if (sizeUpdated || dataUpdated) {
       resetZoom(props, state);
     }
@@ -129,8 +135,7 @@ function d3Viz(rootNode) {
   const repack = (props, state) => {
     const hierarchy = makeHierarchy(props.data, props.hierarchyConfig);
 
-    const pack = packWithLabel()
-      .size([props.width, props.height])
+    const pack = packWithLabel().size([props.width, props.height]);
 
     // Pack once without padding to calculate the radius of the leaf node
     // then repack with new padding, similar to how d3-pack
@@ -160,17 +165,19 @@ function d3Viz(rootNode) {
       nodeRoot: nodeRoot
     });
 
-    setupLegend({
-      legend: legend,
-      hierarchyConfig: props.hierarchyConfig,
-      nodes: nodes,
-      data: props.data,
-      coloredField: props.coloredField
-    });
-
     state.nodes = nodes;
     state.labels = labels;
     state.countLabels = countLabels;
+  };
+
+  const resetLegend = (props, state) => {
+    setupLegend({
+      legend: legend,
+      hierarchyConfig: props.hierarchyConfig,
+      nodes: state.nodes,
+      data: props.data,
+      coloredField: props.coloredField
+    });
   };
 
   const resetZoom = (props, state) => {
