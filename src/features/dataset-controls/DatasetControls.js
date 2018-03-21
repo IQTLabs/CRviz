@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { isNil } from "ramda";
 
@@ -11,43 +12,42 @@ import DatasetUpload from "./DatasetUpload";
 
 import style from "./DatasetControls.module.css";
 
-// Hard coded datasets
-const datasets = [
-  {
-    name: "Small (400 nodes)",
-    url: "http://52.168.28.25:8080/v1/network/400"
-  },
-  {
-    name: "Medium (1400 nodes)",
-    url: "http://52.168.28.25:8080/v1/network/1400"
-  },
-  {
-    name: "Large (4000 nodes)",
-    url: "http://52.168.28.25:8080/v1/network/4000"
-  }
-];
+const CUSTOM_DATASET = {
+  name: "Custom URL",
+  url: "custom-url"
+};
 
 class DatasetControls extends React.Component {
   state = {
     selected: null,
-    selectedFile: null,
+    selectedFile: null
   };
+
+  resetDataset = () => {
+    this.props.setDataset({ dataset: [], configuration: {} });
+    this.setState({
+      selected: null,
+      selectedFile: null
+    });
+  }
 
   onSelected = (dataset) => {
     if (isNil(dataset)) {
-      this.props.setDataset({ dataset: [], configuration: {} });
-      this.setState({
-        selected: null,
-        selectedFile: null
-      });
-    } else {
-      this.props.fetchDataset(dataset.url);
+      return this.resetDataset();
+    }
+
+    const message = "Please enter a URL";
+    const url = dataset === CUSTOM_DATASET ? prompt(message) : dataset.url;
+    if (toURL(url)) {
+      this.props.fetchDataset(url);
       this.setState({
         selected: dataset,
         selectedFile: null
       });
+    } else {
+      alert("Please enter a valid URL.");
     }
-  }
+  };
 
   onUpload = (file) => {
     this.props.uploadDataset(file);
@@ -55,32 +55,56 @@ class DatasetControls extends React.Component {
       selected: null,
       selectedFile: file.name
     });
-  }
+  };
 
   render() {
     return (
-      <div className={ style.dataControls }>
-        <div className={ style.selectorContainer }>
-          <span className={ style.label }>Dataset</span>
+      <div className={style.dataControls}>
+        <div className={style.selectorContainer}>
+          <span className={style.label}>Dataset</span>
           <DatasetSelector
-            className={ style.selector }
+            className={style.selector}
             selected={this.state.selected}
             onChange={this.onSelected}
-            datasets={datasets}
+            datasets={[...this.props.datasets, CUSTOM_DATASET]}
           />
         </div>
 
-        <div className={ style.uploadContainer }>
-          <span className={ style.label }>Upload</span>
+        <div className={style.uploadContainer}>
+          <span className={style.label}>Upload</span>
           <DatasetUpload
-            className={ style.fileUpload }
-            selected={ this.state.selectedFile }
-            onChange={ this.onUpload }/>
+            className={style.fileUpload}
+            selected={this.state.selectedFile}
+            onChange={this.onUpload}
+          />
         </div>
       </div>
     );
   }
 }
+
+const toURL = (url) => {
+  try {
+    return new URL(url)
+  } catch(error) {
+    if (error instanceof TypeError) {
+      return null;
+    } else {
+      throw error;
+    }
+  }
+}
+
+DatasetControls.defaultProps = {
+  datasets: []
+};
+
+DatasetControls.propTypes = {
+  datasets: PropTypes.array,
+  fetchDataset: PropTypes.func.isRequired,
+  uploadDataset: PropTypes.func.isRequired,
+  setDataset: PropTypes.func.isRequired
+};
 
 const mapDispatchToProps = {
   fetchDataset,

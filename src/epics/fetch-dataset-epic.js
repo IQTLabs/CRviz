@@ -1,9 +1,6 @@
 import { createAction } from 'redux-actions';
 import { Observable } from 'rxjs';
 
-// import { setDataset } from 'domain/dataset';
-// import { setHierarchyConfig, colorBy } from 'domain/controls';
-
 import { loadDataset } from './load-dataset-epic';
 
 // ACTIONS

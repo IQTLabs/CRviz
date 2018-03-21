@@ -13,6 +13,8 @@ import DatasetControls from 'features/dataset-controls/DatasetControls';
 
 import style from './App.module.css';
 
+import datasets from './datasets';
+
 class App extends Component {
   render() {
     const darkTheme = this.props.darkTheme;
@@ -31,7 +33,7 @@ class App extends Component {
         <div className={ style.controls }>
           <div className={ style.innerControls }>
             <Header />
-            <DatasetControls />
+            <DatasetControls datasets={ datasets }/>
 
             <div className={ style.section }>
               <HierarchySelector />
