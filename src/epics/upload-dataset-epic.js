@@ -9,13 +9,14 @@ const uploadDataset = createAction("UPLOAD_DATASET");
 // EPIC
 const uploadDatasetEpic = (action$, store) => {
   return action$
+    .do((d) => console.log(d))
     .ofType(uploadDataset.toString())
     .mergeMap((action) => {
       const file = action.payload;
       return fromReader(file)
         .map(JSON.parse)
         .map(loadDataset)
-        .takeUntil(uploadDataset.toString())
+        .takeUntil(action$.ofType(uploadDataset.toString()))
         .catch((error) => {
           if (error instanceof SyntaxError) {
             alert("Invalid JSON.");
