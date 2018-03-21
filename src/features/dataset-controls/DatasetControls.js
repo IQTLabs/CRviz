@@ -17,6 +17,14 @@ const CUSTOM_DATASET = {
   url: "custom-url"
 };
 
+var host = window.location.host;
+var hostname = window.location.hostname;
+var port = String(parseInt(host.split(":")[1])-1)
+const POSEIDON_DATASET = {
+  name: "Poseidon Network",
+  url: "http://"+hostname+":"+port+"/v1/network"
+};
+
 class DatasetControls extends React.Component {
   state = {
     selected: null,
@@ -66,7 +74,7 @@ class DatasetControls extends React.Component {
             className={style.selector}
             selected={this.state.selected}
             onChange={this.onSelected}
-            datasets={[...this.props.datasets, CUSTOM_DATASET]}
+            datasets={[...this.props.datasets, POSEIDON_DATASET, CUSTOM_DATASET]}
           />
         </div>
 
