@@ -1,4 +1,6 @@
 FROM node:alpine
+LABEL maintainer="Charlie Lewis <clewis@iqt.org>"
+
 RUN apk update && apk add git yarn
 COPY . /app
 WORKDIR /app

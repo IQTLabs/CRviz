@@ -6,7 +6,7 @@ groups = visualization
 uri_prefix1 = http://
 
 [settings]
-priority = 1
+priority = 10
 
 [docker]
 publish_all_ports = True
