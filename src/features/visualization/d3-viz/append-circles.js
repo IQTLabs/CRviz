@@ -3,11 +3,8 @@ import datumKey from "./datum-key";
 
 const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes }) => {
   const isInternal = (d) => d.depth > 0 && d.height > 0;
-  const isLeaf = (d) => d.height === 0;
 
-  const data = showNodes
-    ? packedData.descendants()
-    : packedData.descendants().filter((d) => !isLeaf(d));
+  const data = packedData.descendants();
 
   const nodes = nodeRoot
     .selectAll(`g.${className("node")}`)
@@ -28,6 +25,7 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes }) => {
     )
     .classed(className("leafNode"), (d) => d.height === 0)
     .attr("transform", (d) => `translate(${[d.x, d.y].join(",")})`)
+    .attr("display", (d) => !showNodes && d.height === 0 ? 'none' : null)
     .order();
 
   const circles = nodes.select("circle").merge(nodesEnter.append("circle"));
