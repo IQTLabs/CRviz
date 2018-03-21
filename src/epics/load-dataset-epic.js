@@ -46,7 +46,12 @@ const validate = (data) => {
   }
 };
 
-class ValidationError extends Error {}
+function ValidationError(message) {
+  this.name = 'ValidationError';
+  this.message = message;
+}
+
+ValidationError.prototype = Object.create(Error.prototype);
 
 export default loadDatasetEpic;
 
