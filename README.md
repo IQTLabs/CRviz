@@ -1,4 +1,4 @@
-# Visualizer
+# CRviz
 
 [![Build Status](https://travis-ci.org/CyberReboot/CRviz.svg?branch=master)](https://travis-ci.org/CyberReboot/CRviz)
 
