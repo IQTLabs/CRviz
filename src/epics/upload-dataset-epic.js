@@ -1,8 +1,7 @@
 import { createAction } from "redux-actions";
 import { Observable } from "rxjs";
 
-import { setDataset } from "domain/dataset";
-import { setHierarchyConfig, colorBy } from "domain/controls";
+import { loadDataset } from './load-dataset-epic';
 
 // ACTIONS
 const uploadDataset = createAction("UPLOAD_DATASET");
@@ -15,11 +14,8 @@ const uploadDatasetEpic = (action$, store) => {
       const file = action.payload;
       return fromReader(file)
         .map(JSON.parse)
-        .map((data) => setDataset({
-          dataset: data.dataset,
-          configuration: data.configuration
-        }))
-        .concat(Observable.of(setHierarchyConfig([]), colorBy(null)))
+        .map(loadDataset)
+        .takeUntil(uploadDataset.toString())
         .catch((error) => {
           if (error instanceof SyntaxError) {
             alert("Invalid JSON.");
