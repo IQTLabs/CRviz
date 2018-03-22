@@ -4,9 +4,14 @@
 */
 const datumKey = (datum) => {
   if (datum.depth === 0) {
-    return root;
+    return 'root';
   } else if (datum.height > 0) {
-    return [datum.data.field.path.join("."), datum.data.fieldValue].join(".");
+    debugger;
+    return [
+      datumKey(datum.parent),
+      datum.data.field.path.join("."),
+      datum.data.fieldValue
+    ].join(".");
   } else {
     return datum.data.uid;
   }

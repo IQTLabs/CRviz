@@ -12,11 +12,22 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes }) => {
 
   nodes.exit().remove();
 
-  const nodesEnter = nodes.enter().append("g");
+  const nodesEnter = nodes.enter().append("g").classed(className("node"), true);
+
+  console.log('Data size', data.length);
+
+  console.group('Existing')
+  console.log(nodes.size());
+  nodes.filter(isInternal).each((d) => console.log(datumKey(d)));
+  console.groupEnd();
+  console.group('Entering')
+  console.log(nodesEnter.size());
+  nodesEnter.filter(isInternal).each((d) => console.log(datumKey(d)));
+  console.groupEnd();
 
   nodesEnter
     .merge(nodes)
-    .classed(className("node"), true)
+    .attr('data-key', datumKey)
     .classed(className("rootNode"), (d) => d.depth === 0)
     .classed(className("groupingNode"), (d) => d.depth > 0 && d.height > 0)
     .classed(
