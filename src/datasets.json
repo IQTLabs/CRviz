@@ -1,14 +1,14 @@
 [
   {
     "name": "Small (400 nodes)",
-    "url": "http://52.168.28.25:8080/v1/network/400"
+    "url": "https://raw.githubusercontent.com/cglewis/CRviz/master/sample_data/400.json"
   },
   {
     "name": "Medium (1400 nodes)",
-    "url": "http://52.168.28.25:8080/v1/network/1400"
+    "url": "https://raw.githubusercontent.com/cglewis/CRviz/master/sample_data/1400.json"
   },
   {
     "name": "Large (4000 nodes)",
-    "url": "http://52.168.28.25:8080/v1/network/4000"
+    "url": "https://raw.githubusercontent.com/cglewis/CRviz/master/sample_data/4000.json"
   }
 ]
