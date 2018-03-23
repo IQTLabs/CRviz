@@ -71,7 +71,7 @@ class DatasetControls extends React.Component {
   };
 
   render() {
-    if (port !== '80') {
+    if (port === '80') {
       POSEIDON_DATASET = {name:"",url:""};
     }
     return (
