@@ -17,7 +17,22 @@ const CUSTOM_DATASET = {
   url: "custom-url"
 };
 
+/*
+var host = window.location.host;
+var hostname = window.location.hostname;
+var port = '80';
+if (host.indexOf(':') > -1) {
+  port = String(parseInt(host.split(":")[1])-1);
+}
+
+var POSEIDON_DATASET = {
+  name: "Poseidon Network",
+  url: "http://"+hostname+":"+port+"/v1/network"
+};
+*/
+
 class DatasetControls extends React.Component {
+
   state = {
     selected: null,
     selectedFile: null
@@ -58,6 +73,11 @@ class DatasetControls extends React.Component {
   };
 
   render() {
+    /*
+    if (port !== '80') {
+      POSEIDON_DATASET = {name:"",url:""};
+    }
+    */
     return (
       <div className={style.dataControls}>
         <div className={style.selectorContainer}>
