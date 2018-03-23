@@ -82,7 +82,7 @@ class DatasetControls extends React.Component {
             className={style.selector}
             selected={this.state.selected}
             onChange={this.onSelected}
-            datasets={[...this.props.datasets, CUSTOM_DATASET, POSEIDON_DATASET]}
+            datasets={[...this.props.datasets, CUSTOM_DATASET]}
           />
         </div>
 
