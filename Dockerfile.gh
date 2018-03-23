@@ -13,5 +13,4 @@ RUN sed -i '2i\
 
 RUN yarn install
 RUN yarn run build
-CMD /bin/bash
-#CMD yarn run deploy
+CMD yarn run deploy
