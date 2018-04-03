@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
-
+import { selectDataset } from 'domain/dataset';
 import { selectControls } from 'domain/controls';
 
 import Header from 'features/header/Header';
@@ -17,7 +17,10 @@ import datasets from './datasets';
 
 class App extends Component {
   render() {
-    const darkTheme = this.props.darkTheme;
+    const { dataset, darkTheme } = this.props;
+
+    const hasDataset = dataset && dataset.length > 0;
+
     return (
       <div className={
           classNames({
@@ -31,18 +34,22 @@ class App extends Component {
           <span>&lt;&lt;</span>
         </label>
         <div className={ style.controls }>
-          <div className={ style.innerControls }>
-            <Header />
+          <Header />
+          <div className={ style.section }>
             <DatasetControls datasets={ datasets }/>
+          </div>
 
-            <div className={ style.section }>
+          { hasDataset &&
+            <div className={ classNames(style.section, style.hierarchySection) }>
               <HierarchySelector />
             </div>
+          }
 
+          { hasDataset &&
             <div className={ style.section }>
               <MiscControls />
             </div>
-          </div>
+          }
         </div>
 
         <div className={ style.canvas }>
@@ -54,6 +61,7 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  dataset: selectDataset(state),
   darkTheme: selectControls(state).darkTheme
 });
 

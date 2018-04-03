@@ -1,10 +1,9 @@
 .header {
   background: transparent;
   height: auto;
-  display: flex;
   flex-wrap:  wrap;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .logo {

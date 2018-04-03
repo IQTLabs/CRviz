@@ -14,17 +14,6 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes }) => {
 
   const nodesEnter = nodes.enter().append("g").classed(className("node"), true);
 
-  console.log('Data size', data.length);
-
-  console.group('Existing')
-  console.log(nodes.size());
-  nodes.filter(isInternal).each((d) => console.log(datumKey(d)));
-  console.groupEnd();
-  console.group('Entering')
-  console.log(nodesEnter.size());
-  nodesEnter.filter(isInternal).each((d) => console.log(datumKey(d)));
-  console.groupEnd();
-
   nodesEnter
     .merge(nodes)
     .attr('data-key', datumKey)

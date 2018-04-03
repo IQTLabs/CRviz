@@ -6,7 +6,6 @@ const datumKey = (datum) => {
   if (datum.depth === 0) {
     return 'root';
   } else if (datum.height > 0) {
-    debugger;
     return [
       datumKey(datum.parent),
       datum.data.field.path.join("."),
