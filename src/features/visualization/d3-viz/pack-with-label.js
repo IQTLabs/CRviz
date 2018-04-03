@@ -117,9 +117,9 @@ const packChildren = (packSiblings, labelRatio, padding, k) => (node) => {
   // Calculate the label size of the largest non-leaf children
   // and expand their radii accordingly to make space for label.
   if (nonleafChildren.length > 0) {
-    const labelSize = Math.max(
-      ...nonleafChildren.map(getLabelSize(labelRatio))
-    );
+    const labelSize = nonleafChildren.map(getLabelSize(labelRatio))
+      .reduce((a, b) => a + b, 0) / nonleafChildren.length;
+
     nonleafChildren.forEach((node) => {
       node.labelSize = labelSize;
       node.r += labelSize / 2;

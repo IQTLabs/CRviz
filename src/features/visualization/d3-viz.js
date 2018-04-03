@@ -118,10 +118,6 @@ function d3Viz(rootNode) {
 
     props = nextProps;
 
-    console.log('dataUpdated', dataUpdated)
-    console.log('sizeUpdated', sizeUpdated)
-    console.log('legendUpdated', legendUpdated)
-
     if (dataUpdated) {
       repack(props, state);
     }
