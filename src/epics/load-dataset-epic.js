@@ -14,6 +14,7 @@ const loadDatasetEpic = (action$, store) => {
     .mergeMap(({ payload }) => {
       return Observable.of(payload)
         .do(validate)
+        .do(formatPayload)
         .map((payload) =>
           setDataset({
             dataset: payload.dataset,
@@ -35,15 +36,31 @@ const loadDatasetEpic = (action$, store) => {
 const validate = (data) => {
   const errors = [];
 
-  if (isNil(data.dataset) || !is(Array, data.dataset)) {
+  //in the case of a naked array the array will be implicitly placed into a suboject named dataset
+  //hence the check on data.data
+  console.log(data);
+  if ((isNil(data.dataset) || !is(Array, data.dataset)) && !is(Array, data.data)) {
     errors.push(
-      "Data must contains a key named dataset whose value is an array."
+      "Data must contain a key named dataset whose value is an array or be an array itself."
     );
   }
 
   if (!isEmpty(errors)) {
     throw new ValidationError(errors.join(" "));
   }
+};
+
+//if we have a naked array instead of an object containing a dataset
+//transfer the array into an object's dataset to maintain a consistent
+//schema with what is used elsewhere see https://github.com/CyberReboot/CRviz/issues/33
+const formatPayload = (data) => {
+  var tempDataset = [];
+  if(isNil(data.dataset) && is(Array, data.data)){
+    tempDataset = data.data;
+  } else {
+    tempDataset = data.dataset;
+  }
+  data.dataset = tempDataset;
 };
 
 function ValidationError(message) {
