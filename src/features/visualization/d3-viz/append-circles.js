@@ -12,11 +12,11 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes }) => {
 
   nodes.exit().remove();
 
-  const nodesEnter = nodes.enter().append("g");
+  const nodesEnter = nodes.enter().append("g").classed(className("node"), true);
 
   nodesEnter
     .merge(nodes)
-    .classed(className("node"), true)
+    .attr('data-key', datumKey)
     .classed(className("rootNode"), (d) => d.depth === 0)
     .classed(className("groupingNode"), (d) => d.depth > 0 && d.height > 0)
     .classed(

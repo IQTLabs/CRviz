@@ -93,7 +93,8 @@ function d3Viz(rootNode) {
     labels: null,
     countLabels: null,
     zoom: null,
-    selectedNode: null
+    selectedNode: null,
+    legend: null
   };
 
   new ResizeSensor(rootNode, debounce(() => update(props), 100));
@@ -125,6 +126,8 @@ function d3Viz(rootNode) {
 
     if (legendUpdated) {
       resetLegend(props, state);
+    } else {
+      state.legend && state.legend.update({ nodes: state.nodes })
     }
 
     if (sizeUpdated || dataUpdated) {
@@ -171,13 +174,14 @@ function d3Viz(rootNode) {
   };
 
   const resetLegend = (props, state) => {
-    setupLegend({
+    state.legend = setupLegend({
       legend: legend,
       hierarchyConfig: props.hierarchyConfig,
-      nodes: state.nodes,
       data: props.data,
       coloredField: props.coloredField
     });
+
+    state.legend.update({ nodes: state.nodes })
   };
 
   const resetZoom = (props, state) => {

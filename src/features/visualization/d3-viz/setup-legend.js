@@ -18,11 +18,9 @@ import {
 
 import { colorScheme, extendColorScheme } from './color-scheme';
 
-function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField, legendConfig }) {
+function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig }) {
   if (!coloredField) {
     legend.style("display", "none");
-    nodes.select('circle').attr('class', null);
-    nodes.classed('viz-coloredNode', false);
     return;
   } else {
     legend.style("display", null);
@@ -53,17 +51,27 @@ function setupLegend({ legend, nodes, data, hierarchyConfig, coloredField, legen
 
   createStylesheet(coloring);
 
-  function update() {
+  const state = { nodes: [] }
+
+  function update({ nodes }) {
+    state.nodes = nodes;
+
+    if (!coloredField) {
+      nodes.select('circle').attr('class', null);
+      nodes.classed('viz-coloredNode', false);
+      return;
+    }
+
     colorNodes({ nodes, colorMap, getValue, coloredField, isColoringGroup });
     updateLegend({ legend, colorMap, toggleValue })
   }
 
   function toggleValue(value) {
     colorMap[value].disabled = !colorMap[value].disabled;
-    update();
+    update({ nodes: state.nodes });
   }
 
-  update();
+  return { update };
 }
 
 const updateLegend = ({ legend, colorMap, toggleValue }) => {

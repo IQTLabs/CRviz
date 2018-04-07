@@ -26,6 +26,10 @@ const packWithLabel = () => {
     // circles use the label size of the largest circle.
     labelRatio: 0.25,
 
+    // But we ensure smaller circle doesn't look like Ben Solo with its high
+    // waisted pant.
+    maxLabelRatio: 0.4,
+
     // The packing method for packing siblings node.
     // By default use the packGrid method. Can be set to use D3's packSiblings
     // method instead.
@@ -39,25 +43,26 @@ const packWithLabel = () => {
   const pack = (root) => {
     root.x = options.size[0] / 2;
     root.y = options.size[1] / 2;
-    const { radius, size, labelRatio, packSiblings } = options;
+    const { radius, size, labelRatio, maxLabelRatio, packSiblings } = options;
     const padding =
       typeof options.padding === "function" ? options.padding : () => options.padding;
 
     if (radius) {
       root
         .eachBefore(radiusLeaf(radius))
-        .eachAfter(packChildren(packSiblings, labelRatio, padding, 0.5))
+        .eachAfter(packChildren(packSiblings, labelRatio, maxLabelRatio, padding, 0.5))
         .eachBefore(translateChild(1));
     } else {
       // If radius is not specified, set each leaf node's radius based on its
       // value, then resize the entire layout to fit options.size
       root
         .eachBefore(radiusLeaf((d) => Math.sqrt(d.value)))
-        .eachAfter(packChildren(packSiblings, labelRatio, () => 0, 1))
+        .eachAfter(packChildren(packSiblings, labelRatio, maxLabelRatio, () => 0, 1))
         .eachAfter(
           packChildren(
             packSiblings,
             labelRatio,
+            maxLabelRatio,
             padding,
             root.r / Math.min(...size)
           )
@@ -105,7 +110,7 @@ const getLabelSize = (labelRatio) => (node) => {
 /**
  * Pack children of a node, then set the node's radius to enclose all the children
  */
-const packChildren = (packSiblings, labelRatio, padding, k) => (node) => {
+const packChildren = (packSiblings, labelRatio, maxLabelRatio, padding, k) => (node) => {
   if (!node.children) {
     return;
   }
@@ -117,12 +122,11 @@ const packChildren = (packSiblings, labelRatio, padding, k) => (node) => {
   // Calculate the label size of the largest non-leaf children
   // and expand their radii accordingly to make space for label.
   if (nonleafChildren.length > 0) {
-    const labelSize = Math.max(
-      ...nonleafChildren.map(getLabelSize(labelRatio))
-    );
+    const labelSize = Math.max(...nonleafChildren.map(getLabelSize(labelRatio)))
+
     nonleafChildren.forEach((node) => {
-      node.labelSize = labelSize;
-      node.r += labelSize / 2;
+      node.labelSize = Math.min(labelSize, getLabelSize(maxLabelRatio)(node));
+      node.r += node.labelSize / 2;
     });
   }
 

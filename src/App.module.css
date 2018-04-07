@@ -21,6 +21,8 @@
   padding: 0.5rem;
   transition: transform 0.25s;
   transform: translateZ(0);
+  display: flex;
+  flex-direction: column;
 }
 
 :global(.darkTheme) .controls {
@@ -30,6 +32,12 @@
 .controls .section {
   border-top: 2px dashed rgba(125, 125, 125, 0.5);
   padding: 1rem 0;
+  flex: 0 0;
+}
+
+.controls .hierarchySection {
+  overflow: auto;
+  flex: 0 1 auto;
 }
 
 .canvas {
