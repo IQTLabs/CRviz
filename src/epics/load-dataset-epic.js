@@ -1,7 +1,7 @@
 import { createAction } from "redux-actions";
 import { Observable } from "rxjs";
 
-import { isNil, is, isEmpty } from "ramda";
+import { isNil, is } from "ramda";
 
 import { setDataset } from "domain/dataset";
 import { setHierarchyConfig, colorBy } from "domain/controls";
@@ -13,7 +13,7 @@ const loadDatasetEpic = (action$, store) => {
     .ofType(loadDataset.toString())
     .mergeMap(({ payload }) => {
       return Observable.of(payload)
-        .do(validate)
+        .do(formatPayload)
         .map((payload) =>
           setDataset({
             dataset: payload.dataset,
@@ -32,18 +32,19 @@ const loadDatasetEpic = (action$, store) => {
     });
 };
 
-const validate = (data) => {
-  const errors = [];
-
-  if (isNil(data.dataset) || !is(Array, data.dataset)) {
-    errors.push(
-      "Data must contains a key named dataset whose value is an array."
-    );
+//if we have a naked array or an object not containing a dataset instead of an object containing a dataset
+//transfer the array into an object's dataset to maintain a consistent
+//schema with what is used elsewhere see https://github.com/CyberReboot/CRviz/issues/33
+const formatPayload = (data) => {
+  var temp = {};
+  if(isNil(data.dataset) && is(Array, data.dataset)){
+    temp.dataset = data.dataset;
+  } else if(isNil(data.dataset) && is(Array, data)) {
+    temp.dataset = data;
+  } else {
+    temp.dataset = Object.keys(data).map( (key) =>{ return [key, data[key]]  })
   }
-
-  if (!isEmpty(errors)) {
-    throw new ValidationError(errors.join(" "));
-  }
+  data.dataset = temp.dataset;
 };
 
 function ValidationError(message) {
