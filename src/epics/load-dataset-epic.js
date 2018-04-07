@@ -41,8 +41,10 @@ const formatPayload = (data) => {
     temp.dataset = data.dataset;
   } else if(isNil(data.dataset) && is(Array, data)) {
     temp.dataset = data;
-  } else {
+  } else if(isNil(data.dataset)) {
     temp.dataset = Object.keys(data).map( (key) =>{ return [key, data[key]]  })
+  } else {
+    temp.dataset = data.dataset;
   }
   data.dataset = temp.dataset;
 };
