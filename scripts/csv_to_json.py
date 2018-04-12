@@ -1,4 +1,15 @@
 #!/usr/bin/env python3
+#
+# To convert a CSV file to a JSON file useable within CRviz, run 
+# the script as follows:
+#       csv_to_json.py [-o OUTPUT] CSVFILE
+#
+# By default, the output will be the CSVFILE's name + '.json'
+# and it is assumed that the first line of the CSV file will
+# contain column headers, which will become the keys within the
+# json object. Use -o to explicitly name the JSON file.
+#
+# Any questions? Ask @lilchurro
 
 import argparse
 import csv
