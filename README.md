@@ -8,6 +8,8 @@ CRviz is our first attempt at visualizing networks differently. It's still an ea
 
 For more details, please see this [blog post](https://blog.cyberreboot.org/crviz-scalable-design-for-network-visualization-14689133fd91).
 
+For a live demo, please check out https://cyberreboot.github.io/CRviz/
+
 ## Build and run
 
 ### With Docker
