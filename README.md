@@ -41,14 +41,14 @@ For examples, see [`./sample_data`](./sample_data).
 
 | Name | Type | Required | Description |
 | - | - | - | - |
-| configuration | [ConfigurationObject](#ConfigurationObject) | no | configuration for this dataset |
+| configuration | [ConfigurationObject](#configurationobject) | no | configuration for this dataset |
 | dataset | array\<object\> | yes | An array of data points. All data points are expected to have the same schema. |
 
 #### ConfigurationObject
 
 | Name | Type | Required | Description |
 | - | - | - | - |
-| fields | array\<[AttributeObject](#AttributeObject)\> | no | an array of attributes in this dataset. |
+| fields | array\<[AttributeObject](#attributeobject)\> | no | an array of attributes in this dataset. |
 
 #### AttributeObject
 
