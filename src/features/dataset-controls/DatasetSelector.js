@@ -9,7 +9,7 @@ function DatasetSelector({ className, selected, datasets, onChange }) {
         onChange={(evt) => onChange(find(eqUrl(evt.target.value), datasets)) }
         value={isNil(selected) ? "" : selected.url}
       >
-        <option value="">&mdash;</option>
+        <option value="">&mdash;None&mdash;</option>
         {datasets.map((dataset) => {
           return (
             <option key={dataset.url} value={dataset.url}>

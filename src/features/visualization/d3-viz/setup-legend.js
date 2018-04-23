@@ -21,7 +21,19 @@ import { colorScheme, extendColorScheme } from './color-scheme';
 function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig }) {
   if (!coloredField) {
     legend.style("display", "none");
-    return;
+
+    const state = { nodes: [] }
+
+    function update({ nodes }) {
+      state.nodes = nodes;
+      if (!coloredField) {
+        nodes.select('circle').attr('class', null);
+        nodes.classed('viz-coloredNode', false);
+        return;
+      }
+    }
+
+    return { update };
   } else {
     legend.style("display", null);
   }
@@ -55,7 +67,6 @@ function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig
 
   function update({ nodes }) {
     state.nodes = nodes;
-
     if (!coloredField) {
       nodes.select('circle').attr('class', null);
       nodes.classed('viz-coloredNode', false);
