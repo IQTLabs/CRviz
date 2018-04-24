@@ -28,7 +28,7 @@ function FieldSelect({
       onChange={(evt) => onChange(stringToField(fields, evt.target.value))}
       value={isNil(value) ? "" : fieldToString(value)}
     >
-      <option value="">&mdash;</option>
+      <option value="">&mdash;None&mdash;</option>
       {sortBy(getCount(getFieldId, values), fields).map((field) => {
         const key = getFieldId(field);
         return (

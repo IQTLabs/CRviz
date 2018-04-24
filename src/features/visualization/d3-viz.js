@@ -181,7 +181,9 @@ function d3Viz(rootNode) {
       coloredField: props.coloredField
     });
 
-    state.legend.update({ nodes: state.nodes })
+    if(state.legend != null){
+      state.legend.update({ nodes: state.nodes })
+    }
   };
 
   const resetZoom = (props, state) => {
