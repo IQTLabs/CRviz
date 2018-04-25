@@ -5,6 +5,7 @@ import { isNil } from "ramda";
 
 import { fetchDataset } from "epics/fetch-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
+import { showNodes } from "domain/controls"
 import { setDataset } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
@@ -48,6 +49,8 @@ class DatasetControls extends React.Component {
     if (isNil(dataset)) {
       return this.resetDataset();
     }
+
+    this.props.showNodes(true);
 
     const message = "Please enter a URL";
     const url = dataset === CUSTOM_DATASET ? prompt(message) : dataset.url;
@@ -119,13 +122,15 @@ DatasetControls.propTypes = {
   datasets: PropTypes.array,
   fetchDataset: PropTypes.func.isRequired,
   uploadDataset: PropTypes.func.isRequired,
-  setDataset: PropTypes.func.isRequired
+  setDataset: PropTypes.func.isRequired,
+  showNodes: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = {
   fetchDataset,
   uploadDataset,
-  setDataset
+  setDataset,
+  showNodes
 };
 
 export default connect(null, mapDispatchToProps)(DatasetControls);

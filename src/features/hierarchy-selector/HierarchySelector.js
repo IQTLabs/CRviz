@@ -20,7 +20,7 @@ import {
 } from "ramda";
 
 import { selectConfiguration, selectValues, getFieldId } from "domain/dataset";
-import { setHierarchyConfig, selectControls } from "domain/controls";
+import { setHierarchyConfig, selectControls, showNodes } from "domain/controls";
 
 import SelectedFieldList from './SelectedFieldList';
 import AvailableFieldList from './AvailableFieldList';
@@ -91,6 +91,10 @@ class HierarchySelector extends React.Component {
     if (index !== null) {
       setHierarchyConfig(remove(index, 1, hierarchyConfig ))
     }
+
+    if(this.props.controls.hierarchyConfig.length === 0 ){
+      this.props.showNodes(true);
+    }
   }
 
   render() {
@@ -159,7 +163,8 @@ HierarchySelector.propTypes = {
   }),
   controls: PropTypes.shape({
     hierarchyConfig: PropTypes.array.isRequired
-  })
+  }),
+  showNodes: PropTypes.func.isRequired
 };
 
 const findFieldIndex = (list, fieldId) => {
@@ -175,7 +180,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  setHierarchyConfig
+  setHierarchyConfig,
+  showNodes
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HierarchySelector);
