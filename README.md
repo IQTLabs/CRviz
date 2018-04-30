@@ -8,6 +8,8 @@ CRviz is our first attempt at visualizing networks differently. It's still an ea
 
 For more details, please see this [blog post](https://blog.cyberreboot.org/crviz-scalable-design-for-network-visualization-14689133fd91).
 
+For a live demo, please check out https://cyberreboot.github.io/CRviz/
+
 ## Build and run
 
 ### With Docker
@@ -39,14 +41,14 @@ For examples, see [`./sample_data`](./sample_data).
 
 | Name | Type | Required | Description |
 | - | - | - | - |
-| configuration | [ConfigurationObject](#configuration-object) | no | configuration for this dataset |
+| configuration | [ConfigurationObject](#configurationobject) | no | configuration for this dataset |
 | dataset | array\<object\> | yes | An array of data points. All data points are expected to have the same schema. |
 
 #### ConfigurationObject
 
 | Name | Type | Required | Description |
 | - | - | - | - |
-| fields | array\<[AttributeObject](#AttributeObject)\> | no | an array of attributes in this dataset. |
+| fields | array\<[AttributeObject](#attributeobject)\> | no | an array of attributes in this dataset. |
 
 #### AttributeObject
 
