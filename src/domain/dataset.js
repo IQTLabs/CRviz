@@ -105,6 +105,7 @@ const valuesFor = (dataset, configuration) => {
  * }
 */
 const setDataset = createAction("SET_DATASET");
+const setSearchResults = createAction("SET_SEARCHRESULTS");
 
 // REDUCERS
 const reducer = handleActions(
@@ -120,6 +121,12 @@ const reducer = handleActions(
       const values = valuesFor(dataset, configuration);
 
       return { ...state, dataset, values, configuration }
+    },
+    [setSearchResults]: (state, { payload }) => {
+      const results = payload.results;
+      console.log(payload);
+
+      return { ...state, results}
     }
   },
   defaultState
@@ -133,4 +140,4 @@ const selectValues = (state) => state.dataset.values;
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId };
+export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId , setSearchResults};

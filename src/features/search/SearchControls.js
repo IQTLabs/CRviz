@@ -5,28 +5,32 @@ import { connect } from "react-redux";
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
 
+import { selectDataset} from "domain/dataset";
+
+import { searchDataset } from "epics/search-dataset-epic";
 
 import style from "./SearchControls.module.css";
 
 class Search extends React.Component {
 
   state = {
-    queryString: ''
-  }
-
-  search = (queryString) =>{
-    alert("you searched for: \n" + queryString + "\nGood luck with that.");
-    return queryString;
+    queryString: '',
+    results: []
   }
 
   handleSearch(){
-    this.search(this.state.queryString);
+    var data = {
+      dataset:this.props.dataset,
+      queryString: this.state.queryString,
+      results: this.state.results
+    }
+    this.props.searchDataset(data);
   }
 
   handleQueryStringChange = (e) =>{
-    this.setState({
-      queryString:e.target.value
-    })
+        this.setState({
+          queryString: e.target.value
+        });
   }
 
   render() {
@@ -37,7 +41,7 @@ class Search extends React.Component {
             type="search"
             id="search-string"
             placeholder="Search"
-            value={this.state.queryString}
+            value={this.props.queryString}
             onChange={this.handleQueryStringChange}
           />
 
@@ -45,21 +49,28 @@ class Search extends React.Component {
             <FontAwesomeIcon icon={faSearch} />
           </label>
         </span>
+        <br/>
+        <label> {this.state.results.length}&nbsp;Results found </label>
       </div>
     );
   }
 }
 
 Search.propTypes = {
-  queryString: PropTypes.string
+  dataset: PropTypes.array,
+  queryString: PropTypes.string,
+  results: PropTypes.array,
+  searchDataset: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => ({
-  //searchResults: null,
+const mapStateToProps = (state, ownProps) => ({
+  dataset: selectDataset(state),
+  queryString: state.queryString,
+  results: state.results
 });
 
 const mapDispatchToProps = {
-  //searchResults
+  searchDataset,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search);
