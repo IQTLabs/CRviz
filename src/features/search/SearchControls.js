@@ -49,8 +49,9 @@ class Search extends React.Component {
             <FontAwesomeIcon icon={faSearch} />
           </label>
         </span>
-        <br/>
-        <label> {this.state.results.length}&nbsp;Results found </label>
+        <span>
+          <label> {this.state.results.length}&nbsp;Results found </label>
+        </span>
       </div>
     );
   }
