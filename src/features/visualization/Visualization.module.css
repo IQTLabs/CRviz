@@ -20,6 +20,11 @@
   stroke-width: 2;
 }
 
+.viz :global(.viz-searchExcluded) circle {
+  stroke:Red;
+  stroke-width: 2;
+}
+
 .viz :global(.viz-rootNode) circle {
   fill: transparent;
 }

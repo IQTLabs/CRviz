@@ -21,7 +21,8 @@ const defaultState = {
   values: {},
   configuration: {
     fields: []
-  }
+  },
+  results: []
 };
 
 /**
@@ -124,8 +125,7 @@ const reducer = handleActions(
     },
     [setSearchResults]: (state, { payload }) => {
       const results = payload.results;
-      console.log(payload);
-
+      console.log(state.results);
       return { ...state, results}
     }
   },
@@ -137,7 +137,8 @@ const reducer = handleActions(
 const selectDataset = (state) => state.dataset.dataset;
 const selectConfiguration = (state) => state.dataset.configuration;
 const selectValues = (state) => state.dataset.values;
+const getSearchResults = (state) => state.results;
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId , setSearchResults};
+export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId , setSearchResults, getSearchResults};

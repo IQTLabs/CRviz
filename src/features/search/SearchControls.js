@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
 
-import { selectDataset} from "domain/dataset";
+import { selectDataset, getSearchResults} from "domain/dataset";
 
 import { searchDataset } from "epics/search-dataset-epic";
 
@@ -31,6 +31,12 @@ class Search extends React.Component {
         this.setState({
           queryString: e.target.value
         });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      results: nextProps.results
+    });
   }
 
   render() {
@@ -64,11 +70,15 @@ Search.propTypes = {
   searchDataset: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  dataset: selectDataset(state),
-  queryString: state.queryString,
-  results: state.results
-});
+const mapStateToProps = (state, ownProps) => {
+  console.log(state);
+  console.log(ownProps);
+  return {
+    dataset: selectDataset(state),
+    queryString: state.queryString,
+    results: state.dataset.results
+  };
+}
 
 const mapDispatchToProps = {
   searchDataset,

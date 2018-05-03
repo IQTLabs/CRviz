@@ -41,6 +41,12 @@ class App extends Component {
           </div>
 
           { hasDataset &&
+            <div className={ style.section }>
+              <SearchControls />
+            </div>
+          }
+
+          { hasDataset &&
             <div className={ classNames(style.section, style.hierarchySection) }>
               <HierarchySelector />
             </div>
@@ -49,7 +55,6 @@ class App extends Component {
           { hasDataset &&
             <div className={ style.section }>
               <MiscControls />
-              <SearchControls />
             </div>
           }
         </div>
