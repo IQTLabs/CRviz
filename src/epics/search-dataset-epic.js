@@ -16,6 +16,7 @@ const searchDatasetEpic = (action$, store) => {
         .do(performSearch)
         .map((payload) =>
           setSearchResults({
+            queryString: payload.queryString,
             results: payload.results
           })
         )
@@ -25,7 +26,7 @@ const searchDatasetEpic = (action$, store) => {
 
 const performSearch = (data) => {
   data.results = [];
-  var toFind = data.queryString;
+  var toFind = data.queryString || '';
   for(var key in data.dataset){
     if(objectContainsValue(data.dataset[key], toFind)){
       data.dataset[key].isSearchResult = true;

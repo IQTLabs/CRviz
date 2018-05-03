@@ -22,7 +22,8 @@ const defaultState = {
   configuration: {
     fields: []
   },
-  results: []
+  results: [],
+  queryString:''
 };
 
 /**
@@ -125,8 +126,8 @@ const reducer = handleActions(
     },
     [setSearchResults]: (state, { payload }) => {
       const results = payload.results;
-      console.log(state.results);
-      return { ...state, results}
+      const queryString = payload.queryString;
+      return { ...state, results, queryString}
     }
   },
   defaultState

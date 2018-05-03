@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
+import faTimesCircle from "@fortawesome/fontawesome-free-solid/faTimesCircle";
 
 import { selectDataset, getSearchResults} from "domain/dataset";
 
@@ -11,14 +12,20 @@ import { searchDataset } from "epics/search-dataset-epic";
 
 import style from "./SearchControls.module.css";
 
+const defaultState = {
+  queryString: '',
+  results: [],
+  hasSearch: false
+}
+
 class Search extends React.Component {
 
-  state = {
-    queryString: '',
-    results: []
-  }
+  state = defaultState
 
   handleSearch(){
+    this.setState({
+      hasSearch: this.state.queryString !== ''
+    });
     var data = {
       dataset:this.props.dataset,
       queryString: this.state.queryString,
@@ -27,14 +34,27 @@ class Search extends React.Component {
     this.props.searchDataset(data);
   }
 
+  clearSearch(){
+    this.setState(defaultState, function() {
+      this.handleSearch();
+    });
+  }
+
   handleQueryStringChange = (e) =>{
         this.setState({
           queryString: e.target.value
         });
   }
 
+  handleKeyPress = (e) => {
+    if(e.key == 'Enter'){
+      this.handleSearch();
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
+      queryString: nextProps.queryString,
       results: nextProps.results
     });
   }
@@ -47,17 +67,23 @@ class Search extends React.Component {
             type="search"
             id="search-string"
             placeholder="Search"
-            value={this.props.queryString}
+            value={this.state.queryString}
             onChange={this.handleQueryStringChange}
+            onKeyPress={this.handleKeyPress}
           />
 
           <label htmlFor="search-string" className="button" onClick={() => this.handleSearch()}>
             <FontAwesomeIcon icon={faSearch} />
           </label>
         </span>
-        <span>
-          <label> {this.state.results.length}&nbsp;Results found </label>
-        </span>
+        { this.state.hasSearch &&
+          <span>
+            <label id="search-results"> {this.state.results.length}&nbsp;Results found </label>
+            <label htmlFor="search-results" className="button" onClick={() => this.clearSearch()}>
+              <FontAwesomeIcon icon={faTimesCircle} />
+              </label>
+          </span>
+        }
       </div>
     );
   }
@@ -71,11 +97,9 @@ Search.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state);
-  console.log(ownProps);
   return {
     dataset: selectDataset(state),
-    queryString: state.queryString,
+    queryString: state.dataset.queryString,
     results: state.dataset.results
   };
 }
