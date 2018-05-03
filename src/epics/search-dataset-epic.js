@@ -28,7 +28,7 @@ const performSearch = (data) => {
   data.results = [];
   var toFind = data.queryString || '';
   for(var key in data.dataset){
-    if(objectContainsValue(data.dataset[key], toFind)){
+    if(toFind !=='' && objectContainsValue(data.dataset[key], toFind)){
       data.dataset[key].isSearchResult = true;
       data.results.push(data.dataset[key]);
     } else {
@@ -40,7 +40,7 @@ const performSearch = (data) => {
 const objectContainsValue = (obj, toFind) => {
   var retVal = false;
   for(var key in obj){
-    if(typeof(obj[key]) === "string" && obj[key].toUpperCase() === toFind.toUpperCase()){
+    if(typeof(obj[key]) === "string" && obj[key].toUpperCase().includes(toFind.toUpperCase())){
       retVal =  true;
     } else if(typeof(obj[key]) === "object"){
       retVal = objectContainsValue(obj[key], toFind);

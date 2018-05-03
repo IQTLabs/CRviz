@@ -21,8 +21,8 @@
 }
 
 .viz :global(.viz-searchExcluded) circle {
-  stroke:Red;
-  stroke-width: 2;
+  stroke: transparent;
+  stroke-width: 0;
 }
 
 .viz :global(.viz-rootNode) circle {
