@@ -22,8 +22,8 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
       className("unknown"),
       (d) => d.depth > 0 && d.height > 0 && d.data.fieldValue === "Unknown"
     )
-    .classed(className("containsSearchResult"), (d) => hasSearch && d.data.hasSearchResult && d.depth > 0 && d.height > 0)
-    .classed(className("containsNoSearchResult"), (d) => hasSearch && !d.data.hasSearchResult && d.depth > 0 && d.height > 0)
+    .classed(className("containsSearchResult"), (d) => hasSearch && d.data.searchResultCount > 0 && d.depth > 0 && d.height > 0)
+    .classed(className("containsNoSearchResult"), (d) => hasSearch && d.data.searchResultCount === 0 && d.depth > 0 && d.height > 0)
     .classed(className("searchResult"), (d) => hasSearch && d.data.isSearchResult && d.depth > 0 && d.height === 0)
     .classed(className("searchExcluded"), (d) => hasSearch && !d.data.isSearchResult && d.depth > 0 && d.height === 0)
     .classed(className("leafNode"), (d) => d.height === 0)

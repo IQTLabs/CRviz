@@ -1,6 +1,7 @@
 import { createAction } from "redux-actions";
 import { Observable } from "rxjs";
 
+import { setHierarchyConfig } from "domain/controls";
 import { setSearchResults } from "domain/dataset";
 
 const searchDataset = createAction("SEARCH_DATASET");
@@ -17,7 +18,7 @@ const searchDatasetEpic = (action$, store) => {
             results: payload.results
           })
         )
-        //.concat(Observable.of(setHierarchyConfig([]), colorBy(null)))
+        .concat(Observable.of(setHierarchyConfig([])))
     });
 };
 
