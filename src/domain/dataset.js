@@ -138,7 +138,7 @@ const reducer = handleActions(
 const selectDataset = (state) => state.dataset.dataset;
 const selectConfiguration = (state) => state.dataset.configuration;
 const selectValues = (state) => state.dataset.values;
-const getSearchResults = (state) => state.results;
+const getSearchResults = (state) => state.dataset.results;
 
 export default reducer;
 
