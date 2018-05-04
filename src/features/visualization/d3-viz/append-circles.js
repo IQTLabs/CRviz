@@ -11,7 +11,7 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes }) => {
     .data(data, datumKey);
 
   nodes.exit().remove();
-
+  //console.log(nodes);
   const nodesEnter = nodes.enter().append("g").classed(className("node"), true);
   nodesEnter
     .merge(nodes)
@@ -22,8 +22,10 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes }) => {
       className("unknown"),
       (d) => d.depth > 0 && d.height > 0 && d.data.fieldValue === "Unknown"
     )
-    .classed(className("searchResult"), (d)=>d.data.isSearchResult)
-    .classed(className("searchExcluded"), (d)=>!d.data.isSearchResult)
+    .classed(className("containsSearchResult"), (d)=>d.data.hasSearchResult && d.depth > 0 && d.height > 0)
+    .classed(className("containsNoSearchResult"), (d)=>!d.data.hasSearchResult && d.depth > 0 && d.height > 0)
+    .classed(className("searchResult"), (d)=>d.data.isSearchResult && d.depth > 0 && d.height === 0)
+    .classed(className("searchExcluded"), (d)=>!d.data.isSearchResult && d.depth > 0 && d.height === 0)
     .classed(className("leafNode"), (d) => d.height === 0)
     .attr("transform", (d) => `translate(${[d.x, d.y].join(",")})`)
     .attr("display", (d) => !showNodes && d.height === 0 ? 'none' : null)

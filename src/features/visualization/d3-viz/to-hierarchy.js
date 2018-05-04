@@ -32,6 +32,19 @@ const nestHierarchy = (hierarchyConfig) => {
   );
 };
 
+const containsSearchResults = (children) => {
+  var result = false;
+
+  for(var c in children){
+    if(children[c].isSearchResult || children[c].hasSearchResult){
+      result = true;
+      break;
+    }
+  }
+
+  return result;
+};
+
 /**
  * Convert nest entries into the format accepted by d3.hierarchy
  */
@@ -40,7 +53,8 @@ const entriesToHierarchy = (fieldValue, field, hierarchyConfig, entries) => {
     return {
       fieldValue,
       field,
-      children: chain(getLeaves, entries)
+      children: chain(getLeaves, entries),
+      hasSearchResult: containsSearchResults(entries)
     }
   }
 
@@ -58,7 +72,8 @@ const entriesToHierarchy = (fieldValue, field, hierarchyConfig, entries) => {
       } else {
         return entry;
       }
-    }, entries)
+    }, entries),
+    hasSearchResult: containsSearchResults(entries)
   };
 };
 

@@ -15,14 +15,14 @@
   fill: black;
 }
 
-.viz :global(.viz-searchResult) circle {
+.viz :global(.viz-node.viz-searchResult) circle {
   stroke:LawnGreen;
   stroke-width: 2;
 }
 
-.viz :global(.viz-searchExcluded) circle {
-  stroke: transparent;
-  stroke-width: 0;
+.viz :global(.viz-node.viz-searchExcluded) circle {
+  stroke:Red;
+  stroke-width: 2;
 }
 
 .viz :global(.viz-rootNode) circle {
@@ -31,6 +31,16 @@
 
 .viz :global(.viz-groupingNode) circle {
   opacity: 0.2;
+}
+
+.viz :global(.viz-groupingNode.viz-containsNoSearchResult) circle {
+  stroke:DarkOrange;
+  stroke-width: 4;
+}
+
+.viz :global(.viz-groupingNode.viz-containsSearchResult) circle {
+  stroke:DarkCyan;
+  stroke-width: 4;
 }
 
 .viz :global(.viz-groupingNode):hover circle {
