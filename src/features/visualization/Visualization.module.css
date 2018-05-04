@@ -16,13 +16,11 @@
 }
 
 .viz :global(.viz-node.viz-searchResult) circle {
-  stroke:LawnGreen;
-  stroke-width: 2;
+  opacity: 1;
 }
 
 .viz :global(.viz-node.viz-searchExcluded) circle {
-  stroke:Red;
-  stroke-width: 2;
+  opacity: 0.2;
 }
 
 .viz :global(.viz-rootNode) circle {
@@ -34,12 +32,11 @@
 }
 
 .viz :global(.viz-groupingNode.viz-containsNoSearchResult) circle {
-  stroke:DarkOrange;
-  stroke-width: 4;
+  opacity: 0.25;
 }
 
 .viz :global(.viz-groupingNode.viz-containsSearchResult) circle {
-  stroke:DarkCyan;
+  stroke:Lime;
   stroke-width: 4;
 }
 

@@ -1,10 +1,7 @@
 import { createAction } from "redux-actions";
 import { Observable } from "rxjs";
 
-import { isNil} from "ramda";
-
 import { setSearchResults } from "domain/dataset";
-import { setHierarchyConfig, colorBy } from "domain/controls";
 
 const searchDataset = createAction("SEARCH_DATASET");
 

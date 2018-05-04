@@ -139,7 +139,8 @@ const selectDataset = (state) => state.dataset.dataset;
 const selectConfiguration = (state) => state.dataset.configuration;
 const selectValues = (state) => state.dataset.values;
 const getSearchResults = (state) => state.dataset.results;
+const getQueryString = (state) => state.dataset.queryString;
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId , setSearchResults, getSearchResults};
+export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId , setSearchResults, getSearchResults, getQueryString};

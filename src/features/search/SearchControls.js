@@ -6,7 +6,7 @@ import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
 import faTimesCircle from "@fortawesome/fontawesome-free-solid/faTimesCircle";
 
-import { selectDataset, getSearchResults} from "domain/dataset";
+import { selectDataset, getSearchResults } from "domain/dataset";
 
 import { searchDataset } from "epics/search-dataset-epic";
 
@@ -47,7 +47,7 @@ class Search extends React.Component {
   }
 
   handleKeyPress = (e) => {
-    if(e.key == 'Enter'){
+    if(e.key === 'Enter'){
       this.handleSearch();
     }
   }
@@ -100,7 +100,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     dataset: selectDataset(state),
     queryString: state.dataset.queryString,
-    results: state.dataset.results
+    results: getSearchResults(state)
   };
 }
 
