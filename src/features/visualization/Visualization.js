@@ -24,7 +24,7 @@ class Visualization extends React.PureComponent {
       showNodes: this.props.controls.shouldShowNodes,
       coloredField: this.props.controls.colorBy,
       data: this.props.dataset,
-      hasSearch: this.props.hasSearch
+      queryString: this.props.queryString
     });
   }
 
@@ -42,7 +42,7 @@ const mapStateToProps = (state) => {
     dataset: selectDataset(state),
     configuration: selectConfiguration(state),
     controls: selectControls(state),
-    hasSearch: getQueryString(state) !== ''
+    queryString: getQueryString(state)
   };
 };
 

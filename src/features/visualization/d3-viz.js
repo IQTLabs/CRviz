@@ -85,7 +85,7 @@ function d3Viz(rootNode) {
     height: rootNode.clientHeight,
     showNodes: true,
     coloredField: null,
-    hasSearch: false
+    queryString: ''
   };
 
   const state = {
@@ -109,7 +109,7 @@ function d3Viz(rootNode) {
     };
 
     const dataUpdated = !allEqProps(
-      ["hierarchyConfig", "data", "fields"],
+      ["hierarchyConfig", "data", "fields", "queryString"],
       props,
       nextProps
     );
@@ -162,7 +162,7 @@ function d3Viz(rootNode) {
       labelRoot: labelRoot,
       packedData: state.packedData,
       showNodes: props.showNodes,
-      hasSearch: props.hasSearch
+      hasSearch: props.queryString !== ''
     });
 
     setupTooltip({
