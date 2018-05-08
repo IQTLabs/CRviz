@@ -102,10 +102,6 @@ describe("Dataset", () => {
           { uid: "uid2", role: { role: "role", confidence: 80 } }
         ];
         const searchString = 'uid';
-        const data ={
-          queryString: searchString,
-          results: resultSet
-        }
 
         const action = setSearchResults({
           queryString: searchString,
