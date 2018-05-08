@@ -1,4 +1,4 @@
-import { chain, head, tail, map, reduce, path } from "ramda";
+import { chain, head, tail, map, reduce, path, isNil } from "ramda";
 import { nest } from "d3-collection";
 import { hierarchy as d3Hierarchy } from "d3-hierarchy";
 
@@ -32,6 +32,24 @@ const nestHierarchy = (hierarchyConfig) => {
   );
 };
 
+const countSearchResults = (children) => {
+  if(isNil(children)){
+    return 0;
+  }
+
+  var result = 0;
+
+  for(var c in children){
+    result += (children[c].searchResultCount || 0) + (children[c].isSearchResult || 0) +
+              (
+                !isNil(children[c].values)
+                  ? countSearchResults(children[c].values) : 0
+              );
+  }
+
+  return result;
+};
+
 /**
  * Convert nest entries into the format accepted by d3.hierarchy
  */
@@ -40,7 +58,8 @@ const entriesToHierarchy = (fieldValue, field, hierarchyConfig, entries) => {
     return {
       fieldValue,
       field,
-      children: chain(getLeaves, entries)
+      children: chain(getLeaves, entries),
+      searchResultCount: countSearchResults(entries)
     }
   }
 
@@ -58,7 +77,8 @@ const entriesToHierarchy = (fieldValue, field, hierarchyConfig, entries) => {
       } else {
         return entry;
       }
-    }, entries)
+    }, entries),
+    searchResultCount: countSearchResults(entries)
   };
 };
 
