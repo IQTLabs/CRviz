@@ -5,7 +5,8 @@ import {
   selectConfiguration,
   selectValues,
   setSearchResults,
-  getSearchResults
+  getSearchResults,
+  getSearchIndex
 } from "./dataset";
 
 import { combineReducers } from "redux";

@@ -1,11 +1,8 @@
 import { createAction } from "redux-actions";
-import { isNil } from 'ramda'
+import { isNil } from "ramda";
 import { Observable } from "rxjs";
 
-import * as lunr from 'lunr';
-import * as getValue from 'get-value';
-
-import { setSearchResults } from "domain/dataset";
+import { setSearchResults} from "domain/dataset";
 
 const searchDataset = createAction("SEARCH_DATASET");
 
@@ -24,51 +21,25 @@ const searchDatasetEpic = (action$, store) => {
     });
 };
 
-const flattenDataset = (ds, cfg) => {
-  var flattened = [];
-
-  if(isNil(cfg))
-    return flattened;
-
-  for(var key in ds){
-    var item = {'id':key};
-    for(var f in cfg.fields){
-      var field = cfg.fields[f];
-
-      var name = field.displayName
-      item[name] = getValue(ds[key], field.displayName);
-    }
-    flattened.push(item);
-  }
-  return flattened;
-}
-
 const performSearch = (data) => {
   data.results = [];
-  var flat = flattenDataset(data.dataset, data.configuration);
+  console.log(data);
   var toFind = data.queryString || '';
 
-  var idx = lunr(function () {
-    this.ref('id');
-    for(var f in data.configuration.fields){
-      this.field(data.configuration.fields[f].displayName);
-    }
+  const idx = data.searchIndex;
 
-    for(var i in flat){
-      this.add(flat[i]);
-    }
-  });
   console.log(idx);
-  var results = idx.search(toFind);
+  var results = [];
+  if(!isNil(idx)){
+    results = idx.search(toFind);
+  }
   console.log(results);
 
   data.dataset.forEach((el) => { el.isSearchResult = false; });
-
-  for(var key in results){
-    var index = results[key].ref;
-    data.dataset[index].isSearchResult = true;
-    data.results.push(data.dataset[index]);
-  }
+  results.forEach((r) => {
+    data.dataset[r.ref].isSearchResult = true;
+    data.results.push(data.dataset[r.ref]);
+  });
 };
 
 const objectContainsValue = (obj, toFind) => {
