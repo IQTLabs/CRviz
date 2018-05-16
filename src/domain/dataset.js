@@ -141,7 +141,6 @@ const buildIndex = (dataset, configuration) => {
  * }
 */
 const setDataset = createAction("SET_DATASET");
-const setSearchIndex = createAction("SET_SEARCHINDEX");
 const setSearchResults = createAction("SET_SEARCHRESULTS");
 
 // REDUCERS

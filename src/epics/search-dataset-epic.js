@@ -23,17 +23,13 @@ const searchDatasetEpic = (action$, store) => {
 
 const performSearch = (data) => {
   data.results = [];
-  console.log(data);
   var toFind = data.queryString || '';
-
   const idx = data.searchIndex;
 
-  console.log(idx);
   var results = [];
   if(!isNil(idx)){
     results = idx.search(toFind);
   }
-  console.log(results);
 
   data.dataset.forEach((el) => { el.isSearchResult = false; });
   results.forEach((r) => {
