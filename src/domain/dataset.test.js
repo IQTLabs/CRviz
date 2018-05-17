@@ -45,6 +45,7 @@ describe("Dataset", () => {
 
         expect(selectDataset(result)).toEqual(dataset);
         expect(selectConfiguration(result)).toEqual(expectedConfiguration);
+        expect(getSearchIndex(result).fields.length).toEqual(expectedConfiguration.fields.length);
       });
 
       it("sets a default configuration", () => {
