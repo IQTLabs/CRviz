@@ -6,10 +6,11 @@ import { isNil } from "ramda";
 import { fetchDataset } from "epics/fetch-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
 import { showNodes } from "domain/controls"
-import { setDataset } from "domain/dataset";
+import { setDataset, selectDataset } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
+import DatasetDownload from "./DatasetDownload";
 
 import style from "./DatasetControls.module.css";
 
@@ -33,6 +34,7 @@ var POSEIDON_DATASET = {
 class DatasetControls extends React.Component {
 
   state = {
+    dataset: null,
     selected: null,
     selectedFile: null
   };
@@ -73,10 +75,19 @@ class DatasetControls extends React.Component {
     });
   };
 
+  getDownloadUrl = () => {
+    const urlObject = window.URL || window.webkitURL || window;
+    const json = JSON.stringify({'dataset': this.props.dataset});
+    const blob = new Blob([json], {'type': "application/json"});
+    const url = urlObject.createObjectURL(blob);;
+    return url;
+  };
+
   render() {
     if (port === '80') {
       POSEIDON_DATASET = {name:"",url:""};
     }
+    const canDownload = this.state.selected && !this.state.selectedFile;
     return (
       <div className={style.dataControls}>
         <div className={style.selectorContainer}>
@@ -97,6 +108,16 @@ class DatasetControls extends React.Component {
             onChange={this.onUpload}
           />
         </div>
+        { canDownload &&
+          <div className={style.uploadContainer}>
+            <span className={style.label}>Download</span>
+            <DatasetDownload
+              className={style.fileUpload}
+              selected={this.state.selected.name}
+              url={this.getDownloadUrl()}
+            />
+          </div>
+        }
       </div>
     );
   }
@@ -115,22 +136,31 @@ const toURL = (url) => {
 }
 
 DatasetControls.defaultProps = {
-  datasets: []
+  datasets: [],
+  dataset: null
 };
 
 DatasetControls.propTypes = {
   datasets: PropTypes.array,
+  dataset: PropTypes.array,
   fetchDataset: PropTypes.func.isRequired,
   uploadDataset: PropTypes.func.isRequired,
   setDataset: PropTypes.func.isRequired,
   showNodes: PropTypes.func.isRequired
 };
 
+const mapStateToProps = (state, ownProps) => {
+  return {
+    dataset: selectDataset(state),
+  };
+}
+
 const mapDispatchToProps = {
   fetchDataset,
   uploadDataset,
   setDataset,
+  selectDataset,
   showNodes
 };
 
-export default connect(null, mapDispatchToProps)(DatasetControls);
+export default connect(mapStateToProps, mapDispatchToProps)(DatasetControls);
