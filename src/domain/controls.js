@@ -4,7 +4,7 @@ const defaultState = {
   hierarchyConfig: [], // Array of fields to group by.
   shouldShowNodes: true, // Whether to show individual nodes
   darkTheme: false, // Whether to use dark theme
-  colorBy: null, // The field for which to color the devices/groupings by.
+  colorBy: null // The field for which to color the devices/groupings by.
 };
 
 // ACTIONS

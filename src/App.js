@@ -8,6 +8,7 @@ import { selectControls } from 'domain/controls';
 import Header from 'features/header/Header';
 import HierarchySelector from 'features/hierarchy-selector/HierarchySelector';
 import MiscControls from 'features/misc-controls/MiscControls';
+import SearchControls from 'features/search/SearchControls';
 import Visualization from 'features/visualization/Visualization';
 import DatasetControls from 'features/dataset-controls/DatasetControls';
 
@@ -37,7 +38,13 @@ class App extends Component {
           <Header />
           <div className={ style.section }>
             <DatasetControls datasets={ datasets }/>
-          </div>
+          </div>        
+
+          { hasDataset &&
+            <div className={ style.section }>
+              <SearchControls />
+            </div>
+          }
 
           { hasDataset &&
             <div className={ classNames(style.section, style.hierarchySection) }>
