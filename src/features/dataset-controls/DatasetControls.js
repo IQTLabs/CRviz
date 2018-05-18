@@ -69,6 +69,7 @@ class DatasetControls extends React.Component {
 
     const message = "Please enter a URL";
     const url = dataset === CUSTOM_DATASET ? prompt(message) : dataset.url;
+    dataset.url = url;
     this.fetchAndSetDataset(url, dataset);
   };
 
@@ -89,6 +90,8 @@ class DatasetControls extends React.Component {
   };
 
   onRefresh = () =>{
+    console.log(this.state);
+    console.log(this.props);
     const url = this.state.selected.url;
     const dataset = this.state.selected;
     this.fetchAndSetDataset(url, dataset);
