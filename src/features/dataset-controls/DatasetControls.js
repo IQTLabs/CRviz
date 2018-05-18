@@ -90,8 +90,6 @@ class DatasetControls extends React.Component {
   };
 
   onRefresh = () =>{
-    console.log(this.state);
-    console.log(this.props);
     const url = this.state.selected.url;
     const dataset = this.state.selected;
     this.fetchAndSetDataset(url, dataset);
@@ -124,17 +122,17 @@ class DatasetControls extends React.Component {
           />
         </div>
 
-          <div className={style.uploadContainer}>
+          <div className={style.utilityContainer}>
           { canDownload &&
             <DatasetDownload
-              className={style.fileUpload}
+              className={style.fileDownload}
               selected={this.state.selected.name}
               url={this.getDownloadUrl()}
             />
           }
           { canRefresh &&
             <DatasetRefresh
-              className={style.fileUpload}
+              className={style.urlRefresh}
               onClick={this.onRefresh}
             />
           }
