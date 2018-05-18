@@ -7,7 +7,8 @@ import faDownload from "@fortawesome/fontawesome-free-solid/faDownload";
 function DatasetDownload({ className, selected, url }) {
   return (
     <span className={ className }>
-      <a className="button" href={ url } download={ selected + ".json" }>
+      <a className="button" href={ url } download={ selected + ".json" }
+        title="Download">
         <FontAwesomeIcon icon={faDownload} />
       </a>
     </span>

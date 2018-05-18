@@ -11,6 +11,7 @@ import { setDataset, selectDataset } from "domain/dataset";
 import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
 import DatasetDownload from "./DatasetDownload";
+import DatasetRefresh from "./DatasetRefresh";
 
 import style from "./DatasetControls.module.css";
 
@@ -47,15 +48,7 @@ class DatasetControls extends React.Component {
     });
   }
 
-  onSelected = (dataset) => {
-    if (isNil(dataset)) {
-      return this.resetDataset();
-    }
-
-    this.props.showNodes(true);
-
-    const message = "Please enter a URL";
-    const url = dataset === CUSTOM_DATASET ? prompt(message) : dataset.url;
+  fetchAndSetDataset = (url, dataset) => {
     if (toURL(url)) {
       this.props.fetchDataset(url);
       this.setState({
@@ -65,6 +58,18 @@ class DatasetControls extends React.Component {
     } else {
       alert("Please enter a valid URL.");
     }
+  }
+
+  onSelected = (dataset) => {
+    if (isNil(dataset)) {
+      return this.resetDataset();
+    }
+
+    this.props.showNodes(true);
+
+    const message = "Please enter a URL";
+    const url = dataset === CUSTOM_DATASET ? prompt(message) : dataset.url;
+    this.fetchAndSetDataset(url, dataset);
   };
 
   onUpload = (file) => {
@@ -83,11 +88,18 @@ class DatasetControls extends React.Component {
     return url;
   };
 
+  onRefresh = () =>{
+    const url = this.state.selected.url;
+    const dataset = this.state.selected;
+    this.fetchAndSetDataset(url, dataset);
+  }
+
   render() {
     if (port === '80') {
       POSEIDON_DATASET = {name:"",url:""};
     }
     const canDownload = this.state.selected && !this.state.selectedFile;
+    const canRefresh = this.state.selected && !isNil(this.state.selected.url)
     return (
       <div className={style.dataControls}>
         <div className={style.selectorContainer}>
@@ -108,16 +120,23 @@ class DatasetControls extends React.Component {
             onChange={this.onUpload}
           />
         </div>
-        { canDownload &&
+
           <div className={style.uploadContainer}>
-            <span className={style.label}>Download</span>
+          { canDownload &&
             <DatasetDownload
               className={style.fileUpload}
               selected={this.state.selected.name}
               url={this.getDownloadUrl()}
             />
+          }
+          { canRefresh &&
+            <DatasetRefresh
+              className={style.fileUpload}
+              onClick={this.onRefresh}
+            />
+          }
           </div>
-        }
+
       </div>
     );
   }
