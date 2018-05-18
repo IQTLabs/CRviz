@@ -11,6 +11,7 @@
     "d3": "^4.13.0",
     "d3-scale-chromatic": "^1.2.0",
     "lodash.debounce": "^4.0.8",
+    "lunr": "^2.2.0",
     "mini.css": "^2.3.7",
     "normalize.css": "^7.0.0",
     "ramda": "^0.25.0",

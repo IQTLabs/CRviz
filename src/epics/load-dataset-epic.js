@@ -30,6 +30,7 @@ const loadDatasetEpic = (action$, store) => {
           }
         });
     });
+
 };
 
 //if we have a naked array or an object not containing a dataset instead of an object containing a dataset
