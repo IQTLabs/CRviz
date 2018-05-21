@@ -37,12 +37,12 @@ const showTooltip = (event, fields, offsetTop, offsetLeft, tooltip) => {
   } else {
     tooltip.style("display", "none");
   }
+  tooltip.classed("searchResult", datum.data.isSearchResult);
 };
 
 const content = (datum, fields) => {
   if (datum.depth > 0 && datum.height > 0) {
     let cont = `${ datum.data.fieldValue } (${datum.value})`;
-    console.log(datum);
     if(datum.data.searchResultCount > 0){
       cont += `<br/><span style="color: blue">${datum.data.searchResultCount} search results</span>`
     }
