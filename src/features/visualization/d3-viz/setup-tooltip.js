@@ -28,7 +28,6 @@ const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
 const showTooltip = (event, fields, offsetTop, offsetLeft, tooltip) => {
   const target = select(event.target);
   const datum = target.datum();
-
   const text = content(datum, fields);
   if (text) {
     tooltip.node().innerHTML = text;
@@ -42,7 +41,12 @@ const showTooltip = (event, fields, offsetTop, offsetLeft, tooltip) => {
 
 const content = (datum, fields) => {
   if (datum.depth > 0 && datum.height > 0) {
-    return `${ datum.data.fieldValue } (${datum.value})`;
+    let cont = `${ datum.data.fieldValue } (${datum.value})`;
+    console.log(datum);
+    if(datum.data.searchResultCount > 0){
+      cont += `<br/><span style="color: blue">${datum.data.searchResultCount} search results</span>`
+    }
+    return cont;
   } else if (datum.height === 0) {
     const pairs = map(
       (field) => [`<strong>${ field.displayName }</strong>`, path(field.path, datum.data)],
