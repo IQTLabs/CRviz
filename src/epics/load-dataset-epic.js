@@ -40,10 +40,25 @@ const CSVconvert = (data) => {
   if (lines[0].length < 2) { // bail if there's not even linebreaks
     return data;
   }
+
+  function finddelim(hdr) {
+    var delims = [',','|','\t',';']
+    var delim = 0
+    var max = -1
+    for (var i=0; i < hdr.length; i++) {
+      if (max < hdr.split(delims[i]).length-1) {
+        max = hdr.split(delims[i]).length-1
+        delim = i
+      }
+    }
+    return delims[delim];
+  }
+
+  var delimiter = finddelim(lines[0])
   var jsonstring = '['
-  var colnames = lines[0].replace(/[;|\t]/g, ",").split(",")
+  var colnames = lines[0].split(delimiter)
   for (var i=1; i < lines.length; i++) {
-    var entry = lines[i].replace(/[;|\t]/g, ",").split(",")
+    var entry = lines[i].split(delimiter)
     if (entry.length !== colnames.length) { // malformed CSV, or not even CSV.
       return data;
     }
