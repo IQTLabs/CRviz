@@ -38,7 +38,7 @@ class App extends Component {
           <Header />
           <div className={ style.section }>
             <DatasetControls datasets={ datasets }/>
-          </div>
+          </div>        
 
           { hasDataset &&
             <div className={ style.section }>

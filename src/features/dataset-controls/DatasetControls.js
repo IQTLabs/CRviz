@@ -6,10 +6,12 @@ import { isNil } from "ramda";
 import { fetchDataset } from "epics/fetch-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
 import { showNodes } from "domain/controls"
-import { setDataset } from "domain/dataset";
+import { setDataset, selectDataset } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
+import DatasetDownload from "./DatasetDownload";
+import DatasetRefresh from "./DatasetRefresh";
 
 import style from "./DatasetControls.module.css";
 
@@ -33,6 +35,7 @@ var POSEIDON_DATASET = {
 class DatasetControls extends React.Component {
 
   state = {
+    dataset: null,
     selected: null,
     selectedFile: null
   };
@@ -45,15 +48,7 @@ class DatasetControls extends React.Component {
     });
   }
 
-  onSelected = (dataset) => {
-    if (isNil(dataset)) {
-      return this.resetDataset();
-    }
-
-    this.props.showNodes(true);
-
-    const message = "Please enter a URL";
-    const url = dataset === CUSTOM_DATASET ? prompt(message) : dataset.url;
+  fetchAndSetDataset = (url, dataset) => {
     if (toURL(url)) {
       this.props.fetchDataset(url);
       this.setState({
@@ -63,6 +58,19 @@ class DatasetControls extends React.Component {
     } else {
       alert("Please enter a valid URL.");
     }
+  }
+
+  onSelected = (dataset) => {
+    if (isNil(dataset)) {
+      return this.resetDataset();
+    }
+
+    this.props.showNodes(true);
+
+    const message = "Please enter a URL";
+    const url = dataset === CUSTOM_DATASET ? prompt(message) : dataset.url;
+    dataset.url = url;
+    this.fetchAndSetDataset(url, dataset);
   };
 
   onUpload = (file) => {
@@ -73,10 +81,26 @@ class DatasetControls extends React.Component {
     });
   };
 
+  getDownloadUrl = () => {
+    const urlObject = window.URL || window.webkitURL || window;
+    const json = JSON.stringify({'dataset': this.props.dataset});
+    const blob = new Blob([json], {'type': "application/json"});
+    const url = urlObject.createObjectURL(blob);;
+    return url;
+  };
+
+  onRefresh = () =>{
+    const url = this.state.selected.url;
+    const dataset = this.state.selected;
+    this.fetchAndSetDataset(url, dataset);
+  }
+
   render() {
     if (port === '80') {
       POSEIDON_DATASET = {name:"",url:""};
     }
+    const canDownload = this.state.selected && !this.state.selectedFile;
+    const canRefresh = this.state.selected && !isNil(this.state.selected.url)
     return (
       <div className={style.dataControls}>
         <div className={style.selectorContainer}>
@@ -97,6 +121,23 @@ class DatasetControls extends React.Component {
             onChange={this.onUpload}
           />
         </div>
+
+          <div className={style.utilityContainer}>
+          { canDownload &&
+            <DatasetDownload
+              className={style.fileDownload}
+              selected={this.state.selected.name}
+              url={this.getDownloadUrl()}
+            />
+          }
+          { canRefresh &&
+            <DatasetRefresh
+              className={style.urlRefresh}
+              onClick={this.onRefresh}
+            />
+          }
+          </div>
+
       </div>
     );
   }
@@ -115,22 +156,31 @@ const toURL = (url) => {
 }
 
 DatasetControls.defaultProps = {
-  datasets: []
+  datasets: [],
+  dataset: null
 };
 
 DatasetControls.propTypes = {
   datasets: PropTypes.array,
+  dataset: PropTypes.array,
   fetchDataset: PropTypes.func.isRequired,
   uploadDataset: PropTypes.func.isRequired,
   setDataset: PropTypes.func.isRequired,
   showNodes: PropTypes.func.isRequired
 };
 
+const mapStateToProps = (state, ownProps) => {
+  return {
+    dataset: selectDataset(state),
+  };
+}
+
 const mapDispatchToProps = {
   fetchDataset,
   uploadDataset,
   setDataset,
+  selectDataset,
   showNodes
 };
 
-export default connect(null, mapDispatchToProps)(DatasetControls);
+export default connect(mapStateToProps, mapDispatchToProps)(DatasetControls);

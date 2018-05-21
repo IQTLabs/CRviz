@@ -30,6 +30,7 @@ const loadDatasetEpic = (action$, store) => {
           }
         });
     });
+
 };
 
 // doesn't really care if it's not CSV; if it *is* CSV, convert to JSON.
@@ -68,13 +69,19 @@ const CSVconvert = (data) => {
 //schema with what is used elsewhere see https://github.com/CyberReboot/CRviz/issues/33
 const formatPayload = (data) => {
   var temp = {};
-  if(isNil(data.dataset)) {
-    if(is(Array, data)) {
-      temp.dataset = data;
-    } else {
-      temp.dataset = Object.keys(data).map( (key) =>{ return [key, data[key]] })
-    }
-  } else if(is(Array, data.dataset)) {
+  if(isNil(data.dataset) && is(Array, data.dataset)){
+    temp.dataset = data.dataset;
+  } else if(isNil(data.dataset) && is(Array, data)) {
+    temp.dataset = data;
+  } else if(isNil(data.dataset)) {
+    let obj = {};
+    Object.entries(data).forEach( (entry) =>{
+      let key = entry[0];
+      let value = entry[1]
+      obj[key] = value;
+      })
+    temp.dataset = [obj];
+  } else {
     temp.dataset = data.dataset;
   }
 

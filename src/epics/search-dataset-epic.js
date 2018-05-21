@@ -1,7 +1,8 @@
 import { createAction } from "redux-actions";
+import { isNil } from "ramda";
 import { Observable } from "rxjs";
 
-import { setSearchResults } from "domain/dataset";
+import { setSearchResults} from "domain/dataset";
 
 const searchDataset = createAction("SEARCH_DATASET");
 
@@ -23,14 +24,18 @@ const searchDatasetEpic = (action$, store) => {
 const performSearch = (data) => {
   data.results = [];
   var toFind = data.queryString || '';
-  for(var key in data.dataset){
-    if(toFind !=='' && objectContainsValue(data.dataset[key], toFind)){
-      data.dataset[key].isSearchResult = true;
-      data.results.push(data.dataset[key]);
-    } else {
-      data.dataset[key].isSearchResult = false;
-    }
+  const idx = data.searchIndex;
+
+  var results = [];
+  if(!isNil(idx)){
+    results = idx.search(toFind);
   }
+
+  data.dataset.forEach((el) => { el.isSearchResult = false; });
+  results.forEach((r) => {
+    data.dataset[r.ref].isSearchResult = true;
+    data.results.push(data.dataset[r.ref]);
+  });
 };
 
 const objectContainsValue = (obj, toFind) => {
