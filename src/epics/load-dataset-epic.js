@@ -37,7 +37,7 @@ const loadDatasetEpic = (action$, store) => {
 // Otherwise, just pass it along.
 const CSVconvert = (data) => {
   var lines = data.trim().split(/[\r\n]+/g);
-  if (lines[0].length < 2) { // bail if there's not even linebreaks
+  if (lines.length < 2) { // bail if there's not even linebreaks
     return data;
   }
 
