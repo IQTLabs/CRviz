@@ -13,9 +13,8 @@ const loadDatasetEpic = (action$, store) => {
     .ofType(loadDataset.toString())
     .mergeMap(({ payload }) => {
       return Observable.of(payload)
-        .do(formatPayload)
+        .map(formatPayload)
         .map((payload) => {
-          console.log(payload);
           return setDataset({
             dataset: payload.dataset,
             configuration: payload.configuration
@@ -41,9 +40,9 @@ const formatPayload = (data) => {
   var config = data.configuration;
   var temp = {};
   if(!isNil(data.dataset) && is(Array, data.dataset)){
-    temp.dataset = data.dataset;
+    temp = data.dataset;
   } else if(isNil(data.dataset) && is(Array, data)) {
-    temp.dataset = data;
+    temp  = data;
   } else if(isNil(data.dataset)) {
     let obj = {};
     Object.entries(data).forEach( (entry) =>{
@@ -51,11 +50,12 @@ const formatPayload = (data) => {
       let value = entry[1]
       obj[key] = value;
       })
-    temp.dataset = [obj];
+    temp = [obj];
   } else {
     throw ValidationError('Data in invalid format');
   }
-  data = {'dataset': temp.dataset, 'configuration': config};
+  data = {'dataset': temp, 'configuration': config};
+  return data;
 };
 
 function ValidationError(message) {
