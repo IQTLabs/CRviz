@@ -151,7 +151,6 @@ describe("fetchDatasetEpic", () => {
 		let typeToCheck = loadDataset.toString();
 
 		const action$ = ActionsObservable.of({'type': fetchDataset.toString(), 'payload': url});
-		let outActions = null;
 		store = null;
 		fetchDatasetEpic(action$, store, mockAjax)
 			.toArray()
