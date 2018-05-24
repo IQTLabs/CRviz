@@ -1,28 +1,20 @@
 import expect from 'expect';
 import configureMockStore from 'redux-mock-store';
 import configureStore from "../configure-store";
-import { createEpicMiddleware } from 'redux-observable';
+import { createEpicMiddleware, ActionsObservable } from 'redux-observable';
+import { Observable } from 'rxjs';
 
 import rootEpic from './root-epic'
 import { setDataset } from '../domain/dataset'
-import { loadDataset,loadDatasetEpic } from "./load-dataset-epic"
-import { uploadDataset, uploadDatasetEpic } from "./upload-dataset-epic"
-import { searchDataset, searchDatasetEpic } from "./search-dataset-epic"
-import { fetchDataset, fetchDatasetEpic } from "./fetch-dataset-epic"
+import { loadDataset } from "./load-dataset-epic"
+import { uploadDataset } from "./upload-dataset-epic"
+import { searchDataset } from "./search-dataset-epic"
+import { fetchDataset } from "./fetch-dataset-epic"
+import fetchDatasetEpic from "./fetch-dataset-epic"
 
 
 const epicMiddleware = createEpicMiddleware(rootEpic);
 const mockStore = configureMockStore([epicMiddleware]);
-const defaultState = {
-  dataset: [],
-  values: {},
-  configuration: {
-    fields: []
-  },
-  searchIndex: {},
-  results: [],
-  queryString:''
-};
 
 describe("loadDatasetEpic", () => {
 	let store;
@@ -121,7 +113,6 @@ describe("searchDatasetEpic", () => {
 
 		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
 		store.dispatch(action$);
-		let typeToCheck = searchDataset.toString();
 
 		expect(action$.payload.results[0]).toEqual(data[0]);
 	});
@@ -134,9 +125,12 @@ describe("fetchDatasetEpic", () => {
 		  { uid: "uid1", role: { role: "role", confidence: 80 } },
 		  { uid: "uid2", role: { role: "role", confidence: 80 } }
 		];
-	const mockResponse = JSON.stringify(data);
+	const mockResponse = data;
+	const mockAjax = () => {
+	  	return  Observable.of({ 'response': mockResponse });
+	  }
 	const dependencies = {
-	  ajax: response => Observable.of(mockResponse)
+	  'ajax': mockAjax
 	};
 
 	const local_epicMiddleware = createEpicMiddleware(rootEpic, {'dependencies': dependencies});
@@ -154,12 +148,18 @@ describe("fetchDatasetEpic", () => {
 
 	it("loads the dataset with default config", () => {
 		const url = 'test.test'
+		let typeToCheck = loadDataset.toString();
 
-		const action$ = fetchDataset(data);
-		store.dispatch(action$);
-		let typeToCheck = fetchDataset.toString();
-
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload).toEqual(data);
+		const action$ = ActionsObservable.of({'type': fetchDataset.toString(), 'payload': url});
+		let outActions = null;
+		store = null;
+		fetchDatasetEpic(action$, store, mockAjax)
+			.toArray()
+			.subscribe(actions => {
+				expect(actions.length).toEqual(1);
+				expect(actions[0].type).toEqual(typeToCheck);
+				expect(actions[0].payload).toEqual(data);
+			});
 	});
 
 
