@@ -13,12 +13,12 @@ const loadDatasetEpic = (action$, store) => {
     .ofType(loadDataset.toString())
     .mergeMap(({ payload }) => {
       return Observable.of(payload)
-        .do(formatPayload)
-        .map((payload) =>
-          setDataset({
+        .map(formatPayload)
+        .map((payload) => {
+          return setDataset({
             dataset: payload.dataset,
             configuration: payload.configuration
-          })
+          })}
         )
         .concat(Observable.of(setHierarchyConfig([]), colorBy(null)))
         .catch((error) => {
@@ -83,11 +83,12 @@ const CSVconvert = (data) => {
 //transfer the array into an object's dataset to maintain a consistent
 //schema with what is used elsewhere see https://github.com/CyberReboot/CRviz/issues/33
 const formatPayload = (data) => {
+  var config = data.configuration;
   var temp = {};
-  if(isNil(data.dataset) && is(Array, data.dataset)){
-    temp.dataset = data.dataset;
+  if(!isNil(data.dataset) && is(Array, data.dataset)){
+    temp = data.dataset;
   } else if(isNil(data.dataset) && is(Array, data)) {
-    temp.dataset = data;
+    temp  = data;
   } else if(isNil(data.dataset)) {
     let obj = {};
     Object.entries(data).forEach( (entry) =>{
@@ -95,12 +96,13 @@ const formatPayload = (data) => {
       let value = entry[1]
       obj[key] = value;
       })
-    temp.dataset = [obj];
+    temp = [obj];
   } else {
-    temp.dataset = data.dataset;
+    throw ValidationError('Data in invalid format');
   }
 
-  data.dataset = temp.dataset;
+  data = {'dataset': temp, 'configuration': config};
+  return data;
 };
 
 function ValidationError(message) {

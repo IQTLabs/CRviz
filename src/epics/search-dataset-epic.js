@@ -25,12 +25,10 @@ const performSearch = (data) => {
   data.results = [];
   var toFind = data.queryString || '';
   const idx = data.searchIndex;
-
   var results = [];
   if(!isNil(idx)){
     results = idx.search(toFind);
   }
-
   data.dataset.forEach((el) => { el.isSearchResult = false; });
   results.forEach((r) => {
     data.dataset[r.ref].isSearchResult = true;
