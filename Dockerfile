@@ -7,8 +7,8 @@ WORKDIR /app
 
 RUN yarn install
 RUN yarn run build
-RUN npm install -g serve
+RUN yarn global add serve
 
 EXPOSE 5000
 ENTRYPOINT ["serve"]
-CMD ["-s build"]
+CMD ["-s", "build", "-l", "5000"]
