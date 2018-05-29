@@ -1,7 +1,7 @@
 import { createAction } from "redux-actions";
 import { Observable } from "rxjs";
 
-import { loadDataset } from './load-dataset-epic';
+import { loadDataset, CSVconvert } from './load-dataset-epic';
 
 // ACTIONS
 const uploadDataset = createAction("UPLOAD_DATASET");
@@ -13,6 +13,7 @@ const uploadDatasetEpic = (action$, store) => {
     .mergeMap((action) => {
       const file = action.payload;
       return fromReader(file)
+        .map(CSVconvert)
         .map(JSON.parse)
         .map(loadDataset)
         .takeUntil(action$.ofType(uploadDataset.toString()))
