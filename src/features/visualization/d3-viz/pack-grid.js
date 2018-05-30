@@ -70,6 +70,7 @@ const coordinatesForRadii = (radii) => {
   }, [first], aperture(2, radii))
 };
 
+
 const pickEven = (list) => addIndex(reject)((_, i) => i % 2 === 0, list);
 const pickOdd = (list) => addIndex(reject)((_, i) => i % 2 !== 0, list);
 

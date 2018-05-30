@@ -5,7 +5,7 @@ RUN apk update && apk add git yarn
 COPY . /app
 WORKDIR /app
 
-RUN yarn install
+RUN yarn install --ignore-optional
 RUN yarn run build
 RUN yarn global add serve
 

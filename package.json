@@ -19,7 +19,7 @@
     "react-beautiful-dnd": "^5.0.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
-    "react-scripts": "2.0.0-next.9754a231",
+    "react-scripts": "^2.0.0-next.b2fd8db8",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-mock-store": "^1.5.1",
@@ -27,12 +27,13 @@
     "rxjs": "^5.5.6"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "lint": "eslint --ext=js --ext=jsx ."
   },
   "browserslist": {
     "development": [
@@ -48,6 +49,14 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^1.1.0"
+    "babel-eslint": "^7.2.3",
+    "eslint-config-react-app": "^2.1.0",
+    "eslint-plugin-flowtype": "^2.48.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.8.2",
+    "gh-pages": "^1.1.0",
+    "react-app-rewire-eslint": "^0.2.3",
+    "react-app-rewired": "^1.5.2"
   }
 }
