@@ -18,26 +18,26 @@ class SelectedFieldList extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { getFieldId } = nextProps;
+  static getDerivedStateFromProps(props, state){
+    const { getFieldId } = props;
 
     // Find newly inserted item, if any
     let toAnimate = differenceWith(
       eqBy(getFieldId),
-      nextProps.fields,
-      this.state.lastFields
+      props.fields,
+      state.lastFields
     )[0];
 
     if (toAnimate) {
       // Only animate item that are not inserted at the bottom using AffordanceDroppable
-      const newIndex = findIndex(eqBy(getFieldId, toAnimate), nextProps.fields);
-      toAnimate = newIndex < this.state.lastFields.length ? toAnimate : null;
+      const newIndex = findIndex(eqBy(getFieldId, toAnimate), props.fields);
+      toAnimate = newIndex < state.lastFields.length ? toAnimate : null;
     }
 
-    this.setState({
-      lastFields: nextProps.fields,
+    return {
+      lastFields: props.fields,
       toAnimate: toAnimate
-    });
+    };
   }
 
   render() {
@@ -47,7 +47,8 @@ class SelectedFieldList extends React.Component {
     return (
       <div className={style.listContainer}>
         <Droppable droppableId={droppableId} type="Field">
-          {(provided, snapshot) => {
+          {
+            (provided, snapshot) => {
             return (
               <div
                 ref={provided.innerRef}

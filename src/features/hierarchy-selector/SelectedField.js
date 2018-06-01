@@ -15,7 +15,8 @@ function SelectedField({
 }) {
   return (
     <Draggable draggableId={draggableId} type="Field" index={index}>
-      {(provided, snapshot) => {
+      {
+        (provided, snapshot) => {
         return (
           <Field
             style={style}

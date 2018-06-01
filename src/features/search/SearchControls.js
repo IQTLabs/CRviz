@@ -55,13 +55,6 @@ class Search extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      queryString: nextProps.queryString,
-      results: nextProps.results
-    });
-  }
-
   render() {
     return (
       <div className={style.searchContainer}>

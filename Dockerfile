@@ -5,10 +5,11 @@ RUN apk update && apk add git yarn
 COPY . /app
 WORKDIR /app
 
-RUN yarn install
+RUN npm i npm@latest -g
+RUN npm install --no-optional
 RUN yarn run build
-RUN yarn global add serve
+RUN npm install -g serve
 
 EXPOSE 5000
 ENTRYPOINT ["serve"]
-CMD ["-s", "build", "-l", "5000"]
+CMD ["-s build"]

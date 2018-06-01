@@ -1,0 +1,4 @@
+node_modules/**
+experiments/**
+sample_data/**
+build/**
