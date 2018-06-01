@@ -11,6 +11,6 @@ RUN sed -i '2i\
   "homepage": "https:\/\/cyberreboot.github.io\/CRviz", \
 ' package.json
 
-RUN yarn install
+RUN npm install --no-optional
 RUN yarn run build
 CMD yarn run deploy
