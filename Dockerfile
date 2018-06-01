@@ -8,8 +8,8 @@ WORKDIR /app
 RUN npm i npm@latest -g
 RUN npm install --no-optional
 RUN yarn run build
-RUN npm install -g serve
+RUN yarn global add serve
 
 EXPOSE 5000
 ENTRYPOINT ["serve"]
-CMD ["-s build"]
+CMD ["-s", "build", "-l", "5000"]
