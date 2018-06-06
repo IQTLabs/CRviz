@@ -25,8 +25,8 @@ docker run -dp 80:5000 crviz
 
 ### Without Docker
 
-1. Install [yarn](https://yarnpkg.com/en/)
-2. Run `yarn install && yarn build`
+1. Update npm (npm install -g npm)
+2. Run `npm install && npm build`
 
 The static files in the `./build` directory should be ready for deployment.
 
@@ -79,10 +79,10 @@ This project is a bootstrapped using [create-react-app](https://github.com/faceb
 
 Here are some quick commands to get started:
 
-- `yarn install`: Install Node dependencies
-- `yarn start`: Start the hot reloading development server.
-- `yarn test`: Run the test suit and watch for changes.
-- `yarn build`: Build a production optimized bundle of the app.
+- `npm install`: Install Node dependencies
+- `npm start`: Start the hot reloading development server.
+- `npm test`: Run the test suit and watch for changes.
+- `npm build`: Build a production optimized bundle of the app.
 
 ### Project Structure
 

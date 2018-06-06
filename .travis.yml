@@ -6,11 +6,11 @@ dist: trusty
 sudo: false
 
 cache:
-  yarn: true
   directories:
+  - $HOME/.npm
   - node_modules
 
 script:
-- yarn install
+- npm install --no-optional
 - npm run test
 - npm run build

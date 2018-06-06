@@ -1,14 +1,14 @@
 FROM node:alpine
 LABEL maintainer="Charlie Lewis <clewis@iqt.org>"
 
-RUN apk update && apk add git yarn
+RUN apk update
 COPY . /app
 WORKDIR /app
 
 RUN npm i npm@latest -g
 RUN npm install --no-optional
-RUN yarn run build
-RUN yarn global add serve
+RUN npm run build
+RUN npm i -g serve
 
 EXPOSE 5000
 ENTRYPOINT ["serve"]
