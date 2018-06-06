@@ -1,7 +1,7 @@
 FROM node:alpine
 LABEL maintainer="Charlie Lewis <clewis@iqt.org>"
 
-RUN apk update && apk add git yarn
+RUN apk update
 RUN git config --global user.email "clewis@iqt.org"
 RUN git config --global user.name "Charlie Lewis"
 
@@ -13,5 +13,5 @@ RUN sed -i '2i\
 
 RUN npm i npm@latest -g
 RUN npm install --no-optional
-RUN yarn run build
-CMD yarn run deploy
+RUN npm run build
+CMD npm run deploy
