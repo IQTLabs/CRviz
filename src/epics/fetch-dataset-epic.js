@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import { ofType } from 'redux-observable';
-import { Observable, of } from 'rxjs';
+import { empty } from 'rxjs';
 import { ajax  as rxAjax } from 'rxjs/ajax';
 import { catchError, debounceTime, mergeMap, map } from 'rxjs/operators';
 
@@ -29,7 +29,7 @@ const fetchDatasetEpic = (action$, store, ajax = rxAjax) => {
         //.takeUntil(action$.ofType(fetchDataset.toString()))
         ,catchError((error) => {
           alert("Failed to fetch dataset. Please try again later.");
-          return Observable.empty();
+          return empty();
         })
         );
     })

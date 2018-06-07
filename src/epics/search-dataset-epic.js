@@ -1,6 +1,6 @@
 import { createAction } from "redux-actions";
 import { isNil } from "ramda";
-import { Observable, of } from "rxjs";
+import { of } from "rxjs";
 import { mergeMap, map, tap } from 'rxjs/operators';
 
 

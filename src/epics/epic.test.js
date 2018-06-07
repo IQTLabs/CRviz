@@ -1,7 +1,7 @@
 import expect from 'expect';
 import configureMockStore from 'redux-mock-store';
 import configureStore from "../configure-store";
-import { createEpicMiddleware, ActionsObservable } from 'redux-observable';
+import { createEpicMiddleware } from 'redux-observable';
 import { Observable, of} from 'rxjs';
 
 import rootEpic from './root-epic'

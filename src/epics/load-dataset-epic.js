@@ -1,6 +1,6 @@
 import { createAction } from "redux-actions";
 import { ofType } from 'redux-observable';
-import { Observable, of, empty } from "rxjs";
+import { of, empty } from "rxjs";
 import { map, mergeMap, catchError, concat } from 'rxjs/operators';
 
 import { isNil, is } from "ramda";

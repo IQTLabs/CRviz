@@ -1,5 +1,5 @@
 import { createAction } from "redux-actions";
-import { Observable, of, empty } from "rxjs";
+import { Observable, empty } from "rxjs";
 import { catchError, debounceTime, mergeMap, map } from 'rxjs/operators';
 
 import { loadDataset, CSVconvert } from './load-dataset-epic';
