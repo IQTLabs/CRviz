@@ -1,5 +1,6 @@
 import { createAction } from "redux-actions";
-import { Observable } from "rxjs";
+import { Observable, of, empty } from "rxjs";
+import { catchError, debounceTime, mergeMap, map } from 'rxjs/operators';
 
 import { loadDataset, CSVconvert } from './load-dataset-epic';
 
@@ -9,23 +10,26 @@ const uploadDataset = createAction("UPLOAD_DATASET");
 // EPIC
 const uploadDatasetEpic = (action$, store) => {
   return action$
-    .ofType(uploadDataset.toString())
-    .mergeMap((action) => {
-      const file = action.payload;
-      return fromReader(file)
-        .map(CSVconvert)
-        .map(JSON.parse)
-        .map(loadDataset)
-        .takeUntil(action$.ofType(uploadDataset.toString()))
-        .catch((error) => {
-          if (error instanceof SyntaxError) {
-            alert("Invalid JSON.");
-            return Observable.empty();
-          } else {
-            throw error;
-          }
-        })
-    });
+    .ofType(uploadDataset.toString()).pipe(
+      mergeMap((action) => {
+        const file = action.payload;
+        return fromReader(file).pipe(
+            debounceTime(500)
+            ,map(CSVconvert)
+            ,map(JSON.parse)
+            ,map(loadDataset)
+            //,takeUntil(action$.ofType(uploadDataset.toString()))
+            ,catchError((error) => {
+              if (error instanceof SyntaxError) {
+                alert("Invalid JSON.");
+                return empty();
+              } else {
+                throw error;
+              }
+            })
+          )
+      })
+    );
 };
 
 /**
