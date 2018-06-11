@@ -1,5 +1,7 @@
 import { createAction } from "redux-actions";
-import { Observable } from "rxjs";
+import { ofType } from 'redux-observable';
+import { of, empty } from "rxjs";
+import { map, mergeMap, catchError, concat } from 'rxjs/operators';
 
 import { isNil, is } from "ramda";
 
@@ -9,28 +11,29 @@ import { setHierarchyConfig, colorBy } from "domain/controls";
 const loadDataset = createAction("LOAD_DATASET");
 
 const loadDatasetEpic = (action$, store) => {
-  return action$
-    .ofType(loadDataset.toString())
-    .mergeMap(({ payload }) => {
-      return Observable.of(payload)
-        .map(formatPayload)
-        .map((payload) => {
+  return action$.pipe(
+    ofType(loadDataset.toString())
+    ,mergeMap(({ payload }) => {
+      return of(payload).pipe(
+        map(formatPayload)
+        ,map((payload) => {
           return setDataset({
             dataset: payload.dataset,
             configuration: payload.configuration
           })}
         )
-        .concat(Observable.of(setHierarchyConfig([]), colorBy(null)))
-        .catch((error) => {
+        ,concat(of(setHierarchyConfig([]), colorBy(null)))
+        ,catchError((error) => {
           if (is(ValidationError, error)) {
             alert(error.message);
-            return Observable.empty();
+            return empty();
           } else {
             throw error;
           }
-        });
-    });
-
+        })
+      );
+    })
+  );
 };
 
 // doesn't really care if it's not CSV; if it *is* CSV, convert to JSON.

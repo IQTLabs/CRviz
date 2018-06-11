@@ -74,7 +74,7 @@ class Search extends React.Component {
         </span>
         { this.state.hasSearch &&
           <span>
-            <label id="search-results"> {this.state.results.length}&nbsp;Results found </label>
+            <label id="search-results"> {this.props.results.length}&nbsp;Results found </label>
             <label htmlFor="search-results" className="button" onClick={() => this.clearSearch()}>
               <FontAwesomeIcon icon={faTimesCircle} />
               </label>
