@@ -30,7 +30,7 @@ const performSearch = (data) => {
   var toFind = data.queryString || '';
   const idx = data.searchIndex;
   var results = [];
-  if(!isNil(idx)){
+  if(!isNil(idx) && toFind){
     results = idx.search(toFind);
   }
   data.dataset.forEach((el) => { el.isSearchResult = false; });

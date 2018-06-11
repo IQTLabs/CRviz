@@ -105,7 +105,7 @@ describe("searchDatasetEpic", () => {
 		epicMiddleware.replaceEpic(rootEpic);
 	});
 
-	it("search a dataset a dataset", () => {
+	it("search a dataset", () => {
 		const query = 'uid1';
 		
 		const ds = store.getState().dataset.dataset;
@@ -115,6 +115,24 @@ describe("searchDatasetEpic", () => {
 		store.dispatch(action$);
 
 		expect(action$.payload.results[0]).toEqual(data[0]);
+	});
+
+	it("clears a search", () => {
+		const query = 'uid1';
+		
+		const ds = store.getState().dataset.dataset;
+		const index = store.getState().dataset.searchIndex;
+
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		store.dispatch(action$);
+
+		expect(action$.payload.results[0]).toEqual(data[0]);
+
+		const clear = '';
+		const clearAction$ = searchDataset({'dataset': ds, 'queryString': clear, 'searchIndex': index});
+		store.dispatch(clearAction$);
+
+		expect(clearAction$.payload.results.length).toEqual(0);
 	});
 });
 
