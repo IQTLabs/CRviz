@@ -1,8 +1,8 @@
 import expect from 'expect';
 import configureMockStore from 'redux-mock-store';
 import configureStore from "../configure-store";
-import { createEpicMiddleware, ActionsObservable } from 'redux-observable';
-import { Observable } from 'rxjs';
+import { createEpicMiddleware } from 'redux-observable';
+import { Observable, of} from 'rxjs';
 
 import rootEpic from './root-epic'
 import { setDataset } from '../domain/dataset'
@@ -54,7 +54,7 @@ describe("loadDatasetEpic", () => {
 
 		const action$ = loadDataset({dataset, configuration});
 		store.dispatch(action$);
-		let typeToCheck = setDataset.toString();
+		let typeToCheck = setDataset.toString();	
 
 		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).toEqual(dataset);
 		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.configuration).toEqual(configuration);
@@ -105,7 +105,7 @@ describe("searchDatasetEpic", () => {
 		epicMiddleware.replaceEpic(rootEpic);
 	});
 
-	it("search a dataset a dataset", () => {
+	it("search a dataset", () => {
 		const query = 'uid1';
 		
 		const ds = store.getState().dataset.dataset;
@@ -115,6 +115,24 @@ describe("searchDatasetEpic", () => {
 		store.dispatch(action$);
 
 		expect(action$.payload.results[0]).toEqual(data[0]);
+	});
+
+	it("clears a search", () => {
+		const query = 'uid1';
+		
+		const ds = store.getState().dataset.dataset;
+		const index = store.getState().dataset.searchIndex;
+
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		store.dispatch(action$);
+
+		expect(action$.payload.results[0]).toEqual(data[0]);
+
+		const clear = '';
+		const clearAction$ = searchDataset({'dataset': ds, 'queryString': clear, 'searchIndex': index});
+		store.dispatch(clearAction$);
+
+		expect(clearAction$.payload.results.length).toEqual(0);
 	});
 });
 
@@ -150,10 +168,9 @@ describe("fetchDatasetEpic", () => {
 		const url = 'test.test'
 		let typeToCheck = loadDataset.toString();
 
-		const action$ = ActionsObservable.of({'type': fetchDataset.toString(), 'payload': url});
+		const action$ = of({'type': fetchDataset.toString(), 'payload': url});
 		store = null;
 		fetchDatasetEpic(action$, store, mockAjax)
-			.toArray()
 			.subscribe(actions => {
 				expect(actions.length).toEqual(1);
 				expect(actions[0].type).toEqual(typeToCheck);
