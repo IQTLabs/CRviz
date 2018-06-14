@@ -17,9 +17,6 @@ import {
   uniq
 } from "ramda";
 
-const getValue = require("get-value");
-const lunr = require("lunr");
-
 const defaultState = {
   dataset: [],
   values: {},
@@ -30,6 +27,11 @@ const defaultState = {
   results: [],
   queryString:''
 };
+
+/**
+ * Return a string that uniquely identify the field
+ */
+const getFieldId = (field) => field.path.join(".")
 
 /**
  * Returns an array of paths to literal values and arrays in a POJO.
@@ -43,11 +45,6 @@ const pathsIn = (obj) =>
       is(Object, value) ? map(concat([key]), pathsIn(value)) : [[key]],
     toPairs(obj)
   );
-
-/**
- * Return a string that uniquely identify the field
- */
-const getFieldId = (field) => field.path.join(".")
 
 /**
  * Return all fields for an object
@@ -103,35 +100,6 @@ const valuesFor = (dataset, configuration) => {
   }, configuration.fields));
 };
 
-const flattenDataset = (ds, cfg) => {
-  var flattened = [];
-
-  if(isNil(cfg))
-    return flattened;
-
-  for(var key in ds){
-    var item = {'id':key};
-    for(var f in cfg.fields){
-      var field = cfg.fields[f];
-
-      var name = field.displayName
-      item[name] = getValue(ds[key], field.displayName);
-    }
-    flattened.push(item);
-  }
-  return flattened;
-}
-
-const buildIndex = (dataset, configuration) => {
-  var flat = flattenDataset(dataset, configuration);
-  const idx = lunr(function () {
-    this.ref('id');
-    configuration.fields.map((field) => { return this.field(field.displayName); })
-    flat.map((item) => { return this.add(item); })
-  });
-  return idx;
-};
-
 // ACTIONS
 
 /**
@@ -142,6 +110,7 @@ const buildIndex = (dataset, configuration) => {
 */
 const setDataset = createAction("SET_DATASET");
 const setSearchResults = createAction("SET_SEARCHRESULTS");
+const setSearchIndex = createAction("SET_SEARCHINDEX");
 
 // REDUCERS
 const reducer = handleActions(
@@ -156,8 +125,7 @@ const reducer = handleActions(
 
       const values = valuesFor(dataset, configuration);
 
-      const searchIndex = buildIndex(dataset, configuration);
-      return { ...state, dataset, values, configuration, searchIndex };
+      return { ...state, dataset, values, configuration };
     },
     [setSearchResults]: (state, { payload }) => {
       const results = payload.results;
@@ -179,4 +147,4 @@ const getQueryString = (state) => state.dataset.queryString;
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId , setSearchResults, getSearchResults, getSearchIndex, getQueryString};
+export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId , setSearchResults, getSearchResults, getQueryString, configurationFor };

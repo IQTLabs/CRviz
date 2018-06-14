@@ -1,11 +1,13 @@
 import { createAction } from "redux-actions";
 import { ofType } from 'redux-observable';
 import { of, empty } from "rxjs";
-import { map, mergeMap, catchError, concat } from 'rxjs/operators';
+import { map, mergeMap, catchError, concat, tap, takeUntil } from 'rxjs/operators';
 
 import { isNil, is } from "ramda";
 
-import { setDataset } from "domain/dataset";
+import { buildIndex } from './index-dataset-epic';
+
+import { setDataset, setSearchIndex } from "domain/dataset";
 import { setHierarchyConfig, colorBy } from "domain/controls";
 
 const loadDataset = createAction("LOAD_DATASET");
@@ -17,12 +19,31 @@ const loadDatasetEpic = (action$, store) => {
       return of(payload).pipe(
         map(formatPayload)
         ,map((payload) => {
-          return setDataset({
+          const data = {
             dataset: payload.dataset,
             configuration: payload.configuration
-          })}
+          }
+           // const setIdx$ = setSearchIndex();
+           // store.dispatch(setIdx$);
+           //of(setSearchIndex());
+          return setDataset(data);
+        }
         )
-        ,concat(of(setHierarchyConfig([]), colorBy(null)))
+        //,map(buildIndex)
+        ,concat(
+            of(
+              setHierarchyConfig([])
+              ,colorBy(null)
+              ,buildIndex({
+                dataset: payload.dataset,
+                configuration: payload.configuration
+              })
+            )
+              // ,(payload) => setSearchIndex({
+              //   dataset: payload.dataset,
+              //   configuration: payload.configuration
+              // })
+            )
         ,catchError((error) => {
           if (is(ValidationError, error)) {
             alert(error.message);

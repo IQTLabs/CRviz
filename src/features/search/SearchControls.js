@@ -6,8 +6,9 @@ import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
 import faTimesCircle from "@fortawesome/fontawesome-free-solid/faTimesCircle";
 
-import { selectDataset, selectConfiguration, getSearchResults, getSearchIndex } from "domain/dataset";
+import { selectDataset, selectConfiguration, getSearchResults } from "domain/dataset";
 
+import { getSearchIndex } from "epics/index-dataset-epic";
 import { searchDataset } from "epics/search-dataset-epic";
 
 import style from "./SearchControls.module.css";

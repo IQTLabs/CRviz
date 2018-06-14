@@ -5,7 +5,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { Observable, of} from 'rxjs';
 
 import rootEpic from './root-epic'
-import { setDataset } from '../domain/dataset'
+import { setDataset, setSearchIndex } from '../domain/dataset'
 import { loadDataset } from "./load-dataset-epic"
 import { uploadDataset } from "./upload-dataset-epic"
 import { searchDataset } from "./search-dataset-epic"
@@ -36,7 +36,7 @@ describe("loadDatasetEpic", () => {
 		const action$ = loadDataset(data);
 		store.dispatch(action$);
 		let typeToCheck = setDataset.toString();
-
+		console.log(store.getActions());
 		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).toEqual(data);
 	});
 
@@ -97,8 +97,11 @@ describe("searchDatasetEpic", () => {
 
 	beforeEach(() => {
 		store  = configureStore();
-		const action$ = setDataset({'dataset': data});
+		const action$ = setDataset({'dataset': data});		
 		store.dispatch(action$);
+		const config = store.getState().dataset.configuration;
+		const indexAction$ = setSearchIndex({'dataset': data, 'configuration': config });
+		store.dispatch(indexAction$);
 	});
 
 	afterEach(() => {
