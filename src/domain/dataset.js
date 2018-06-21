@@ -155,8 +155,8 @@ const reducer = handleActions(
       );
 
       const values = valuesFor(dataset, configuration);
-
       const searchIndex = buildIndex(dataset, configuration);
+
       return { ...state, dataset, values, configuration, searchIndex };
     },
     [setSearchResults]: (state, { payload }) => {

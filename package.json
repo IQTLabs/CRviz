@@ -26,7 +26,6 @@
     "redux-observable": "^1.0.0-beta.2",
     "rxjs": "^6.2.0",
     "rxjs-compat": "^6.2.0"
-
   },
   "scripts": {
     "start": "react-app-rewired start",
