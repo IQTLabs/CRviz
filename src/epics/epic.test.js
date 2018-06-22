@@ -13,18 +13,18 @@ import { fetchDataset } from "./fetch-dataset-epic"
 import fetchDatasetEpic from "./fetch-dataset-epic"
 
 
-const epicMiddleware = createEpicMiddleware(rootEpic);
-const mockStore = configureMockStore([epicMiddleware]);
-
 describe("loadDatasetEpic", () => {
 	let store;
 
 	beforeEach(() => {
+		const epicMiddleware = createEpicMiddleware();
+		const mockStore = configureMockStore([epicMiddleware]);
 		store  = mockStore();
+		epicMiddleware.run(rootEpic);
 	});
 
 	afterEach(() => {
-		epicMiddleware.replaceEpic(rootEpic);
+		
 	});
 
 	it("loads the dataset with default config", () => {
@@ -66,11 +66,14 @@ describe("uploadDatasetEpic", () => {
 	let store;
 
 	beforeEach(() => {
+		const epicMiddleware = createEpicMiddleware();
+		const mockStore = configureMockStore([epicMiddleware]);
 		store  = mockStore();
+		epicMiddleware.run(rootEpic);
 	});
 
 	afterEach(() => {
-		epicMiddleware.replaceEpic(rootEpic);
+		
 	});
 
 	it("uploads a file containing a dataset", () => {
@@ -96,6 +99,7 @@ describe("searchDatasetEpic", () => {
 		];
 
 	beforeEach(() => {
+
 		store  = configureStore();
 		const action$ = setDataset({'dataset': data});		
 		store.dispatch(action$);
@@ -105,7 +109,7 @@ describe("searchDatasetEpic", () => {
 	});
 
 	afterEach(() => {
-		epicMiddleware.replaceEpic(rootEpic);
+		
 	});
 
 	it("search a dataset", () => {
@@ -154,17 +158,17 @@ describe("fetchDatasetEpic", () => {
 	  'ajax': mockAjax
 	};
 
-	const local_epicMiddleware = createEpicMiddleware(rootEpic, {'dependencies': dependencies});
-	const local_mockStore = configureMockStore([local_epicMiddleware]);
-
 	let store;
 
 	beforeEach(() => {
-		store  = local_mockStore();
+		const epicMiddleware = createEpicMiddleware();
+		const mockStore = configureMockStore([epicMiddleware]);
+		store  = mockStore();
+		epicMiddleware.run(rootEpic, {'dependencies': dependencies});
 	});
 
 	afterEach(() => {
-		epicMiddleware.replaceEpic(rootEpic);
+		
 	});
 
 	it("loads the dataset with default config", () => {
