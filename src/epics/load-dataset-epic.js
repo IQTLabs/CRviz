@@ -1,7 +1,7 @@
 import { createAction } from "redux-actions";
 import { ofType } from 'redux-observable';
-import { of, empty } from "rxjs";
-import { map, mergeMap, catchError, concat, tap, takeUntil } from 'rxjs/operators';
+import { of, create, empty } from "rxjs";
+import { map, mergeMap, catchError, concat, tap, takeUntil, debounceTime } from 'rxjs/operators';
 
 import { isNil, is } from "ramda";
 
@@ -14,7 +14,7 @@ const loadDataset = createAction("LOAD_DATASET");
 
 const loadDatasetEpic = (action$, store) => {
   return action$.pipe(
-    ofType(loadDataset.toString())
+    ofType(loadDataset.toString())  
     ,mergeMap(({ payload }) => {
       return of(payload).pipe(
         map(formatPayload)
@@ -23,21 +23,16 @@ const loadDatasetEpic = (action$, store) => {
             dataset: payload.dataset,
             configuration: payload.configuration
           }
-           // const setIdx$ = setSearchIndex();
-           // store.dispatch(setIdx$);
+           //const setIdx$ = buildIndex(payload);
+           //store.dispatch(setIdx$);
            //of(setSearchIndex());
           return setDataset(data);
-        }
-        )
+        })
         //,map(buildIndex)
         ,concat(
             of(
               setHierarchyConfig([])
               ,colorBy(null)
-              ,buildIndex({
-                dataset: payload.dataset,
-                configuration: payload.configuration
-              })
             )
               // ,(payload) => setSearchIndex({
               //   dataset: payload.dataset,
@@ -53,6 +48,21 @@ const loadDatasetEpic = (action$, store) => {
           }
         })
       );
+    })
+    ,mergeMap(({ payload }) => {
+      console.log(payload);
+      return of(payload).pipe(
+        debounceTime(500)
+        ,map((payload) => {
+          const data = {
+            dataset: payload.dataset,
+            configuration: payload.configuration || null
+          }
+          console.log(data);
+          return buildIndex(data);
+        })
+        ,takeUntil(action$.ofType("BUILD_INDEX_SUCCESS"))
+      )
     })
   );
 };

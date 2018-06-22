@@ -1,7 +1,7 @@
 import { ofType } from 'redux-observable';
 import { isNil } from "ramda";
 import { of } from "rxjs";
-import { mergeMap, map, tap } from 'rxjs/operators';
+import { mergeMap, map, debounceTime, tap, take } from 'rxjs/operators';
 
 
 import { setSearchIndex, configurationFor } from "domain/dataset";
@@ -21,7 +21,7 @@ const getSearchIndex = (state) => state.index.searchIndex;
 const indexDatasetEpic = (action$, store) => {
   return action$.pipe(
       ofType(BUILD_INDEX)
-      ,mergeMap(async ({ payload }) => {
+      ,mergeMap(({ payload }) => {
         return of(payload).pipe(
             map(generateIndex)
             ,map((payload) =>
@@ -36,7 +36,7 @@ const index = (state = { searchIndex: null }, action) => {
   switch (action.type) {
     case BUILD_INDEX_SUCCESS:
       const searchIndex = action.payload
-      console.log('index set');
+      console.log(searchIndex);
       return {...state, searchIndex};
     default:
       return state;
@@ -65,7 +65,7 @@ const flattenDataset = (ds, cfg) => {
 
 
 const generateIndex = (payload) => {
-  console.log('generate idx started');
+  console.log(payload);
   const dataset = payload.dataset;
   const configuration = payload.configuration || configurationFor(dataset);
   var flat = flattenDataset(dataset, configuration);

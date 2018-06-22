@@ -25,6 +25,7 @@ class Search extends React.Component {
   state = defaultState
 
   handleSearch(){
+    console.log(this.props.searchIndex);
     this.setState({
       hasSearch: this.state.queryString !== ''
     });
@@ -96,6 +97,8 @@ Search.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  console.log(state);
+  console.log(getSearchIndex(state))
   return {
     dataset: selectDataset(state),
     configuration: selectConfiguration(state),
