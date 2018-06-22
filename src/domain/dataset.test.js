@@ -3,11 +3,7 @@ import {
   setDataset,
   selectDataset,
   selectConfiguration,
-  selectValues,
-  setSearchResults,
-  getSearchResults,
-  getSearchIndex,
-  setSearchIndex
+  selectValues
 } from "./dataset";
 
 import { combineReducers } from "redux";
@@ -48,31 +44,6 @@ describe("Dataset", () => {
         expect(selectConfiguration(result)).toEqual(expectedConfiguration);
       });
 
-      // it("sets the search index", () => {
-      //   const dataset = [
-      //     { uid: "uid1", role: { role: "role", confidence: 80 } },
-      //     { uid: "uid2", role: { role: "role", confidence: 80 } }
-      //   ];
-      //   const configuration = {
-      //     fields: [
-      //       { path: ["uid"], displayName: "UID", groupable: true },
-      //       { path: ["role", "role"], displayName: "Role", groupable: false }
-      //     ]
-      //   };
-
-      //   const action = setSearchIndex({ dataset, configuration });
-      //   const result = reducer({}, action);
-
-      //   const expectedConfiguration = {
-      //     fields: [
-      //       { path: ["uid"], displayName: "UID", groupable: true },
-      //       { path: ["role", "role"], displayName: "Role", groupable: false }
-      //     ]
-      //   };
-      //   const idx = getSearchIndex(result)
-      //   expect(idx.fields.length).toEqual(expectedConfiguration.fields.length);
-      // });
-
       it("sets a default configuration", () => {
         const dataset = [
           { uid: "uid1", role: { role: "role", confidence: 80 } },
@@ -111,31 +82,6 @@ describe("Dataset", () => {
           "role.role": ["role"],
           "role.confidence": [80, 82]
         });
-      });
-
-      it("sets the results of a search", () => {
-        const defaultState = {
-          dataset: [],
-          values: {},
-          configuration: {
-            fields: []
-          },
-          results: [],
-          queryString:''
-        };
-
-        const resultSet = [
-          { uid: "uid1", role: { role: "role", confidence: 80 } },
-          { uid: "uid2", role: { role: "role", confidence: 80 } }
-        ];
-        const searchString = 'uid';
-
-        const action = setSearchResults({
-          queryString: searchString,
-          results: resultSet
-        });
-        const result = reducer({dataset:defaultState}, action);
-        expect(getSearchResults(result)).toEqual(resultSet);
       });
     });
   });

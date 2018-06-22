@@ -6,7 +6,6 @@ import {
   fromPairs,
   identity,
   is,
-  isNil,
   map,
   merge,
   path,
@@ -17,18 +16,12 @@ import {
   uniq
 } from "ramda";
 
-const getValue = require("get-value");
-const lunr = require("lunr");
-
 const defaultState = {
   dataset: [],
   values: {},
   configuration: {
     fields: []
-  },
-  searchIndex: null,
-  results: [],
-  queryString:''
+  }
 };
 
 /**
@@ -112,7 +105,6 @@ const valuesFor = (dataset, configuration) => {
  * }
 */
 const setDataset = createAction("SET_DATASET");
-const setSearchResults = createAction("SET_SEARCHRESULTS");
 
 // REDUCERS
 const reducer = handleActions(
@@ -128,12 +120,7 @@ const reducer = handleActions(
       const values = valuesFor(dataset, configuration);
 
       return { ...state, dataset, values, configuration };
-    },
-    [setSearchResults]: (state, { payload }) => {
-      const results = payload.results;
-      const queryString = payload.queryString;
-      return { ...state, results, queryString}
-    },
+    }
   },
   defaultState
 );
@@ -143,9 +130,8 @@ const reducer = handleActions(
 const selectDataset = (state) => state.dataset.dataset;
 const selectConfiguration = (state) => state.dataset.configuration;
 const selectValues = (state) => state.dataset.values;
-const getSearchResults = (state) => state.dataset.results;
-const getQueryString = (state) => state.dataset.queryString;
+
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId , setSearchResults, getSearchResults, getQueryString, configurationFor };
+export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId, configurationFor };

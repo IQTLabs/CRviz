@@ -6,9 +6,9 @@ import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
 import faTimesCircle from "@fortawesome/fontawesome-free-solid/faTimesCircle";
 
-import { selectDataset, selectConfiguration, getSearchResults } from "domain/dataset";
+import { selectDataset, selectConfiguration } from "domain/dataset";
 
-import { getSearchIndex } from "epics/index-dataset-epic";
+import { getSearchIndex, getSearchResults } from "epics/index-dataset-epic";
 import { searchDataset } from "epics/search-dataset-epic";
 
 import style from "./SearchControls.module.css";
@@ -25,7 +25,6 @@ class Search extends React.Component {
   state = defaultState
 
   handleSearch(){
-    console.log(this.props.searchIndex);
     this.setState({
       hasSearch: this.state.queryString !== ''
     });
@@ -97,8 +96,6 @@ Search.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state);
-  console.log(getSearchIndex(state))
   return {
     dataset: selectDataset(state),
     configuration: selectConfiguration(state),

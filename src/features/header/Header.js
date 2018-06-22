@@ -26,7 +26,6 @@ class Header extends React.Component {
 	}
 
 	render() {
-		console.log(process.env);
 		return (
 			<div className={ style.header }>
 			  <img src={ logo } className={ style.logo } alt='' />
