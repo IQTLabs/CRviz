@@ -1,5 +1,5 @@
 FROM node:alpine
-LABEL maintainer="Charlie Lewis <clewis@iqt.org>"
+LABEL maintainer="rashley-iqt <rashley@iqt.org>"
 
 RUN apk update
 COPY . /app

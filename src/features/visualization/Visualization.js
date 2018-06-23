@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 
 import { connect } from "react-redux";
 
-import { selectDataset, selectConfiguration, getQueryString } from "domain/dataset";
+import { selectDataset, selectConfiguration } from "domain/dataset";
+import { getQueryString } from "epics/index-dataset-epic";
 import { selectControls } from "domain/controls";
 
 import d3Viz from './d3-viz';
