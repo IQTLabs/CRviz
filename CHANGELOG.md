@@ -7,6 +7,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 
 
+<a name=""></a>
+# [](https://github.com/CyberReboot/CRviz/compare/v0.1.2...v) (2018-06-23)
+
+
+
 <a name="0.1.2"></a>
 ## [0.1.2](https://github.com/CyberReboot/CRviz/compare/v0.1.1...v0.1.2) (2018-06-23)
 
