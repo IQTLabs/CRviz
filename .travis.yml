@@ -1,3 +1,8 @@
+sudo: required
+
+services:
+  - docker
+
 language: node_js
 node_js:
 - '8'
@@ -14,3 +19,5 @@ script:
 - npm install --no-optional
 - npm run test
 - npm run build
+- docker build -t crviz -f Dockerfile .
+- docker build -t crviz-gh -f Dockerfile.gh .
