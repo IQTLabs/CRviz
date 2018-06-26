@@ -1,7 +1,13 @@
 FROM node:alpine
 LABEL maintainer="rashley-iqt <rashley@iqt.org>"
 
-RUN apk update
+HEALTHCHECK --interval=15s --timeout=15s \
+ CMD curl --silent --fail http://localhost:5000/ || exit 1
+
+RUN apk add --update \
+    curl \
+    && rm -rf /var/cache/apk/*
+
 COPY . /app
 WORKDIR /app
 
