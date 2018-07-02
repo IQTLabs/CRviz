@@ -1,7 +1,11 @@
 import { createAction } from "redux-actions";
-import { Observable } from "rxjs";
+import { ofType } from 'redux-observable';
+import { of, empty } from "rxjs";
+import { map, mergeMap, catchError, concat } from 'rxjs/operators';
 
 import { isNil, is } from "ramda";
+
+import { buildIndex } from './index-dataset-epic';
 
 import { setDataset } from "domain/dataset";
 import { setHierarchyConfig, colorBy } from "domain/controls";
@@ -9,29 +13,36 @@ import { setHierarchyConfig, colorBy } from "domain/controls";
 const loadDataset = createAction("LOAD_DATASET");
 
 const loadDatasetEpic = (action$, store) => {
-  return action$
-    .ofType(loadDataset.toString())
-    .mergeMap(({ payload }) => {
-      return Observable.of(payload)
-        .map(formatPayload)
-        .map((payload) => {
-          return setDataset({
-            dataset: payload.dataset,
-            configuration: payload.configuration
-          })}
-        )
-        .concat(Observable.of(setHierarchyConfig([]), colorBy(null)))
-        .catch((error) => {
+  return action$.pipe(
+    ofType(loadDataset.toString())
+    ,mergeMap(({ payload }) => {
+      return of(payload).pipe(
+        map(formatPayload)
+        ,mergeMap((payload) => {
+          return of(
+            setDataset({
+              dataset: payload.dataset,
+              configuration: payload.configuration
+            })
+            ,buildIndex({
+                dataset: payload.dataset,
+                configuration: payload.configuration || null
+              })
+          )
+        })
+        ,concat(of(setHierarchyConfig([]), colorBy(null)))
+        ,catchError((error) => {
           if (is(ValidationError, error)) {
             alert(error.message);
-            return Observable.empty();
+            return empty();
           } else {
             throw error;
           }
-        });
-    });
-
-};
+        })
+      );
+    })
+  );
+}; 
 
 // doesn't really care if it's not CSV; if it *is* CSV, convert to JSON.
 // Otherwise, just pass it along.

@@ -1,24 +1,27 @@
 import { createAction } from "redux-actions";
-import { isNil } from "ramda";
-import { Observable } from "rxjs";
+import { of } from "rxjs";
+import { mergeMap, map, tap } from 'rxjs/operators';
 
-import { setSearchResults} from "domain/dataset";
+
+import { setSearchResults} from "epics/index-dataset-epic";
 
 const searchDataset = createAction("SEARCH_DATASET");
 
 const searchDatasetEpic = (action$, store) => {
   return action$
-    .ofType(searchDataset.toString())
-    .mergeMap(({ payload }) => {
-      return Observable.of(payload)
-        .do(performSearch)
-        .map((payload) =>
-          setSearchResults({
-            queryString: payload.queryString,
-            results: payload.results
-          })
-        )
-    });
+    .ofType(searchDataset.toString()).pipe(
+      mergeMap(({ payload }) => {
+        return of(payload).pipe(
+            tap(performSearch)
+            ,map((payload) =>
+              setSearchResults({
+                queryString: payload.queryString,
+                results: payload.results
+              })
+            )
+          );
+      })
+    );
 };
 
 const performSearch = (data) => {
@@ -26,7 +29,7 @@ const performSearch = (data) => {
   var toFind = data.queryString || '';
   const idx = data.searchIndex;
   var results = [];
-  if(!isNil(idx)){
+  if(idx && toFind){
     results = idx.search(toFind);
   }
   data.dataset.forEach((el) => { el.isSearchResult = false; });

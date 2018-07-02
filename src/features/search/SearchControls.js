@@ -6,8 +6,9 @@ import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
 import faTimesCircle from "@fortawesome/fontawesome-free-solid/faTimesCircle";
 
-import { selectDataset, selectConfiguration, getSearchResults, getSearchIndex } from "domain/dataset";
+import { selectDataset, selectConfiguration } from "domain/dataset";
 
+import { getSearchIndex, getSearchResults } from "epics/index-dataset-epic";
 import { searchDataset } from "epics/search-dataset-epic";
 
 import style from "./SearchControls.module.css";
@@ -74,7 +75,7 @@ class Search extends React.Component {
         </span>
         { this.state.hasSearch &&
           <span>
-            <label id="search-results"> {this.state.results.length}&nbsp;Results found </label>
+            <label id="search-results"> {this.props.results.length}&nbsp;Results found </label>
             <label htmlFor="search-results" className="button" onClick={() => this.clearSearch()}>
               <FontAwesomeIcon icon={faTimesCircle} />
               </label>
