@@ -10,21 +10,26 @@ import { loadDataset } from "./load-dataset-epic"
 import { uploadDataset } from "./upload-dataset-epic"
 import { searchDataset } from "./search-dataset-epic"
 import { fetchDataset } from "./fetch-dataset-epic"
+import { 
+	buildIndex, 
+	getSearchIndex,
+	setSearchResults,
+	getSearchResults
+} from "./index-dataset-epic"
 import fetchDatasetEpic from "./fetch-dataset-epic"
-
-
-const epicMiddleware = createEpicMiddleware(rootEpic);
-const mockStore = configureMockStore([epicMiddleware]);
 
 describe("loadDatasetEpic", () => {
 	let store;
 
 	beforeEach(() => {
+		const epicMiddleware = createEpicMiddleware();
+		const mockStore = configureMockStore([epicMiddleware]);
 		store  = mockStore();
+		epicMiddleware.run(rootEpic);
 	});
 
 	afterEach(() => {
-		epicMiddleware.replaceEpic(rootEpic);
+		
 	});
 
 	it("loads the dataset with default config", () => {
@@ -36,7 +41,6 @@ describe("loadDatasetEpic", () => {
 		const action$ = loadDataset(data);
 		store.dispatch(action$);
 		let typeToCheck = setDataset.toString();
-
 		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).toEqual(data);
 	});
 
@@ -66,11 +70,14 @@ describe("uploadDatasetEpic", () => {
 	let store;
 
 	beforeEach(() => {
+		const epicMiddleware = createEpicMiddleware();
+		const mockStore = configureMockStore([epicMiddleware]);
 		store  = mockStore();
+		epicMiddleware.run(rootEpic);
 	});
 
 	afterEach(() => {
-		epicMiddleware.replaceEpic(rootEpic);
+		
 	});
 
 	it("uploads a file containing a dataset", () => {
@@ -96,20 +103,23 @@ describe("searchDatasetEpic", () => {
 		];
 
 	beforeEach(() => {
+
 		store  = configureStore();
-		const action$ = setDataset({'dataset': data});
+		const action$ = setDataset({'dataset': data});		
 		store.dispatch(action$);
+		const config = store.getState().dataset.configuration;
+		const indexAction$ = buildIndex({'dataset': data, 'configuration': config });
+		store.dispatch(indexAction$);
 	});
 
 	afterEach(() => {
-		epicMiddleware.replaceEpic(rootEpic);
+		
 	});
 
 	it("search a dataset", () => {
 		const query = 'uid1';
-		
 		const ds = store.getState().dataset.dataset;
-		const index = store.getState().dataset.searchIndex;
+		const index = store.getState().search.searchIndex;
 
 		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
 		store.dispatch(action$);
@@ -121,7 +131,7 @@ describe("searchDatasetEpic", () => {
 		const query = 'uid1';
 		
 		const ds = store.getState().dataset.dataset;
-		const index = store.getState().dataset.searchIndex;
+		const index = store.getState().search.searchIndex;
 
 		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
 		store.dispatch(action$);
@@ -151,17 +161,17 @@ describe("fetchDatasetEpic", () => {
 	  'ajax': mockAjax
 	};
 
-	const local_epicMiddleware = createEpicMiddleware(rootEpic, {'dependencies': dependencies});
-	const local_mockStore = configureMockStore([local_epicMiddleware]);
-
 	let store;
 
 	beforeEach(() => {
-		store  = local_mockStore();
+		const epicMiddleware = createEpicMiddleware();
+		const mockStore = configureMockStore([epicMiddleware]);
+		store  = mockStore();
+		epicMiddleware.run(rootEpic, {'dependencies': dependencies});
 	});
 
 	afterEach(() => {
-		epicMiddleware.replaceEpic(rootEpic);
+		
 	});
 
 	it("loads the dataset with default config", () => {
@@ -177,6 +187,61 @@ describe("fetchDatasetEpic", () => {
 				expect(actions[0].payload).toEqual(data);
 			});
 	});
+});
 
+describe("indexDatasetEpic", () => {
+	let store;
+	const dataset = [
+		  { uid: "uid1", role: { role: "role", confidence: 80 } },
+		  { uid: "uid2", role: { role: "role", confidence: 80 } }
+		];
+	const configuration = {
+	      fields: [
+	        { path: ["uid"], displayName: "UID", groupable: true },
+	        { path: ["role", "role"], displayName: "Role", groupable: false }
+	      ]
+	    };
 
+	beforeEach(() => {
+
+		store  = configureStore();
+		const action$ = setDataset({'dataset': dataset});		
+		store.dispatch(action$);
+	});
+
+	afterEach(() => {
+		
+	});
+
+	it("sets the search index", () => {
+
+	    const action$ = buildIndex({ dataset, configuration });
+	    store.dispatch(action$);
+
+	    const expectedConfiguration = {
+	      fields: [
+	        { path: ["uid"], displayName: "UID", groupable: true },
+	        { path: ["role", "role"], displayName: "Role", groupable: false }
+	      ]
+	    };
+	    const idx = getSearchIndex(store.getState())
+	    expect(idx.fields.length).toEqual(expectedConfiguration.fields.length);
+	});
+
+	it("sets the results of a search", () => {
+        
+
+        const resultSet = [
+          { uid: "uid1", role: { role: "role", confidence: 80 } },
+          { uid: "uid2", role: { role: "role", confidence: 80 } }
+        ];
+        const searchString = 'uid';
+
+        const action$ = setSearchResults({
+          queryString: searchString,
+          results: resultSet
+        });
+        store.dispatch(action$);
+        expect(getSearchResults(store.getState())).toEqual(resultSet);
+      });
 });

@@ -7,7 +7,6 @@ import {
   fromPairs,
   toPairs,
   identity,
-  reject,
   map,
   path,
   pipe,
@@ -46,7 +45,6 @@ function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig
   const values = pipe(
     map(getValue),
     uniq,
-    reject(equals("Unknown")),
     sortBy(identity)
   )(data);
 
@@ -154,8 +152,7 @@ const colorNodes = ({ nodes, colorMap, getValue, coloredField, isColoringGroup }
     .classed("viz-coloredNode", (d) => {
       const { disabled } = colorMap[getValue(d.data)] || {};
       return !disabled &&
-        equals(d.data.field, coloredField) &&
-        d.data.fieldValue !== "Unknown";
+        equals(d.data.field, coloredField) 
     })
     .select("circle")
     .attr('class', (d) => {

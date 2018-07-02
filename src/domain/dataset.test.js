@@ -3,10 +3,7 @@ import {
   setDataset,
   selectDataset,
   selectConfiguration,
-  selectValues,
-  setSearchResults,
-  getSearchResults,
-  getSearchIndex
+  selectValues
 } from "./dataset";
 
 import { combineReducers } from "redux";
@@ -45,7 +42,6 @@ describe("Dataset", () => {
 
         expect(selectDataset(result)).toEqual(dataset);
         expect(selectConfiguration(result)).toEqual(expectedConfiguration);
-        expect(getSearchIndex(result).fields.length).toEqual(expectedConfiguration.fields.length);
       });
 
       it("sets a default configuration", () => {
@@ -86,31 +82,6 @@ describe("Dataset", () => {
           "role.role": ["role"],
           "role.confidence": [80, 82]
         });
-      });
-
-      it("sets the results of a search", () => {
-        const defaultState = {
-          dataset: [],
-          values: {},
-          configuration: {
-            fields: []
-          },
-          results: [],
-          queryString:''
-        };
-
-        const resultSet = [
-          { uid: "uid1", role: { role: "role", confidence: 80 } },
-          { uid: "uid2", role: { role: "role", confidence: 80 } }
-        ];
-        const searchString = 'uid';
-
-        const action = setSearchResults({
-          queryString: searchString,
-          results: resultSet
-        });
-        const result = reducer({dataset:defaultState}, action);
-        expect(getSearchResults(result)).toEqual(resultSet);
       });
     });
   });

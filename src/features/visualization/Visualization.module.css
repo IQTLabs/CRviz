@@ -52,15 +52,6 @@
   opacity: 0.95;
 }
 
-.viz :global(.viz-unknown) circle {
-  fill: #ed4747;
-  opacity: 1;
-}
-
-.viz :global(.viz-unknown):hover circle {
-  opacity: 0.75;
-}
-
 .viz :global(.viz-zoomMinutia) {
   visibility: hidden;
 }
@@ -160,10 +151,6 @@
 
 :global(.darkTheme) .viz :global(.viz-groupingNode):hover circle {
   opacity: 0.4;
-}
-
-:global(.darkTheme) .viz :global(.viz-unknown) circle {
-  fill: red;
 }
 
 :global(.darkTheme) .viz :global(.viz-labelShape) {

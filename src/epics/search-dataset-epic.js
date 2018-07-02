@@ -1,10 +1,9 @@
 import { createAction } from "redux-actions";
-import { isNil } from "ramda";
 import { of } from "rxjs";
 import { mergeMap, map, tap } from 'rxjs/operators';
 
 
-import { setSearchResults} from "domain/dataset";
+import { setSearchResults} from "epics/index-dataset-epic";
 
 const searchDataset = createAction("SEARCH_DATASET");
 
@@ -30,7 +29,7 @@ const performSearch = (data) => {
   var toFind = data.queryString || '';
   const idx = data.searchIndex;
   var results = [];
-  if(!isNil(idx) && toFind){
+  if(idx && toFind){
     results = idx.search(toFind);
   }
   data.dataset.forEach((el) => { el.isSearchResult = false; });
