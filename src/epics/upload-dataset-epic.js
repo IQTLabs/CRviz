@@ -38,7 +38,7 @@ const uploadDatasetEpic = (action$, store) => {
  */
 const fromReader = (file) => {
   return Observable.create((observer) => {
-    const reader = new FileReader();
+    const reader = new window.FileReader();
 
     reader.addEventListener('load', () => {
       observer.next(reader.result);

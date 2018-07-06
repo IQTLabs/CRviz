@@ -3,7 +3,7 @@ import { of } from "rxjs";
 import { mergeMap, map, tap } from 'rxjs/operators';
 
 
-import { setSearchResults} from "epics/index-dataset-epic";
+import { setSearchResults} from "./index-dataset-epic";
 
 const searchDataset = createAction("SEARCH_DATASET");
 

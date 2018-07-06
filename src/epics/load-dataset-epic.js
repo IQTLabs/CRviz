@@ -7,8 +7,8 @@ import { isNil, is } from "ramda";
 
 import { buildIndex } from './index-dataset-epic';
 
-import { setDataset } from "domain/dataset";
-import { setHierarchyConfig, colorBy } from "domain/controls";
+import { setDataset } from "../domain/dataset";
+import { setHierarchyConfig, colorBy } from "../domain/controls";
 
 const loadDataset = createAction("LOAD_DATASET");
 

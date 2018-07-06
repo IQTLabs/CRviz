@@ -7,6 +7,7 @@ import {
 } from "./dataset";
 
 import { combineReducers } from "redux";
+import { expect } from "chai"
 
 const reducer = combineReducers({ dataset: datasetReducer });
 
@@ -40,8 +41,8 @@ describe("Dataset", () => {
           ]
         };
 
-        expect(selectDataset(result)).toEqual(dataset);
-        expect(selectConfiguration(result)).toEqual(expectedConfiguration);
+        expect(selectDataset(result)).to.deep.equal(dataset);
+        expect(selectConfiguration(result)).to.deep.equal(expectedConfiguration);
       });
 
       it("sets a default configuration", () => {
@@ -52,7 +53,7 @@ describe("Dataset", () => {
 
         const action = setDataset({ dataset });
         const result = reducer({}, action);
-        expect(selectConfiguration(result)).toEqual({
+        expect(selectConfiguration(result)).to.deep.equal({
           fields: [
             { path: ["uid"], displayName: "uid", groupable: true },
             {
@@ -77,7 +78,7 @@ describe("Dataset", () => {
 
         const action = setDataset({ dataset });
         const result = reducer({}, action);
-        expect(selectValues(result)).toEqual({
+        expect(selectValues(result)).to.deep.equal({
           uid: ["uid1", "uid2"],
           "role.role": ["role"],
           "role.confidence": [80, 82]

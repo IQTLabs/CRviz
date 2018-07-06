@@ -1,0 +1,6 @@
+NODE_ENV=development 
+--require babel-register
+--require babel-core/register 
+--require jsdom-global/register
+--require jsdom
+src/**/*.test.js*

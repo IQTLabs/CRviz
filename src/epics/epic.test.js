@@ -1,8 +1,9 @@
-import expect from 'expect';
+import { expect } from 'chai';
 import configureMockStore from 'redux-mock-store';
 import configureStore from "../configure-store";
 import { createEpicMiddleware } from 'redux-observable';
 import { Observable, of} from 'rxjs';
+import { TestScheduler } from 'rxjs/testing';
 
 import rootEpic from './root-epic'
 import { setDataset } from '../domain/dataset'
@@ -41,7 +42,7 @@ describe("loadDatasetEpic", () => {
 		const action$ = loadDataset(data);
 		store.dispatch(action$);
 		let typeToCheck = setDataset.toString();
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).toEqual(data);
+		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).to.equal(data);
 	});
 
 	it("loads the dataset and config", () => {
@@ -60,8 +61,8 @@ describe("loadDatasetEpic", () => {
 		store.dispatch(action$);
 		let typeToCheck = setDataset.toString();	
 
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).toEqual(dataset);
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.configuration).toEqual(configuration);
+		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).to.equal(dataset);
+		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.configuration).to.equal(configuration);
 	});
 
 });
@@ -91,7 +92,7 @@ describe("uploadDatasetEpic", () => {
 		store.dispatch(action$);
 		let typeToCheck = uploadDataset.toString();
 
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload).toEqual(theBlob);
+		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload).to.equal(theBlob);
 	});
 });
 
@@ -124,7 +125,7 @@ describe("searchDatasetEpic", () => {
 		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
 		store.dispatch(action$);
 
-		expect(action$.payload.results[0]).toEqual(data[0]);
+		expect(action$.payload.results[0]).to.equal(data[0]);
 	});
 
 	it("clears a search", () => {
@@ -136,13 +137,13 @@ describe("searchDatasetEpic", () => {
 		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
 		store.dispatch(action$);
 
-		expect(action$.payload.results[0]).toEqual(data[0]);
+		expect(action$.payload.results[0]).to.equal(data[0]);
 
 		const clear = '';
 		const clearAction$ = searchDataset({'dataset': ds, 'queryString': clear, 'searchIndex': index});
 		store.dispatch(clearAction$);
 
-		expect(clearAction$.payload.results.length).toEqual(0);
+		expect(clearAction$.payload.results.length).to.equal(0);
 	});
 });
 
@@ -155,7 +156,7 @@ describe("fetchDatasetEpic", () => {
 		];
 	const mockResponse = data;
 	const mockAjax = () => {
-	  	return  Observable.of({ 'response': mockResponse });
+	  	return  of({ 'response': mockResponse });
 	  }
 	const dependencies = {
 	  'ajax': mockAjax
@@ -179,12 +180,10 @@ describe("fetchDatasetEpic", () => {
 		let typeToCheck = loadDataset.toString();
 
 		const action$ = of({'type': fetchDataset.toString(), 'payload': url});
-		store = null;
 		fetchDatasetEpic(action$, store, mockAjax)
-			.subscribe(actions => {
-				expect(actions.length).toEqual(1);
-				expect(actions[0].type).toEqual(typeToCheck);
-				expect(actions[0].payload).toEqual(data);
+			 .subscribe((actions) => {
+				expect(actions.type).to.equal(typeToCheck);
+				expect(actions.payload).to.equal(data);
 			});
 	});
 });
@@ -225,7 +224,7 @@ describe("indexDatasetEpic", () => {
 	      ]
 	    };
 	    const idx = getSearchIndex(store.getState())
-	    expect(idx.fields.length).toEqual(expectedConfiguration.fields.length);
+	    expect(idx.fields.length).to.equal(expectedConfiguration.fields.length);
 	});
 
 	it("sets the results of a search", () => {
@@ -242,6 +241,6 @@ describe("indexDatasetEpic", () => {
           results: resultSet
         });
         store.dispatch(action$);
-        expect(getSearchResults(store.getState())).toEqual(resultSet);
+        expect(getSearchResults(store.getState())).to.deep.equal(resultSet);
       });
 });
