@@ -2,8 +2,7 @@ import { expect } from 'chai';
 import configureMockStore from 'redux-mock-store';
 import configureStore from "../configure-store";
 import { createEpicMiddleware } from 'redux-observable';
-import { Observable, of} from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { of} from 'rxjs';
 
 import rootEpic from './root-epic'
 import { setDataset } from '../domain/dataset'
