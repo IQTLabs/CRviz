@@ -3,7 +3,7 @@ import { isNil } from "ramda";
 import { of } from "rxjs";
 import { mergeMap, map } from 'rxjs/operators';
 
-import { configurationFor } from "domain/dataset";
+import { configurationFor } from "../domain/dataset";
 
 const getValue = require("get-value");
 const lunr = require("lunr");
