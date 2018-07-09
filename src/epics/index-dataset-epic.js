@@ -17,7 +17,7 @@ const buildIndex = (payload) => ({'type': BUILD_INDEX, 'payload': payload })
 const buildIndexSuccess = (payload) => ({'type': BUILD_INDEX_SUCCESS, 'payload': payload})
 const setSearchResults = (payload) => ({'type': SET_SEARCH_RESULTS, 'payload': payload })
 
-const getSearchResults = (state) => state.search.searchResults;
+const getSearchResults = (state) => state.search.searchResults || [];
 const getQueryString = (state) => state.search.queryString;
 const getSearchIndex = (state) => state.search.searchIndex;
 

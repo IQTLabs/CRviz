@@ -1,6 +1,8 @@
+import { is } from "ramda";
 import { createAction } from "redux-actions";
-import { of } from "rxjs";
-import { mergeMap, map, tap } from 'rxjs/operators';
+import { of, empty } from "rxjs";
+import { mergeMap, map, tap, catchError } from 'rxjs/operators';
+import { QueryParseError } from 'lunr';
 
 
 import { setSearchResults} from "./index-dataset-epic";
@@ -16,9 +18,17 @@ const searchDatasetEpic = (action$, store) => {
             ,map((payload) =>
               setSearchResults({
                 queryString: payload.queryString,
-                results: payload.results
+                results: payload.results || []
               })
             )
+            ,catchError((error) => {
+              if (is(QueryParseError, error)) {
+                alert(error.message);
+                return empty();
+              } else {
+                throw error;
+              }
+            })
           );
       })
     );
