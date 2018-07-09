@@ -4,8 +4,6 @@ import configureStore from "../configure-store";
 import { createEpicMiddleware } from 'redux-observable';
 import { of} from 'rxjs';
 
-import { QueryParseError } from 'lunr';
-
 import rootEpic from './root-epic'
 import { setDataset } from '../domain/dataset'
 import { loadDataset } from "./load-dataset-epic"
