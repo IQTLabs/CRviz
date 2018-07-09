@@ -5,22 +5,8 @@ in cases where the code calls things like window.alert.
 */
 process.env.NODE_ENV = 'test'
 
-/*const { JSDOM } = require('jsdom')
-var exposedProperties = ['window', 'navigator', 'document'];
-console.log(jsdom);
-
-global.document = jsdom('');
-global.window = document.defaultView;
-Object.keys(document.defaultView).forEach((property) => {
-  if (typeof global[property] === 'undefined') {
-    exposedProperties.push(property);
-    global[property] = document.defaultView[property];
-  }
-});
-
-global.navigator = {
-  userAgent: 'node.js'
-};*/ 
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
 const { JSDOM } = require('jsdom');
 
@@ -28,7 +14,7 @@ const jsdom = new JSDOM('<!doctype html><html><body></body></html>');
 const { window } = jsdom;
 
 function copyProps(src, target) {
-  window.alert = (msg) => { console.log(msg); }
+  window.alert = (msg) => {  }
   const props = Object.getOwnPropertyNames(src)
     .filter(prop => typeof target[prop] === 'undefined')
     .reduce((result, prop) => ({
@@ -44,3 +30,5 @@ global.navigator = {
   userAgent: 'node.js',
 };
 copyProps(window, global);
+
+configure({ adapter: new Adapter() });
