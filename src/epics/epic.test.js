@@ -4,6 +4,8 @@ import configureStore from "../configure-store";
 import { createEpicMiddleware } from 'redux-observable';
 import { of} from 'rxjs';
 
+import { QueryParseError } from 'lunr';
+
 import rootEpic from './root-epic'
 import { setDataset } from '../domain/dataset'
 import { loadDataset } from "./load-dataset-epic"
@@ -103,7 +105,6 @@ describe("searchDatasetEpic", () => {
 		];
 
 	beforeEach(() => {
-
 		store  = configureStore();
 		const action$ = setDataset({'dataset': data});		
 		store.dispatch(action$);
@@ -113,7 +114,6 @@ describe("searchDatasetEpic", () => {
 	});
 
 	afterEach(() => {
-		
 	});
 
 	it("search a dataset", () => {
@@ -125,6 +125,17 @@ describe("searchDatasetEpic", () => {
 		store.dispatch(action$);
 
 		expect(action$.payload.results[0]).to.equal(data[0]);
+	});
+
+	it("search a for a non-existent field", () => {
+		const query = 'fake: field';
+		const ds = store.getState().dataset.dataset;
+		const index = store.getState().search.searchIndex;
+
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		store.dispatch(action$);
+
+		expect(action$.payload.results.length).to.equal(0);
 	});
 
 	it("clears a search", () => {

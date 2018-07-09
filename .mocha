@@ -1,5 +1,5 @@
 --require babel-register
 --require babel-core/register 
---require jsdom-global/register
 --require jsdom
+--require ./src/test/test-dom.js
 src/**/*.test.js*
