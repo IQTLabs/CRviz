@@ -77,7 +77,7 @@ const generateIndex = (payload) => {
   var flat = flattenDataset(dataset, configuration);
   const idx = lunr(function () {
     this.ref('id');
-    configuration.fields.map((field) => { return this.field(field.displayName); })
+    configuration.fields.map((field) => { return this.field(field.displayName.toLowerCase()); })
     flat.map((item) => { return this.add(item); })
   });
   return idx;
