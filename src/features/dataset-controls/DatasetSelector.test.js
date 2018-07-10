@@ -17,7 +17,7 @@ const empty = {name: "None", url:" "};
 const change = (target) => {
 
 }
-const event = {"target": {"name": "ds3", "url":"test3.url"}};
+const event = {"target": {value:"test3.url"}};
 describe('DatasetSelector', () => {
 	it('renders the control', () => {
 		const selector = mount(<DatasetSelector
@@ -31,15 +31,18 @@ describe('DatasetSelector', () => {
 	});
 
 	it('changes the selection', () => {
-		const onChange = sinon.stub()
+		const fakeOnChange = (evt) =>{
+			
+		}
+		const onChangeSpy = sinon.spy(fakeOnChange);
 		const selector = mount(<DatasetSelector
             className={style.selector}
             selected={empty}
-            onChange={onChange}
+            onChange={onChangeSpy}
             datasets={datasets}
           />);
-		selector.find('select').first().simulate("change", event);
-		expect(onChange.calledOnce).to.equal(true);
+		selector.find('select').first().simulate('change', event);
+		expect(onChangeSpy.calledWith(datasets[2])).to.equal(true);
 	});
 
 });
