@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import configureMockStore from 'redux-mock-store';
-import configureStore from "../configure-store";
+import configureStore from "configure-store";
 import { createEpicMiddleware } from 'redux-observable';
 import { of} from 'rxjs';
 
 import rootEpic from './root-epic'
-import { setDataset } from '../domain/dataset'
+import { setDataset } from 'domain/dataset'
 import { loadDataset } from "./load-dataset-epic"
 import { uploadDataset } from "./upload-dataset-epic"
 import { searchDataset } from "./search-dataset-epic"
