@@ -49,21 +49,6 @@ const performSearch = (data) => {
   });
 };
 
-const objectContainsValue = (obj, toFind) => {
-  var retVal = false;
-  for(var key in obj){
-    if(typeof(obj[key]) === "string" && obj[key].toUpperCase().includes(toFind.toUpperCase())){
-      retVal =  true;
-    } else if(typeof(obj[key]) === "object"){
-      retVal = objectContainsValue(obj[key], toFind);
-    }
-
-    if(retVal === true)
-      break;
-  }
-  return retVal
-};
-
 export default searchDatasetEpic;
 
 export { searchDataset };
