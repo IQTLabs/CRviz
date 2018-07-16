@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/CyberReboot/CRviz.svg?branch=master)](https://travis-ci.org/CyberReboot/CRviz)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6fe34768060e4f75a9ad8d20c0c31fec)](https://www.codacy.com/app/CyberReboot/CRviz?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CyberReboot/CRviz&amp;utm_campaign=Badge_Grade)
+[![codecov](https://codecov.io/gh/CyberReboot/CRviz/branch/master/graph/badge.svg?token=ORXmFYC3MM)](https://codecov.io/gh/CyberReboot/CRviz)
 [![Docker Hub Downloads](https://img.shields.io/docker/pulls/cyberreboot/crviz.svg)](https://hub.docker.com/u/cyberreboot) [![Greenkeeper badge](https://badges.greenkeeper.io/CyberReboot/CRviz.svg)](https://greenkeeper.io/)
 
 CRviz is our first attempt at visualizing networks differently. It's still an early prototype, and it's still under development. That said, we want to share the tool in this formative stage both because we think that our approach has the potential to improve the scalability and legibility of network data, and also because we're actively looking for feedback. So please send us your suggestions and comments!
