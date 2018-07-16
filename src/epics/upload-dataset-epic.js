@@ -18,7 +18,6 @@ const uploadDatasetEpic = (action$, store) => {
             ,map(CSVconvert)
             ,map(JSON.parse)
             ,map(loadDataset)
-            //,takeUntil(action$.ofType(uploadDataset.toString()))
             ,catchError((error) => {
               if (error instanceof SyntaxError) {
                 alert("Invalid JSON.");

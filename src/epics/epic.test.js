@@ -6,7 +6,7 @@ import { of} from 'rxjs';
 
 import rootEpic from './root-epic'
 import { setDataset } from 'domain/dataset'
-import { loadDataset } from "./load-dataset-epic"
+import { loadDataset, CSVconvert } from "./load-dataset-epic"
 import { uploadDataset } from "./upload-dataset-epic"
 import { searchDataset } from "./search-dataset-epic"
 import { fetchDataset } from "./fetch-dataset-epic"
@@ -31,37 +31,62 @@ describe("loadDatasetEpic", () => {
 	afterEach(() => {
 		
 	});
+	describe("loading various datasets", () => {
+		it("loads the dataset with default config", () => {
+			const data = [
+			  { uid: "uid1", role: { role: "role", confidence: 80 } },
+			  { uid: "uid2", role: { role: "role", confidence: 80 } }
+			];
 
-	it("loads the dataset with default config", () => {
-		const data = [
-		  { uid: "uid1", role: { role: "role", confidence: 80 } },
-		  { uid: "uid2", role: { role: "role", confidence: 80 } }
-		];
+			const action$ = loadDataset(data);
+			store.dispatch(action$);
+			let typeToCheck = setDataset.toString();
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).to.equal(data);
+		});
 
-		const action$ = loadDataset(data);
-		store.dispatch(action$);
-		let typeToCheck = setDataset.toString();
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).to.equal(data);
+		it("loads the dataset and config", () => {
+			const dataset = [
+	          { uid: "uid1", role: { role: "role", confidence: 80 } },
+	          { uid: "uid2", role: { role: "role", confidence: 80 } }
+	        ];
+	        const configuration = {
+	          fields: [
+	            { path: ["uid"], displayName: "UID", groupable: true },
+	            { path: ["role", "role"], displayName: "Role", groupable: false }
+	          ]
+	        };
+
+			const action$ = loadDataset({dataset, configuration});
+			store.dispatch(action$);
+			let typeToCheck = setDataset.toString();	
+
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).to.equal(dataset);
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.configuration).to.equal(configuration);
+		});
+
+		it("loads a simple object", () => {
+			const data = { uid: "uid1", role: { role: "role", confidence: 80 } };
+
+			const action$ = loadDataset(data);
+			store.dispatch(action$);
+			let typeToCheck = setDataset.toString();
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset.length).to.equal(1);
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset[0]).to.deep.equal(data);
+		});
 	});
 
-	it("loads the dataset and config", () => {
-		const dataset = [
-          { uid: "uid1", role: { role: "role", confidence: 80 } },
-          { uid: "uid2", role: { role: "role", confidence: 80 } }
-        ];
-        const configuration = {
-          fields: [
-            { path: ["uid"], displayName: "UID", groupable: true },
-            { path: ["role", "role"], displayName: "Role", groupable: false }
-          ]
-        };
+	describe("CSV Conversion", () => {
+		it("converts CSV to json", () => {
+			const expectedData = [
+			  { uid: "uid1", role: "role", confidence: "80" },
+			  { uid: "uid2", role: "role", confidence: "80" }
+			];
+			const csv = "uid,role,confidence\n" +
+						"uid1,role,80\nuid2,role,80"
+			const converted = CSVconvert(csv);
 
-		const action$ = loadDataset({dataset, configuration});
-		store.dispatch(action$);
-		let typeToCheck = setDataset.toString();	
-
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).to.equal(dataset);
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.configuration).to.equal(configuration);
+			expect(JSON.parse(converted)).to.deep.equal(expectedData);
+		});
 	});
 
 });
@@ -80,12 +105,24 @@ describe("uploadDatasetEpic", () => {
 		
 	});
 
-	it("uploads a file containing a dataset", () => {
+	it("uploads a json file containing a dataset", () => {
 		const data = [
 		  { uid: "uid1", role: { role: "role", confidence: 80 } },
 		  { uid: "uid2", role: { role: "role", confidence: 80 } }
 		];
 		const theBlob = new Blob([JSON.stringify(data)], { 'type': 'application/json' });
+
+		const action$ = uploadDataset(theBlob);
+		store.dispatch(action$);
+		let typeToCheck = uploadDataset.toString();
+
+		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload).to.equal(theBlob);
+	});
+
+	it("uploads a csv file containing a dataset", () => {
+		const csv = "uid,role.role,role.confidence\n" +
+					"uid1,role,80\nuid2,role,80"
+		const theBlob = new Blob([csv], { 'type': 'text/csv' });
 
 		const action$ = uploadDataset(theBlob);
 		store.dispatch(action$);
