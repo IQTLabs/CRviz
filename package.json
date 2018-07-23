@@ -21,7 +21,7 @@
     "react-dom": "^16.2.0",
     "react-portal-tooltip": "^2.4.0",
     "react-redux": "^5.0.6",
-    "react-scripts": "^2.0.0-next.b2fd8db8",
+    "react-scripts": "^2.0.0-next.3e165448",
     "redux": "^4.0.0",
     "redux-actions": "^2.2.1",
     "redux-mock-store": "^1.5.1",
