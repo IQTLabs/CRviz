@@ -1,8 +1,8 @@
 import React from 'react';
 import ToolTip from 'react-portal-tooltip'
 
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faInfo from "@fortawesome/fontawesome-free-solid/faInfoCircle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 import logo from './crlogo.png';
 import style from './Header.module.css';
@@ -32,7 +32,7 @@ class Header extends React.Component {
 			  <span className={ style.appName }>CRviz</span>
 			  <span className={ style.infoIcon }>
 				<label id="showInfo" onMouseEnter={this.showTooltip} onMouseLeave={this.hideTooltip}>
-			      <FontAwesomeIcon icon={faInfo} />
+			      <FontAwesomeIcon icon={faInfoCircle} />
 			    </label>
 			    <ToolTip active={this.state.showInfo} position="bottom" parent="#showInfo" tooltipTimeout={250}>
 			      <div className={ style.infoPopup }>

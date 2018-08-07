@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import { isNil } from "ramda";
 
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faUpload from "@fortawesome/fontawesome-free-solid/faUpload";
+import { FontAwesomeIcon }from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
 function DatasetUpload({ className, selected, onChange }) {
   return (

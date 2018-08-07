@@ -2,9 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
-import faTimesCircle from "@fortawesome/fontawesome-free-solid/faTimesCircle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch,  faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 
 import { selectDataset, selectConfiguration } from "domain/dataset";
 

@@ -7,8 +7,8 @@ import { isEmpty, contains, map, sortBy, curry } from "ramda";
 
 import { Droppable } from "react-beautiful-dnd";
 
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faTrashAlt from "@fortawesome/fontawesome-free-solid/faTrashAlt";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 import AvailableField from "./AvailableField";
 

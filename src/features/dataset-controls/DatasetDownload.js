@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from 'prop-types';
 
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faDownload from "@fortawesome/fontawesome-free-solid/faDownload";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 
 function DatasetDownload({ className, selected, url }) {
   return (
