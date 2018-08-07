@@ -1,6 +1,65 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
 version: v1.12.0
-ignore: {}
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'npm:chownr:20180731':
+    - react-scripts > eslint-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > file-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > file-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > html-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > mini-css-extract-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > mini-css-extract-plugin > @webpack-contrib/schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > optimize-css-assets-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > postcss-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > sass-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > style-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > sw-precache-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > thread-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > url-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
+    - react-scripts > url-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
+    - react-scripts > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
+    - react-scripts > webpack-manifest-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
+    - react-scripts > webpack-dev-server > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
+    - react-scripts > webpack-dev-server > webpack-dev-middleware > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
 # patches apply the minimum changes required to fix a vulnerability
 patch:
   'npm:hoek:20180212':
