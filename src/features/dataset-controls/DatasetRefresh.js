@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRedoAlt } from "@fortawesome/free-solid-svg-icons/faRedoAlt";
+import { faRedoAlt } from "@fortawesome/free-solid-svg-icons";
 
 function DatasetRefresh({ className, onClick }) {
   return (
