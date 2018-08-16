@@ -4,9 +4,8 @@ import { connect } from "react-redux";
 import { isNil } from "ramda";
 import Modal from 'react-modal';
 
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faCheck from "@fortawesome/fontawesome-free-solid/faCheck";
-import faTimes from "@fortawesome/fontawesome-free-solid/faTimes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
