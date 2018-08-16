@@ -39,6 +39,8 @@ var POSEIDON_DATASET = {
   url: "http://"+hostname+":"+port+"/v1/network"
 };
 
+Modal.setAppElement('#root');
+
 class DatasetControls extends React.Component {
 
   state = {
