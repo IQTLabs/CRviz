@@ -3,7 +3,6 @@ import { ofType } from 'redux-observable';
 import { empty } from 'rxjs';
 import { ajax  as rxAjax } from 'rxjs/ajax';
 import { catchError, debounceTime, mergeMap, map } from 'rxjs/operators';
-import { isEmpty } from 'ramda';
 
 import { loadDataset } from './load-dataset-epic';
 
@@ -18,7 +17,6 @@ const fetchDatasetEpic = (action$, store, ajax = rxAjax) => {
     ,mergeMap((action) => {
       const url = action.payload.url
       const header = action.payload.header
-      console.log(action.payload);
       return ajax({ url: url, headers:header, crossDomain: true, responseType: 'json' }).pipe(
         map((result) => { 
           return result.response 
@@ -41,9 +39,9 @@ const fetchDatasetEpic = (action$, store, ajax = rxAjax) => {
 
 const getScheme = (username, password, token) =>{
    let scheme = 'None';
-    if(!isEmpty(token)) {
+    if(token) {
       scheme = 'Bearer'
-    } else if (!isEmpty(username) && !isEmpty(password)) {
+    } else if (username && password) {
       scheme = 'Basic'
     }
     return scheme;
