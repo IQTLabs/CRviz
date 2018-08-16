@@ -9,7 +9,7 @@ import { setDataset } from 'domain/dataset'
 import { loadDataset, CSVconvert } from "./load-dataset-epic"
 import { uploadDataset } from "./upload-dataset-epic"
 import { searchDataset } from "./search-dataset-epic"
-import { fetchDataset } from "./fetch-dataset-epic"
+import { fetchDataset, buildAuthHeader } from "./fetch-dataset-epic"
 import { 
 	buildIndex, 
 	getSearchIndex,
@@ -218,6 +218,32 @@ describe("fetchDatasetEpic", () => {
 
 	afterEach(() => {
 		
+	});
+
+	describe("Authorization headers", () => {
+
+		it("uses no auth", () => {
+			const expected = null;
+
+			const actual = buildAuthHeader(null, null, null);
+			expect(actual).to.deep.equal(expected);
+		});
+
+		it("uses basic auth", () => {
+			const creds = new Buffer('test:test').toString('base64');
+			const expected = {'Authorization': `Basic ${creds}`};
+
+			const actual = buildAuthHeader('test', 'test', null);
+			expect(actual).to.deep.equal(expected);
+		});
+
+		it("uses bearer auth", () => {
+			const creds = 'testToken';
+			const expected = {'Authorization': `Bearer ${creds}`};
+
+			const actual = buildAuthHeader(null, null, creds);
+			expect(actual).to.deep.equal(expected);
+		});
 	});
 
 	it("loads the dataset with default config", () => {

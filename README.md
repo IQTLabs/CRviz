@@ -5,6 +5,7 @@
 [![codecov](https://codecov.io/gh/CyberReboot/CRviz/branch/master/graph/badge.svg?token=ORXmFYC3MM)](https://codecov.io/gh/CyberReboot/CRviz)
 [![Docker Hub Downloads](https://img.shields.io/docker/pulls/cyberreboot/crviz.svg)](https://hub.docker.com/u/cyberreboot) [![Greenkeeper badge](https://badges.greenkeeper.io/CyberReboot/CRviz.svg)](https://greenkeeper.io/)
 
+
 CRviz is our first attempt at visualizing networks differently. It's still an early prototype, and it's still under development. That said, we want to share the tool in this formative stage both because we think that our approach has the potential to improve the scalability and legibility of network data, and also because we're actively looking for feedback. So please send us your suggestions and comments!
 
 For more details, please see this [blog post](https://blog.cyberreboot.org/crviz-scalable-design-for-network-visualization-14689133fd91).

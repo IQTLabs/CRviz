@@ -15,8 +15,9 @@ const fetchDatasetEpic = (action$, store, ajax = rxAjax) => {
     ofType(fetchDataset.toString())
     ,debounceTime(500)
     ,mergeMap((action) => {
-      const url = action.payload
-      return ajax({ url: url, crossDomain: true, responseType: 'json' }).pipe(
+      const url = action.payload.url
+      const header = action.payload.header
+      return ajax({ url: url, headers:header, crossDomain: true, responseType: 'json' }).pipe(
         map((result) => { 
           return result.response 
         })
@@ -36,5 +37,36 @@ const fetchDatasetEpic = (action$, store, ajax = rxAjax) => {
     );
 }
 
+const getScheme = (username, password, token) =>{
+   let scheme = 'None';
+    if(token) {
+      scheme = 'Bearer'
+    } else if (username && password) {
+      scheme = 'Basic'
+    }
+    return scheme;
+}
+
+const buildAuthHeader = (username, password, token) => {
+  let header = null;
+  var scheme = getScheme(username, password, token);
+
+  switch (scheme){
+    case 'Basic':
+       var basic = "Basic " + new Buffer(`${username}:${password}`).toString("base64");
+       header = {'Authorization' : basic};
+      break;
+    case 'Bearer':
+      var bearer = `Bearer ${token}`;
+      header = {'Authorization' : bearer};
+      break;
+    default:
+      header = null;
+      break;
+  }
+  
+  return header;
+}
+
 export default fetchDatasetEpic;
-export { fetchDataset }
+export { fetchDataset, buildAuthHeader };
