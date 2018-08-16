@@ -221,22 +221,30 @@ describe("fetchDatasetEpic", () => {
 	});
 
 	describe("Authorization headers", () => {
-	it("uses basic auth", () => {
-		const creds = new Buffer('test:test').toString('base64');
-		const expected = {'Authorization': `Basic ${creds}`};
 
-		const actual = buildAuthHeader('test', 'test', null);
-		expect(actual).to.deep.equal(expected);
+		it("uses no auth", () => {
+			const expected = null;
+
+			const actual = buildAuthHeader(null, null, null);
+			expect(actual).to.deep.equal(expected);
+		});
+
+		it("uses basic auth", () => {
+			const creds = new Buffer('test:test').toString('base64');
+			const expected = {'Authorization': `Basic ${creds}`};
+
+			const actual = buildAuthHeader('test', 'test', null);
+			expect(actual).to.deep.equal(expected);
+		});
+
+		it("uses bearer auth", () => {
+			const creds = 'testToken';
+			const expected = {'Authorization': `Bearer ${creds}`};
+
+			const actual = buildAuthHeader(null, null, creds);
+			expect(actual).to.deep.equal(expected);
+		});
 	});
-
-	it("uses bearer auth", () => {
-		const creds = 'testToken';
-		const expected = {'Authorization': `Bearer ${creds}`};
-
-		const actual = buildAuthHeader(null, null, creds);
-		expect(actual).to.deep.equal(expected);
-	});
-});
 
 	it("loads the dataset with default config", () => {
 		const url = 'test.test'
