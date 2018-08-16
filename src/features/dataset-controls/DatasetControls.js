@@ -2,8 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { isNil } from "ramda";
+import Modal from 'react-modal';
 
-import { fetchDataset } from "epics/fetch-dataset-epic";
+import FontAwesomeIcon from "@fortawesome/react-fontawesome";
+import faCheck from "@fortawesome/fontawesome-free-solid/faCheck";
+import faTimes from "@fortawesome/fontawesome-free-solid/faTimes";
+
+import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
 import { showNodes } from "domain/controls"
 import { setDataset, selectDataset } from "domain/dataset";
@@ -12,6 +17,7 @@ import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
 import DatasetDownload from "./DatasetDownload";
 import DatasetRefresh from "./DatasetRefresh";
+//import DatasetUrl from "./DatasetUrl";
 
 import style from "./DatasetControls.module.css";
 
@@ -38,7 +44,12 @@ class DatasetControls extends React.Component {
   state = {
     dataset: null,
     selected: null,
-    selectedFile: null
+    selectedFile: null,
+    showUrlEntry: false,
+    url: '',
+    token: '',
+    username: '',
+    password: '',
   };
 
   resetDataset = () => {
@@ -49,9 +60,12 @@ class DatasetControls extends React.Component {
     });
   }
 
-  fetchAndSetDataset = (url, dataset) => {
+  fetchAndSetDataset = (url, dataset, username, password, token) => {
+
+    const authHeader = buildAuthHeader(username, password, token);
+    console.log(authHeader);
     if (toURL(url)) {
-      this.props.fetchDataset(url);
+      this.props.fetchDataset({'url': url, 'header': authHeader});
       this.setState({
         selected: dataset,
         selectedFile: null
@@ -68,11 +82,14 @@ class DatasetControls extends React.Component {
 
     this.props.showNodes(true);
 
-    const message = "Please enter a URL";
-    const url = dataset === CUSTOM_DATASET ? prompt(message) : dataset.url;
-    dataset.url = url;
-    this.fetchAndSetDataset(url, dataset);
-  };
+    const showUrlEntry = dataset === CUSTOM_DATASET;
+    this.setState({ showUrlEntry: showUrlEntry });
+    if(!showUrlEntry)
+    {
+      const url = dataset.url;
+      this.fetchAndSetDataset(url, dataset, null, null, null);
+    }
+  }
 
   onUpload = (file) => {
     this.props.uploadDataset(file);
@@ -80,7 +97,44 @@ class DatasetControls extends React.Component {
       selected: null,
       selectedFile: file.name
     });
-  };
+  }
+
+  onUrlChange = (evt) => {
+    this.setState({ url: evt.target.value });
+  }
+
+  onTokenChange = (evt) => {
+    this.setState({ token: evt.target.value });
+  }
+
+  onUsernameChange = (evt) => {
+    this.setState({ username: evt.target.value });
+  }
+
+  onPasswordChange = (evt) => {
+    this.setState({ password: evt.target.value });
+  }
+
+  onUrlOk = () => {
+    this.setState({ showUrlEntry: false });
+    const dataset = CUSTOM_DATASET;
+    if(!isNil(this.state.url))
+    {
+      const url = this.state.url;
+      dataset.url = url;
+      this.fetchAndSetDataset(url, dataset, this.state.username, this.state.password, this.state.token);
+    }
+  }
+
+  onUrlCancel = () => {
+    this.setState({ 
+      showUrlEntry: false,
+      url: '',
+      token: '',
+      username: '',
+      password: '',
+     });
+  }
 
   getDownloadUrl = () => {
     const urlObject = window.URL || window.webkitURL || window;
@@ -88,7 +142,7 @@ class DatasetControls extends React.Component {
     const blob = new Blob([json], {'type': "application/json"});
     const url = urlObject.createObjectURL(blob);;
     return url;
-  };
+  }
 
   onRefresh = () =>{
     const url = this.state.selected.url;
@@ -138,7 +192,38 @@ class DatasetControls extends React.Component {
             />
           }
           </div>
-
+          <Modal isOpen={ this.state.showUrlEntry } onRequestClose={this.onUrlCancel} contentLabel="Enter a Url">
+            <div className={ style.modal }>
+              <div className={ style.modalMain }>
+                <span>
+                  <label> URL </label>
+                  <input type="text" value={this.state.url} onChange={ this.onUrlChange }/>
+                </span>
+                <span>
+                  <label> Token </label>
+                  <input type="text" value={this.state.Token} onChange={ this.onTokenChange }/>
+                </span>
+                <span>
+                  <label> Username </label>
+                  <input type="text" value={this.state.userName} onChange={ this.onUsernameChange }/>
+                </span>
+                <span>
+                  <label> Password </label>
+                  <input type="password" value={this.state.password} onChange={ this.onPasswordChange }/>
+                </span>
+                <div>
+                  <span className={ style.centerSpan }>
+                    <div className="button" title="Ok" onClick={this.onUrlOk}>
+                        <FontAwesomeIcon icon={faCheck} />
+                    </div>
+                    <div className="button" title="Cancel" onClick={this.onUrlCancel}>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Modal>
       </div>
     );
   }
