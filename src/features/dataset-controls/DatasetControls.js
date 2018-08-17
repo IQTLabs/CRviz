@@ -25,6 +25,12 @@ const CUSTOM_DATASET = {
   url: "custom-url"
 };
 
+const authTypes = [
+  {'name': '-None-', 'scheme':'None' },
+  {'name': 'Username\\Password', 'scheme':'Basic' },
+  {'name': 'Token', 'scheme':'Bearer' },
+];
+
 var host = window.location.host;
 var hostname = window.location.hostname;
 var port = '80';
@@ -48,6 +54,7 @@ class DatasetControls extends React.Component {
     selectedFile: null,
     showUrlEntry: false,
     url: '',
+    authScheme:null,
     token: '',
     username: '',
     password: '',
@@ -83,7 +90,14 @@ class DatasetControls extends React.Component {
     this.props.showNodes(true);
 
     const showUrlEntry = dataset === CUSTOM_DATASET;
-    this.setState({ showUrlEntry: showUrlEntry });
+    this.setState({ 
+      showUrlEntry: showUrlEntry,
+      url: '',
+      authScheme:null,
+      token: '',
+      username: '',
+      password: '',
+     });
     if(!showUrlEntry)
     {
       const url = dataset.url;
@@ -130,6 +144,7 @@ class DatasetControls extends React.Component {
     this.setState({ 
       showUrlEntry: false,
       url: '',
+      authScheme:null,
       token: '',
       username: '',
       password: '',
@@ -200,17 +215,38 @@ class DatasetControls extends React.Component {
                   <input type="text" value={this.state.url} onChange={ this.onUrlChange }/>
                 </span>
                 <span>
-                  <label> Token </label>
-                  <input type="text" value={this.state.Token} onChange={ this.onTokenChange }/>
+                  <label> AuthType </label>
+                  <select
+                    onChange={(evt) => this.setState({ authScheme: evt.target.value })}
+                    value={isNil(this.state.authScheme) ? null : this.state.authScheme}
+                  >
+                    {authTypes.map((at) => {
+                      return (
+                        <option key={at.scheme} value={at.scheme}>
+                          {at.name}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </span>
-                <span>
-                  <label> Username </label>
-                  <input type="text" value={this.state.userName} onChange={ this.onUsernameChange }/>
-                </span>
-                <span>
-                  <label> Password </label>
-                  <input type="password" value={this.state.password} onChange={ this.onPasswordChange }/>
-                </span>
+                { this.state.authScheme === 'Bearer' &&
+                  <span>
+                    <label> Token </label>
+                    <input type="text" value={this.state.Token} onChange={ this.onTokenChange }/>
+                  </span> 
+                }
+                { this.state.authScheme === 'Basic' &&
+                  <div>
+                    <span>
+                      <label> Username </label>
+                      <input type="text" value={this.state.userName} onChange={ this.onUsernameChange }/>
+                    </span>
+                    <span>
+                      <label> Password </label>
+                      <input type="password" value={this.state.password} onChange={ this.onPasswordChange }/>
+                    </span>
+                  </div>
+                }
                 <div>
                   <span className={ style.centerSpan }>
                     <div className="button" title="Ok" onClick={this.onUrlOk}>
