@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
+import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
 import { showNodes } from "domain/controls"
 import { setDataset, selectDataset } from "domain/dataset";
@@ -16,7 +17,7 @@ import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
 import DatasetDownload from "./DatasetDownload";
 import DatasetRefresh from "./DatasetRefresh";
-//import DatasetUrl from "./DatasetUrl";
+import DatasetTimedRefresh from "./DatasetTimedRefresh";
 
 import style from "./DatasetControls.module.css";
 
@@ -54,10 +55,12 @@ class DatasetControls extends React.Component {
     selectedFile: null,
     showUrlEntry: false,
     url: '',
-    authScheme:null,
+    authScheme:'',
     token: '',
     username: '',
     password: '',
+    refreshInterval: 0,
+    refreshTimerRunning: false
   };
 
   resetDataset = () => {
@@ -144,7 +147,7 @@ class DatasetControls extends React.Component {
     this.setState({ 
       showUrlEntry: false,
       url: '',
-      authScheme:null,
+      authScheme:'',
       token: '',
       username: '',
       password: '',
@@ -162,7 +165,34 @@ class DatasetControls extends React.Component {
   onRefresh = () =>{
     const url = this.state.selected.url;
     const dataset = this.state.selected;
-    this.fetchAndSetDataset(url, dataset);
+    this.fetchAndSetDataset(url, dataset, this.state.username, this.state.password, this.state.token);
+  }
+
+  onTimedRefreshStart = () =>{
+    this.setState({
+      refreshTimerRunning: true
+    });
+    const authHeader = buildAuthHeader(this.state.username, this.state.password, this.state.token);
+    const url = this.state.url;
+    const interval = this.state.refreshInterval;
+    console.log(this.state.refreshInterval);
+    this.props.startRefresh({'url': url, 'header': authHeader, 'interval': interval});
+  }
+
+  onTimedRefreshStop = () =>{
+    this.setState({
+      refreshTimerRunning: false
+    });
+    this.props.stopRefresh();
+  }
+
+  onTimedRefreshIntervalChanged = (interval) =>{
+    const numInt = parseInt(interval, 10);
+    if(!isNaN(numInt)){
+      this.setState({
+        refreshInterval: numInt,
+      });
+    }
   }
 
   render() {
@@ -201,10 +231,20 @@ class DatasetControls extends React.Component {
             />
           }
           { canRefresh &&
-            <DatasetRefresh
-              className={style.urlRefresh}
-              onClick={this.onRefresh}
-            />
+            <div className={style.urlRefreshContainer}>
+              <DatasetRefresh
+                className={style.urlRefresh}
+                onClick={this.onRefresh}
+              />
+              <DatasetTimedRefresh
+                className={style.urlRefresh}
+                interval={this.state.refreshInterval}
+                timerIsRunning={this.state.refreshTimerRunning}
+                onIntervalChange={this.onTimedRefreshIntervalChanged}
+                onStartClick={this.onTimedRefreshStart}
+                onStopClick={this.onTimedRefreshStop}
+              />
+            </div>
           }
           </div>
           <Modal isOpen={ this.state.showUrlEntry } onRequestClose={this.onUrlCancel} contentLabel="Enter a Url">
@@ -218,7 +258,7 @@ class DatasetControls extends React.Component {
                   <label> AuthType </label>
                   <select
                     onChange={(evt) => this.setState({ authScheme: evt.target.value })}
-                    value={isNil(this.state.authScheme) ? null : this.state.authScheme}
+                    value={isNil(this.state.authScheme) ? '' : this.state.authScheme}
                   >
                     {authTypes.map((at) => {
                       return (
@@ -288,7 +328,9 @@ DatasetControls.propTypes = {
   fetchDataset: PropTypes.func.isRequired,
   uploadDataset: PropTypes.func.isRequired,
   setDataset: PropTypes.func.isRequired,
-  showNodes: PropTypes.func.isRequired
+  showNodes: PropTypes.func.isRequired,
+  startRefresh: PropTypes.func.isRequired,
+  stopRefresh: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -302,7 +344,9 @@ const mapDispatchToProps = {
   uploadDataset,
   setDataset,
   selectDataset,
-  showNodes
+  showNodes,
+  startRefresh,
+  stopRefresh
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DatasetControls);

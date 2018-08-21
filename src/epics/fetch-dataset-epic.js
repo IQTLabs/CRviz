@@ -17,7 +17,8 @@ const fetchDatasetEpic = (action$, store, ajax = rxAjax) => {
     ,mergeMap((action) => {
       const url = action.payload.url
       const header = action.payload.header
-      return ajax({ url: url, headers:header, crossDomain: true, responseType: 'json' }).pipe(
+      console.log('making ajax call');
+      return ajax({ 'url': url, 'headers':header, 'crossDomain': true, 'responseType': 'json' }).pipe(
         map((result) => { 
           return result.response 
         })
