@@ -30,7 +30,7 @@ const loadDatasetEpic = (action$, store) => {
               })
           )
         })
-        ,concat(of(setHierarchyConfig([]), colorBy(null)))
+        ,concat(of(setHierarchyConfig(store.value.controls.hierarchyConfig || []), colorBy(store.value.controls.colorBy)))
         ,catchError((error) => {
           if (is(ValidationError, error)) {
             alert(error.message);

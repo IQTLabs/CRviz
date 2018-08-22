@@ -10,7 +10,7 @@ import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
-import { showNodes } from "domain/controls"
+import { showNodes, setHierarchyConfig, colorBy } from "domain/controls"
 import { setDataset, selectDataset } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
@@ -90,7 +90,10 @@ class DatasetControls extends React.Component {
       return this.resetDataset();
     }
 
+    this.props.setHierarchyConfig([]);
+    this.props.colorBy(null);
     this.props.showNodes(true);
+    this.props.stopRefresh();
 
     const showUrlEntry = dataset === CUSTOM_DATASET;
     this.setState({ 
@@ -100,6 +103,8 @@ class DatasetControls extends React.Component {
       token: '',
       username: '',
       password: '',
+      refreshInterval: 0,
+      refreshTimerRunning: false,
      });
     if(!showUrlEntry)
     {
@@ -109,10 +114,15 @@ class DatasetControls extends React.Component {
   }
 
   onUpload = (file) => {
+    this.props.setHierarchyConfig([]);
+    this.props.colorBy(null);
     this.props.uploadDataset(file);
+    this.props.stopRefresh();
     this.setState({
       selected: null,
-      selectedFile: file.name
+      selectedFile: file.name,
+      refreshInterval: 0,
+      refreshTimerRunning: false
     });
   }
 
@@ -175,7 +185,6 @@ class DatasetControls extends React.Component {
     const authHeader = buildAuthHeader(this.state.username, this.state.password, this.state.token);
     const url = this.state.url;
     const interval = this.state.refreshInterval;
-    console.log(this.state.refreshInterval);
     this.props.startRefresh({'url': url, 'header': authHeader, 'interval': interval});
   }
 
@@ -329,6 +338,8 @@ DatasetControls.propTypes = {
   uploadDataset: PropTypes.func.isRequired,
   setDataset: PropTypes.func.isRequired,
   showNodes: PropTypes.func.isRequired,
+  setHierarchyConfig: PropTypes.func.isRequired, 
+  colorBy: PropTypes.func.isRequired,
   startRefresh: PropTypes.func.isRequired,
   stopRefresh: PropTypes.func.isRequired
 };
@@ -345,6 +356,8 @@ const mapDispatchToProps = {
   setDataset,
   selectDataset,
   showNodes,
+  setHierarchyConfig, 
+  colorBy,
   startRefresh,
   stopRefresh
 };
