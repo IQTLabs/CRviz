@@ -22,11 +22,17 @@ import fetchDatasetEpic from "./fetch-dataset-epic"
 
 describe("loadDatasetEpic", () => {
 	let store;
+	const initialState ={
+			'controls': {
+				'hierarchyConfig':{'path': ['test'], 'displayName': 'test', 'groupable': true},
+				'colorBy':{'path': ['test'], 'displayName': 'test', 'groupable': true}
+			}
+		};
 
 	beforeEach(() => {
 		const epicMiddleware = createEpicMiddleware();
 		const mockStore = configureMockStore([epicMiddleware]);
-		store  = mockStore();
+		store  = mockStore(initialState);
 		epicMiddleware.run(rootEpic);
 	});
 
@@ -77,6 +83,17 @@ describe("loadDatasetEpic", () => {
 		});
 	});
 
+	it("preserves control state across load", () => {
+		const data = [
+		  { uid: "uid1", role: { role: "role", confidence: 80 } },
+		  { uid: "uid2", role: { role: "role", confidence: 80 } }
+		];
+
+		const action$ = loadDataset(data);
+		store.dispatch(action$);
+		expect(store.getState()).to.deep.equal(initialState);
+	});
+
 	describe("CSV Conversion", () => {
 		it("converts CSV to json", () => {
 			const expectedData = [
@@ -95,11 +112,17 @@ describe("loadDatasetEpic", () => {
 
 describe("uploadDatasetEpic", () => {
 	let store;
+	const initialState ={
+			'controls': {
+				'hierarchyConfig':{'path': ['test'], 'displayName': 'test', 'groupable': true},
+				'colorBy':{'path': ['test'], 'displayName': 'test', 'groupable': true}
+			}
+		};
 
 	beforeEach(() => {
 		const epicMiddleware = createEpicMiddleware();
 		const mockStore = configureMockStore([epicMiddleware]);
-		store  = mockStore();
+		store  = mockStore(initialState);
 		epicMiddleware.run(rootEpic);
 	});
 
@@ -342,7 +365,7 @@ describe("refreshDatasetEpic", () =>{
 		const action$ = ActionsObservable.of(startRefresh(data));
 		refreshDatasetEpic(action$).toPromise()
 			.then((actionsOut) => {
-				console.log(actionsOut);
+				//console.log(actionsOut);
 				expect(actionsOut.type).toBe(stopRefresh.toString());
 
 			})
