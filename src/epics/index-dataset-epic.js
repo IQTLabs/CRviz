@@ -69,15 +69,15 @@ const flattenDataset = (ds, cfg) => {
   return flattened;
 }
 
-
-
 const generateIndex = (payload) => {
   const dataset = payload.dataset;
   const configuration = payload.configuration || configurationFor(dataset);
   var flat = flattenDataset(dataset, configuration);
   const idx = lunr(function () {
     this.ref('id');
-    configuration.fields.map((field) => { return this.field(field.displayName.toLowerCase()); })
+    if(configuration && configuration.fields){
+      configuration.fields.map((field) => { return this.field(field.displayName.toLowerCase()); })
+    }
     flat.map((item) => { return this.add(item); })
   });
   return idx;
