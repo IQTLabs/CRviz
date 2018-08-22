@@ -6,112 +6,190 @@ ignore:
     - react-scripts > eslint-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.087Z'
     - react-scripts > file-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: no remediation path
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > webpack-dev-server > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > file-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > html-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: no remediation path
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > html-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > eslint-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: no remediation path
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > mini-css-extract-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > mini-css-extract-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: None given
         expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > optimize-css-assets-webpack-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > mini-css-extract-plugin > @webpack-contrib/schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > optimize-css-assets-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > eslint-loader > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > optimize-css-assets-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > sass-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > sw-precache-webpack-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > postcss-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > sw-precache-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > thread-loader > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > sass-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > thread-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > url-loader > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > style-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > file-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > file-loader > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > sw-precache-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > webpack-manifest-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > webpack-dev-server > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > thread-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > webpack-dev-server > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > webpack-manifest-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.441Z'
-      react-scripts > url-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > html-webpack-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > url-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.442Z'
-      react-scripts > webpack-dev-server > webpack-dev-middleware > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > uglifyjs-webpack-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > url-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.442Z'
-      react-scripts > mini-css-extract-plugin > @webpack-contrib/schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > jest > jest-cli > jest-haste-map > sane > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.442Z'
-      react-scripts > file-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > sass-loader > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > webpack-manifest-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.442Z'
-      react-scripts > postcss-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > style-loader > schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > webpack-dev-server > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.442Z'
-      react-scripts > style-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
-        reason: None given
-        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > url-loader > schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
     - react-scripts > webpack-dev-server > webpack-dev-middleware > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: no remediation path
         expires: '2018-08-31T19:30:34.442Z'
-      react-scripts > url-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+      react-scripts > uglifyjs-webpack-plugin > schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > mini-css-extract-plugin > @webpack-contrib/schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > file-loader > schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > html-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > postcss-loader > schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > eslint-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > jest > jest-cli > jest-runtime > jest-haste-map > sane > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.089Z'
+    - react-scripts > optimize-css-assets-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > jest > jest-cli > jest-runner > jest-haste-map > sane > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.089Z'
+    - react-scripts > sass-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > webpack-dev-server > webpack-dev-middleware > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.090Z'
+    - react-scripts > sw-precache-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+      react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-haste-map > sane > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.090Z'
+    - react-scripts > thread-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > file-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > webpack-manifest-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > webpack-dev-server > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > url-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > webpack-dev-server > webpack-dev-middleware > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > mini-css-extract-plugin > @webpack-contrib/schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > file-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > postcss-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > style-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > url-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
         reason: None given
         expires: '2018-09-07T14:31:25.532Z'
   'npm:braces:20180219':
