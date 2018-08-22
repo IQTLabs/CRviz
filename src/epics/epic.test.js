@@ -323,6 +323,17 @@ describe("indexDatasetEpic", () => {
 	    expect(idx.fields.length).to.equal(expectedConfiguration.fields.length);
 	});
 
+	it("sets the search index in a config with no fields", () => {
+		const emptyConf = {};
+
+	    const action$ = buildIndex({ dataset, emptyConf });
+	    store.dispatch(action$);
+
+	    const expectedFields = ['uid', 'role.role', 'role.confidence'];
+	    const idx = getSearchIndex(store.getState())
+	    expect(idx.fields).to.deep.equal(expectedFields);
+	});
+
 	it("sets the results of a search", () => {
         
 
