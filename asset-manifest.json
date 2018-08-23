@@ -1,6 +1,11 @@
 {
-  "main.css": "/CRviz/static/css/main.75b9a782.css",
-  "main.css.map": "/CRviz/static/css/main.75b9a782.css.map",
-  "main.js": "/CRviz/static/js/main.2956c80c.js",
-  "main.js.map": "/CRviz/static/js/main.2956c80c.js.map"
+  "runtime~main.js": "/CRviz/static/js/runtime~main.574e5d29.js",
+  "runtime~main.js.map": "/CRviz/static/js/runtime~main.574e5d29.js.map",
+  "vendors.css": "/CRviz/static/css/vendors.b4cca668.chunk.css",
+  "vendors.js": "/CRviz/static/js/vendors.9878c0b9.chunk.js",
+  "vendors.js.map": "/CRviz/static/js/vendors.9878c0b9.chunk.js.map",
+  "main.css": "/CRviz/static/css/main.3c8cefd0.chunk.css",
+  "main.js": "/CRviz/static/js/main.d0d30a5d.chunk.js",
+  "main.js.map": "/CRviz/static/js/main.d0d30a5d.chunk.js.map",
+  "index.html": "/CRviz/index.html"
 }
