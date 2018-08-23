@@ -34,7 +34,7 @@ const authTypes = [
 
 var host = window.location.host;
 var hostname = window.location.hostname;
-var port = '32795';
+var port = '80';
 const radix = 10;
 if (host.indexOf(':') > -1) {
   port = String(parseInt(host.split(":")[1], radix)-1);
