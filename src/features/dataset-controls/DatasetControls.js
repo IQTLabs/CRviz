@@ -34,7 +34,7 @@ const authTypes = [
 
 var host = window.location.host;
 var hostname = window.location.hostname;
-var port = '80';
+var port = '32795';
 const radix = 10;
 if (host.indexOf(':') > -1) {
   port = String(parseInt(host.split(":")[1], radix)-1);
@@ -183,7 +183,7 @@ class DatasetControls extends React.Component {
       refreshTimerRunning: true
     });
     const authHeader = buildAuthHeader(this.state.username, this.state.password, this.state.token);
-    const url = this.state.url;
+    const url = this.state.selected.url;
     const interval = this.state.refreshInterval;
     this.props.startRefresh({'url': url, 'header': authHeader, 'interval': interval});
   }
