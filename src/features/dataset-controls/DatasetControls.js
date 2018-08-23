@@ -183,7 +183,7 @@ class DatasetControls extends React.Component {
       refreshTimerRunning: true
     });
     const authHeader = buildAuthHeader(this.state.username, this.state.password, this.state.token);
-    const url = this.state.url;
+    const url = this.state.selected.url;
     const interval = this.state.refreshInterval;
     this.props.startRefresh({'url': url, 'header': authHeader, 'interval': interval});
   }
