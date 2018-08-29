@@ -18,6 +18,7 @@ describe('DatasetTimedRefresh', () => {
                 onStartClick={spy}
                 onStopClick={spy}
               />);
+		expect(refresh.find('input')).to.have.length(1);
 		expect(refresh.find('div.button')).to.have.length(1);
 		expect(refresh.find('svg').first().prop('role')).to.equal('img');
 		expect(refresh.find('svg').first().prop('data-icon')).to.equal('sync-alt');
@@ -33,6 +34,7 @@ describe('DatasetTimedRefresh', () => {
                 onStartClick={spy}
                 onStopClick={spy}
               />);
+		expect(refresh.find('input')).to.have.length(1);
 		expect(refresh.find('div.button')).to.have.length(1);
 		expect(refresh.find('svg').first().prop('role')).to.equal('img');
 		expect(refresh.find('svg').first().prop('data-icon')).to.equal('stop-circle');

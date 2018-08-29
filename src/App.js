@@ -21,7 +21,7 @@ class App extends Component {
     const { dataset, darkTheme } = this.props;
 
     const hasDataset = dataset && dataset.length > 0;
-
+    
     return (
       <div className={
           classNames({

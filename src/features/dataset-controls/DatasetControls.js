@@ -5,13 +5,13 @@ import { isNil } from "ramda";
 import Modal from 'react-modal';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
 
 import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
 import { showNodes, setHierarchyConfig, colorBy } from "domain/controls"
-import { setDataset, selectDataset } from "domain/dataset";
+import { setDataset, selectDataset, getIsFetching, setIsFetching, getLastUpdated } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
@@ -72,13 +72,13 @@ class DatasetControls extends React.Component {
   }
 
   fetchAndSetDataset = (url, dataset, username, password, token) => {
-
+    this.props.setIsFetching(true);
     const authHeader = buildAuthHeader(username, password, token);
     if (toURL(url)) {
       this.props.fetchDataset({'url': url, 'header': authHeader});
       this.setState({
         selected: dataset,
-        selectedFile: null
+        selectedFile: null,
       });
     } else {
       alert("Please enter a valid URL.");
@@ -122,7 +122,7 @@ class DatasetControls extends React.Component {
       selected: null,
       selectedFile: file.name,
       refreshInterval: 0,
-      refreshTimerRunning: false
+      refreshTimerRunning: false,
     });
   }
 
@@ -179,6 +179,7 @@ class DatasetControls extends React.Component {
   }
 
   onTimedRefreshStart = () =>{
+    this.props.setIsFetching(true);
     this.setState({
       refreshTimerRunning: true
     });
@@ -237,6 +238,7 @@ class DatasetControls extends React.Component {
               className={style.fileDownload}
               selected={this.state.selected.name}
               url={this.getDownloadUrl()}
+              disabled={this.props.isFetching}
             />
           }
           { canRefresh &&
@@ -244,17 +246,31 @@ class DatasetControls extends React.Component {
               <DatasetRefresh
                 className={style.urlRefresh}
                 onClick={this.onRefresh}
+                disabled={this.props.isFetching}
               />
               <DatasetTimedRefresh
                 className={style.urlRefresh}
                 interval={this.state.refreshInterval}
                 timerIsRunning={this.state.refreshTimerRunning}
+                disabled={this.props.isFetching}
                 onIntervalChange={this.onTimedRefreshIntervalChanged}
                 onStartClick={this.onTimedRefreshStart}
                 onStopClick={this.onTimedRefreshStop}
               />
             </div>
           }
+          </div>
+          <div className={style.urlRefreshTime}>
+            { canRefresh && this.props.isFetching &&
+              <span>
+                <FontAwesomeIcon className="fa-spin" icon={faCog} /> Fetching Data...
+              </span>
+            }
+            { canRefresh && !this.props.isFetching &&
+              <span>
+                Last Updated: {this.props.lastUpdated.toLocaleDateString() || ""} {this.props.lastUpdated.toLocaleTimeString() || ""}
+              </span>
+            }
           </div>
           <Modal isOpen={ this.state.showUrlEntry } onRequestClose={this.onUrlCancel} contentLabel="Enter a Url">
             <div className={ style.modal }>
@@ -328,7 +344,9 @@ const toURL = (url) => {
 
 DatasetControls.defaultProps = {
   datasets: [],
-  dataset: null
+  dataset: null,
+  isFetching: false,
+  lastUpdated: new Date(),
 };
 
 DatasetControls.propTypes = {
@@ -337,16 +355,22 @@ DatasetControls.propTypes = {
   fetchDataset: PropTypes.func.isRequired,
   uploadDataset: PropTypes.func.isRequired,
   setDataset: PropTypes.func.isRequired,
+  getIsFetching: PropTypes.func.isRequired,
+  setIsFetching: PropTypes.func.isRequired,
   showNodes: PropTypes.func.isRequired,
   setHierarchyConfig: PropTypes.func.isRequired, 
   colorBy: PropTypes.func.isRequired,
   startRefresh: PropTypes.func.isRequired,
-  stopRefresh: PropTypes.func.isRequired
+  stopRefresh: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool,
+  lastUpdated: PropTypes.instanceOf(Date)
 };
 
 const mapStateToProps = (state, ownProps) => {
   return {
     dataset: selectDataset(state),
+    isFetching: getIsFetching(state),
+    lastUpdated: getLastUpdated(state)
   };
 }
 
@@ -355,6 +379,8 @@ const mapDispatchToProps = {
   uploadDataset,
   setDataset,
   selectDataset,
+  getIsFetching,
+  setIsFetching,
   showNodes,
   setHierarchyConfig, 
   colorBy,

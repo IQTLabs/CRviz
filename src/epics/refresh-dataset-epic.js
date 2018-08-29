@@ -1,9 +1,9 @@
 import { createAction } from 'redux-actions';
 import { ofType } from 'redux-observable';
-import {  timer } from 'rxjs';
-import { mergeMap, mapTo, takeUntil, debounceTime } from 'rxjs/operators';
+import {  timer, of } from 'rxjs';
+import { mergeMap, takeUntil, debounceTime } from 'rxjs/operators';
 
-
+import { setIsFetching } from "domain/dataset";
 import { fetchDataset } from './fetch-dataset-epic';
 
 // ACTIONS
@@ -20,7 +20,12 @@ const refreshDatasetEpic = (action$, store) => {
       const header = action.payload.header;
       const interval = action.payload.interval * 1000;
       return timer(0, interval).pipe(
-        mapTo(fetchDataset({ 'url': url, 'header':header}))
+          mergeMap(() => {
+            return of(
+              setIsFetching(true)
+              ,fetchDataset({ 'url': url, 'header':header})
+            )
+          })
         ,takeUntil(action$.ofType(stopRefresh.toString()))
         )
     })  

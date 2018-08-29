@@ -65,13 +65,29 @@
 }
 
 .urlRefresh input{
-  width: 4em;
+  width: 4rem;
+  text-align: right;
 }
 
 .urlContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.urlRefreshTime {
+  flex: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.urlRefreshTime span{
+  font-size: 0.85rem;
+  opacity: 65%;
+  text-align: center;
+  width: 100%;
 }
 
 .modal {

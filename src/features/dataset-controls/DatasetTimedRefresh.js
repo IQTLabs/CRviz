@@ -2,20 +2,19 @@ import React from "react";
 import PropTypes from 'prop-types';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
-import { faStopCircle } from "@fortawesome/free-solid-svg-icons";
+import { faSyncAlt,faStopCircle } from "@fortawesome/free-solid-svg-icons";
 
-function DatasetRefresh({ className, interval, timerIsRunning, onIntervalChange, onStartClick, onStopClick }) {
+function DatasetTimedRefresh({ className, interval, timerIsRunning, disabled, onIntervalChange, onStartClick, onStopClick }) {
   return (
     <span className={ className }>
-      <input type='text' value={interval} onChange={(evt) => onIntervalChange(evt.target.value)}/>
-      {!timerIsRunning &&
-	      <div className="button" title="Start Refresh Timer" onClick={() => onStartClick()}>
+      <input type='text' title="Refresh interval in seconds" value={interval} onChange={(evt) => onIntervalChange(evt.target.value)}/>
+      {!timerIsRunning && 
+	      <div className="button" disabled={disabled} title="Start Refresh Timer" onClick={() => onStartClick()}>
 	        <FontAwesomeIcon icon={faSyncAlt} />
 	      </div>
   	  }
-  	  {timerIsRunning &&
-	      <div className="button" title="Stop Refresh Timer" onClick={() => onStopClick()}>
+  	  {timerIsRunning && 
+	      <div className="button" disabled={disabled} title="Stop Refresh Timer" onClick={() => onStopClick()}>
 	        <FontAwesomeIcon icon={faStopCircle} />
 	      </div>
   	  }
@@ -23,7 +22,7 @@ function DatasetRefresh({ className, interval, timerIsRunning, onIntervalChange,
   );
 }
 
-DatasetRefresh.propTypes = {
+DatasetTimedRefresh.propTypes = {
   className: PropTypes.string,
   interval: PropTypes.number,
   timerIsRunning: PropTypes.bool,
@@ -32,4 +31,4 @@ DatasetRefresh.propTypes = {
   onStopClick: PropTypes.func.isRequired
 };
 
-export default DatasetRefresh;
+export default DatasetTimedRefresh;
