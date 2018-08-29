@@ -5,7 +5,7 @@ import { isNil } from "ramda";
 import Modal from 'react-modal';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
 
 import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
@@ -61,6 +61,7 @@ class DatasetControls extends React.Component {
     password: '',
     refreshInterval: 0,
     refreshTimerRunning: false,
+    lastUpdated: new Date()
   };
 
   resetDataset = () => {
@@ -72,7 +73,9 @@ class DatasetControls extends React.Component {
   }
 
   willReceiveProps = (nextProps) => {
-
+    if(this.props.refreshTimerRunning && !nextProps.refreshTimerRunning ){
+      this.setState({'lastUpdated': new Date()});
+    }
   }
 
   fetchAndSetDataset = (url, dataset, username, password, token) => {
@@ -109,6 +112,7 @@ class DatasetControls extends React.Component {
       password: '',
       refreshInterval: 0,
       refreshTimerRunning: false,
+      lastUpdated: new Date()
      });
     if(!showUrlEntry)
     {
@@ -126,7 +130,8 @@ class DatasetControls extends React.Component {
       selected: null,
       selectedFile: file.name,
       refreshInterval: 0,
-      refreshTimerRunning: false
+      refreshTimerRunning: false,
+      lastUpdated: new Date()
     });
   }
 
@@ -242,6 +247,7 @@ class DatasetControls extends React.Component {
               className={style.fileDownload}
               selected={this.state.selected.name}
               url={this.getDownloadUrl()}
+              disabled={this.props.isFetching}
             />
           }
           { canRefresh &&
@@ -249,19 +255,31 @@ class DatasetControls extends React.Component {
               <DatasetRefresh
                 className={style.urlRefresh}
                 onClick={this.onRefresh}
-                isFetching={this.props.isFetching}
+                disabled={this.props.isFetching}
               />
               <DatasetTimedRefresh
                 className={style.urlRefresh}
                 interval={this.state.refreshInterval}
                 timerIsRunning={this.state.refreshTimerRunning}
-                isFetching={this.props.isFetching}
+                disabled={this.props.isFetching}
                 onIntervalChange={this.onTimedRefreshIntervalChanged}
                 onStartClick={this.onTimedRefreshStart}
                 onStopClick={this.onTimedRefreshStop}
               />
             </div>
           }
+          </div>
+          <div className={style.urlRefreshTime}>
+            { canRefresh && this.props.isFetching &&
+              <span>
+                <FontAwesomeIcon className="fa-spin" icon={faCog} /> Fetching Data...
+              </span>
+            }
+            { canRefresh && !this.props.isFetching &&
+              <span>
+                Last Updated: {this.state.lastUpdated.toLocaleDateString()} {this.state.lastUpdated.toLocaleTimeString()}
+              </span>
+            }
           </div>
           <Modal isOpen={ this.state.showUrlEntry } onRequestClose={this.onUrlCancel} contentLabel="Enter a Url">
             <div className={ style.modal }>

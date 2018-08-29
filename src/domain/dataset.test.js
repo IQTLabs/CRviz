@@ -3,7 +3,9 @@ import {
   setDataset,
   selectDataset,
   selectConfiguration,
-  selectValues
+  selectValues,
+  setIsFetching,
+  getIsFetching
 } from "./dataset";
 
 import { combineReducers } from "redux";
@@ -83,6 +85,25 @@ describe("Dataset", () => {
           "role.role": ["role"],
           "role.confidence": [80, 82]
         });
+      });
+
+      it("sets the fetching indicator", () => {
+        const expectedValue = true;
+        const dataset = [
+          { uid: "uid1", role: { role: "role", confidence: 80 } },
+          { uid: "uid2", role: { role: "role", confidence: 80 } }
+        ];
+        const configuration = {
+          fields: [
+            { path: ["uid"], displayName: "UID", groupable: true },
+            { path: ["role", "role"], displayName: "Role", groupable: false }
+          ]
+        };
+
+        const action = setIsFetching({ dataset, configuration });
+        const result = reducer({ dataset, configuration }, action);
+
+        expect(getIsFetching(result)).to.equal(expectedValue);
       });
     });
   });

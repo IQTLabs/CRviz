@@ -2,21 +2,14 @@ import React from "react";
 import PropTypes from 'prop-types';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRedoAlt, faCog } from "@fortawesome/free-solid-svg-icons";
+import { faRedoAlt } from "@fortawesome/free-solid-svg-icons";
 
-function DatasetRefresh({ className, onClick, isFetching }) {
+function DatasetRefresh({ className, onClick, disabled }) {
   return (
     <span className={ className }>
-      {!isFetching &&
-      <div className="button" title="Refresh" onClick={() => onClick()}>
+      <div className="button" disabled={disabled} title="Refresh" onClick={() => onClick()}>
         <FontAwesomeIcon icon={faRedoAlt} />
       </div>
-  	  }
-      {isFetching &&
-        <div className="button" disabled title="Refreshing...">
-          <FontAwesomeIcon className="fa-spin" icon={faCog} />
-        </div>
-      }
     </span>
   );
 }
