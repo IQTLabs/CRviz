@@ -20,7 +20,7 @@ function DatasetUpload({ className, selected, onChange }) {
       { isNil(selected) ? "No file selected" : selected }
     </span>
 
-      <label htmlFor="file-input" className="button">
+      <label htmlFor="file-input" className="button" title="Upload data from file">
         <FontAwesomeIcon icon={faUpload} />
       </label>
     </span>

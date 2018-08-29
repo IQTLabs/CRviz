@@ -27,7 +27,7 @@ const loadDatasetEpic = (action$, store) => {
             ,buildIndex({
                 dataset: payload.dataset,
                 configuration: payload.configuration || null
-              })
+            })
           )
         })
         ,concat(of(setHierarchyConfig(store.value.controls.hierarchyConfig || []), colorBy(store.value.controls.colorBy)))

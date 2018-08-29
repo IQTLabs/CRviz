@@ -68,7 +68,7 @@ class Search extends React.Component {
             onKeyPress={this.handleKeyPress}
           />
 
-          <label htmlFor="search-string" className="button" onClick={() => this.handleSearch()}>
+          <label htmlFor="search-string" className="button" onClick={() => this.handleSearch()} title="Search">
             <FontAwesomeIcon icon={faSearch} />
           </label>
         </span>

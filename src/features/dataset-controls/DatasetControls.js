@@ -11,7 +11,7 @@ import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
 import { showNodes, setHierarchyConfig, colorBy } from "domain/controls"
-import { setDataset, selectDataset } from "domain/dataset";
+import { setDataset, selectDataset, getIsFetching, setIsFetching } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
@@ -60,7 +60,7 @@ class DatasetControls extends React.Component {
     username: '',
     password: '',
     refreshInterval: 0,
-    refreshTimerRunning: false
+    refreshTimerRunning: false,
   };
 
   resetDataset = () => {
@@ -71,14 +71,18 @@ class DatasetControls extends React.Component {
     });
   }
 
-  fetchAndSetDataset = (url, dataset, username, password, token) => {
+  willReceiveProps = (nextProps) => {
 
+  }
+
+  fetchAndSetDataset = (url, dataset, username, password, token) => {
+    this.props.setIsFetching(true);
     const authHeader = buildAuthHeader(username, password, token);
     if (toURL(url)) {
       this.props.fetchDataset({'url': url, 'header': authHeader});
       this.setState({
         selected: dataset,
-        selectedFile: null
+        selectedFile: null,
       });
     } else {
       alert("Please enter a valid URL.");
@@ -179,6 +183,7 @@ class DatasetControls extends React.Component {
   }
 
   onTimedRefreshStart = () =>{
+    this.props.setIsFetching(true);
     this.setState({
       refreshTimerRunning: true
     });
@@ -244,11 +249,13 @@ class DatasetControls extends React.Component {
               <DatasetRefresh
                 className={style.urlRefresh}
                 onClick={this.onRefresh}
+                isFetching={this.props.isFetching}
               />
               <DatasetTimedRefresh
                 className={style.urlRefresh}
                 interval={this.state.refreshInterval}
                 timerIsRunning={this.state.refreshTimerRunning}
+                isFetching={this.props.isFetching}
                 onIntervalChange={this.onTimedRefreshIntervalChanged}
                 onStartClick={this.onTimedRefreshStart}
                 onStopClick={this.onTimedRefreshStop}
@@ -337,16 +344,20 @@ DatasetControls.propTypes = {
   fetchDataset: PropTypes.func.isRequired,
   uploadDataset: PropTypes.func.isRequired,
   setDataset: PropTypes.func.isRequired,
+  getIsFetching: PropTypes.func.isRequired,
+  setIsFetching: PropTypes.func.isRequired,
   showNodes: PropTypes.func.isRequired,
   setHierarchyConfig: PropTypes.func.isRequired, 
   colorBy: PropTypes.func.isRequired,
   startRefresh: PropTypes.func.isRequired,
-  stopRefresh: PropTypes.func.isRequired
+  stopRefresh: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool
 };
 
 const mapStateToProps = (state, ownProps) => {
   return {
     dataset: selectDataset(state),
+    isFetching: getIsFetching(state)
   };
 }
 
@@ -355,6 +366,8 @@ const mapDispatchToProps = {
   uploadDataset,
   setDataset,
   selectDataset,
+  getIsFetching,
+  setIsFetching,
   showNodes,
   setHierarchyConfig, 
   colorBy,

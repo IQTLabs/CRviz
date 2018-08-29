@@ -21,7 +21,8 @@ const defaultState = {
   values: {},
   configuration: {
     fields: []
-  }
+  },
+  isFetching: false
 };
 
 /**
@@ -105,6 +106,7 @@ const valuesFor = (dataset, configuration) => {
  * }
 */
 const setDataset = createAction("SET_DATASET");
+const setIsFetching = createAction("SET_IS_FETCHING");
 
 // REDUCERS
 const reducer = handleActions(
@@ -118,8 +120,12 @@ const reducer = handleActions(
       );
 
       const values = valuesFor(dataset, configuration);
-
-      return { ...state, dataset, values, configuration };
+      const isFetching = false;
+      return { ...state, dataset, values, configuration, isFetching };
+    },
+    [setIsFetching]: (state, { payload }) => {
+      const isFetching = !!payload;
+      return { ...state, isFetching};
     }
   },
   defaultState
@@ -130,8 +136,11 @@ const reducer = handleActions(
 const selectDataset = (state) => state.dataset.dataset;
 const selectConfiguration = (state) => state.dataset.configuration;
 const selectValues = (state) => state.dataset.values;
+const getIsFetching = (state) => {
+  return state.dataset.isFetching
+};
 
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId, configurationFor };
+export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId, configurationFor, setIsFetching, getIsFetching };

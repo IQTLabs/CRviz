@@ -66,6 +66,7 @@
 
 .urlRefresh input{
   width: 4em;
+  text-align: right;
 }
 
 .urlContainer {
