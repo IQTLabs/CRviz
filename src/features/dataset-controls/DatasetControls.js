@@ -11,7 +11,7 @@ import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
 import { showNodes, setHierarchyConfig, colorBy } from "domain/controls"
-import { setDataset, selectDataset, getIsFetching, setIsFetching } from "domain/dataset";
+import { setDataset, selectDataset, getIsFetching, setIsFetching, getLastUpdated } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
@@ -60,8 +60,7 @@ class DatasetControls extends React.Component {
     username: '',
     password: '',
     refreshInterval: 0,
-    refreshTimerRunning: false,
-    lastUpdated: new Date()
+    refreshTimerRunning: false
   };
 
   resetDataset = () => {
@@ -70,12 +69,6 @@ class DatasetControls extends React.Component {
       selected: null,
       selectedFile: null
     });
-  }
-
-  willReceiveProps = (nextProps) => {
-    if(this.props.refreshTimerRunning && !nextProps.refreshTimerRunning ){
-      this.setState({'lastUpdated': new Date()});
-    }
   }
 
   fetchAndSetDataset = (url, dataset, username, password, token) => {
@@ -112,7 +105,6 @@ class DatasetControls extends React.Component {
       password: '',
       refreshInterval: 0,
       refreshTimerRunning: false,
-      lastUpdated: new Date()
      });
     if(!showUrlEntry)
     {
@@ -131,7 +123,6 @@ class DatasetControls extends React.Component {
       selectedFile: file.name,
       refreshInterval: 0,
       refreshTimerRunning: false,
-      lastUpdated: new Date()
     });
   }
 
@@ -277,7 +268,7 @@ class DatasetControls extends React.Component {
             }
             { canRefresh && !this.props.isFetching &&
               <span>
-                Last Updated: {this.state.lastUpdated.toLocaleDateString()} {this.state.lastUpdated.toLocaleTimeString()}
+                Last Updated: {this.props.lastUpdated.toLocaleDateString() || ""} {this.props.lastUpdated.toLocaleTimeString() || ""}
               </span>
             }
           </div>
@@ -353,7 +344,9 @@ const toURL = (url) => {
 
 DatasetControls.defaultProps = {
   datasets: [],
-  dataset: null
+  dataset: null,
+  isFetching: false,
+  lastUpdated: new Date(),
 };
 
 DatasetControls.propTypes = {
@@ -369,13 +362,15 @@ DatasetControls.propTypes = {
   colorBy: PropTypes.func.isRequired,
   startRefresh: PropTypes.func.isRequired,
   stopRefresh: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool
+  isFetching: PropTypes.bool,
+  lastUpdated: PropTypes.instanceOf(Date)
 };
 
 const mapStateToProps = (state, ownProps) => {
   return {
     dataset: selectDataset(state),
-    isFetching: getIsFetching(state)
+    isFetching: getIsFetching(state),
+    lastUpdated: getLastUpdated(state)
   };
 }
 

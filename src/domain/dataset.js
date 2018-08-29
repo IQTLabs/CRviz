@@ -121,7 +121,8 @@ const reducer = handleActions(
 
       const values = valuesFor(dataset, configuration);
       const isFetching = false;
-      return { ...state, dataset, values, configuration, isFetching };
+      const lastUpdated = new Date();
+      return { ...state, dataset, values, configuration, isFetching, lastUpdated };
     },
     [setIsFetching]: (state, { payload }) => {
       const isFetching = !!payload;
@@ -136,11 +137,10 @@ const reducer = handleActions(
 const selectDataset = (state) => state.dataset.dataset;
 const selectConfiguration = (state) => state.dataset.configuration;
 const selectValues = (state) => state.dataset.values;
-const getIsFetching = (state) => {
-  return state.dataset.isFetching
-};
+const getIsFetching = (state) => state.dataset.isFetching;
+const getLastUpdated = (state) => state.dataset.lastUpdated;
 
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId, configurationFor, setIsFetching, getIsFetching };
+export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };
