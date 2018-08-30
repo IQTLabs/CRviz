@@ -77,8 +77,8 @@ class App extends Component {
         <Modal isOpen={ error !== null } onRequestClose={this.onErrorClose} contentLabel="An Error has occurred">
             <div className={ style.modal }>
               <div className={ style.modalMain }>
-                <span className={style.justifySpan}>
-                   <div title="Error">
+                <span className={ style.justifySpan }>
+                   <div className={ style.icon } title="Error">
                         <FontAwesomeIcon icon={faDizzy} size="7x" color="#cc0000"/>
                     </div>
                     <div>

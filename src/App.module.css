@@ -131,6 +131,10 @@ input[name=hideControls]:checked ~ .canvas {
   justify-content: flex-start;
 }
 
+.icon {
+  padding-right: 1em;
+}
+
 .centerSpan {
   display: flex;
   flex-flow: row wrap;

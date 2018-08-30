@@ -11,6 +11,7 @@ import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
 import { showNodes, setHierarchyConfig, colorBy } from "domain/controls"
+import { setError } from "domain/error"
 import { setDataset, selectDataset, getIsFetching, setIsFetching, getLastUpdated } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
@@ -81,7 +82,7 @@ class DatasetControls extends React.Component {
         selectedFile: null,
       });
     } else {
-      alert("Please enter a valid URL.");
+      this.props.setError(new Error("Please enter a valid URL."));
     }
   }
 
@@ -363,7 +364,8 @@ DatasetControls.propTypes = {
   startRefresh: PropTypes.func.isRequired,
   stopRefresh: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
-  lastUpdated: PropTypes.instanceOf(Date)
+  lastUpdated: PropTypes.instanceOf(Date),
+  setError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -385,7 +387,8 @@ const mapDispatchToProps = {
   setHierarchyConfig, 
   colorBy,
   startRefresh,
-  stopRefresh
+  stopRefresh,
+  setError
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DatasetControls);

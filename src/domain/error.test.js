@@ -29,7 +29,7 @@ describe("Error Reducer", () => {
 	    const action = setError(message);
 	    const result = reducer({}, action);
 
-	    expect(getError(result)).to.be.null;
+	    expect(getError(result)).to.equal(null);
 	  });
 
 	  it("clears the Error", () => {
@@ -39,7 +39,7 @@ describe("Error Reducer", () => {
 	    const action = clearError();
 	    const result = reducer({error}, action);
 
-	    expect(getError(result)).to.be.null;
+	    expect(getError(result)).to.equal(null);
 	  });
 	});
 });
