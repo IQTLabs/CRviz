@@ -2,10 +2,12 @@ import { expect } from 'chai';
 import configureMockStore from 'redux-mock-store';
 import configureStore from "configure-store";
 import { createEpicMiddleware, ActionsObservable } from 'redux-observable';
-import { of} from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { QueryParseError } from 'lunr';
 
 import rootEpic from './root-epic'
 import { setDataset } from 'domain/dataset'
+import { getError, setError } from 'domain/error'
 import { loadDataset, CSVconvert } from "./load-dataset-epic"
 import { uploadDataset } from "./upload-dataset-epic"
 import { searchDataset } from "./search-dataset-epic"
@@ -155,6 +157,24 @@ describe("uploadDatasetEpic", () => {
 
 		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload).to.equal(theBlob);
 	});
+
+	it("fails to upload a file containing only text", (done) => {
+		store = configureStore();
+		const text = "This is not json or csv"
+		const expectedMessage = "Invalid JSON."
+		const theBlob = new Blob([text], { 'type': 'text/plain' });
+
+		const action$ = uploadDataset(theBlob);
+
+		store.subscribe(() => {
+			if(getError(store.getState())){
+				expect(getError(store.getState()).toString()).to.contain(expectedMessage);
+				done();
+			}			
+		});
+
+		store.dispatch(action$);
+	})
 });
 
 describe("searchDatasetEpic", () => {
@@ -196,6 +216,7 @@ describe("searchDatasetEpic", () => {
 		store.dispatch(action$);
 
 		expect(action$.payload.results.length).to.equal(0);
+		expect(getError(store.getState())).to.be.instanceOf(QueryParseError);
 	});
 
 	it("clears a search", () => {
@@ -228,6 +249,12 @@ describe("fetchDatasetEpic", () => {
 	const mockAjax = () => {
 	  	return  of({ 'response': mockResponse });
 	  }
+
+	const errMsg = "Fetch Error Test";
+	const mockAjaxError = () => {
+		throwError(errMsg);
+	}
+
 	const dependencies = {
 	  'ajax': mockAjax
 	};
@@ -280,6 +307,20 @@ describe("fetchDatasetEpic", () => {
 			 .subscribe((actions) => {
 				expect(actions.type).to.equal(typeToCheck);
 				expect(actions.payload).to.equal(data);
+			});
+	});
+
+	it("Encounters an error during fetch", (done) => {
+		const url = 'test.test'
+		let typeToCheck = setError.toString();
+
+		const action$ = of({'type': fetchDataset.toString(), 'payload': url});
+		fetchDatasetEpic(action$, store, mockAjaxError)
+			 .subscribe((actions) => {
+				expect(actions.type).to.equal(typeToCheck);
+				expect(actions.payload).to.be.instanceOf(Error);
+
+				done();
 			});
 	});
 });
@@ -353,13 +394,13 @@ describe("indexDatasetEpic", () => {
 });
 
 describe("refreshDatasetEpic", () =>{
-	let store;
+	//let store;
 
 	beforeEach(() => {
-		const epicMiddleware = createEpicMiddleware();
-		const mockStore = configureMockStore([epicMiddleware]);
-		store = mockStore();
-		epicMiddleware.run(rootEpic);
+		// const epicMiddleware = createEpicMiddleware();
+		// const mockStore = configureMockStore([epicMiddleware]);
+		// store = mockStore();
+		// epicMiddleware.run(rootEpic);
 	});
 
 	afterEach(() => {

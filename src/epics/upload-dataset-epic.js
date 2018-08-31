@@ -25,6 +25,7 @@ const uploadDatasetEpic = (action$, store) => {
                 const newErr = new Error("Invalid JSON.");
                 return of(setError(newErr));
               } else {
+                /* istanbul ignore next */
                 throw error;
               }
             })
