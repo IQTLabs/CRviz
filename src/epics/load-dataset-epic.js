@@ -36,6 +36,7 @@ const loadDatasetEpic = (action$, store) => {
           if (is(ValidationError, error)) {
             return of(setError(error));
           } else {
+            /* istanbul ignore next */
             throw error;
           }
         })

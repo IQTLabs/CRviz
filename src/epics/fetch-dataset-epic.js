@@ -29,11 +29,12 @@ const fetchDatasetEpic = (action$, store, ajax = rxAjax) => {
         // it seems like this change doesn't change functionality and makes unit testing easier
         // I intend to do more thorough user testing later
         //.takeUntil(action$.ofType(fetchDataset.toString()))
-        ,catchError((error) => {
-          const newErr = new Error("Error fetching dataset: " + error.message);
-          return of(setError(newErr));
-        })
+        
       );
+    })
+    ,catchError((error) => {
+      const newErr = new Error("Error fetching dataset: " + error.message);
+      return of(setError(newErr));
     })
   );
 }

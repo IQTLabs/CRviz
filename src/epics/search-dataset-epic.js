@@ -25,6 +25,7 @@ const searchDatasetEpic = (action$, store) => {
               if (is(QueryParseError, error)) {
                 return of(setError(error));
               } else {
+                /* istanbul ignore next */
                 throw error;
               }
             })
