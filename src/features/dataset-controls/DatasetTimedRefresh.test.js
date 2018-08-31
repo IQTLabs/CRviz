@@ -40,6 +40,23 @@ describe('DatasetTimedRefresh', () => {
 		expect(refresh.find('svg').first().prop('data-icon')).to.equal('stop-circle');
 	});
 
+	it('enters an interval value', () => {
+		const expectedArg = 10;
+		const changeSpy = sinon.spy();
+		const startSpy = sinon.spy();
+		const stopSpy = sinon.spy();
+		const refresh = shallow(<DatasetTimedRefresh
+                className={style.urlRefresh}
+                interval={10}
+                timerIsRunning={false}
+                onIntervalChange={changeSpy}
+                onStartClick={startSpy}
+                onStopClick={stopSpy}
+              />);
+		refresh.find('input').simulate("change", {'target': {'value': 10}});
+		expect(changeSpy.calledWith(expectedArg)).to.equal(true);
+	});
+
 	it('clicks the start button', () => {
 		const changeSpy = sinon.spy();
 		const startSpy = sinon.spy();
