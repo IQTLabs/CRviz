@@ -1,9 +1,10 @@
 import { createAction } from 'redux-actions';
 import { ofType } from 'redux-observable';
-import { empty } from 'rxjs';
+import { of } from 'rxjs';
 import { ajax  as rxAjax } from 'rxjs/ajax';
 import { catchError, debounceTime, mergeMap, map } from 'rxjs/operators';
 
+import { setError } from "domain/error";
 import { loadDataset } from './load-dataset-epic';
 
 // ACTIONS
@@ -29,12 +30,12 @@ const fetchDatasetEpic = (action$, store, ajax = rxAjax) => {
         // I intend to do more thorough user testing later
         //.takeUntil(action$.ofType(fetchDataset.toString()))
         ,catchError((error) => {
-          alert("Failed to fetch dataset. Please try again later.");
-          return empty();
+          const newErr = new Error("Error fetching dataset: " + error.message);
+          return of(setError(newErr));
         })
-        );
+      );
     })
-    );
+  );
 }
 
 const getScheme = (username, password, token) =>{

@@ -1,6 +1,8 @@
 import { createAction } from "redux-actions";
-import { Observable, empty } from "rxjs";
+import { Observable, of } from "rxjs";
 import { catchError, debounceTime, mergeMap, map } from 'rxjs/operators';
+
+import { setError } from "domain/error"
 
 import { loadDataset, CSVconvert } from './load-dataset-epic';
 
@@ -20,8 +22,8 @@ const uploadDatasetEpic = (action$, store) => {
             ,map(loadDataset)
             ,catchError((error) => {
               if (error instanceof SyntaxError) {
-                alert("Invalid JSON.");
-                return empty();
+                const newErr = new Error("Invalid JSON.");
+                return of(setError(newErr));
               } else {
                 throw error;
               }

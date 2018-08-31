@@ -13,7 +13,7 @@ import { expect } from "chai"
 
 const reducer = combineReducers({ dataset: datasetReducer });
 
-describe("Dataset", () => {
+describe("Dataset Reducer", () => {
   describe("actions", () => {
     describe("setDataset", () => {
       it("sets the dataset and configuration", () => {

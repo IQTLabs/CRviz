@@ -1,10 +1,10 @@
 import { is } from "ramda";
 import { createAction } from "redux-actions";
-import { of, empty } from "rxjs";
+import { of } from "rxjs";
 import { mergeMap, map, tap, catchError } from 'rxjs/operators';
 import { QueryParseError } from 'lunr';
 
-
+import { setError } from "domain/error"
 import { setSearchResults} from "./index-dataset-epic";
 
 const searchDataset = createAction("SEARCH_DATASET");
@@ -23,8 +23,7 @@ const searchDatasetEpic = (action$, store) => {
             )
             ,catchError((error) => {
               if (is(QueryParseError, error)) {
-                alert(error.message);
-                return empty();
+                return of(setError(error));
               } else {
                 throw error;
               }
