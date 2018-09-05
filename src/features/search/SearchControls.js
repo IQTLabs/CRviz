@@ -95,9 +95,10 @@ Search.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const hash = Object.keys(state.dataset.datasets)[0] || ""
   return {
-    dataset: selectDataset(state),
-    configuration: selectConfiguration(state),
+    dataset: selectDataset(state, hash),
+    configuration: selectConfiguration(state, hash),
     searchIndex: getSearchIndex(state),
     queryString: state.search.queryString,
     results: getSearchResults(state)

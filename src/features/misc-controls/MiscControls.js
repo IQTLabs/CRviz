@@ -7,7 +7,7 @@ import {
   colorBy,
   selectControls
 } from "domain/controls";
-import { selectConfiguration, selectValues, getFieldId } from "domain/dataset";
+import { selectMergedConfiguration, selectMergedValues, getFieldId } from "domain/dataset";
 
 import FieldSelect from "./FieldSelect";
 
@@ -68,8 +68,8 @@ function MiscControls({
 const mapStateToProps = (state) => {
   return {
     controls: selectControls(state),
-    configuration: selectConfiguration(state),
-    values: selectValues(state)
+    configuration: selectMergedConfiguration(state),
+    values: selectMergedValues(state)
   };
 };
 

@@ -22,6 +22,7 @@ const defaultState = {
   datasets: {}
 };
 const defaultItemState = {
+  hash: "",
   dataset: [],
   values: {},
   configuration: {
@@ -129,6 +130,7 @@ const reducer = handleActions(
       const isFetching = false;
       const lastUpdated = new Date();
       state.datasets[dsHash] = {
+        hash: dsHash,
         dataset: dataset,
         values: values,
         configuration: configuration,
@@ -152,11 +154,41 @@ const reducer = handleActions(
 
 const selectDataset = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].dataset ? state.dataset.datasets[hash].dataset : defaultItemState.dataset;
 const selectConfiguration = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].configuration ? state.dataset.datasets[hash].configuration : defaultItemState.configuration;
+const selectMergedConfiguration = (state) => {
+  let fields = [];
+  const ds = state.dataset.datasets;
+  for (var key in ds){
+    for (var f of ds[key].configuration.fields){
+      if(!fields.includes(f))
+        fields.push(f);
+    }
+  }
+
+  return { fields: fields };
+}
 const selectValues = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].values ? state.dataset.datasets[hash].values : defaultItemState.values;
+const selectMergedValues = (state) => {
+  let vals = {};
+  const ds = state.dataset.datasets;
+  for (var key in ds){
+    for (var v in ds[key].values){
+      if(vals.hasOwnProperty(v)){
+        console.log(vals);
+        console.log(v);
+        vals[v].push(ds[key].values[v]);
+      }
+      else {
+        vals[v] = ds[key].values[v];
+      }
+    }
+  }
+
+  return vals;
+}
 const getIsFetching = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].isFetching ? state.dataset.datasets[hash].isFetching : defaultItemState.isFetching;
 const getLastUpdated = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].lastUpdated ? state.dataset.datasets[hash].lastUpdated : defaultItemState.lastUpdated;
 
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };
+export { setDataset, selectDataset, selectConfiguration, selectMergedConfiguration, selectValues, selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };

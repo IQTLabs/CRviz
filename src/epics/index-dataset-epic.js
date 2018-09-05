@@ -35,7 +35,7 @@ const indexDatasetEpic = (action$, store) => {
     );
 };
 
-const searchReducer = (state = { searchIndex: null, queryString: '', searchResults: null }, action) => {
+const searchReducer = (state = { searchIndex: {}, queryString: '', searchResults: null }, action) => {
   switch (action.type) {
     case BUILD_INDEX_SUCCESS:
       const searchIndex = action.payload

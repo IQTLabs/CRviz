@@ -19,7 +19,7 @@ import {
   remove
 } from "ramda";
 
-import { selectConfiguration, selectValues, getFieldId } from "domain/dataset";
+import { selectMergedConfiguration, selectMergedValues, getFieldId } from "domain/dataset";
 import { setHierarchyConfig, selectControls, showNodes } from "domain/controls";
 
 import SelectedFieldList from './SelectedFieldList';
@@ -174,8 +174,8 @@ const findFieldIndex = (list, fieldId) => {
 }
 
 const mapStateToProps = (state) => ({
-  configuration: selectConfiguration(state),
-  values: selectValues(state),
+  configuration: selectMergedConfiguration(state),
+  values: selectMergedValues(state),
   controls: selectControls(state)
 });
 

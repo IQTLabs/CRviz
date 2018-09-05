@@ -11,6 +11,8 @@ import {
 import { combineReducers } from "redux";
 import { expect } from "chai"
 
+import hash from "hash-it"
+
 const reducer = combineReducers({ dataset: datasetReducer });
 
 describe("Dataset Reducer", () => {
@@ -28,6 +30,8 @@ describe("Dataset Reducer", () => {
           ]
         };
 
+        const dsHash = hash(dataset);
+
         const action = setDataset({ dataset, configuration });
         const result = reducer({}, action);
 
@@ -43,8 +47,8 @@ describe("Dataset Reducer", () => {
           ]
         };
 
-        expect(selectDataset(result)).to.deep.equal(dataset);
-        expect(selectConfiguration(result)).to.deep.equal(expectedConfiguration);
+        expect(selectDataset(result, dsHash)).to.deep.equal(dataset);
+        expect(selectConfiguration(result, dsHash)).to.deep.equal(expectedConfiguration);
       });
 
       it("sets a default configuration", () => {
@@ -52,10 +56,9 @@ describe("Dataset Reducer", () => {
           { uid: "uid1", role: { role: "role", confidence: 80 } },
           { uid: "uid2", role: { role: "role", confidence: 80 } }
         ];
+        const dsHash = hash(dataset);
 
-        const action = setDataset({ dataset });
-        const result = reducer({}, action);
-        expect(selectConfiguration(result)).to.deep.equal({
+        const expectedConfiguration = {
           fields: [
             { path: ["uid"], displayName: "uid", groupable: true },
             {
@@ -69,7 +72,11 @@ describe("Dataset Reducer", () => {
               groupable: true
             }
           ]
-        });
+        };
+
+        const action = setDataset({ dataset });
+        const result = reducer({}, action);
+        expect(selectConfiguration(result, dsHash)).to.deep.equal(expectedConfiguration);
       });
 
       it("find the unique values for each fields", () => {
@@ -77,27 +84,42 @@ describe("Dataset Reducer", () => {
           { uid: "uid1", role: { role: "role", confidence: 80 } },
           { uid: "uid2", role: { role: "role", confidence: 82 } }
         ];
+        const dsHash = hash(dataset);
 
-        const action = setDataset({ dataset });
-        const result = reducer({}, action);
-        expect(selectValues(result)).to.deep.equal({
+        const expectedValues = {
           uid: ["uid1", "uid2"],
           "role.role": ["role"],
           "role.confidence": [80, 82]
-        });
+        };
+
+        const action = setDataset({ dataset });
+        const result = reducer({}, action);
+        expect(selectValues(result, dsHash)).to.deep.equal(expectedValues);
       });
 
       it("sets the fetching indicator", () => {
         const expectedValue = true;
-        const dataset = [
+        const data = [
           { uid: "uid1", role: { role: "role", confidence: 80 } },
           { uid: "uid2", role: { role: "role", confidence: 80 } }
         ];
+        const dsHash = hash(data);
 
-        const action = setIsFetching(true);
+        let dataset = { datasets: {} };
+        dataset.datasets[dsHash] = {
+          dataset: data,
+          values: {},
+          configuration: {
+            fields: []
+          },
+          isFetching: false,
+          lastUpdated: null
+        }
+
+        const action = setIsFetching({hash: dsHash, isFetching: true});
         const result = reducer({ dataset }, action);
 
-        expect(getIsFetching(result)).to.equal(expectedValue);
+        expect(getIsFetching(result, dsHash)).to.equal(expectedValue);
       });
     });
   });
