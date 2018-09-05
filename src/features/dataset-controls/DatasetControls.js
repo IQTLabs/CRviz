@@ -74,7 +74,7 @@ class DatasetControls extends React.Component {
   }
 
   fetchAndSetDataset = (url, dataset, username, password, token) => {
-    this.props.setIsFetching(true);
+    this.props.setIsFetching({hash: this.props.activeHash, isFetching: true});
     const authHeader = buildAuthHeader(username, password, token);
     if (toURL(url)) {
       this.props.fetchDataset({'url': url, 'header': authHeader});
@@ -181,19 +181,19 @@ class DatasetControls extends React.Component {
   }
 
   onTimedRefreshStart = () =>{
-    this.props.setIsFetching(true);
+    this.props.setIsFetching({'hash': this.props.activeHash, 'isFetching': true});
     this.setState({
-      refreshTimerRunning: true
+      'refreshTimerRunning': true
     });
     const authHeader = buildAuthHeader(this.state.username, this.state.password, this.state.token);
     const url = this.state.selected.url;
     const interval = this.state.refreshInterval;
-    this.props.startRefresh({'url': url, 'header': authHeader, 'interval': interval});
+    this.props.startRefresh({'hash': this.props.activeHash,'url': url, 'header': authHeader, 'interval': interval});
   }
 
   onTimedRefreshStop = () =>{
     this.setState({
-      refreshTimerRunning: false
+      'refreshTimerRunning': false
     });
     this.props.stopRefresh();
   }
@@ -270,7 +270,7 @@ class DatasetControls extends React.Component {
             }
             { canRefresh && !this.props.isFetching &&
               <span>
-                Last Updated: {this.props.lastUpdated.toLocaleDateString() || ""} {this.props.lastUpdated.toLocaleTimeString() || ""}
+                Last Updated: { this.props.lastUpdated ? (this.props.lastUpdated.toLocaleDateString() || "") + " " + (this.props.lastUpdated.toLocaleTimeString() || "") : "Never" }
               </span>
             }
           </div>
@@ -349,6 +349,7 @@ DatasetControls.defaultProps = {
   dataset: null,
   isFetching: false,
   lastUpdated: new Date(),
+  activeHash: "",
 };
 
 DatasetControls.propTypes = {
@@ -370,10 +371,12 @@ DatasetControls.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const hash = Object.keys(state.dataset.datasets)[0] || ""
   return {
-    dataset: selectDataset(state),
-    isFetching: getIsFetching(state),
-    lastUpdated: getLastUpdated(state)
+    dataset: selectDataset(state,hash),
+    isFetching: getIsFetching(state, hash),
+    lastUpdated: getLastUpdated(state, hash),
+    activeHash: hash,
   };
 }
 

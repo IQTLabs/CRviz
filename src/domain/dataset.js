@@ -16,13 +16,19 @@ import {
   uniq
 } from "ramda";
 
+import hash from "hash-it"
+
 const defaultState = {
+  datasets: {}
+};
+const defaultItemState = {
   dataset: [],
   values: {},
   configuration: {
     fields: []
   },
-  isFetching: false
+  isFetching: false,
+  lastUpdated: null
 };
 
 /**
@@ -113,7 +119,7 @@ const reducer = handleActions(
   {
     [setDataset]: (state, { payload }) => {
       const dataset = payload.dataset;
-
+      const dsHash = hash(dataset);
       const configuration = configurationFor(
         payload.dataset || [],
         payload.configuration || {}
@@ -122,10 +128,20 @@ const reducer = handleActions(
       const values = valuesFor(dataset, configuration);
       const isFetching = false;
       const lastUpdated = new Date();
-      return { ...state, dataset, values, configuration, isFetching, lastUpdated };
+      state.datasets[dsHash] = {
+        dataset: dataset,
+        values: values,
+        configuration: configuration,
+        isFetching: isFetching,
+        lastUpdated: lastUpdated
+      }
+      return { ...state};
     },
     [setIsFetching]: (state, { payload }) => {
-      const isFetching = !!payload;
+      const hash = payload.hash;
+      const isFetching = !!payload.isFetching;
+      if(state.datasets.hasOwnProperty(hash))
+        state.datasets[hash].isFetching = isFetching;
       return { ...state, isFetching};
     }
   },
@@ -134,11 +150,11 @@ const reducer = handleActions(
 
 // SELECTORS
 
-const selectDataset = (state) => state.dataset.dataset;
-const selectConfiguration = (state) => state.dataset.configuration;
-const selectValues = (state) => state.dataset.values;
-const getIsFetching = (state) => state.dataset.isFetching;
-const getLastUpdated = (state) => state.dataset.lastUpdated;
+const selectDataset = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].dataset ? state.dataset.datasets[hash].dataset : defaultItemState.dataset;
+const selectConfiguration = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].configuration ? state.dataset.datasets[hash].configuration : defaultItemState.configuration;
+const selectValues = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].values ? state.dataset.datasets[hash].values : defaultItemState.values;
+const getIsFetching = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].isFetching ? state.dataset.datasets[hash].isFetching : defaultItemState.isFetching;
+const getLastUpdated = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].lastUpdated ? state.dataset.datasets[hash].lastUpdated : defaultItemState.lastUpdated;
 
 
 export default reducer;
