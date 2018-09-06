@@ -4,31 +4,33 @@ import { Provider } from 'react-redux'
 import { createEpicMiddleware } from 'redux-observable';
 
 import configureMockStore from 'redux-mock-store';
+import hash from "hash-it"
 import { expect } from "chai"
 
 import SearchControls from './SearchControls';
 
 const dataset = [
-          { uid: "uid1", role: { role: "role", confidence: 80 } },
-          { uid: "uid2", role: { role: "role", confidence: 80 } }
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
         ];
 
 const configuration = {
   fields: [
-    { path: ["uid"], displayName: "UID", groupable: true },
-    { path: ["role", "role"], displayName: "Role", groupable: false }
+    { 'path': ["uid"], 'displayName': "UID", groupable: true },
+    { 'path': ["role", "role"], 'displayName': "Role", groupable: false }
   ]
 };
 
-const initialState = {
-  dataset:{
-  	dataset: dataset,
-  	configuration: configuration
+const dsHash = hash(dataset);
+
+let initialState = {
+  'dataset':{
+  	'datasets': {}
   },
-  search:{
-  	searchResults: [],
-  	searchIndex: null,
-  	queryString: '',
+  'search':{
+  	'searchResults': [],
+  	'searchIndices': {},
+  	'queryString': '',
   },
 };
 
@@ -39,6 +41,8 @@ describe('SearchControls', () => {
 	beforeEach(() => {	
 		const epicMiddleware = createEpicMiddleware();
 		const mockStore = configureMockStore([epicMiddleware]);
+		initialState.dataset.datasets = {};
+		initialState.dataset.datasets[dsHash] = { 'dataset': dataset, 'configuration': configuration }
 		store  = mockStore(initialState);
 	});
 
@@ -66,11 +70,11 @@ describe('SearchControls', () => {
 		const expectedAction = {
 			type: 'SEARCH_DATASET',
 			payload: {
-				dataset: dataset,
-  				configuration: configuration,
-  				searchIndex: null,
-				queryString: 'test',
-  				results: []
+				'dataset': dataset,
+  				'configuration': configuration,
+  				'searchIndex': null,
+				'queryString': 'test',
+  				'results': []
 			}
 		}
 		const event ={target: {value: "test"}}
@@ -92,7 +96,7 @@ describe('SearchControls', () => {
 		const expectedText = "2 Results found";
 		const newState = {
 		  queryString: 'uid',
-		  searchIndex: null,
+		  searchIndices: {},
 		  results: dataset,
 		  hasSearch: true
 		}

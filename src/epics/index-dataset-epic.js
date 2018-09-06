@@ -19,7 +19,7 @@ const setSearchResults = (payload) => ({'type': SET_SEARCH_RESULTS, 'payload': p
 
 const getSearchResults = (state) => state.search.searchResults || [];
 const getQueryString = (state) => state.search.queryString;
-const getSearchIndex = (state) => state.search.searchIndex;
+const getSearchIndex = (state, hash) => state.search.searchIndices[hash] || null;
 
 const indexDatasetEpic = (action$, store) => {
   return action$.pipe(
@@ -35,11 +35,13 @@ const indexDatasetEpic = (action$, store) => {
     );
 };
 
-const searchReducer = (state = { searchIndex: {}, queryString: '', searchResults: null }, action) => {
+const searchReducer = (state = { searchIndices: {}, queryString: '', searchResults: null }, action) => {
   switch (action.type) {
     case BUILD_INDEX_SUCCESS:
-      const searchIndex = action.payload
-      return {...state, searchIndex};
+    const hash = action.payload.hash
+      const searchIndex = action.payload.index
+      state.searchIndices[hash] = searchIndex;
+      return {...state };
     case 
     SET_SEARCH_RESULTS: 
       const searchResults = action.payload.results;
@@ -70,6 +72,7 @@ const flattenDataset = (ds, cfg) => {
 }
 
 const generateIndex = (payload) => {
+  const hash = payload.hash;
   const dataset = payload.dataset;
   const configuration = payload.configuration || configurationFor(dataset);
   var flat = flattenDataset(dataset, configuration);
@@ -80,7 +83,7 @@ const generateIndex = (payload) => {
     }
     flat.map((item) => { return this.add(item); })
   });
-  return idx;
+  return { hash: hash, index: idx };
 };
 
 export default indexDatasetEpic;

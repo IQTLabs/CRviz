@@ -16,8 +16,6 @@ import {
   uniq
 } from "ramda";
 
-import hash from "hash-it"
-
 const defaultState = {
   datasets: {}
 };
@@ -120,7 +118,7 @@ const reducer = handleActions(
   {
     [setDataset]: (state, { payload }) => {
       const dataset = payload.dataset;
-      const dsHash = hash(dataset);
+      const hash = payload.hash;
       const configuration = configurationFor(
         payload.dataset || [],
         payload.configuration || {}
@@ -129,8 +127,8 @@ const reducer = handleActions(
       const values = valuesFor(dataset, configuration);
       const isFetching = false;
       const lastUpdated = new Date();
-      state.datasets[dsHash] = {
-        hash: dsHash,
+      state.datasets[hash] = {
+        hash: hash,
         dataset: dataset,
         values: values,
         configuration: configuration,

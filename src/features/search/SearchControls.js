@@ -99,7 +99,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     dataset: selectDataset(state, hash),
     configuration: selectConfiguration(state, hash),
-    searchIndex: getSearchIndex(state),
+    searchIndex: getSearchIndex(state, hash),
     queryString: state.search.queryString,
     results: getSearchResults(state)
   };

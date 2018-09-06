@@ -32,7 +32,7 @@ describe("Dataset Reducer", () => {
 
         const dsHash = hash(dataset);
 
-        const action = setDataset({ dataset, configuration });
+        const action = setDataset({ hash: dsHash, dataset: dataset, configuration: configuration });
         const result = reducer({}, action);
 
         const expectedConfiguration = {
@@ -74,7 +74,7 @@ describe("Dataset Reducer", () => {
           ]
         };
 
-        const action = setDataset({ dataset });
+        const action = setDataset({ hash: dsHash, dataset: dataset });
         const result = reducer({}, action);
         expect(selectConfiguration(result, dsHash)).to.deep.equal(expectedConfiguration);
       });
@@ -92,7 +92,7 @@ describe("Dataset Reducer", () => {
           "role.confidence": [80, 82]
         };
 
-        const action = setDataset({ dataset });
+        const action = setDataset({ hash: dsHash, dataset: dataset });
         const result = reducer({}, action);
         expect(selectValues(result, dsHash)).to.deep.equal(expectedValues);
       });
