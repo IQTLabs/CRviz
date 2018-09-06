@@ -102,6 +102,7 @@ const valuesFor = (dataset, configuration) => {
   }, configuration.fields));
 };
 
+
 // ACTIONS
 
 /**
@@ -111,6 +112,7 @@ const valuesFor = (dataset, configuration) => {
  * }
 */
 const setDataset = createAction("SET_DATASET");
+const removeDataset = createAction("REMOVE_DATASET");
 const setIsFetching = createAction("SET_IS_FETCHING");
 
 // REDUCERS
@@ -137,6 +139,13 @@ const reducer = handleActions(
       }
       return { ...state};
     },
+    [removeDataset]: (state, { payload }) => {
+      const hash = payload.hash;
+      if(state.datasets.hasOwnProperty(hash))
+        delete state.datasets[hash];
+
+      return { ...state }
+    },
     [setIsFetching]: (state, { payload }) => {
       const hash = payload.hash;
       const isFetching = !!payload.isFetching;
@@ -156,9 +165,11 @@ const selectMergedConfiguration = (state) => {
   let fields = [];
   const ds = state.dataset.datasets;
   for (var key in ds){
-    for (var f of ds[key].configuration.fields){
-      if(!fields.includes(f))
+    for (var f of ds[key].configuration.fields){ 
+      // eslint-disable-next-line no-loop-func
+      if(!fields.some(field => field.displayName === f.displayName)){
         fields.push(f);
+      }
     }
   }
 
@@ -171,9 +182,8 @@ const selectMergedValues = (state) => {
   for (var key in ds){
     for (var v in ds[key].values){
       if(vals.hasOwnProperty(v)){
-        console.log(vals);
-        console.log(v);
-        vals[v].push(ds[key].values[v]);
+        const valSet = new Set([...vals[v], ...ds[key].values[v]]);
+        vals[v] = [...valSet];
       }
       else {
         vals[v] = ds[key].values[v];
@@ -189,4 +199,4 @@ const getLastUpdated = (state, hash) => state.dataset.datasets[hash] && state.da
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration, selectMergedConfiguration, selectValues, selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };
+export { setDataset, selectDataset, removeDataset, selectConfiguration, selectMergedConfiguration, selectValues, selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };

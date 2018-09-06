@@ -29,7 +29,7 @@ let initialState = {
   },
   'search':{
   	'searchResults': [],
-  	'searchIndices': {},
+  	'searchIndices': [],
   	'queryString': '',
   },
 };
@@ -72,7 +72,7 @@ describe('SearchControls', () => {
 			payload: {
 				'dataset': dataset,
   				'configuration': configuration,
-  				'searchIndex': null,
+  				'searchIndices': [],
 				'queryString': 'test',
   				'results': []
 			}
@@ -96,7 +96,7 @@ describe('SearchControls', () => {
 		const expectedText = "2 Results found";
 		const newState = {
 		  queryString: 'uid',
-		  searchIndices: {},
+		  searchIndices: [],
 		  results: dataset,
 		  hasSearch: true
 		}
@@ -115,7 +115,7 @@ describe('SearchControls', () => {
 	it('clears the search', () => {
 		const newState = {
 		  queryString: 'uid',
-		  searchIndex: null,
+		  searchIndices: [],
 		  results: dataset,
 		  hasSearch: true
 		}
@@ -124,7 +124,7 @@ describe('SearchControls', () => {
 			payload: {
 				dataset: dataset,
   				configuration: configuration,
-  				searchIndex: null,
+  				searchIndices: [],
 				queryString: '',
   				results: []
 			}

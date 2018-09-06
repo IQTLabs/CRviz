@@ -2,8 +2,11 @@ import {
   default as datasetReducer,
   setDataset,
   selectDataset,
+  removeDataset,
   selectConfiguration,
+  selectMergedConfiguration,
   selectValues,
+  selectMergedValues,
   setIsFetching,
   getIsFetching
 } from "./dataset";
@@ -20,13 +23,13 @@ describe("Dataset Reducer", () => {
     describe("setDataset", () => {
       it("sets the dataset and configuration", () => {
         const dataset = [
-          { uid: "uid1", role: { role: "role", confidence: 80 } },
-          { uid: "uid2", role: { role: "role", confidence: 80 } }
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
         ];
         const configuration = {
           fields: [
-            { path: ["uid"], displayName: "UID", groupable: true },
-            { path: ["role", "role"], displayName: "Role", groupable: false }
+            { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+            { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
           ]
         };
 
@@ -37,12 +40,12 @@ describe("Dataset Reducer", () => {
 
         const expectedConfiguration = {
           fields: [
-            { path: ["uid"], displayName: "UID", groupable: true },
-            { path: ["role", "role"], displayName: "Role", groupable: false },
+            { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+            { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false },
             {
-              path: ["role", "confidence"],
-              displayName: "role.confidence",
-              groupable: true
+              'path': ["role", "confidence"],
+              'displayName': "role.confidence",
+              'groupable': true
             }
           ]
         };
@@ -53,23 +56,23 @@ describe("Dataset Reducer", () => {
 
       it("sets a default configuration", () => {
         const dataset = [
-          { uid: "uid1", role: { role: "role", confidence: 80 } },
-          { uid: "uid2", role: { role: "role", confidence: 80 } }
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
         ];
         const dsHash = hash(dataset);
 
         const expectedConfiguration = {
           fields: [
-            { path: ["uid"], displayName: "uid", groupable: true },
+            { 'path': ["uid"], 'displayName': "uid", 'groupable': true },
             {
-              path: ["role", "role"],
-              displayName: "role.role",
-              groupable: true
+              'path': ["role", "role"],
+              'displayName': "role.role",
+              'groupable': true
             },
             {
-              path: ["role", "confidence"],
-              displayName: "role.confidence",
-              groupable: true
+              'path': ["role", "confidence"],
+              'displayName': "role.confidence",
+              'groupable': true
             }
           ]
         };
@@ -120,6 +123,113 @@ describe("Dataset Reducer", () => {
         const result = reducer({ dataset }, action);
 
         expect(getIsFetching(result, dsHash)).to.equal(expectedValue);
+      });
+
+      it("removes a dataset", () => {
+        const data = [
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
+        ];
+        const configuration = {
+          fields: [
+            { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+            { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
+          ]
+        };
+        const dsHash = hash(data);
+        let dataset = {
+          'datasets': {}
+        }
+
+        dataset.datasets[dsHash] = {
+          'dataset': data,
+          'configuration': configuration
+        }
+
+        const action = removeDataset({ hash: dsHash });
+        const result = reducer({dataset}, action);
+
+        expect(selectDataset(result, dsHash).length).to.equal(0);
+        expect(selectConfiguration(result, dsHash).fields.length).to.equal(0);
+      });
+
+      it("merges fields", () => {
+        const initialState = {
+          'dataset': {
+            'datasets': {
+              'test1': {
+                'dataset': {},
+                'configuration':{
+                  'fields': [
+                    { 'path': ["id"], 'displayName': "id", 'groupable': true },
+                    { 'path': ["name"], 'displayName': "name", 'groupable': true },
+                  ]
+                }
+              },
+              'test2': {
+                'dataset': {},
+                'configuration': {
+                  'fields': [
+                    { 'path': ["id"], 'displayName': "id", 'groupable': true },
+                    { 'path': ["value"], 'displayName': "value", 'groupable': true },
+                  ]
+                }
+              }
+            }
+          }
+        };
+
+        const expectedConfig ={
+          'fields': [
+              { 'path': ["id"], 'displayName': "id", 'groupable': true },
+              { 'path': ["name"], 'displayName': "name", 'groupable': true },
+              { 'path': ["value"], 'displayName': "value", 'groupable': true },
+          ]
+        }
+        expect(selectMergedConfiguration(initialState)).to.deep.equal(expectedConfig);
+      });
+
+      it("merges values", () => {
+        const initialState = {
+          'dataset': {
+            'datasets': {
+              'test1': {
+                'dataset': {},
+                'configuration':{
+                  'fields': [
+                    { 'path': ["id"], 'displayName': "id", 'groupable': true },
+                    { 'path': ["name"], 'displayName': "name", 'groupable': true },
+                  ]
+                },
+                'values': {
+                  'id': [1, 2, 3],
+                  'name': ["test1", "test2", "test3"]
+                }
+              },
+              'test2': {
+                'dataset': {},
+                'configuration': {
+                  'fields': [
+                    { 'path': ["id"], 'displayName': "id", 'groupable': true },
+                    { 'path': ["value"], 'displayName': "value", 'groupable': true },
+                  ]
+                },
+                'values': {
+                  'id': [1, 2, 4, 5],
+                  'value': ["test1", "test2", "test4", "test5"]
+                }
+              }
+            }
+          }
+        };
+
+        const expectedValues ={
+          'id': [1, 2, 3, 4, 5],
+          'name': ["test1", "test2", "test3"],
+          'value': ["test1", "test2", "test4", "test5"]
+        }
+        console.log(selectMergedValues(initialState));
+        expect(selectMergedValues(initialState)).to.deep.equal(expectedValues);
       });
     });
   });

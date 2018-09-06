@@ -10,16 +10,19 @@ const lunr = require("lunr");
 
 const BUILD_INDEX = "BUILD_INDEX";
 const BUILD_INDEX_SUCCESS = "BUILD_INDEX_SUCCESS";
+const REMOVE_SEARCH_INDEX = "REMOVE_SEARCH_INDEX";
 //const BUILD_INDEX_FAILURE = "BUILD_INDEX_FAILURE";
 const SET_SEARCH_RESULTS = "SET_SEARCH_RESULTS";
 
 const buildIndex = (payload) => ({'type': BUILD_INDEX, 'payload': payload })
 const buildIndexSuccess = (payload) => ({'type': BUILD_INDEX_SUCCESS, 'payload': payload})
+const removeSearchIndex = (payload) => ({'type': REMOVE_SEARCH_INDEX, 'payload': payload});
 const setSearchResults = (payload) => ({'type': SET_SEARCH_RESULTS, 'payload': payload })
 
 const getSearchResults = (state) => state.search.searchResults || [];
 const getQueryString = (state) => state.search.queryString;
 const getSearchIndex = (state, hash) => state.search.searchIndices[hash] || null;
+const getSearchIndices = (state) => state.search.searchIndices || [];
 
 const indexDatasetEpic = (action$, store) => {
   return action$.pipe(
@@ -38,15 +41,22 @@ const indexDatasetEpic = (action$, store) => {
 const searchReducer = (state = { searchIndices: {}, queryString: '', searchResults: null }, action) => {
   switch (action.type) {
     case BUILD_INDEX_SUCCESS:
-    const hash = action.payload.hash
-      const searchIndex = action.payload.index
+      const hash = action.payload.hash;
+      const searchIndex = action.payload.index;
       state.searchIndices[hash] = searchIndex;
       return {...state };
     case 
-    SET_SEARCH_RESULTS: 
+    SET_SEARCH_RESULTS:
       const searchResults = action.payload.results;
       const queryString = action.payload.queryString;
-      return { ...state, searchResults, queryString}
+      return { ...state, searchResults, queryString};
+    case 
+    REMOVE_SEARCH_INDEX:
+      const rhash = action.payload.hash;
+      if(state.searchIndices.hasOwnProperty(rhash))
+        delete state.searchIndices[rhash];
+
+      return { ...state }
     default:
       return state;
   }
@@ -88,4 +98,4 @@ const generateIndex = (payload) => {
 
 export default indexDatasetEpic;
 
-export { buildIndex, searchReducer,  getSearchIndex, setSearchResults, getSearchResults, getQueryString };
+export { buildIndex, searchReducer,  getSearchIndex, removeSearchIndex, getSearchIndices, setSearchResults, getSearchResults, getQueryString };

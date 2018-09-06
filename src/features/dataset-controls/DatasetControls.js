@@ -10,10 +10,11 @@ import { faCheck, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
 import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
+import { removeSearchIndex } from "epics/index-dataset-epic";
 import { showNodes, setHierarchyConfig, colorBy } from "domain/controls"
 
 import { setError } from "domain/error"
-import { setDataset, selectDataset, getIsFetching, setIsFetching, getLastUpdated } from "domain/dataset";
+import { setDataset, selectDataset, removeDataset, getIsFetching, setIsFetching, getLastUpdated } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
@@ -92,6 +93,8 @@ class DatasetControls extends React.Component {
       return this.resetDataset();
     }
 
+    this.props.removeDataset({hash: this.props.activeHash});
+    this.props.removeSearchIndex({hash: this.props.activeHash});
     this.props.setHierarchyConfig([]);
     this.props.colorBy(null);
     this.props.showNodes(true);
@@ -358,6 +361,8 @@ DatasetControls.propTypes = {
   fetchDataset: PropTypes.func.isRequired,
   uploadDataset: PropTypes.func.isRequired,
   setDataset: PropTypes.func.isRequired,
+  removeDataset: PropTypes.func.isRequired,
+  removeSearchIndex: PropTypes.func.isRequired,
   getIsFetching: PropTypes.func.isRequired,
   setIsFetching: PropTypes.func.isRequired,
   showNodes: PropTypes.func.isRequired,
@@ -385,6 +390,8 @@ const mapDispatchToProps = {
   uploadDataset,
   setDataset,
   selectDataset,
+  removeDataset,
+  removeSearchIndex,
   getIsFetching,
   setIsFetching,
   showNodes,

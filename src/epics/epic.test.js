@@ -19,6 +19,7 @@ import { startRefresh, stopRefresh } from "./refresh-dataset-epic"
 import { 
 	buildIndex, 
 	getSearchIndex,
+	getSearchIndices,
 	setSearchResults,
 	getSearchResults
 } from "./index-dataset-epic"
@@ -202,9 +203,9 @@ describe("searchDatasetEpic", () => {
 	it("search a dataset", () => {
 		const query = 'uid1';
 		const ds = selectDataset(store.getState(), dsHash);
-		const index = getSearchIndex(store.getState(), dsHash);
+		const indices = getSearchIndices(store.getState());
 
-		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndices': indices});
 		store.dispatch(action$);
 
 		expect(action$.payload.results[0]).to.equal(data[0]);
@@ -213,9 +214,9 @@ describe("searchDatasetEpic", () => {
 	it("search a for a non-existent field", () => {
 		const query = 'fake: field';
 		const ds = selectDataset(store.getState(), dsHash);
-		const index = getSearchIndex(store.getState(), dsHash);
+		const indices = getSearchIndices(store.getState());
 
-		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndices': indices});
 		store.dispatch(action$);
 
 		expect(action$.payload.results.length).to.equal(0);
@@ -226,15 +227,15 @@ describe("searchDatasetEpic", () => {
 		const query = 'uid1';
 		
 		const ds = selectDataset(store.getState(), dsHash);
-		const index = getSearchIndex(store.getState(), dsHash);
+		const indices = getSearchIndices(store.getState());
 
-		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndices': indices});
 		store.dispatch(action$);
 
 		expect(action$.payload.results[0]).to.equal(data[0]);
 
 		const clear = '';
-		const clearAction$ = searchDataset({'dataset': ds, 'queryString': clear, 'searchIndex': index});
+		const clearAction$ = searchDataset({'dataset': ds, 'queryString': clear, 'searchIndices': indices});
 		store.dispatch(clearAction$);
 
 		expect(clearAction$.payload.results.length).to.equal(0);

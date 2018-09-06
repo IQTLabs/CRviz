@@ -7,14 +7,14 @@ import { faSearch,  faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 
 import { selectDataset, selectConfiguration } from "domain/dataset";
 
-import { getSearchIndex, getSearchResults } from "epics/index-dataset-epic";
+import { getSearchIndices, getSearchResults } from "epics/index-dataset-epic";
 import { searchDataset } from "epics/search-dataset-epic";
 
 import style from "./SearchControls.module.css";
 
 const defaultState = {
   queryString: '',
-  searchIndex: null,
+  searchIndices: [],
   results: [],
   hasSearch: false
 }
@@ -30,7 +30,7 @@ class Search extends React.Component {
     var data = {
       dataset: this.props.dataset,
       configuration: this.props.configuration,
-      searchIndex: this.props.searchIndex,
+      searchIndices: this.props.searchIndices,
       queryString: this.state.queryString,
       results: this.state.results
     }
@@ -99,7 +99,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     dataset: selectDataset(state, hash),
     configuration: selectConfiguration(state, hash),
-    searchIndex: getSearchIndex(state, hash),
+    searchIndices: getSearchIndices(state),
     queryString: state.search.queryString,
     results: getSearchResults(state)
   };
