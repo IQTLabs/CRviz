@@ -21,7 +21,8 @@ import {
 	getSearchIndex,
 	getSearchIndices,
 	setSearchResults,
-	getSearchResults
+	getSearchResults,
+	removeSearchIndex
 } from "./index-dataset-epic"
 import fetchDatasetEpic from "./fetch-dataset-epic"
 
@@ -240,6 +241,13 @@ describe("searchDatasetEpic", () => {
 
 		expect(clearAction$.payload.results.length).to.equal(0);
 	});
+
+	it("removes a search index", () => {
+		const action = removeSearchIndex({ hash: dsHash });
+		store.dispatch(action);
+		
+		expect(getSearchIndex(store.getState(), dsHash)).to.equal(null);
+	})
 });
 
 //use dependency injection to test this epic without having to hit a real URL

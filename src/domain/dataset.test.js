@@ -228,7 +228,6 @@ describe("Dataset Reducer", () => {
           'name': ["test1", "test2", "test3"],
           'value': ["test1", "test2", "test4", "test5"]
         }
-        console.log(selectMergedValues(initialState));
         expect(selectMergedValues(initialState)).to.deep.equal(expectedValues);
       });
     });
