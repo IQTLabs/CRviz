@@ -41,7 +41,7 @@ class SelectedFieldList extends React.Component {
   }
 
   render() {
-    const { style, fields, getFieldId, droppableId, dragState } = this.props;
+    const { style, fields, values, getFieldId, droppableId, dragState } = this.props;
 
     const draggingOver = isDraggingOver(droppableId, dragState);
     return (
@@ -58,6 +58,7 @@ class SelectedFieldList extends React.Component {
                 <List
                   style={style}
                   fields={fields}
+                  values={values}
                   getFieldId={getFieldId}
                   droppableId={droppableId}
                   dragState={dragState}
@@ -78,6 +79,7 @@ class SelectedFieldList extends React.Component {
 
 function List({
   fields,
+  values,
   getFieldId,
   style,
   droppableId,
@@ -90,13 +92,14 @@ function List({
   return fields.map((field, index) => {
     const id = getFieldId(field);
     const animated = toAnimate && getFieldId(field) === getFieldId(toAnimate);
-
+    const count = values[id].length
     return (
       <SelectedField
         style={style}
         draggableId={id}
         key={id}
         displayName={field.displayName}
+        count={count}
         index={index}
         dragIndex={dragIndex(droppableId, dragState, index)}
         animated={animated || false}
