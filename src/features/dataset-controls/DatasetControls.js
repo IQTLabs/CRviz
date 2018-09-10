@@ -24,6 +24,8 @@ import DatasetTimedRefresh from "./DatasetTimedRefresh";
 
 import style from "./DatasetControls.module.css";
 
+const uuidv4 = require('uuid/v4');
+
 const CUSTOM_DATASET = {
   name: "Custom URL",
   url: "custom-url"
@@ -52,19 +54,23 @@ Modal.setAppElement('#root');
 
 class DatasetControls extends React.Component {
 
-  state = {
-    dataset: null,
-    selected: null,
-    selectedFile: null,
-    showUrlEntry: false,
-    url: '',
-    authScheme:'',
-    token: '',
-    username: '',
-    password: '',
-    refreshInterval: 0,
-    refreshTimerRunning: false
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      dataset: null,
+      selected: null,
+      selectedFile: null,
+      showUrlEntry: false,
+      url: '',
+      authScheme:'',
+      token: '',
+      username: '',
+      password: '',
+      refreshInterval: 0,
+      refreshTimerRunning: false
+    };
+  }
 
   resetDataset = () => {
     this.props.setDataset({ dataset: [], configuration: {} });
@@ -75,10 +81,11 @@ class DatasetControls extends React.Component {
   }
 
   fetchAndSetDataset = (url, dataset, username, password, token) => {
-    this.props.setIsFetching({hash: this.props.activeHash, isFetching: true});
+    this.props.setIsFetching({owner: this.props.uuid, isFetching: true});
     const authHeader = buildAuthHeader(username, password, token);
+    console.log("fetch dispatched from " + this.props.uuid);
     if (toURL(url)) {
-      this.props.fetchDataset({'url': url, 'header': authHeader});
+      this.props.fetchDataset({ 'owner': this.props.uuid, 'url': url, 'header': authHeader });
       this.setState({
         selected: dataset,
         selectedFile: null,
@@ -93,8 +100,8 @@ class DatasetControls extends React.Component {
       return this.resetDataset();
     }
 
-    this.props.removeDataset({hash: this.props.activeHash});
-    this.props.removeSearchIndex({hash: this.props.activeHash});
+    this.props.removeDataset({owner: this.props.uuid});
+    this.props.removeSearchIndex({owner: this.props.uuid});
     this.props.setHierarchyConfig([]);
     this.props.colorBy(null);
     this.props.showNodes(true);
@@ -121,7 +128,7 @@ class DatasetControls extends React.Component {
   onUpload = (file) => {
     this.props.setHierarchyConfig([]);
     this.props.colorBy(null);
-    this.props.uploadDataset(file);
+    this.props.uploadDataset({ 'owner': this.props.uuid, 'file': file });
     this.props.stopRefresh();
     this.setState({
       selected: null,
@@ -184,14 +191,14 @@ class DatasetControls extends React.Component {
   }
 
   onTimedRefreshStart = () =>{
-    this.props.setIsFetching({'hash': this.props.activeHash, 'isFetching': true});
+    this.props.setIsFetching({'owner': this.props.uuid, 'isFetching': true});
     this.setState({
       'refreshTimerRunning': true
     });
     const authHeader = buildAuthHeader(this.state.username, this.state.password, this.state.token);
     const url = this.state.selected.url;
     const interval = this.state.refreshInterval;
-    this.props.startRefresh({'hash': this.props.activeHash,'url': url, 'header': authHeader, 'interval': interval});
+    this.props.startRefresh({'owner': this.props.uuid,'url': url, 'header': authHeader, 'interval': interval});
   }
 
   onTimedRefreshStop = () =>{
@@ -348,14 +355,15 @@ const toURL = (url) => {
 }
 
 DatasetControls.defaultProps = {
+  uuid: uuidv4(),
   datasets: [],
   dataset: null,
   isFetching: false,
   lastUpdated: new Date(),
-  activeHash: "",
 };
 
 DatasetControls.propTypes = {
+  uuid: PropTypes.string,
   datasets: PropTypes.array,
   dataset: PropTypes.array,
   fetchDataset: PropTypes.func.isRequired,
@@ -376,12 +384,12 @@ DatasetControls.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const hash = Object.keys(state.dataset.datasets)[0] || ""
+  console.log(ownProps.uuid);
+  const owner = state.uuid;
   return {
-    dataset: selectDataset(state,hash),
-    isFetching: getIsFetching(state, hash),
-    lastUpdated: getLastUpdated(state, hash),
-    activeHash: hash,
+    dataset: selectDataset(state,owner),
+    isFetching: getIsFetching(state, owner),
+    lastUpdated: getLastUpdated(state, owner)
   };
 }
 

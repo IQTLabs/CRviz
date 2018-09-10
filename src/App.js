@@ -21,6 +21,8 @@ import style from './App.module.css';
 
 import datasets from './datasets';
 
+const uuidv4 = require('uuid/v4');
+
 Modal.setAppElement('#root');
 
 class App extends Component {
@@ -49,7 +51,7 @@ class App extends Component {
         <div className={ style.controls }>
           <Header />
           <div className={ style.section }>
-            <DatasetControls datasets={ datasets }/>
+            <DatasetControls uuid={ uuidv4() } datasets={ datasets }/>
           </div>        
 
           { hasDataset &&
