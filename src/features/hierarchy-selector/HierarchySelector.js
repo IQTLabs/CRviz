@@ -129,6 +129,7 @@ class HierarchySelector extends React.Component {
             <SelectedFieldList
               style={ selectedFieldListStyle }
               fields={ hierarchyConfig }
+              values={ values }
               droppableId={ SELECTED_FIELD_LIST_ID }
               getFieldId={ getFieldId }
               dragState={ dragState }
