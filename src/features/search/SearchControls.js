@@ -2,9 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
-import faTimesCircle from "@fortawesome/fontawesome-free-solid/faTimesCircle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch,  faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 
 import { selectDataset, selectConfiguration } from "domain/dataset";
 
@@ -69,13 +68,13 @@ class Search extends React.Component {
             onKeyPress={this.handleKeyPress}
           />
 
-          <label htmlFor="search-string" className="button" onClick={() => this.handleSearch()}>
+          <label htmlFor="search-string" className="button" onClick={() => this.handleSearch()} title="Search">
             <FontAwesomeIcon icon={faSearch} />
           </label>
         </span>
         { this.state.hasSearch &&
           <span>
-            <label id="search-results"> {this.props.results.length}&nbsp;Results found </label>
+            <label id="search-results"> {this.props.results.length} Results found </label>
             <label htmlFor="search-results" className="button" onClick={() => this.clearSearch()}>
               <FontAwesomeIcon icon={faTimesCircle} />
               </label>
@@ -100,7 +99,7 @@ const mapStateToProps = (state, ownProps) => {
     dataset: selectDataset(state),
     configuration: selectConfiguration(state),
     searchIndex: getSearchIndex(state),
-    queryString: state.dataset.queryString,
+    queryString: state.search.queryString,
     results: getSearchResults(state)
   };
 }

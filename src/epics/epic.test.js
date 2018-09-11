@@ -1,15 +1,19 @@
-import expect from 'expect';
+import { expect } from 'chai';
 import configureMockStore from 'redux-mock-store';
-import configureStore from "../configure-store";
-import { createEpicMiddleware } from 'redux-observable';
-import { Observable, of} from 'rxjs';
+import configureStore from "configure-store";
+import { createEpicMiddleware, ActionsObservable } from 'redux-observable';
+import { of, throwError } from 'rxjs';
+import { QueryParseError } from 'lunr';
 
 import rootEpic from './root-epic'
-import { setDataset } from '../domain/dataset'
-import { loadDataset } from "./load-dataset-epic"
+import { setDataset } from 'domain/dataset'
+import { getError, setError } from 'domain/error'
+import { loadDataset, CSVconvert } from "./load-dataset-epic"
 import { uploadDataset } from "./upload-dataset-epic"
 import { searchDataset } from "./search-dataset-epic"
-import { fetchDataset } from "./fetch-dataset-epic"
+import { fetchDataset, buildAuthHeader } from "./fetch-dataset-epic"
+import refreshDatasetEpic from "./refresh-dataset-epic"
+import { startRefresh, stopRefresh } from "./refresh-dataset-epic"
 import { 
 	buildIndex, 
 	getSearchIndex,
@@ -20,19 +24,68 @@ import fetchDatasetEpic from "./fetch-dataset-epic"
 
 describe("loadDatasetEpic", () => {
 	let store;
+	const initialState ={
+			'controls': {
+				'hierarchyConfig':{'path': ['test'], 'displayName': 'test', 'groupable': true},
+				'colorBy':{'path': ['test'], 'displayName': 'test', 'groupable': true}
+			}
+		};
 
 	beforeEach(() => {
 		const epicMiddleware = createEpicMiddleware();
 		const mockStore = configureMockStore([epicMiddleware]);
-		store  = mockStore();
+		store  = mockStore(initialState);
 		epicMiddleware.run(rootEpic);
 	});
 
 	afterEach(() => {
 		
 	});
+	describe("loading various datasets", () => {
+		it("loads the dataset with default config", () => {
+			const data = [
+			  { uid: "uid1", role: { role: "role", confidence: 80 } },
+			  { uid: "uid2", role: { role: "role", confidence: 80 } }
+			];
 
-	it("loads the dataset with default config", () => {
+			const action$ = loadDataset(data);
+			store.dispatch(action$);
+			let typeToCheck = setDataset.toString();
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).to.equal(data);
+		});
+
+		it("loads the dataset and config", () => {
+			const dataset = [
+	          { uid: "uid1", role: { role: "role", confidence: 80 } },
+	          { uid: "uid2", role: { role: "role", confidence: 80 } }
+	        ];
+	        const configuration = {
+	          fields: [
+	            { path: ["uid"], displayName: "UID", groupable: true },
+	            { path: ["role", "role"], displayName: "Role", groupable: false }
+	          ]
+	        };
+
+			const action$ = loadDataset({dataset, configuration});
+			store.dispatch(action$);
+			let typeToCheck = setDataset.toString();	
+
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).to.equal(dataset);
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.configuration).to.equal(configuration);
+		});
+
+		it("loads a simple object", () => {
+			const data = { uid: "uid1", role: { role: "role", confidence: 80 } };
+
+			const action$ = loadDataset(data);
+			store.dispatch(action$);
+			let typeToCheck = setDataset.toString();
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset.length).to.equal(1);
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset[0]).to.deep.equal(data);
+		});
+	});
+
+	it("preserves control state across load", () => {
 		const data = [
 		  { uid: "uid1", role: { role: "role", confidence: 80 } },
 		  { uid: "uid2", role: { role: "role", confidence: 80 } }
@@ -40,39 +93,38 @@ describe("loadDatasetEpic", () => {
 
 		const action$ = loadDataset(data);
 		store.dispatch(action$);
-		let typeToCheck = setDataset.toString();
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).toEqual(data);
+		expect(store.getState()).to.deep.equal(initialState);
 	});
 
-	it("loads the dataset and config", () => {
-		const dataset = [
-          { uid: "uid1", role: { role: "role", confidence: 80 } },
-          { uid: "uid2", role: { role: "role", confidence: 80 } }
-        ];
-        const configuration = {
-          fields: [
-            { path: ["uid"], displayName: "UID", groupable: true },
-            { path: ["role", "role"], displayName: "Role", groupable: false }
-          ]
-        };
+	describe("CSV Conversion", () => {
+		it("converts CSV to json", () => {
+			const expectedData = [
+			  { uid: "uid1", role: "role", confidence: "80" },
+			  { uid: "uid2", role: "role", confidence: "80" }
+			];
+			const csv = "uid,role,confidence\n" +
+						"uid1,role,80\nuid2,role,80"
+			const converted = CSVconvert(csv);
 
-		const action$ = loadDataset({dataset, configuration});
-		store.dispatch(action$);
-		let typeToCheck = setDataset.toString();	
-
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).toEqual(dataset);
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.configuration).toEqual(configuration);
+			expect(JSON.parse(converted)).to.deep.equal(expectedData);
+		});
 	});
 
 });
 
 describe("uploadDatasetEpic", () => {
 	let store;
+	const initialState ={
+			'controls': {
+				'hierarchyConfig':{'path': ['test'], 'displayName': 'test', 'groupable': true},
+				'colorBy':{'path': ['test'], 'displayName': 'test', 'groupable': true}
+			}
+		};
 
 	beforeEach(() => {
 		const epicMiddleware = createEpicMiddleware();
 		const mockStore = configureMockStore([epicMiddleware]);
-		store  = mockStore();
+		store  = mockStore(initialState);
 		epicMiddleware.run(rootEpic);
 	});
 
@@ -80,7 +132,7 @@ describe("uploadDatasetEpic", () => {
 		
 	});
 
-	it("uploads a file containing a dataset", () => {
+	it("uploads a json file containing a dataset", () => {
 		const data = [
 		  { uid: "uid1", role: { role: "role", confidence: 80 } },
 		  { uid: "uid2", role: { role: "role", confidence: 80 } }
@@ -91,8 +143,38 @@ describe("uploadDatasetEpic", () => {
 		store.dispatch(action$);
 		let typeToCheck = uploadDataset.toString();
 
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload).toEqual(theBlob);
+		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload).to.equal(theBlob);
 	});
+
+	it("uploads a csv file containing a dataset", () => {
+		const csv = "uid,role.role,role.confidence\n" +
+					"uid1,role,80\nuid2,role,80"
+		const theBlob = new Blob([csv], { 'type': 'text/csv' });
+
+		const action$ = uploadDataset(theBlob);
+		store.dispatch(action$);
+		let typeToCheck = uploadDataset.toString();
+
+		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload).to.equal(theBlob);
+	});
+
+	it("fails to upload a file containing only text", (done) => {
+		store = configureStore();
+		const text = "This is not json or csv"
+		const expectedMessage = "Invalid JSON."
+		const theBlob = new Blob([text], { 'type': 'text/plain' });
+
+		const action$ = uploadDataset(theBlob);
+
+		store.subscribe(() => {
+			if(getError(store.getState())){
+				expect(getError(store.getState()).toString()).to.contain(expectedMessage);
+				done();
+			}			
+		});
+
+		store.dispatch(action$);
+	})
 });
 
 describe("searchDatasetEpic", () => {
@@ -103,7 +185,6 @@ describe("searchDatasetEpic", () => {
 		];
 
 	beforeEach(() => {
-
 		store  = configureStore();
 		const action$ = setDataset({'dataset': data});		
 		store.dispatch(action$);
@@ -113,7 +194,6 @@ describe("searchDatasetEpic", () => {
 	});
 
 	afterEach(() => {
-		
 	});
 
 	it("search a dataset", () => {
@@ -124,7 +204,19 @@ describe("searchDatasetEpic", () => {
 		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
 		store.dispatch(action$);
 
-		expect(action$.payload.results[0]).toEqual(data[0]);
+		expect(action$.payload.results[0]).to.equal(data[0]);
+	});
+
+	it("search a for a non-existent field", () => {
+		const query = 'fake: field';
+		const ds = store.getState().dataset.dataset;
+		const index = store.getState().search.searchIndex;
+
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		store.dispatch(action$);
+
+		expect(action$.payload.results.length).to.equal(0);
+		expect(getError(store.getState())).to.be.instanceOf(QueryParseError);
 	});
 
 	it("clears a search", () => {
@@ -136,13 +228,13 @@ describe("searchDatasetEpic", () => {
 		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
 		store.dispatch(action$);
 
-		expect(action$.payload.results[0]).toEqual(data[0]);
+		expect(action$.payload.results[0]).to.equal(data[0]);
 
 		const clear = '';
 		const clearAction$ = searchDataset({'dataset': ds, 'queryString': clear, 'searchIndex': index});
 		store.dispatch(clearAction$);
 
-		expect(clearAction$.payload.results.length).toEqual(0);
+		expect(clearAction$.payload.results.length).to.equal(0);
 	});
 });
 
@@ -155,8 +247,14 @@ describe("fetchDatasetEpic", () => {
 		];
 	const mockResponse = data;
 	const mockAjax = () => {
-	  	return  Observable.of({ 'response': mockResponse });
+	  	return  of({ 'response': mockResponse });
 	  }
+
+	const errMsg = "Fetch Error Test";
+	const mockAjaxError = () => {
+		throwError(errMsg);
+	}
+
 	const dependencies = {
 	  'ajax': mockAjax
 	};
@@ -174,17 +272,55 @@ describe("fetchDatasetEpic", () => {
 		
 	});
 
+	describe("Authorization headers", () => {
+
+		it("uses no auth", () => {
+			const expected = null;
+
+			const actual = buildAuthHeader(null, null, null);
+			expect(actual).to.deep.equal(expected);
+		});
+
+		it("uses basic auth", () => {
+			const creds = new Buffer('test:test').toString('base64');
+			const expected = {'Authorization': `Basic ${creds}`};
+
+			const actual = buildAuthHeader('test', 'test', null);
+			expect(actual).to.deep.equal(expected);
+		});
+
+		it("uses bearer auth", () => {
+			const creds = 'testToken';
+			const expected = {'Authorization': `Bearer ${creds}`};
+
+			const actual = buildAuthHeader(null, null, creds);
+			expect(actual).to.deep.equal(expected);
+		});
+	});
+
 	it("loads the dataset with default config", () => {
 		const url = 'test.test'
 		let typeToCheck = loadDataset.toString();
 
 		const action$ = of({'type': fetchDataset.toString(), 'payload': url});
-		store = null;
 		fetchDatasetEpic(action$, store, mockAjax)
-			.subscribe(actions => {
-				expect(actions.length).toEqual(1);
-				expect(actions[0].type).toEqual(typeToCheck);
-				expect(actions[0].payload).toEqual(data);
+			 .subscribe((actions) => {
+				expect(actions.type).to.equal(typeToCheck);
+				expect(actions.payload).to.equal(data);
+			});
+	});
+
+	it("Encounters an error during fetch", (done) => {
+		const url = 'test.test'
+		let typeToCheck = setError.toString();
+
+		const action$ = of({'type': fetchDataset.toString(), 'payload': url});
+		fetchDatasetEpic(action$, store, mockAjaxError)
+			 .subscribe((actions) => {
+				expect(actions.type).to.equal(typeToCheck);
+				expect(actions.payload).to.be.instanceOf(Error);
+
+				done();
 			});
 	});
 });
@@ -225,7 +361,18 @@ describe("indexDatasetEpic", () => {
 	      ]
 	    };
 	    const idx = getSearchIndex(store.getState())
-	    expect(idx.fields.length).toEqual(expectedConfiguration.fields.length);
+	    expect(idx.fields.length).to.equal(expectedConfiguration.fields.length);
+	});
+
+	it("sets the search index in a config with no fields", () => {
+		const emptyConf = {};
+
+	    const action$ = buildIndex({ dataset, emptyConf });
+	    store.dispatch(action$);
+
+	    const expectedFields = ['uid', 'role.role', 'role.confidence'];
+	    const idx = getSearchIndex(store.getState())
+	    expect(idx.fields).to.deep.equal(expectedFields);
 	});
 
 	it("sets the results of a search", () => {
@@ -242,6 +389,65 @@ describe("indexDatasetEpic", () => {
           results: resultSet
         });
         store.dispatch(action$);
-        expect(getSearchResults(store.getState())).toEqual(resultSet);
+        expect(getSearchResults(store.getState())).to.deep.equal(resultSet);
       });
 });
+
+describe("refreshDatasetEpic", () =>{
+	//let store;
+
+	beforeEach(() => {
+		// const epicMiddleware = createEpicMiddleware();
+		// const mockStore = configureMockStore([epicMiddleware]);
+		// store = mockStore();
+		// epicMiddleware.run(rootEpic);
+	});
+
+	afterEach(() => {
+	});
+
+	it("starts and stops the refresh timer", (done) => {
+		const url ="test.test"
+		const header = null;
+		const interval = 10;
+		//const expectedInterval = 10;
+		const data = { 'url': url, 'header': header, 'interval': interval }
+		// const start$ = startRefresh(data);
+		// const stop$ = stopRefresh();
+		const action$ = ActionsObservable.of(startRefresh(data));
+		refreshDatasetEpic(action$).toPromise()
+			.then((actionsOut) => {
+				//console.log(actionsOut);
+				expect(actionsOut.type).toBe(stopRefresh.toString());
+
+			})
+			.catch((error) => {
+				expect(false).to.equal(true);
+			})
+		done();
+		// store.dispatch(action$);
+		// let typeToCheck = startRefresh.toString();
+		// expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.url).to.equal(url);
+		// expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.interval).to.equal(expectedInterval);
+
+		// const stop$ = stopRefresh();
+		// store.dispatch(stop$);
+		// typeToCheck = stopRefresh.toString();
+		// console.log(store.getActions());
+		// expect(store.getActions().filter(a => a.type === typeToCheck).length).to.equal(1);
+		// setImmediate(done());
+
+		// const subscription = store.subscribe(() =>{
+		// 	const actionsOut = store.getActions();
+		// 	console.log(actionsOut);	
+		// 	done();	
+		// });
+
+		// store.dispatch(start$);
+		// let x=0;
+		// while(x < 500000){
+		// 	x++;
+		// }
+		// store.dispatch(stop$);
+	});
+})

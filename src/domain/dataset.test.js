@@ -3,14 +3,17 @@ import {
   setDataset,
   selectDataset,
   selectConfiguration,
-  selectValues
+  selectValues,
+  setIsFetching,
+  getIsFetching
 } from "./dataset";
 
 import { combineReducers } from "redux";
+import { expect } from "chai"
 
 const reducer = combineReducers({ dataset: datasetReducer });
 
-describe("Dataset", () => {
+describe("Dataset Reducer", () => {
   describe("actions", () => {
     describe("setDataset", () => {
       it("sets the dataset and configuration", () => {
@@ -40,8 +43,8 @@ describe("Dataset", () => {
           ]
         };
 
-        expect(selectDataset(result)).toEqual(dataset);
-        expect(selectConfiguration(result)).toEqual(expectedConfiguration);
+        expect(selectDataset(result)).to.deep.equal(dataset);
+        expect(selectConfiguration(result)).to.deep.equal(expectedConfiguration);
       });
 
       it("sets a default configuration", () => {
@@ -52,7 +55,7 @@ describe("Dataset", () => {
 
         const action = setDataset({ dataset });
         const result = reducer({}, action);
-        expect(selectConfiguration(result)).toEqual({
+        expect(selectConfiguration(result)).to.deep.equal({
           fields: [
             { path: ["uid"], displayName: "uid", groupable: true },
             {
@@ -77,11 +80,24 @@ describe("Dataset", () => {
 
         const action = setDataset({ dataset });
         const result = reducer({}, action);
-        expect(selectValues(result)).toEqual({
+        expect(selectValues(result)).to.deep.equal({
           uid: ["uid1", "uid2"],
           "role.role": ["role"],
           "role.confidence": [80, 82]
         });
+      });
+
+      it("sets the fetching indicator", () => {
+        const expectedValue = true;
+        const dataset = [
+          { uid: "uid1", role: { role: "role", confidence: 80 } },
+          { uid: "uid2", role: { role: "role", confidence: 80 } }
+        ];
+
+        const action = setIsFetching(true);
+        const result = reducer({ dataset }, action);
+
+        expect(getIsFetching(result)).to.equal(expectedValue);
       });
     });
   });

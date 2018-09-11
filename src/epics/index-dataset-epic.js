@@ -17,7 +17,7 @@ const buildIndex = (payload) => ({'type': BUILD_INDEX, 'payload': payload })
 const buildIndexSuccess = (payload) => ({'type': BUILD_INDEX_SUCCESS, 'payload': payload})
 const setSearchResults = (payload) => ({'type': SET_SEARCH_RESULTS, 'payload': payload })
 
-const getSearchResults = (state) => state.search.searchResults;
+const getSearchResults = (state) => state.search.searchResults || [];
 const getQueryString = (state) => state.search.queryString;
 const getSearchIndex = (state) => state.search.searchIndex;
 
@@ -69,15 +69,15 @@ const flattenDataset = (ds, cfg) => {
   return flattened;
 }
 
-
-
 const generateIndex = (payload) => {
   const dataset = payload.dataset;
   const configuration = payload.configuration || configurationFor(dataset);
   var flat = flattenDataset(dataset, configuration);
   const idx = lunr(function () {
     this.ref('id');
-    configuration.fields.map((field) => { return this.field(field.displayName); })
+    if(configuration && configuration.fields){
+      configuration.fields.map((field) => { return this.field(field.displayName.toLowerCase()); })
+    }
     flat.map((item) => { return this.add(item); })
   });
   return idx;

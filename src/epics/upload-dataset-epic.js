@@ -1,6 +1,8 @@
 import { createAction } from "redux-actions";
-import { Observable, empty } from "rxjs";
+import { Observable, of } from "rxjs";
 import { catchError, debounceTime, mergeMap, map } from 'rxjs/operators';
+
+import { setError } from "domain/error"
 
 import { loadDataset, CSVconvert } from './load-dataset-epic';
 
@@ -18,12 +20,12 @@ const uploadDatasetEpic = (action$, store) => {
             ,map(CSVconvert)
             ,map(JSON.parse)
             ,map(loadDataset)
-            //,takeUntil(action$.ofType(uploadDataset.toString()))
             ,catchError((error) => {
               if (error instanceof SyntaxError) {
-                alert("Invalid JSON.");
-                return empty();
+                const newErr = new Error("Invalid JSON.");
+                return of(setError(newErr));
               } else {
+                /* istanbul ignore next */
                 throw error;
               }
             })
@@ -38,7 +40,7 @@ const uploadDatasetEpic = (action$, store) => {
  */
 const fromReader = (file) => {
   return Observable.create((observer) => {
-    const reader = new FileReader();
+    const reader = new window.FileReader();
 
     reader.addEventListener('load', () => {
       observer.next(reader.result);

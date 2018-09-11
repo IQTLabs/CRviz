@@ -1,12 +1,13 @@
 import { createAction } from "redux-actions";
 import { ofType } from 'redux-observable';
-import { of, empty } from "rxjs";
+import { of } from "rxjs";
 import { map, mergeMap, catchError, concat } from 'rxjs/operators';
 
 import { isNil, is } from "ramda";
 
 import { buildIndex } from './index-dataset-epic';
 
+import { setError } from "domain/error"
 import { setDataset } from "domain/dataset";
 import { setHierarchyConfig, colorBy } from "domain/controls";
 
@@ -27,15 +28,15 @@ const loadDatasetEpic = (action$, store) => {
             ,buildIndex({
                 dataset: payload.dataset,
                 configuration: payload.configuration || null
-              })
+            })
           )
         })
-        ,concat(of(setHierarchyConfig([]), colorBy(null)))
+        ,concat(of(setHierarchyConfig(store.value.controls.hierarchyConfig || []), colorBy(store.value.controls.colorBy)))
         ,catchError((error) => {
           if (is(ValidationError, error)) {
-            alert(error.message);
-            return empty();
+            return of(setError(error));
           } else {
+            /* istanbul ignore next */
             throw error;
           }
         })

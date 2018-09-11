@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.3"></a>
+## [0.2.3](https://github.com/CyberReboot/CRviz/compare/v0.2.2...v0.2.3) (2018-08-23)
+
+
+### Bug Fixes
+
+* .snyk & package.json to reduce vulnerabilities ([29e9a07](https://github.com/CyberReboot/CRviz/commit/29e9a07))
+* **package:** update [@fortawesome](https://github.com/fortawesome)/react-fontawesome to version 0.1.1 ([a238f56](https://github.com/CyberReboot/CRviz/commit/a238f56))
+* **package:** update react-beautiful-dnd to version 9.0.0 ([7a84330](https://github.com/CyberReboot/CRviz/commit/7a84330))
+* [#126](https://github.com/CyberReboot/CRviz/issues/126) - corrected mechanism of supplying url to autorefresh function ([79b377b](https://github.com/CyberReboot/CRviz/commit/79b377b))
+* [#126](https://github.com/CyberReboot/CRviz/issues/126) - fixed port number ([df41a41](https://github.com/CyberReboot/CRviz/commit/df41a41))
+* dependency updates to remediate vulns flagged by Snyk ([42fc97d](https://github.com/CyberReboot/CRviz/commit/42fc97d))
+* Fixes [#125](https://github.com/CyberReboot/CRviz/issues/125) - refreshing dataset no longer resets group by and color by selections ([276a238](https://github.com/CyberReboot/CRviz/commit/276a238))
+* Fixes [#126](https://github.com/CyberReboot/CRviz/issues/126) - added null check on configuration and fields when building index ([c1e86d7](https://github.com/CyberReboot/CRviz/commit/c1e86d7))
+
+
+
+<a name="0.2.2"></a>
+## [0.2.2](https://github.com/CyberReboot/CRviz/compare/v0.2.1...v0.2.2) (2018-07-13)
+
+
+### Bug Fixes
+
+* git not found error ([f103fde](https://github.com/CyberReboot/CRviz/commit/f103fde)), closes [#84](https://github.com/CyberReboot/CRviz/issues/84)
+* **package:** update react-beautiful-dnd to version 8.0.3 ([5de168b](https://github.com/CyberReboot/CRviz/commit/5de168b))
+* **search:** Fixes [#76](https://github.com/CyberReboot/CRviz/issues/76) - make searching case insensitive by reducing everything to lower case ([cbbf638](https://github.com/CyberReboot/CRviz/commit/cbbf638))
+* **search:** Fixes [#80](https://github.com/CyberReboot/CRviz/issues/80) - linting issue ([087fe7f](https://github.com/CyberReboot/CRviz/commit/087fe7f))
+* **search:** Fixes [#80](https://github.com/CyberReboot/CRviz/issues/80) - search using : but no valid field fails gracefully ([a6e3942](https://github.com/CyberReboot/CRviz/commit/a6e3942))
+
+
+### Features
+
+* Remove default red ([3201e38](https://github.com/CyberReboot/CRviz/commit/3201e38)), closes [#91](https://github.com/CyberReboot/CRviz/issues/91)
+
+
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/CyberReboot/CRviz/compare/v0.2.0...v0.2.1) (2018-06-23)
 

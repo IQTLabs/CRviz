@@ -1,0 +1,758 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.12.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'npm:chownr:20180731':
+    - react-scripts > eslint-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > file-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > file-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > html-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > mini-css-extract-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > mini-css-extract-plugin > @webpack-contrib/schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > optimize-css-assets-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > postcss-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > sass-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > style-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > sw-precache-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > thread-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.441Z'
+    - react-scripts > url-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
+    - react-scripts > url-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
+    - react-scripts > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
+    - react-scripts > webpack-manifest-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
+    - react-scripts > webpack-dev-server > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
+    - react-scripts > webpack-dev-server > webpack-dev-middleware > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-08-31T19:30:34.442Z'
+    - react-scripts > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > html-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > eslint-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > optimize-css-assets-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > sass-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > sw-precache-webpack-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > thread-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > file-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > webpack-manifest-plugin > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > webpack-dev-server > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > url-loader > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > webpack-dev-server > webpack-dev-middleware > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > mini-css-extract-plugin > @webpack-contrib/schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > file-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > postcss-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > style-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > url-loader > schema-utils > webpack > uglifyjs-webpack-plugin > cacache > chownr:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.087Z'
+    - react-scripts > webpack-dev-server > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > mini-css-extract-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > optimize-css-assets-webpack-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > eslint-loader > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > sw-precache-webpack-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > thread-loader > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > url-loader > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > file-loader > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > webpack-dev-server > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > webpack-manifest-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > html-webpack-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > uglifyjs-webpack-plugin > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > jest > jest-cli > jest-haste-map > sane > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > sass-loader > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > style-loader > schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > url-loader > schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > uglifyjs-webpack-plugin > schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > mini-css-extract-plugin > @webpack-contrib/schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > file-loader > schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > postcss-loader > schema-utils > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.088Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-haste-map > sane > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.089Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-haste-map > sane > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.089Z'
+    - react-scripts > webpack-dev-server > webpack-dev-middleware > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.090Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-haste-map > sane > fsevents > node-pre-gyp > tar > chownr:
+        reason: no remediation available
+        expires: '2018-09-19T14:45:23.090Z'
+  'npm:braces:20180219':
+    - react-scripts > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.523Z'
+    - react-scripts > babel-core > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.523Z'
+    - react-scripts > babel-plugin-named-asset-import > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > jest > jest-cli > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > svgr > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-loader > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/plugin-transform-runtime > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-react > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > svgr > @babel/plugin-proposal-object-rest-spread > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/plugin-syntax-dynamic-import > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/plugin-transform-classes > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/plugin-transform-destructuring > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/plugin-transform-react-constant-elements > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > svgr > @babel/plugin-transform-react-constant-elements > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/plugin-transform-react-display-name > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/plugin-transform-regenerator > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/plugin-proposal-object-rest-spread > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > jest > jest-cli > jest-runtime > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > jest > jest-cli > jest-haste-map > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > jest > jest-cli > jest-message-util > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-flow > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/plugin-proposal-class-properties > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > svgr > @babel/preset-react > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-unicode-regex > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-regenerator > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-regenerator > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.524Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-classes > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-classes > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-proposal-object-rest-spread > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-syntax-async-generators > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-syntax-async-generators > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-proposal-async-generator-functions > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-proposal-async-generator-functions > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-destructuring > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-haste-map > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-syntax-optional-catch-binding > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-syntax-optional-catch-binding > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-proposal-optional-catch-binding > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-proposal-optional-catch-binding > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-proposal-unicode-property-regex > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-proposal-unicode-property-regex > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-arrow-functions > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-arrow-functions > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-async-to-generator > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-async-to-generator > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-block-scoped-functions > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-block-scoped-functions > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-block-scoping > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.525Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-block-scoping > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.526Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-computed-properties > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.526Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-computed-properties > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.526Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-dotall-regex > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.526Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-dotall-regex > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.526Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-duplicate-keys > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.526Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-duplicate-keys > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.526Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-exponentiation-operator > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-exponentiation-operator > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-for-of > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-for-of > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-function-name > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-function-name > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-literals > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-literals > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-modules-amd > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-modules-amd > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-modules-commonjs > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-modules-commonjs > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-modules-systemjs > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-modules-systemjs > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-modules-umd > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-modules-umd > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-new-target > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-new-target > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-object-super > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-object-super > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-parameters > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-parameters > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-shorthand-properties > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-shorthand-properties > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-spread > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.527Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-spread > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-sticky-regex > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-sticky-regex > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-template-literals > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-haste-map > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-transform-typeof-symbol > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-typeof-symbol > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/plugin-proposal-object-rest-spread > @babel/plugin-syntax-object-rest-spread > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-unicode-regex > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-destructuring > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-proposal-object-rest-spread > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/plugin-proposal-object-rest-spread > @babel/plugin-syntax-object-rest-spread > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-flow > @babel/plugin-transform-flow-strip-types > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-syntax-object-rest-spread > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-message-util > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > jest > jest-cli > jest-util > jest-message-util > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/plugin-proposal-class-properties > @babel/plugin-syntax-class-properties > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-react > @babel/plugin-transform-react-display-name > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-react > @babel/plugin-transform-react-display-name > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-syntax-object-rest-spread > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-react > @babel/plugin-syntax-jsx > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-react > @babel/plugin-syntax-jsx > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-react > @babel/plugin-transform-react-jsx > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-react > @babel/plugin-transform-react-jsx > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-react > @babel/plugin-transform-react-jsx-self > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-react > @babel/plugin-transform-react-jsx-self > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-react > @babel/plugin-transform-react-jsx-source > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-react > @babel/plugin-transform-react-jsx-source > @babel/core > micromatch > braces:
+        reason: no remediation path
+        expires: '2018-09-07T14:31:25.528Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-transform-template-literals > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > svgr > @babel/preset-react > @babel/plugin-transform-react-jsx-source > @babel/plugin-syntax-jsx > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-proposal-object-rest-spread > @babel/plugin-syntax-object-rest-spread > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > svgr > @babel/preset-react > @babel/plugin-transform-react-jsx-self > @babel/plugin-syntax-jsx > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-react > @babel/plugin-transform-react-jsx-self > @babel/plugin-syntax-jsx > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-proposal-async-generator-functions > @babel/plugin-syntax-async-generators > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-proposal-async-generator-functions > @babel/plugin-syntax-async-generators > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-env > @babel/plugin-proposal-optional-catch-binding > @babel/plugin-syntax-optional-catch-binding > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-proposal-optional-catch-binding > @babel/plugin-syntax-optional-catch-binding > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > svgr > @babel/preset-env > @babel/plugin-proposal-object-rest-spread > @babel/plugin-syntax-object-rest-spread > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-haste-map > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-flow > @babel/plugin-transform-flow-strip-types > @babel/plugin-syntax-flow > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > jest > jest-cli > jest-environment-jsdom > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-react > @babel/plugin-transform-react-jsx > @babel/plugin-syntax-jsx > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-jasmine2 > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > jest > jest-cli > jest-config > jest-jasmine2 > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > svgr > @babel/preset-react > @babel/plugin-transform-react-jsx > @babel/plugin-syntax-jsx > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > babel-preset-react-app > @babel/preset-react > @babel/plugin-transform-react-jsx-source > @babel/plugin-syntax-jsx > @babel/core > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.529Z'
+    - react-scripts > jest > jest-cli > jest-config > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-validate > jest-config > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-config > jest-jasmine2 > expect > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-jasmine2 > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-config > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-config > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-config > jest-environment-jsdom > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-config > jest-jasmine2 > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-config > jest-environment-node > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-validate > jest-config > jest-jasmine2 > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-jasmine2 > expect > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-config > jest-jasmine2 > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-config > jest-jasmine2 > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-config > jest-jasmine2 > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-config > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-validate > jest-config > jest-environment-jsdom > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-config > jest-environment-node > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-config > jest-environment-jsdom > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.530Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-config > jest-environment-jsdom > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-config > jest-jasmine2 > expect > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-config > jest-jasmine2 > expect > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-config > jest-jasmine2 > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-validate > jest-config > jest-jasmine2 > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-config > jest-environment-node > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-validate > jest-config > jest-jasmine2 > expect > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-validate > jest-config > jest-jasmine2 > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-config > jest-jasmine2 > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-validate > jest-config > jest-environment-node > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-validate > jest-config > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-validate > jest-config > jest-environment-jsdom > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-validate > jest-config > jest-jasmine2 > expect > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-config > jest-environment-jsdom > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-config > jest-jasmine2 > expect > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-validate > jest-config > jest-jasmine2 > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.531Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-config > jest-environment-node > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > jest > jest-cli > jest-runtime > jest-validate > jest-config > jest-environment-node > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-validate > jest-config > jest-jasmine2 > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-config > jest-jasmine2 > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-validate > jest-config > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-validate > jest-config > jest-environment-jsdom > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-validate > jest-config > jest-environment-node > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-validate > jest-config > jest-jasmine2 > jest-util > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+    - react-scripts > jest > jest-cli > jest-runner > jest-runtime > jest-validate > jest-config > jest-jasmine2 > expect > jest-message-util > micromatch > braces:
+        reason: None given
+        expires: '2018-09-07T14:31:25.532Z'
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:hoek:20180212':
+    - react-scripts > fsevents > node-pre-gyp > hawk > hoek:
+        patched: '2018-07-25T16:30:12.278Z'
+    - react-scripts > fsevents > node-pre-gyp > hawk > boom > hoek:
+        patched: '2018-07-25T16:30:12.278Z'
+    - react-scripts > fsevents > node-pre-gyp > hawk > sntp > hoek:
+        patched: '2018-07-25T16:30:12.278Z'
+    - react-scripts > fsevents > node-pre-gyp > hawk > cryptiles > boom > hoek:
+        patched: '2018-07-25T16:30:12.278Z'
+    - react-scripts > fsevents > node-pre-gyp > request > hawk > hoek:
+        patched: '2018-07-25T16:30:12.278Z'
+    - react-scripts > fsevents > node-pre-gyp > request > hawk > boom > hoek:
+        patched: '2018-07-25T16:30:12.278Z'
+    - react-scripts > fsevents > node-pre-gyp > request > hawk > sntp > hoek:
+        patched: '2018-07-25T16:30:12.278Z'
+    - react-scripts > fsevents > node-pre-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-07-25T16:30:12.278Z'
+    - react-scripts > fsevents > node-pre-gyp > hawk > hoek:
+        patched: '2018-09-05T14:16:52.408Z'
+    - react-scripts > fsevents > node-pre-gyp > hawk > boom > hoek:
+        patched: '2018-09-05T14:16:52.408Z'
+    - react-scripts > fsevents > node-pre-gyp > hawk > sntp > hoek:
+        patched: '2018-09-05T14:16:52.408Z'
+    - react-scripts > fsevents > node-pre-gyp > request > hawk > hoek:
+        patched: '2018-09-05T14:16:52.408Z'
+    - react-scripts > fsevents > node-pre-gyp > hawk > cryptiles > boom > hoek:
+        patched: '2018-09-05T14:16:52.408Z'
+    - react-scripts > fsevents > node-pre-gyp > request > hawk > boom > hoek:
+        patched: '2018-09-05T14:16:52.408Z'
+    - react-scripts > fsevents > node-pre-gyp > request > hawk > sntp > hoek:
+        patched: '2018-09-05T14:16:52.408Z'
+    - react-scripts > fsevents > node-pre-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-09-05T14:16:52.408Z'
