@@ -20,7 +20,6 @@ const loadDatasetEpic = (action$, store) => {
         map(formatPayload)
         ,mergeMap((payload) => {
           const owner = payload.owner;
-          console.log("loading for " + payload.owner);
           return of(
             setDataset({
               owner: owner,

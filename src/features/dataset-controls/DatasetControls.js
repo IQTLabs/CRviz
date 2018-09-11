@@ -83,7 +83,6 @@ class DatasetControls extends React.Component {
   fetchAndSetDataset = (url, dataset, username, password, token) => {
     this.props.setIsFetching({owner: this.props.uuid, isFetching: true});
     const authHeader = buildAuthHeader(username, password, token);
-    console.log("fetch dispatched from " + this.props.uuid);
     if (toURL(url)) {
       this.props.fetchDataset({ 'owner': this.props.uuid, 'url': url, 'header': authHeader });
       this.setState({
@@ -384,7 +383,6 @@ DatasetControls.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(ownProps.uuid);
   const owner = state.uuid;
   return {
     dataset: selectDataset(state,owner),

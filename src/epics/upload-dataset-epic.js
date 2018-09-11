@@ -16,7 +16,6 @@ const uploadDatasetEpic = (action$, store) => {
       mergeMap((action) => {
         const owner = action.payload.owner;
         const file = action.payload.file;
-        console.log("uploading for " + owner);
         return fromReader(owner, file).pipe(
             debounceTime(500)
             ,map(CSVconvert)
@@ -66,4 +65,4 @@ const fromJson = (payload) =>{
 }
 
 export default uploadDatasetEpic;
-export { uploadDataset };
+export { uploadDataset, fromJson };
