@@ -141,3 +141,11 @@ input[name=hideControls]:checked ~ .canvas {
   align-items: center;
   justify-content: center;
 }
+
+.accordionHeader {
+  font-weight: bold;
+  display: flex;
+  flex-flow: row no-wrap;
+  align-items: center;
+  justify-content: space-between;
+}

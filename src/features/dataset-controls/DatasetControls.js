@@ -184,6 +184,7 @@ class DatasetControls extends React.Component {
   }
 
   onRefresh = () =>{
+    console.log("On Refresh for " + this.props.uuid)
     const url = this.state.selected.url;
     const dataset = this.state.selected;
     this.fetchAndSetDataset(url, dataset, this.state.username, this.state.password, this.state.token);
@@ -383,7 +384,7 @@ DatasetControls.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const owner = state.uuid;
+  const owner = ownProps.uuid;
   return {
     dataset: selectDataset(state,owner),
     isFetching: getIsFetching(state, owner),
