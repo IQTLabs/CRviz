@@ -10,10 +10,11 @@ import { faCheck, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
 import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
+import { removeSearchIndex } from "epics/index-dataset-epic";
 import { showNodes, setHierarchyConfig, colorBy } from "domain/controls"
 
 import { setError } from "domain/error"
-import { setDataset, selectDataset, getIsFetching, setIsFetching, getLastUpdated } from "domain/dataset";
+import { setDataset, selectDataset, removeDataset, getIsFetching, setIsFetching, getLastUpdated } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
@@ -74,7 +75,7 @@ class DatasetControls extends React.Component {
   }
 
   fetchAndSetDataset = (url, dataset, username, password, token) => {
-    this.props.setIsFetching(true);
+    this.props.setIsFetching({hash: this.props.activeHash, isFetching: true});
     const authHeader = buildAuthHeader(username, password, token);
     if (toURL(url)) {
       this.props.fetchDataset({'url': url, 'header': authHeader});
@@ -92,6 +93,8 @@ class DatasetControls extends React.Component {
       return this.resetDataset();
     }
 
+    this.props.removeDataset({hash: this.props.activeHash});
+    this.props.removeSearchIndex({hash: this.props.activeHash});
     this.props.setHierarchyConfig([]);
     this.props.colorBy(null);
     this.props.showNodes(true);
@@ -181,19 +184,19 @@ class DatasetControls extends React.Component {
   }
 
   onTimedRefreshStart = () =>{
-    this.props.setIsFetching(true);
+    this.props.setIsFetching({'hash': this.props.activeHash, 'isFetching': true});
     this.setState({
-      refreshTimerRunning: true
+      'refreshTimerRunning': true
     });
     const authHeader = buildAuthHeader(this.state.username, this.state.password, this.state.token);
     const url = this.state.selected.url;
     const interval = this.state.refreshInterval;
-    this.props.startRefresh({'url': url, 'header': authHeader, 'interval': interval});
+    this.props.startRefresh({'hash': this.props.activeHash,'url': url, 'header': authHeader, 'interval': interval});
   }
 
   onTimedRefreshStop = () =>{
     this.setState({
-      refreshTimerRunning: false
+      'refreshTimerRunning': false
     });
     this.props.stopRefresh();
   }
@@ -270,7 +273,7 @@ class DatasetControls extends React.Component {
             }
             { canRefresh && !this.props.isFetching &&
               <span>
-                Last Updated: {this.props.lastUpdated.toLocaleDateString() || ""} {this.props.lastUpdated.toLocaleTimeString() || ""}
+                Last Updated: { this.props.lastUpdated ? (this.props.lastUpdated.toLocaleDateString() || "") + " " + (this.props.lastUpdated.toLocaleTimeString() || "") : "Never" }
               </span>
             }
           </div>
@@ -349,6 +352,7 @@ DatasetControls.defaultProps = {
   dataset: null,
   isFetching: false,
   lastUpdated: new Date(),
+  activeHash: "",
 };
 
 DatasetControls.propTypes = {
@@ -357,6 +361,8 @@ DatasetControls.propTypes = {
   fetchDataset: PropTypes.func.isRequired,
   uploadDataset: PropTypes.func.isRequired,
   setDataset: PropTypes.func.isRequired,
+  removeDataset: PropTypes.func.isRequired,
+  removeSearchIndex: PropTypes.func.isRequired,
   getIsFetching: PropTypes.func.isRequired,
   setIsFetching: PropTypes.func.isRequired,
   showNodes: PropTypes.func.isRequired,
@@ -370,10 +376,12 @@ DatasetControls.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const hash = Object.keys(state.dataset.datasets)[0] || ""
   return {
-    dataset: selectDataset(state),
-    isFetching: getIsFetching(state),
-    lastUpdated: getLastUpdated(state)
+    dataset: selectDataset(state,hash),
+    isFetching: getIsFetching(state, hash),
+    lastUpdated: getLastUpdated(state, hash),
+    activeHash: hash,
   };
 }
 
@@ -382,6 +390,8 @@ const mapDispatchToProps = {
   uploadDataset,
   setDataset,
   selectDataset,
+  removeDataset,
+  removeSearchIndex,
   getIsFetching,
   setIsFetching,
   showNodes,
