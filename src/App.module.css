@@ -30,7 +30,7 @@
 }
 
 .controls .section {
-  border-top: 2px dashed rgba(125, 125, 125, 0.5);
+  border-bottom: 2px dashed rgba(125, 125, 125, 0.5);
   padding: 1rem 0;
   flex: 0 0;
 }
@@ -148,4 +148,9 @@ input[name=hideControls]:checked ~ .canvas {
   flex-flow: row no-wrap;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 2px dashed rgba(125, 125, 125, 0.5);
+}
+
+.hidden {
+  display: none;
 }

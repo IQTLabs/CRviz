@@ -29,7 +29,9 @@ class App extends Component {
 
   state = {
     showData: true,
-    showGrouping: false
+    showGrouping: false,
+    uuid1: uuidv4(),
+    uuid2: uuidv4(),
   }
 
   toggleShowData = () =>{
@@ -75,34 +77,32 @@ class App extends Component {
           <div className={style.accordionHeader}>
             Data  {!showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faPlusCircle} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faMinusCircle} />}
           </div> 
-          {showData && 
-            <div>
-              <div className={ style.section }>
-                <DatasetControls uuid={ uuidv4() } datasets={ datasets }/>
-              </div> 
+          <div>
+            <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
+              <DatasetControls uuid={ this.state.uuid1 } datasets={ datasets }/>
+            </div> 
 
-              <div className={ style.section }>
-                <DatasetControls uuid={ uuidv4() } datasets={ datasets }/>
-              </div> 
-            </div>
-          }       
+            <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
+              <DatasetControls uuid={ this.state.uuid2 } datasets={ datasets }/>
+            </div> 
+          </div>    
 
           { hasDataset && showData &&
             <div className={ style.section }>
               <SearchControls />
             </div>
           }
-          <div className={style.accordionHeader}>
-            Grouping  {!showGrouping && <FontAwesomeIcon onClick={this.toggleShowGrouping} icon={faPlusCircle} />}{showGrouping && <FontAwesomeIcon onClick={this.toggleShowGrouping} icon={faMinusCircle} />}
+          <div className={style.accordionHeader} >
+            Grouping  {!showGrouping && <FontAwesomeIcon onClick={this.toggleShowGrouping} icon={faPlusCircle} />}{showGrouping && <FontAwesomeIcon  onClick={this.toggleShowGrouping} icon={faMinusCircle} />}
           </div> 
-          { hasDataset && showGrouping &&
-            <div className={ classNames(style.section, style.hierarchySection) }>
+          { hasDataset &&
+            <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
               <HierarchySelector />
             </div>
           }
 
-          { hasDataset && showGrouping &&
-            <div className={ style.section }>
+          { hasDataset &&
+            <div className={ classNames({ [style.section]: true, [style.hidden]: !showGrouping }) }>
               <MiscControls />
             </div>
           }
