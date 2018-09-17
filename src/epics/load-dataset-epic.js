@@ -2,8 +2,9 @@ import { createAction } from "redux-actions";
 import { ofType } from 'redux-observable';
 import { of } from "rxjs";
 import { map, mergeMap, catchError, concat } from 'rxjs/operators';
-
 import { isNil, is } from "ramda";
+
+import hash from "hash-it"
 
 import { buildIndex } from './index-dataset-epic';
 
@@ -20,12 +21,15 @@ const loadDatasetEpic = (action$, store) => {
       return of(payload).pipe(
         map(formatPayload)
         ,mergeMap((payload) => {
+          const dsHash = hash(payload.dataset);
           return of(
             setDataset({
+              hash: dsHash,
               dataset: payload.dataset,
               configuration: payload.configuration
             })
             ,buildIndex({
+                hash: dsHash,
                 dataset: payload.dataset,
                 configuration: payload.configuration || null
             })

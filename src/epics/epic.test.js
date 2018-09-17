@@ -5,8 +5,10 @@ import { createEpicMiddleware, ActionsObservable } from 'redux-observable';
 import { of, throwError } from 'rxjs';
 import { QueryParseError } from 'lunr';
 
+import hash from "hash-it"
+
 import rootEpic from './root-epic'
-import { setDataset } from 'domain/dataset'
+import { setDataset, selectDataset, selectConfiguration } from 'domain/dataset'
 import { getError, setError } from 'domain/error'
 import { loadDataset, CSVconvert } from "./load-dataset-epic"
 import { uploadDataset } from "./upload-dataset-epic"
@@ -17,8 +19,10 @@ import { startRefresh, stopRefresh } from "./refresh-dataset-epic"
 import { 
 	buildIndex, 
 	getSearchIndex,
+	getSearchIndices,
 	setSearchResults,
-	getSearchResults
+	getSearchResults,
+	removeSearchIndex
 } from "./index-dataset-epic"
 import fetchDatasetEpic from "./fetch-dataset-epic"
 
@@ -183,13 +187,14 @@ describe("searchDatasetEpic", () => {
 		  { uid: "uid1", role: { role: "role", confidence: 80 } },
 		  { uid: "uid2", role: { role: "role", confidence: 80 } }
 		];
+	const dsHash = hash(data);
 
 	beforeEach(() => {
 		store  = configureStore();
-		const action$ = setDataset({'dataset': data});		
+		const action$ = setDataset({ 'hash': dsHash, 'dataset': data });		
 		store.dispatch(action$);
-		const config = store.getState().dataset.configuration;
-		const indexAction$ = buildIndex({'dataset': data, 'configuration': config });
+		const config = selectConfiguration(store.getState(), dsHash);
+		const indexAction$ = buildIndex({ 'hash': dsHash, 'dataset': data, 'configuration': config });
 		store.dispatch(indexAction$);
 	});
 
@@ -198,10 +203,10 @@ describe("searchDatasetEpic", () => {
 
 	it("search a dataset", () => {
 		const query = 'uid1';
-		const ds = store.getState().dataset.dataset;
-		const index = store.getState().search.searchIndex;
+		const ds = selectDataset(store.getState(), dsHash);
+		const indices = getSearchIndices(store.getState());
 
-		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndices': indices});
 		store.dispatch(action$);
 
 		expect(action$.payload.results[0]).to.equal(data[0]);
@@ -209,10 +214,10 @@ describe("searchDatasetEpic", () => {
 
 	it("search a for a non-existent field", () => {
 		const query = 'fake: field';
-		const ds = store.getState().dataset.dataset;
-		const index = store.getState().search.searchIndex;
+		const ds = selectDataset(store.getState(), dsHash);
+		const indices = getSearchIndices(store.getState());
 
-		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndices': indices});
 		store.dispatch(action$);
 
 		expect(action$.payload.results.length).to.equal(0);
@@ -222,20 +227,27 @@ describe("searchDatasetEpic", () => {
 	it("clears a search", () => {
 		const query = 'uid1';
 		
-		const ds = store.getState().dataset.dataset;
-		const index = store.getState().search.searchIndex;
+		const ds = selectDataset(store.getState(), dsHash);
+		const indices = getSearchIndices(store.getState());
 
-		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndices': indices});
 		store.dispatch(action$);
 
 		expect(action$.payload.results[0]).to.equal(data[0]);
 
 		const clear = '';
-		const clearAction$ = searchDataset({'dataset': ds, 'queryString': clear, 'searchIndex': index});
+		const clearAction$ = searchDataset({'dataset': ds, 'queryString': clear, 'searchIndices': indices});
 		store.dispatch(clearAction$);
 
 		expect(clearAction$.payload.results.length).to.equal(0);
 	});
+
+	it("removes a search index", () => {
+		const action = removeSearchIndex({ hash: dsHash });
+		store.dispatch(action);
+		
+		expect(getSearchIndex(store.getState(), dsHash)).to.equal(null);
+	})
 });
 
 //use dependency injection to test this epic without having to hit a real URL

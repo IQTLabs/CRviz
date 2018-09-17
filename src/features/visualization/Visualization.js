@@ -21,10 +21,10 @@ class Visualization extends React.PureComponent {
   updateFromProps() {
     this.viz.update({
       hierarchyConfig: this.props.controls.hierarchyConfig,
-      fields: this.props.configuration.fields,
+      fields: this.props.configuration.fields || [],
       showNodes: this.props.controls.shouldShowNodes,
       coloredField: this.props.controls.colorBy,
-      data: this.props.dataset,
+      data: this.props.dataset || [],
       queryString: this.props.queryString
     });
   }
@@ -39,9 +39,10 @@ class Visualization extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => {
+  const hash = Object.keys(state.dataset.datasets)[0] || ""
   return {
-    dataset: selectDataset(state),
-    configuration: selectConfiguration(state),
+    dataset: selectDataset(state, hash),
+    configuration: selectConfiguration(state, hash),
     controls: selectControls(state),
     queryString: getQueryString(state)
   };
