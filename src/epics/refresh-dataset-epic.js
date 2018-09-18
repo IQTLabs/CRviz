@@ -16,15 +16,15 @@ const refreshDatasetEpic = (action$, store) => {
     ofType(startRefresh.toString())
     ,debounceTime(500)
     ,mergeMap((action) => {
-      const hash = action.payload.hash
+      const owner = action.payload.owner
       const url = action.payload.url;
       const header = action.payload.header;
       const interval = action.payload.interval * 1000;
       return timer(0, interval).pipe(
           mergeMap(() => {
             return of(
-              setIsFetching({hash: hash, isFetching: true})
-              ,fetchDataset({ 'url': url, 'header':header})
+              setIsFetching({'owner': owner, 'isFetching': true})
+              ,fetchDataset({'owner': owner, 'url': url, 'header':header})
             )
           })
         ,takeUntil(action$.ofType(stopRefresh.toString()))

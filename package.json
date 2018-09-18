@@ -16,7 +16,6 @@
     "debug": "^4.0.1",
     "deep-extend": "^0.5.1",
     "extend": "^3.0.2",
-    "hash-it": "^4.0.1",
     "hawk": "^7.0.0",
     "http-signature": "^1.1.1",
     "lodash.debounce": "^4.0.8",
@@ -40,7 +39,8 @@
     "rxjs": "^6.2.0",
     "rxjs-compat": "^6.2.0",
     "snyk": "^1.94.0",
-    "tar-pack": "^3.4.0"
+    "tar-pack": "^3.4.0",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "REACT_APP_VERSION=$npm_package_version react-app-rewired start",

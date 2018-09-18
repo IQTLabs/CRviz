@@ -4,10 +4,10 @@ import { Provider } from 'react-redux'
 import { createEpicMiddleware } from 'redux-observable';
 
 import configureMockStore from 'redux-mock-store';
-import hash from "hash-it"
 import { expect } from "chai"
 
 import SearchControls from './SearchControls';
+const uuidv4 = require('uuid/v4');
 
 const dataset = [
           { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
@@ -21,7 +21,7 @@ const configuration = {
   ]
 };
 
-const dsHash = hash(dataset);
+const owner = uuidv4();
 
 let initialState = {
   'dataset':{
@@ -42,7 +42,7 @@ describe('SearchControls', () => {
 		const epicMiddleware = createEpicMiddleware();
 		const mockStore = configureMockStore([epicMiddleware]);
 		initialState.dataset.datasets = {};
-		initialState.dataset.datasets[dsHash] = { 'dataset': dataset, 'configuration': configuration }
+		initialState.dataset.datasets[owner] = { 'dataset': dataset, 'configuration': configuration }
 		store  = mockStore(initialState);
 	});
 

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import Modal from 'react-modal';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faDizzy } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faDizzy, faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { selectDataset } from 'domain/dataset';
 import { selectControls } from 'domain/controls';
@@ -21,9 +21,32 @@ import style from './App.module.css';
 
 import datasets from './datasets';
 
+const uuidv4 = require('uuid/v4');
+
 Modal.setAppElement('#root');
 
 class App extends Component {
+
+  state = {
+    showData: true,
+    showGrouping: false,
+    uuid1: uuidv4(),
+    uuid2: uuidv4(),
+  }
+
+  toggleShowData = () =>{
+    this.setState({
+      showData: !this.state.showData,
+      showGrouping: false
+    });
+  }
+
+  toggleShowGrouping = () =>{
+    this.setState({
+      showData: false,
+      showGrouping: !this.state.showGrouping
+    });
+  }
 
   onErrorClose = () => {
     this.props.clearError();
@@ -33,6 +56,9 @@ class App extends Component {
     const { dataset, darkTheme, error } = this.props;
 
     const hasDataset = dataset && dataset.length > 0;
+
+    const showData = this.state.showData;
+    const showGrouping = this.state.showGrouping;
     
     return (
       <div className={
@@ -48,24 +74,35 @@ class App extends Component {
         </label>
         <div className={ style.controls }>
           <Header />
-          <div className={ style.section }>
-            <DatasetControls datasets={ datasets }/>
-          </div>        
+          <div className={style.accordionHeader}>
+            Data  {!showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faPlusCircle} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faMinusCircle} />}
+          </div> 
+          <div>
+            <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
+              <DatasetControls uuid={ this.state.uuid1 } datasets={ datasets }/>
+            </div> 
 
-          { hasDataset &&
+            <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
+              <DatasetControls uuid={ this.state.uuid2 } datasets={ datasets }/>
+            </div> 
+          </div>    
+
+          { hasDataset && showData &&
             <div className={ style.section }>
               <SearchControls />
             </div>
           }
-
+          <div className={style.accordionHeader} >
+            Grouping  {!showGrouping && <FontAwesomeIcon onClick={this.toggleShowGrouping} icon={faPlusCircle} />}{showGrouping && <FontAwesomeIcon  onClick={this.toggleShowGrouping} icon={faMinusCircle} />}
+          </div> 
           { hasDataset &&
-            <div className={ classNames(style.section, style.hierarchySection) }>
+            <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
               <HierarchySelector />
             </div>
           }
 
           { hasDataset &&
-            <div className={ style.section }>
+            <div className={ classNames({ [style.section]: true, [style.hidden]: !showGrouping }) }>
               <MiscControls />
             </div>
           }

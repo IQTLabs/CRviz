@@ -14,7 +14,7 @@ import {
 import { combineReducers } from "redux";
 import { expect } from "chai"
 
-import hash from "hash-it"
+const uuidv4 = require('uuid/v4');
 
 const reducer = combineReducers({ dataset: datasetReducer });
 
@@ -22,6 +22,7 @@ describe("Dataset Reducer", () => {
   describe("actions", () => {
     describe("setDataset", () => {
       it("sets the dataset and configuration", () => {
+        const owner = uuidv4();
         const dataset = [
           { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
           { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
@@ -33,9 +34,7 @@ describe("Dataset Reducer", () => {
           ]
         };
 
-        const dsHash = hash(dataset);
-
-        const action = setDataset({ hash: dsHash, dataset: dataset, configuration: configuration });
+        const action = setDataset({ 'owner': owner, 'dataset': dataset, 'configuration': configuration });
         const result = reducer({}, action);
 
         const expectedConfiguration = {
@@ -50,16 +49,16 @@ describe("Dataset Reducer", () => {
           ]
         };
 
-        expect(selectDataset(result, dsHash)).to.deep.equal(dataset);
-        expect(selectConfiguration(result, dsHash)).to.deep.equal(expectedConfiguration);
+        expect(selectDataset(result, owner)).to.deep.equal(dataset);
+        expect(selectConfiguration(result, owner)).to.deep.equal(expectedConfiguration);
       });
 
       it("sets a default configuration", () => {
+        const owner = uuidv4();
         const dataset = [
           { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
           { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
         ];
-        const dsHash = hash(dataset);
 
         const expectedConfiguration = {
           fields: [
@@ -77,17 +76,17 @@ describe("Dataset Reducer", () => {
           ]
         };
 
-        const action = setDataset({ hash: dsHash, dataset: dataset });
+        const action = setDataset({ 'owner': owner, 'dataset': dataset });
         const result = reducer({}, action);
-        expect(selectConfiguration(result, dsHash)).to.deep.equal(expectedConfiguration);
+        expect(selectConfiguration(result, owner)).to.deep.equal(expectedConfiguration);
       });
 
       it("find the unique values for each fields", () => {
+        const owner = uuidv4();
         const dataset = [
           { uid: "uid1", role: { role: "role", confidence: 80 } },
           { uid: "uid2", role: { role: "role", confidence: 82 } }
         ];
-        const dsHash = hash(dataset);
 
         const expectedValues = {
           uid: ["uid1", "uid2"],
@@ -95,21 +94,21 @@ describe("Dataset Reducer", () => {
           "role.confidence": [80, 82]
         };
 
-        const action = setDataset({ hash: dsHash, dataset: dataset });
+        const action = setDataset({ 'owner': owner, 'dataset': dataset });
         const result = reducer({}, action);
-        expect(selectValues(result, dsHash)).to.deep.equal(expectedValues);
+        expect(selectValues(result, owner)).to.deep.equal(expectedValues);
       });
 
       it("sets the fetching indicator", () => {
+        const owner = uuidv4();
         const expectedValue = true;
         const data = [
           { uid: "uid1", role: { role: "role", confidence: 80 } },
           { uid: "uid2", role: { role: "role", confidence: 80 } }
         ];
-        const dsHash = hash(data);
 
         let dataset = { datasets: {} };
-        dataset.datasets[dsHash] = {
+        dataset.datasets[owner] = {
           dataset: data,
           values: {},
           configuration: {
@@ -119,13 +118,14 @@ describe("Dataset Reducer", () => {
           lastUpdated: null
         }
 
-        const action = setIsFetching({hash: dsHash, isFetching: true});
+        const action = setIsFetching({'owner': owner, 'isFetching': true});
         const result = reducer({ dataset }, action);
 
-        expect(getIsFetching(result, dsHash)).to.equal(expectedValue);
+        expect(getIsFetching(result, owner)).to.equal(expectedValue);
       });
 
       it("removes a dataset", () => {
+        const owner = uuidv4();
         const data = [
           { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
           { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
@@ -136,21 +136,20 @@ describe("Dataset Reducer", () => {
             { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
           ]
         };
-        const dsHash = hash(data);
         let dataset = {
           'datasets': {}
         }
 
-        dataset.datasets[dsHash] = {
+        dataset.datasets[owner] = {
           'dataset': data,
           'configuration': configuration
         }
 
-        const action = removeDataset({ hash: dsHash });
+        const action = removeDataset({ 'owner': owner });
         const result = reducer({dataset}, action);
 
-        expect(selectDataset(result, dsHash).length).to.equal(0);
-        expect(selectConfiguration(result, dsHash).fields.length).to.equal(0);
+        expect(selectDataset(result, owner).length).to.equal(0);
+        expect(selectConfiguration(result, owner).fields.length).to.equal(0);
       });
 
       it("merges fields", () => {
