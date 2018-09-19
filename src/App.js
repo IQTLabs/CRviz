@@ -59,7 +59,7 @@ class App extends Component {
 
     const showData = this.state.showData;
     const showGrouping = this.state.showGrouping;
-    
+
     return (
       <div className={
           classNames({

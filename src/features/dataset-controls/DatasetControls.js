@@ -237,6 +237,7 @@ class DatasetControls extends React.Component {
         <div className={style.uploadContainer}>
           <span className={style.label}>Upload</span>
           <DatasetUpload
+            ownerUuid={this.props.uuid}
             className={style.fileUpload}
             selected={this.state.selectedFile}
             onChange={this.onUpload}
