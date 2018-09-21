@@ -48,7 +48,6 @@
     "coverage": "nyc report --reporter=text-lcov > coverage/coverage.lcov && codecov",
     "test": "NODE_ENV=test NODE_PATH=./src nyc mocha --opts ./.mocha ",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "lint": "eslint --ext=js --ext=jsx .",
     "release": "standard-version",
