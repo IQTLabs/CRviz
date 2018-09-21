@@ -37,15 +37,23 @@ const searchDatasetEpic = (action$, store) => {
 const performSearch = (data) => {
   data.results = [];
   var toFind = data.queryString || '';
-  const idx = data.searchIndex;
+  const indices = data.searchIndices;
   var results = [];
-  if(idx && toFind){
-    results = idx.search(toFind.toLowerCase());
+  if(indices && toFind){
+    for(var hash in indices){
+      const idx = indices[hash];
+      const idxResults = idx.search(toFind.toLowerCase());
+      const temp = new Set([...results, ...idxResults]);
+      results = [...temp];
+    }
   }
+
   data.dataset.forEach((el) => { el.isSearchResult = false; });
   results.forEach((r) => {
-    data.dataset[r.ref].isSearchResult = true;
-    data.results.push(data.dataset[r.ref]);
+    if(data.dataset[r.ref]){
+      data.dataset[r.ref].isSearchResult = true;
+      data.results.push(data.dataset[r.ref]);
+    }
   });
 };
 

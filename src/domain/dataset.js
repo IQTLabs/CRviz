@@ -17,12 +17,17 @@ import {
 } from "ramda";
 
 const defaultState = {
+  datasets: {}
+};
+const defaultItemState = {
+  owner: "",
   dataset: [],
   values: {},
   configuration: {
     fields: []
   },
-  isFetching: false
+  isFetching: false,
+  lastUpdated: null
 };
 
 /**
@@ -97,6 +102,7 @@ const valuesFor = (dataset, configuration) => {
   }, configuration.fields));
 };
 
+
 // ACTIONS
 
 /**
@@ -106,6 +112,7 @@ const valuesFor = (dataset, configuration) => {
  * }
 */
 const setDataset = createAction("SET_DATASET");
+const removeDataset = createAction("REMOVE_DATASET");
 const setIsFetching = createAction("SET_IS_FETCHING");
 
 // REDUCERS
@@ -113,7 +120,7 @@ const reducer = handleActions(
   {
     [setDataset]: (state, { payload }) => {
       const dataset = payload.dataset;
-
+      const owner = payload.owner;
       const configuration = configurationFor(
         payload.dataset || [],
         payload.configuration || {}
@@ -122,10 +129,27 @@ const reducer = handleActions(
       const values = valuesFor(dataset, configuration);
       const isFetching = false;
       const lastUpdated = new Date();
-      return { ...state, dataset, values, configuration, isFetching, lastUpdated };
+      state.datasets[owner] = {
+        dataset: dataset,
+        values: values,
+        configuration: configuration,
+        isFetching: isFetching,
+        lastUpdated: lastUpdated
+      }
+      return { ...state};
+    },
+    [removeDataset]: (state, { payload }) => {
+      const owner = payload.owner;
+      if(state.datasets.hasOwnProperty(owner))
+        delete state.datasets[owner];
+
+      return { ...state }
     },
     [setIsFetching]: (state, { payload }) => {
-      const isFetching = !!payload;
+      const owner = payload.owner;
+      const isFetching = !!payload.isFetching;
+      if(state.datasets.hasOwnProperty(owner))
+        state.datasets[owner].isFetching = isFetching;
       return { ...state, isFetching};
     }
   },
@@ -134,13 +158,44 @@ const reducer = handleActions(
 
 // SELECTORS
 
-const selectDataset = (state) => state.dataset.dataset;
-const selectConfiguration = (state) => state.dataset.configuration;
-const selectValues = (state) => state.dataset.values;
-const getIsFetching = (state) => state.dataset.isFetching;
-const getLastUpdated = (state) => state.dataset.lastUpdated;
+const selectDataset = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].dataset ? state.dataset.datasets[owner].dataset : defaultItemState.dataset;
+const selectConfiguration = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].configuration ? state.dataset.datasets[owner].configuration : defaultItemState.configuration;
+const selectMergedConfiguration = (state) => {
+  let fields = [];
+  const ds = state.dataset.datasets;
+  for (var key in ds){
+    for (var f of ds[key].configuration.fields){ 
+      // eslint-disable-next-line no-loop-func
+      if(!fields.some(field => field.displayName === f.displayName)){
+        fields.push(f);
+      }
+    }
+  }
+
+  return { fields: fields };
+}
+const selectValues = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].values ? state.dataset.datasets[owner].values : defaultItemState.values;
+const selectMergedValues = (state) => {
+  let vals = {};
+  const ds = state.dataset.datasets;
+  for (var key in ds){
+    for (var v in ds[key].values){
+      if(vals.hasOwnProperty(v)){
+        const valSet = new Set([...vals[v], ...ds[key].values[v]]);
+        vals[v] = [...valSet];
+      }
+      else {
+        vals[v] = ds[key].values[v];
+      }
+    }
+  }
+
+  return vals;
+}
+const getIsFetching = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].isFetching ? state.dataset.datasets[owner].isFetching : defaultItemState.isFetching;
+const getLastUpdated = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].lastUpdated ? state.dataset.datasets[owner].lastUpdated : defaultItemState.lastUpdated;
 
 
 export default reducer;
 
-export { setDataset, selectDataset, selectConfiguration, selectValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };
+export { setDataset, selectDataset, removeDataset, selectConfiguration, selectMergedConfiguration, selectValues, selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };

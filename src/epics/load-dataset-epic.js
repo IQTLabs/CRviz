@@ -2,7 +2,6 @@ import { createAction } from "redux-actions";
 import { ofType } from 'redux-observable';
 import { of } from "rxjs";
 import { map, mergeMap, catchError, concat } from 'rxjs/operators';
-
 import { isNil, is } from "ramda";
 
 import { buildIndex } from './index-dataset-epic';
@@ -20,12 +19,15 @@ const loadDatasetEpic = (action$, store) => {
       return of(payload).pipe(
         map(formatPayload)
         ,mergeMap((payload) => {
+          const owner = payload.owner;
           return of(
             setDataset({
+              owner: owner,
               dataset: payload.dataset,
               configuration: payload.configuration
             })
             ,buildIndex({
+                owner: owner,
                 dataset: payload.dataset,
                 configuration: payload.configuration || null
             })
@@ -48,7 +50,8 @@ const loadDatasetEpic = (action$, store) => {
 // doesn't really care if it's not CSV; if it *is* CSV, convert to JSON.
 // Otherwise, just pass it along.
 const CSVconvert = (data) => {
-  var lines = data.trim().split(/[\r\n]+/g);
+  const owner = data.owner;
+  var lines = data.file.trim().split(/[\r\n]+/g);
   if (lines.length < 2) { // bail if there's not even linebreaks
     return data;
   }
@@ -88,22 +91,24 @@ const CSVconvert = (data) => {
     }
   }
   jsonstring += ']'
-  return jsonstring;
+  return { 'owner': owner, 'file': jsonstring };
 }
 
 //if we have a naked array or an object not containing a dataset instead of an object containing a dataset
 //transfer the array into an object's dataset to maintain a consistent
 //schema with what is used elsewhere see https://github.com/CyberReboot/CRviz/issues/33
 const formatPayload = (data) => {
-  var config = data.configuration;
+  const owner = data.owner;
+  const content = data.content;
+  const config = content.configuration;
   var temp = {};
-  if(!isNil(data.dataset) && is(Array, data.dataset)){
-    temp = data.dataset;
-  } else if(isNil(data.dataset) && is(Array, data)) {
-    temp  = data;
-  } else if(isNil(data.dataset)) {
+  if(!isNil(content.dataset) && is(Array, content.dataset)){
+    temp = content.dataset;
+  } else if(isNil(content.dataset) && is(Array, content)) {
+    temp  = content;
+  } else if(isNil(content.dataset)) {
     let obj = {};
-    Object.entries(data).forEach( (entry) =>{
+    Object.entries(content).forEach( (entry) =>{
       let key = entry[0];
       let value = entry[1]
       obj[key] = value;
@@ -113,7 +118,7 @@ const formatPayload = (data) => {
     throw ValidationError('Data in invalid format');
   }
 
-  data = {'dataset': temp, 'configuration': config};
+  data = { 'owner': owner, 'dataset': temp, 'configuration': config };
   return data;
 };
 

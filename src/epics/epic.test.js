@@ -6,10 +6,10 @@ import { of, throwError } from 'rxjs';
 import { QueryParseError } from 'lunr';
 
 import rootEpic from './root-epic'
-import { setDataset } from 'domain/dataset'
+import { setDataset, selectDataset, selectConfiguration } from 'domain/dataset'
 import { getError, setError } from 'domain/error'
 import { loadDataset, CSVconvert } from "./load-dataset-epic"
-import { uploadDataset } from "./upload-dataset-epic"
+import { uploadDataset, fromJson } from "./upload-dataset-epic"
 import { searchDataset } from "./search-dataset-epic"
 import { fetchDataset, buildAuthHeader } from "./fetch-dataset-epic"
 import refreshDatasetEpic from "./refresh-dataset-epic"
@@ -17,10 +17,14 @@ import { startRefresh, stopRefresh } from "./refresh-dataset-epic"
 import { 
 	buildIndex, 
 	getSearchIndex,
+	getSearchIndices,
 	setSearchResults,
-	getSearchResults
+	getSearchResults,
+	removeSearchIndex
 } from "./index-dataset-epic"
 import fetchDatasetEpic from "./fetch-dataset-epic"
+
+const uuidv4 = require('uuid/v4');
 
 describe("loadDatasetEpic", () => {
 	let store;
@@ -43,18 +47,20 @@ describe("loadDatasetEpic", () => {
 	});
 	describe("loading various datasets", () => {
 		it("loads the dataset with default config", () => {
+			const owner = uuidv4();
 			const data = [
 			  { uid: "uid1", role: { role: "role", confidence: 80 } },
 			  { uid: "uid2", role: { role: "role", confidence: 80 } }
 			];
 
-			const action$ = loadDataset(data);
+			const action$ = loadDataset({ 'owner': owner, 'content': data });
 			store.dispatch(action$);
 			let typeToCheck = setDataset.toString();
 			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset).to.equal(data);
 		});
 
 		it("loads the dataset and config", () => {
+			const owner = uuidv4();
 			const dataset = [
 	          { uid: "uid1", role: { role: "role", confidence: 80 } },
 	          { uid: "uid2", role: { role: "role", confidence: 80 } }
@@ -66,7 +72,7 @@ describe("loadDatasetEpic", () => {
 	          ]
 	        };
 
-			const action$ = loadDataset({dataset, configuration});
+			const action$ = loadDataset({ 'owner': owner, 'content': { 'dataset': dataset, 'configuration': configuration} });
 			store.dispatch(action$);
 			let typeToCheck = setDataset.toString();	
 
@@ -75,38 +81,41 @@ describe("loadDatasetEpic", () => {
 		});
 
 		it("loads a simple object", () => {
+			const owner = uuidv4();
 			const data = { uid: "uid1", role: { role: "role", confidence: 80 } };
 
-			const action$ = loadDataset(data);
+			const action$ = loadDataset({ 'owner': owner, 'content': data });
 			store.dispatch(action$);
 			let typeToCheck = setDataset.toString();
+
 			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset.length).to.equal(1);
 			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.dataset[0]).to.deep.equal(data);
 		});
 	});
 
 	it("preserves control state across load", () => {
+		const owner = uuidv4();
 		const data = [
 		  { uid: "uid1", role: { role: "role", confidence: 80 } },
 		  { uid: "uid2", role: { role: "role", confidence: 80 } }
 		];
 
-		const action$ = loadDataset(data);
+		const action$ = loadDataset({ 'owner': owner, 'content': data });
 		store.dispatch(action$);
 		expect(store.getState()).to.deep.equal(initialState);
 	});
 
 	describe("CSV Conversion", () => {
 		it("converts CSV to json", () => {
+			const owner = uuidv4();
 			const expectedData = [
 			  { uid: "uid1", role: "role", confidence: "80" },
 			  { uid: "uid2", role: "role", confidence: "80" }
 			];
 			const csv = "uid,role,confidence\n" +
 						"uid1,role,80\nuid2,role,80"
-			const converted = CSVconvert(csv);
-
-			expect(JSON.parse(converted)).to.deep.equal(expectedData);
+			const converted = CSVconvert({ 'owner': owner, 'file': csv });
+			expect(fromJson(converted).content).to.deep.equal(expectedData);
 		});
 	});
 
@@ -114,6 +123,7 @@ describe("loadDatasetEpic", () => {
 
 describe("uploadDatasetEpic", () => {
 	let store;
+	const owner = uuidv4();
 	const initialState ={
 			'controls': {
 				'hierarchyConfig':{'path': ['test'], 'displayName': 'test', 'groupable': true},
@@ -139,11 +149,11 @@ describe("uploadDatasetEpic", () => {
 		];
 		const theBlob = new Blob([JSON.stringify(data)], { 'type': 'application/json' });
 
-		const action$ = uploadDataset(theBlob);
+		const action$ = uploadDataset({ 'owner': owner, 'file': theBlob });
 		store.dispatch(action$);
 		let typeToCheck = uploadDataset.toString();
 
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload).to.equal(theBlob);
+		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.file).to.equal(theBlob);
 	});
 
 	it("uploads a csv file containing a dataset", () => {
@@ -151,11 +161,11 @@ describe("uploadDatasetEpic", () => {
 					"uid1,role,80\nuid2,role,80"
 		const theBlob = new Blob([csv], { 'type': 'text/csv' });
 
-		const action$ = uploadDataset(theBlob);
+		const action$ = uploadDataset({ 'owner': owner, 'file': theBlob });
 		store.dispatch(action$);
 		let typeToCheck = uploadDataset.toString();
 
-		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload).to.equal(theBlob);
+		expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.file).to.equal(theBlob);
 	});
 
 	it("fails to upload a file containing only text", (done) => {
@@ -164,7 +174,7 @@ describe("uploadDatasetEpic", () => {
 		const expectedMessage = "Invalid JSON."
 		const theBlob = new Blob([text], { 'type': 'text/plain' });
 
-		const action$ = uploadDataset(theBlob);
+		const action$ = uploadDataset({ 'owner': owner, 'file': theBlob });
 
 		store.subscribe(() => {
 			if(getError(store.getState())){
@@ -179,6 +189,7 @@ describe("uploadDatasetEpic", () => {
 
 describe("searchDatasetEpic", () => {
 	let store;
+	const owner = uuidv4();
 	const data = [
 		  { uid: "uid1", role: { role: "role", confidence: 80 } },
 		  { uid: "uid2", role: { role: "role", confidence: 80 } }
@@ -186,10 +197,10 @@ describe("searchDatasetEpic", () => {
 
 	beforeEach(() => {
 		store  = configureStore();
-		const action$ = setDataset({'dataset': data});		
+		const action$ = setDataset({ 'owner': owner, 'dataset': data });		
 		store.dispatch(action$);
-		const config = store.getState().dataset.configuration;
-		const indexAction$ = buildIndex({'dataset': data, 'configuration': config });
+		const config = selectConfiguration(store.getState(), owner);
+		const indexAction$ = buildIndex({ 'owner': owner, 'dataset': data, 'configuration': config });
 		store.dispatch(indexAction$);
 	});
 
@@ -198,10 +209,10 @@ describe("searchDatasetEpic", () => {
 
 	it("search a dataset", () => {
 		const query = 'uid1';
-		const ds = store.getState().dataset.dataset;
-		const index = store.getState().search.searchIndex;
+		const ds = selectDataset(store.getState(), owner);
+		const indices = getSearchIndices(store.getState());
 
-		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndices': indices});
 		store.dispatch(action$);
 
 		expect(action$.payload.results[0]).to.equal(data[0]);
@@ -209,10 +220,10 @@ describe("searchDatasetEpic", () => {
 
 	it("search a for a non-existent field", () => {
 		const query = 'fake: field';
-		const ds = store.getState().dataset.dataset;
-		const index = store.getState().search.searchIndex;
+		const ds = selectDataset(store.getState(), owner);
+		const indices = getSearchIndices(store.getState());
 
-		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndices': indices});
 		store.dispatch(action$);
 
 		expect(action$.payload.results.length).to.equal(0);
@@ -222,25 +233,33 @@ describe("searchDatasetEpic", () => {
 	it("clears a search", () => {
 		const query = 'uid1';
 		
-		const ds = store.getState().dataset.dataset;
-		const index = store.getState().search.searchIndex;
+		const ds = selectDataset(store.getState(), owner);
+		const indices = getSearchIndices(store.getState());
 
-		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndex': index});
+		const action$ = searchDataset({'dataset': ds, 'queryString': query, 'searchIndices': indices});
 		store.dispatch(action$);
 
 		expect(action$.payload.results[0]).to.equal(data[0]);
 
 		const clear = '';
-		const clearAction$ = searchDataset({'dataset': ds, 'queryString': clear, 'searchIndex': index});
+		const clearAction$ = searchDataset({'dataset': ds, 'queryString': clear, 'searchIndices': indices});
 		store.dispatch(clearAction$);
 
 		expect(clearAction$.payload.results.length).to.equal(0);
 	});
+
+	it("removes a search index", () => {
+		const action = removeSearchIndex({ 'owner': owner });
+		store.dispatch(action);
+		
+		expect(getSearchIndex(store.getState(), owner)).to.equal(null);
+	})
 });
 
 //use dependency injection to test this epic without having to hit a real URL
 //so that we can get consisten test results regardless of connectivity
 describe("fetchDatasetEpic", () => {
+	const owner = uuidv4();
 	const data = [
 		  { uid: "uid1", role: { role: "role", confidence: 80 } },
 		  { uid: "uid2", role: { role: "role", confidence: 80 } }
@@ -298,15 +317,17 @@ describe("fetchDatasetEpic", () => {
 		});
 	});
 
-	it("loads the dataset with default config", () => {
+	it("fetches an array of data", (done) => {
 		const url = 'test.test'
 		let typeToCheck = loadDataset.toString();
 
-		const action$ = of({'type': fetchDataset.toString(), 'payload': url});
+		const action$ = of({'type': fetchDataset.toString(), 'payload': { 'owner': owner, 'url': url } });
 		fetchDatasetEpic(action$, store, mockAjax)
 			 .subscribe((actions) => {
 				expect(actions.type).to.equal(typeToCheck);
-				expect(actions.payload).to.equal(data);
+				expect(actions.payload.content).to.equal(data);
+
+				done();
 			});
 	});
 
@@ -314,7 +335,7 @@ describe("fetchDatasetEpic", () => {
 		const url = 'test.test'
 		let typeToCheck = setError.toString();
 
-		const action$ = of({'type': fetchDataset.toString(), 'payload': url});
+		const action$ = of({'type': fetchDataset.toString(), 'payload': { 'owner': owner, 'url': url } });
 		fetchDatasetEpic(action$, store, mockAjaxError)
 			 .subscribe((actions) => {
 				expect(actions.type).to.equal(typeToCheck);
@@ -327,6 +348,7 @@ describe("fetchDatasetEpic", () => {
 
 describe("indexDatasetEpic", () => {
 	let store;
+	const owner = uuidv4();
 	const dataset = [
 		  { uid: "uid1", role: { role: "role", confidence: 80 } },
 		  { uid: "uid2", role: { role: "role", confidence: 80 } }
@@ -341,7 +363,7 @@ describe("indexDatasetEpic", () => {
 	beforeEach(() => {
 
 		store  = configureStore();
-		const action$ = setDataset({'dataset': dataset});		
+		const action$ = setDataset({ 'owner': owner, 'dataset': dataset });		
 		store.dispatch(action$);
 	});
 
@@ -351,7 +373,7 @@ describe("indexDatasetEpic", () => {
 
 	it("sets the search index", () => {
 
-	    const action$ = buildIndex({ dataset, configuration });
+	    const action$ = buildIndex({ 'owner': owner, 'dataset': dataset, 'configuration': configuration });
 	    store.dispatch(action$);
 
 	    const expectedConfiguration = {
@@ -360,23 +382,23 @@ describe("indexDatasetEpic", () => {
 	        { path: ["role", "role"], displayName: "Role", groupable: false }
 	      ]
 	    };
-	    const idx = getSearchIndex(store.getState())
+	    const idx = getSearchIndex(store.getState(), owner);
 	    expect(idx.fields.length).to.equal(expectedConfiguration.fields.length);
 	});
 
 	it("sets the search index in a config with no fields", () => {
 		const emptyConf = {};
 
-	    const action$ = buildIndex({ dataset, emptyConf });
+	    const action$ = buildIndex({ 'owner': owner, 'dataset': dataset, 'configuration': emptyConf });
 	    store.dispatch(action$);
 
-	    const expectedFields = ['uid', 'role.role', 'role.confidence'];
-	    const idx = getSearchIndex(store.getState())
+	    const expectedFields = []//['uid', 'role.role', 'role.confidence'];
+	    const idx = getSearchIndex(store.getState(), owner)
+
 	    expect(idx.fields).to.deep.equal(expectedFields);
 	});
 
-	it("sets the results of a search", () => {
-        
+	it("sets the results of a search", () => {       
 
         const resultSet = [
           { uid: "uid1", role: { role: "role", confidence: 80 } },

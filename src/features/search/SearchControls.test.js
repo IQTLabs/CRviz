@@ -7,28 +7,30 @@ import configureMockStore from 'redux-mock-store';
 import { expect } from "chai"
 
 import SearchControls from './SearchControls';
+const uuidv4 = require('uuid/v4');
 
 const dataset = [
-          { uid: "uid1", role: { role: "role", confidence: 80 } },
-          { uid: "uid2", role: { role: "role", confidence: 80 } }
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
         ];
 
 const configuration = {
   fields: [
-    { path: ["uid"], displayName: "UID", groupable: true },
-    { path: ["role", "role"], displayName: "Role", groupable: false }
+    { 'path': ["uid"], 'displayName': "UID", groupable: true },
+    { 'path': ["role", "role"], 'displayName': "Role", groupable: false }
   ]
 };
 
-const initialState = {
-  dataset:{
-  	dataset: dataset,
-  	configuration: configuration
+const owner = uuidv4();
+
+let initialState = {
+  'dataset':{
+  	'datasets': {}
   },
-  search:{
-  	searchResults: [],
-  	searchIndex: null,
-  	queryString: '',
+  'search':{
+  	'searchResults': [],
+  	'searchIndices': [],
+  	'queryString': '',
   },
 };
 
@@ -39,6 +41,8 @@ describe('SearchControls', () => {
 	beforeEach(() => {	
 		const epicMiddleware = createEpicMiddleware();
 		const mockStore = configureMockStore([epicMiddleware]);
+		initialState.dataset.datasets = {};
+		initialState.dataset.datasets[owner] = { 'dataset': dataset, 'configuration': configuration }
 		store  = mockStore(initialState);
 	});
 
@@ -66,11 +70,11 @@ describe('SearchControls', () => {
 		const expectedAction = {
 			type: 'SEARCH_DATASET',
 			payload: {
-				dataset: dataset,
-  				configuration: configuration,
-  				searchIndex: null,
-				queryString: 'test',
-  				results: []
+				'dataset': dataset,
+  				'configuration': configuration,
+  				'searchIndices': [],
+				'queryString': 'test',
+  				'results': []
 			}
 		}
 		const event ={target: {value: "test"}}
@@ -92,7 +96,7 @@ describe('SearchControls', () => {
 		const expectedText = "2 Results found";
 		const newState = {
 		  queryString: 'uid',
-		  searchIndex: null,
+		  searchIndices: [],
 		  results: dataset,
 		  hasSearch: true
 		}
@@ -111,7 +115,7 @@ describe('SearchControls', () => {
 	it('clears the search', () => {
 		const newState = {
 		  queryString: 'uid',
-		  searchIndex: null,
+		  searchIndices: [],
 		  results: dataset,
 		  hasSearch: true
 		}
@@ -120,7 +124,7 @@ describe('SearchControls', () => {
 			payload: {
 				dataset: dataset,
   				configuration: configuration,
-  				searchIndex: null,
+  				searchIndices: [],
 				queryString: '',
   				results: []
 			}

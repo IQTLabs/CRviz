@@ -10,10 +10,11 @@ import { faCheck, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
 import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
+import { removeSearchIndex } from "epics/index-dataset-epic";
 import { showNodes, setHierarchyConfig, colorBy } from "domain/controls"
 
 import { setError } from "domain/error"
-import { setDataset, selectDataset, getIsFetching, setIsFetching, getLastUpdated } from "domain/dataset";
+import { setDataset, selectDataset, removeDataset, getIsFetching, setIsFetching, getLastUpdated } from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
@@ -22,6 +23,8 @@ import DatasetRefresh from "./DatasetRefresh";
 import DatasetTimedRefresh from "./DatasetTimedRefresh";
 
 import style from "./DatasetControls.module.css";
+
+const uuidv4 = require('uuid/v4');
 
 const CUSTOM_DATASET = {
   name: "Custom URL",
@@ -51,19 +54,23 @@ Modal.setAppElement('#root');
 
 class DatasetControls extends React.Component {
 
-  state = {
-    dataset: null,
-    selected: null,
-    selectedFile: null,
-    showUrlEntry: false,
-    url: '',
-    authScheme:'',
-    token: '',
-    username: '',
-    password: '',
-    refreshInterval: 0,
-    refreshTimerRunning: false
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      dataset: null,
+      selected: null,
+      selectedFile: null,
+      showUrlEntry: false,
+      url: '',
+      authScheme:'',
+      token: '',
+      username: '',
+      password: '',
+      refreshInterval: 0,
+      refreshTimerRunning: false
+    };
+  }
 
   resetDataset = () => {
     this.props.setDataset({ dataset: [], configuration: {} });
@@ -74,10 +81,10 @@ class DatasetControls extends React.Component {
   }
 
   fetchAndSetDataset = (url, dataset, username, password, token) => {
-    this.props.setIsFetching(true);
+    this.props.setIsFetching({owner: this.props.uuid, isFetching: true});
     const authHeader = buildAuthHeader(username, password, token);
     if (toURL(url)) {
-      this.props.fetchDataset({'url': url, 'header': authHeader});
+      this.props.fetchDataset({ 'owner': this.props.uuid, 'url': url, 'header': authHeader });
       this.setState({
         selected: dataset,
         selectedFile: null,
@@ -92,6 +99,8 @@ class DatasetControls extends React.Component {
       return this.resetDataset();
     }
 
+    this.props.removeDataset({owner: this.props.uuid});
+    this.props.removeSearchIndex({owner: this.props.uuid});
     this.props.setHierarchyConfig([]);
     this.props.colorBy(null);
     this.props.showNodes(true);
@@ -118,7 +127,7 @@ class DatasetControls extends React.Component {
   onUpload = (file) => {
     this.props.setHierarchyConfig([]);
     this.props.colorBy(null);
-    this.props.uploadDataset(file);
+    this.props.uploadDataset({ 'owner': this.props.uuid, 'file': file });
     this.props.stopRefresh();
     this.setState({
       selected: null,
@@ -181,19 +190,19 @@ class DatasetControls extends React.Component {
   }
 
   onTimedRefreshStart = () =>{
-    this.props.setIsFetching(true);
+    this.props.setIsFetching({'owner': this.props.uuid, 'isFetching': true});
     this.setState({
-      refreshTimerRunning: true
+      'refreshTimerRunning': true
     });
     const authHeader = buildAuthHeader(this.state.username, this.state.password, this.state.token);
     const url = this.state.selected.url;
     const interval = this.state.refreshInterval;
-    this.props.startRefresh({'url': url, 'header': authHeader, 'interval': interval});
+    this.props.startRefresh({'owner': this.props.uuid,'url': url, 'header': authHeader, 'interval': interval});
   }
 
   onTimedRefreshStop = () =>{
     this.setState({
-      refreshTimerRunning: false
+      'refreshTimerRunning': false
     });
     this.props.stopRefresh();
   }
@@ -228,6 +237,7 @@ class DatasetControls extends React.Component {
         <div className={style.uploadContainer}>
           <span className={style.label}>Upload</span>
           <DatasetUpload
+            ownerUuid={this.props.uuid}
             className={style.fileUpload}
             selected={this.state.selectedFile}
             onChange={this.onUpload}
@@ -270,7 +280,7 @@ class DatasetControls extends React.Component {
             }
             { canRefresh && !this.props.isFetching &&
               <span>
-                Last Updated: {this.props.lastUpdated.toLocaleDateString() || ""} {this.props.lastUpdated.toLocaleTimeString() || ""}
+                Last Updated: { this.props.lastUpdated ? (this.props.lastUpdated.toLocaleDateString() || "") + " " + (this.props.lastUpdated.toLocaleTimeString() || "") : "Never" }
               </span>
             }
           </div>
@@ -345,6 +355,7 @@ const toURL = (url) => {
 }
 
 DatasetControls.defaultProps = {
+  uuid: uuidv4(),
   datasets: [],
   dataset: null,
   isFetching: false,
@@ -352,11 +363,14 @@ DatasetControls.defaultProps = {
 };
 
 DatasetControls.propTypes = {
+  uuid: PropTypes.string,
   datasets: PropTypes.array,
   dataset: PropTypes.array,
   fetchDataset: PropTypes.func.isRequired,
   uploadDataset: PropTypes.func.isRequired,
   setDataset: PropTypes.func.isRequired,
+  removeDataset: PropTypes.func.isRequired,
+  removeSearchIndex: PropTypes.func.isRequired,
   getIsFetching: PropTypes.func.isRequired,
   setIsFetching: PropTypes.func.isRequired,
   showNodes: PropTypes.func.isRequired,
@@ -370,10 +384,11 @@ DatasetControls.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const owner = ownProps.uuid;
   return {
-    dataset: selectDataset(state),
-    isFetching: getIsFetching(state),
-    lastUpdated: getLastUpdated(state)
+    dataset: selectDataset(state,owner),
+    isFetching: getIsFetching(state, owner),
+    lastUpdated: getLastUpdated(state, owner)
   };
 }
 
@@ -382,6 +397,8 @@ const mapDispatchToProps = {
   uploadDataset,
   setDataset,
   selectDataset,
+  removeDataset,
+  removeSearchIndex,
   getIsFetching,
   setIsFetching,
   showNodes,

@@ -10,16 +10,19 @@ const lunr = require("lunr");
 
 const BUILD_INDEX = "BUILD_INDEX";
 const BUILD_INDEX_SUCCESS = "BUILD_INDEX_SUCCESS";
+const REMOVE_SEARCH_INDEX = "REMOVE_SEARCH_INDEX";
 //const BUILD_INDEX_FAILURE = "BUILD_INDEX_FAILURE";
 const SET_SEARCH_RESULTS = "SET_SEARCH_RESULTS";
 
 const buildIndex = (payload) => ({'type': BUILD_INDEX, 'payload': payload })
 const buildIndexSuccess = (payload) => ({'type': BUILD_INDEX_SUCCESS, 'payload': payload})
+const removeSearchIndex = (payload) => ({'type': REMOVE_SEARCH_INDEX, 'payload': payload});
 const setSearchResults = (payload) => ({'type': SET_SEARCH_RESULTS, 'payload': payload })
 
 const getSearchResults = (state) => state.search.searchResults || [];
 const getQueryString = (state) => state.search.queryString;
-const getSearchIndex = (state) => state.search.searchIndex;
+const getSearchIndex = (state, owner) => state.search.searchIndices[owner] || null;
+const getSearchIndices = (state) => state.search.searchIndices || [];
 
 const indexDatasetEpic = (action$, store) => {
   return action$.pipe(
@@ -35,16 +38,25 @@ const indexDatasetEpic = (action$, store) => {
     );
 };
 
-const searchReducer = (state = { searchIndex: null, queryString: '', searchResults: null }, action) => {
+const searchReducer = (state = { searchIndices: {}, queryString: '', searchResults: null }, action) => {
   switch (action.type) {
     case BUILD_INDEX_SUCCESS:
-      const searchIndex = action.payload
-      return {...state, searchIndex};
+      const biowner = action.payload.owner;
+      const searchIndex = action.payload.index;
+      state.searchIndices[biowner] = searchIndex;
+      return {...state };
     case 
-    SET_SEARCH_RESULTS: 
+    SET_SEARCH_RESULTS:
       const searchResults = action.payload.results;
       const queryString = action.payload.queryString;
-      return { ...state, searchResults, queryString}
+      return { ...state, searchResults, queryString};
+    case 
+    REMOVE_SEARCH_INDEX:
+      const rsowner = action.payload.owner;
+      if(state.searchIndices.hasOwnProperty(rsowner))
+        delete state.searchIndices[rsowner];
+
+      return { ...state }
     default:
       return state;
   }
@@ -70,6 +82,7 @@ const flattenDataset = (ds, cfg) => {
 }
 
 const generateIndex = (payload) => {
+  const owner = payload.owner;
   const dataset = payload.dataset;
   const configuration = payload.configuration || configurationFor(dataset);
   var flat = flattenDataset(dataset, configuration);
@@ -80,9 +93,9 @@ const generateIndex = (payload) => {
     }
     flat.map((item) => { return this.add(item); })
   });
-  return idx;
+  return { owner: owner, index: idx };
 };
 
 export default indexDatasetEpic;
 
-export { buildIndex, searchReducer,  getSearchIndex, setSearchResults, getSearchResults, getQueryString };
+export { buildIndex, searchReducer,  getSearchIndex, removeSearchIndex, getSearchIndices, setSearchResults, getSearchResults, getQueryString };
