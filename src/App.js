@@ -87,8 +87,8 @@ class App extends Component {
             </div> 
           </div>    
 
-          { hasDataset && showData &&
-            <div className={ style.section }>
+          { hasDataset &&
+            <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
               <SearchControls />
             </div>
           }
