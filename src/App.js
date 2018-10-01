@@ -30,6 +30,7 @@ class App extends Component {
   state = {
     showData: true,
     showGrouping: false,
+    showFiltering: false,
     uuid1: uuidv4(),
     uuid2: uuidv4(),
   }
@@ -37,14 +38,24 @@ class App extends Component {
   toggleShowData = () =>{
     this.setState({
       showData: !this.state.showData,
-      showGrouping: false
+      showGrouping: false,
+      showFiltering: false,
     });
   }
 
   toggleShowGrouping = () =>{
     this.setState({
       showData: false,
-      showGrouping: !this.state.showGrouping
+      showGrouping: !this.state.showGrouping,
+      showFiltering: false
+    });
+  }
+
+  toggleShowFiltering = () =>{
+    this.setState({
+      showData: false,
+      showGrouping: false,
+      showFiltering: !this.state.showFiltering
     });
   }
 
@@ -59,6 +70,7 @@ class App extends Component {
 
     const showData = this.state.showData;
     const showGrouping = this.state.showGrouping;
+    const showFiltering = this.state.showFiltering;
 
     return (
       <div className={
@@ -106,6 +118,13 @@ class App extends Component {
               <MiscControls />
             </div>
           }
+
+          <div className={style.accordionHeader}>
+            Filtering  {!showFiltering && <FontAwesomeIcon onClick={this.toggleShowFiltering} icon={faPlusCircle} />}{showFiltering && <FontAwesomeIcon onClick={this.toggleShowFiltering} icon={faMinusCircle} />}
+          </div> 
+          <div>
+
+          </div> 
         </div>
 
         <div className={ style.canvas }>

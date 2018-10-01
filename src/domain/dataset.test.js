@@ -3,6 +3,9 @@ import {
   setDataset,
   selectDataset,
   removeDataset,
+  setFilteredDataset,
+  selectFilteredDataset,
+  removeFilteredDataset,
   selectConfiguration,
   selectMergedConfiguration,
   selectValues,
@@ -51,6 +54,37 @@ describe("Dataset Reducer", () => {
 
         expect(selectDataset(result, owner)).to.deep.equal(dataset);
         expect(selectConfiguration(result, owner)).to.deep.equal(expectedConfiguration);
+      });
+
+      it("sets the filtered dataset", () => {
+        const owner = uuidv4();
+        const data = [
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
+        ];
+        const filtered = [
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } }
+          ]
+        const configuration = {
+          fields: [
+            { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+            { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
+          ]
+        };
+        let dataset = {
+          'datasets': {}
+        }
+
+        dataset.datasets[owner] = {
+          'dataset': data,
+          'filtered': null,
+          'configuration': configuration
+        }
+
+        const action = setFilteredDataset({ 'owner': owner, 'filtered': filtered });
+        const result = reducer({dataset}, action);
+
+        expect(selectFilteredDataset(result, owner)).to.deep.equal(filtered);
       });
 
       it("sets a default configuration", () => {
@@ -150,6 +184,38 @@ describe("Dataset Reducer", () => {
 
         expect(selectDataset(result, owner).length).to.equal(0);
         expect(selectConfiguration(result, owner).fields.length).to.equal(0);
+      });
+
+      it("removes a Filtered dataset", () => {
+        const owner = uuidv4();
+        const data = [
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
+        ];
+        const filtered = [
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } }
+          ]
+        const configuration = {
+          fields: [
+            { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+            { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
+          ]
+        };
+        let dataset = {
+          'datasets': {}
+        }
+
+        dataset.datasets[owner] = {
+          'dataset': data,
+          'filtered': filtered,
+          'configuration': configuration
+        }
+
+        const action = removeFilteredDataset({ 'owner': owner });
+        const result = reducer({dataset}, action);
+
+        expect(selectDataset(result, owner)).to.deep.equal(data);
+        expect(selectFilteredDataset(result, owner)).to.equal(null);
       });
 
       it("merges fields", () => {

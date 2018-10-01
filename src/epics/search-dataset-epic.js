@@ -1,5 +1,6 @@
 import { is } from "ramda";
 import { createAction } from "redux-actions";
+import { ofType } from 'redux-observable';
 import { of } from "rxjs";
 import { mergeMap, map, tap, catchError } from 'rxjs/operators';
 import { QueryParseError } from 'lunr';
@@ -10,9 +11,9 @@ import { setSearchResults} from "./index-dataset-epic";
 const searchDataset = createAction("SEARCH_DATASET");
 
 const searchDatasetEpic = (action$, store) => {
-  return action$
-    .ofType(searchDataset.toString()).pipe(
-      mergeMap(({ payload }) => {
+  return action$.pipe(
+      ofType(searchDataset.toString())
+      ,mergeMap(({ payload }) => {
         return of(payload).pipe(
             tap(performSearch)
             ,map((payload) =>

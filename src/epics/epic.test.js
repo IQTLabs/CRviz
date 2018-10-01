@@ -6,11 +6,13 @@ import { of, throwError } from 'rxjs';
 import { QueryParseError } from 'lunr';
 
 import rootEpic from './root-epic'
-import { setDataset, selectDataset, selectConfiguration } from 'domain/dataset'
+import { setDataset, selectDataset, selectConfiguration, selectFilteredDataset } from 'domain/dataset'
 import { getError, setError } from 'domain/error'
+import { setFilter } from 'domain/filter'
 import { loadDataset, CSVconvert } from "./load-dataset-epic"
 import { uploadDataset, fromJson } from "./upload-dataset-epic"
 import { searchDataset } from "./search-dataset-epic"
+import { filterDataset } from "./filter-dataset-epic"
 import { fetchDataset, buildAuthHeader } from "./fetch-dataset-epic"
 import refreshDatasetEpic from "./refresh-dataset-epic"
 import { startRefresh, stopRefresh } from "./refresh-dataset-epic"
@@ -473,3 +475,47 @@ describe("refreshDatasetEpic", () =>{
 		// store.dispatch(stop$);
 	});
 })
+
+describe("filterDatasetEpic", () => {
+	let store;
+	const owner = uuidv4();
+	const data = [
+		  { uid: "uid1", role: { role: "role", confidence: 80 } },
+		  { uid: "uid2", role: { role: "role", confidence: 80 } }
+		];
+
+	
+
+	beforeEach(() => {
+		store  = configureStore();
+		const action$ = setDataset({ 'owner': owner, 'dataset': data });		
+		store.dispatch(action$);
+	});
+
+	afterEach(() => {
+	});
+
+	it("filters a dataset", () => {
+		const filterString = 'uid == "uid1"';
+
+		const filterAction$ = setFilter(filterString);
+		store.dispatch(filterAction$);
+
+		const action$ = filterDataset({ 'owner': owner, 'dataset': data });
+		store.dispatch(action$);
+
+		expect(selectFilteredDataset(store.getState(), owner)[0]).to.equal(data[0]);
+	});
+
+	it("filters with an invalid filter", () => {
+		const filterString = 'uid ==';
+
+		const filterAction$ = setFilter(filterString);
+		store.dispatch(filterAction$);
+
+		const action$ = filterDataset({ 'owner': owner, 'dataset': data });
+		store.dispatch(action$);
+
+		expect(selectFilteredDataset(store.getState(), owner)).to.equal(null);
+	});
+});

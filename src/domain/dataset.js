@@ -22,6 +22,7 @@ const defaultState = {
 const defaultItemState = {
   owner: "",
   dataset: [],
+  filtered: null,
   values: {},
   configuration: {
     fields: []
@@ -112,7 +113,9 @@ const valuesFor = (dataset, configuration) => {
  * }
 */
 const setDataset = createAction("SET_DATASET");
+const setFilteredDataset = createAction("SET_FILTERED_DATASET");
 const removeDataset = createAction("REMOVE_DATASET");
+const removeFilteredDataset = createAction("REMOVE_FILTERED_DATASET");
 const setIsFetching = createAction("SET_IS_FETCHING");
 
 // REDUCERS
@@ -131,6 +134,7 @@ const reducer = handleActions(
       const lastUpdated = new Date();
       state.datasets[owner] = {
         dataset: dataset,
+        filtered: null,
         values: values,
         configuration: configuration,
         isFetching: isFetching,
@@ -138,10 +142,24 @@ const reducer = handleActions(
       }
       return { ...state};
     },
+    [setFilteredDataset]: (state, { payload }) => {
+      const filtered = payload.filtered;
+      const owner = payload.owner;
+
+      state.datasets[owner].filtered = filtered;
+      return { ...state};
+    },
     [removeDataset]: (state, { payload }) => {
       const owner = payload.owner;
       if(state.datasets.hasOwnProperty(owner))
         delete state.datasets[owner];
+
+      return { ...state }
+    },
+    [removeFilteredDataset]: (state, { payload }) => {
+      const owner = payload.owner;
+      if(state.datasets.hasOwnProperty(owner))
+        state.datasets[owner].filtered = null;
 
       return { ...state }
     },
@@ -159,6 +177,7 @@ const reducer = handleActions(
 // SELECTORS
 
 const selectDataset = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].dataset ? state.dataset.datasets[owner].dataset : defaultItemState.dataset;
+const selectFilteredDataset = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].filtered ? state.dataset.datasets[owner].filtered : defaultItemState.filtered;
 const selectConfiguration = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].configuration ? state.dataset.datasets[owner].configuration : defaultItemState.configuration;
 const selectMergedConfiguration = (state) => {
   let fields = [];
@@ -198,4 +217,5 @@ const getLastUpdated = (state, owner) => state.dataset.datasets[owner] && state.
 
 export default reducer;
 
-export { setDataset, selectDataset, removeDataset, selectConfiguration, selectMergedConfiguration, selectValues, selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };
+export { setDataset, selectDataset, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
+  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };
