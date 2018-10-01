@@ -484,23 +484,38 @@ describe("filterDatasetEpic", () => {
 		  { uid: "uid2", role: { role: "role", confidence: 80 } }
 		];
 
-	const filterString = 'uid == "uid1"'
+	
 
 	beforeEach(() => {
 		store  = configureStore();
 		const action$ = setDataset({ 'owner': owner, 'dataset': data });		
 		store.dispatch(action$);
-		const filterAction$ = setFilter(filterString);
-		store.dispatch(filterAction$);
 	});
 
 	afterEach(() => {
 	});
 
 	it("filters a dataset", () => {
+		const filterString = 'uid == "uid1"';
+
+		const filterAction$ = setFilter(filterString);
+		store.dispatch(filterAction$);
+
 		const action$ = filterDataset({ 'owner': owner, 'dataset': data });
 		store.dispatch(action$);
 
 		expect(selectFilteredDataset(store.getState(), owner)[0]).to.equal(data[0]);
+	});
+
+	it("filters with an invalid filter", () => {
+		const filterString = 'uid ==';
+
+		const filterAction$ = setFilter(filterString);
+		store.dispatch(filterAction$);
+
+		const action$ = filterDataset({ 'owner': owner, 'dataset': data });
+		store.dispatch(action$);
+
+		expect(selectFilteredDataset(store.getState(), owner)).to.equal(null);
 	});
 });

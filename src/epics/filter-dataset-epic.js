@@ -1,8 +1,6 @@
-import { is } from "ramda";
 import { createAction } from "redux-actions";
 import { of, empty } from "rxjs";
 import { mergeMap, map, tap, catchError } from 'rxjs/operators';
-import { QueryParseError } from 'lunr';
 
 import { setError } from "domain/error"
 import { getFilter } from "domain/filter"
@@ -17,7 +15,7 @@ const filterDatasetEpic = (action$, store) => {
         const filter = getFilter(store.value);
 
         if(filter === null)
-          return of(empty());
+          return empty();
 
         return of(payload).pipe(
             tap(applyFilter(payload, filter))
@@ -28,12 +26,8 @@ const filterDatasetEpic = (action$, store) => {
               })
             )
             ,catchError((error) => {
-              if (is(QueryParseError, error)) {
-                return of(setError(error));
-              } else {
-                /* istanbul ignore next */
-                throw error;
-              }
+               const newErr = new Error("Error filtering dataset: " + error.message);
+               return of(setError(newErr));
             })
           );
       })

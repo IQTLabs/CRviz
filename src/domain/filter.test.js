@@ -27,6 +27,18 @@ describe("Filter Reducer", () => {
 	    expect(getFilter(result)).to.not.equal(null);
 	  });
 
+	  it("sets an invalid filter string", () => {
+	    const filterString = "property >";
+
+	    const action = setFilter(filterString);
+	    const result = reducer({}, action);
+
+	    const expectedIsValid = false;
+
+	    expect(filterIsValid(result)).to.equal(expectedIsValid);
+	    expect(getFilter(result)).to.equal(null);
+	  });
+
 	  it("clears the Filter", () => {
 	    const filterString = "property > 1";
 	    const filter = compileExpression(filterString);
