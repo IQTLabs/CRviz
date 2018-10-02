@@ -1,5 +1,5 @@
---require babel-register
---require babel-core/register 
+--require @babel/core
+--require @babel/register 
 --require jsdom
 --require ./src/test/test-dom.js
 --require ./src/test/ignore-styles.js
