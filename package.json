@@ -47,7 +47,7 @@
     "start": "REACT_APP_VERSION=$npm_package_version react-app-rewired start",
     "build": "REACT_APP_VERSION=$npm_package_version react-app-rewired build",
     "coverage": "nyc report --reporter=text-lcov > coverage/coverage.lcov && codecov",
-    "test": "NODE_ENV=test NODE_PATH=./src nyc mocha --opts ./.mocha ",
+    "test": "NODE_ENV=test NODE_PATH=./src nyc mocha --opts ./.mocha --exit",
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build",
     "lint": "eslint --ext=js --ext=jsx .",

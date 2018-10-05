@@ -15,7 +15,7 @@ const reducer = combineReducers({ filter: filterReducer });
 
 describe("Filter Reducer", () => {
 	describe("setFilter", () => {
-	  it("sets a Filter", () => {
+	  it("sets a Filter", (done) => {
 	    const filterString = "property > 1";
 
 	    const action = setFilter(filterString);
@@ -25,9 +25,11 @@ describe("Filter Reducer", () => {
 
 	    expect(filterIsValid(result)).to.equal(expectedIsValid);
 	    expect(getFilter(result)).to.not.equal(null);
+
+	    done();
 	  });
 
-	  it("sets an invalid filter string", () => {
+	  it("sets an invalid filter string", (done) => {
 	    const filterString = "property >";
 
 	    const action = setFilter(filterString);
@@ -37,9 +39,11 @@ describe("Filter Reducer", () => {
 
 	    expect(filterIsValid(result)).to.equal(expectedIsValid);
 	    expect(getFilter(result)).to.equal(null);
+
+	    done();
 	  });
 
-	  it("clears the Filter", () => {
+	  it("clears the Filter", (done) => {
 	    const filterString = "property > 1";
 	    const filter = compileExpression(filterString);
 	    const isValid = true
@@ -55,6 +59,8 @@ describe("Filter Reducer", () => {
 
 	    expect(getFilter(result)).to.equal(null);
 	    expect(filterIsValid(result)).to.equal(false);
+
+	    done();
 	  });
 	});
 });
