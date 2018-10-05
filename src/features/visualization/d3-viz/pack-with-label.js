@@ -83,11 +83,12 @@ const packWithLabel = () => {
    * pack.radius() //=> () => 20.
    */
   Object.keys(options).forEach((key) => {
-    pack[key] = (value) => {
-      if (arguments.length === 0) {
+    pack[key] = (...values) => {
+      console.log(values);
+      if (values.length === 0) {
         return options[key];
       }
-      options[key] = value;
+      options[key] = values[0];
       return pack;
     };
   });
