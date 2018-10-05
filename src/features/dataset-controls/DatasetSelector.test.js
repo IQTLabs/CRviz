@@ -18,7 +18,7 @@ const change = (target) => {
 }
 const event = {"target": {value:"test3.url"}};
 describe('DatasetSelector', () => {
-	it('renders the control', () => {
+	it('renders the control', (done) => {
 		const selector = mount(<DatasetSelector
             className={style.selector}
             selected={empty}
@@ -27,9 +27,11 @@ describe('DatasetSelector', () => {
           />);
 		//4 items because of the implicit "None we add"
 		expect(selector.find('option')).to.have.length(4);
+
+		done();
 	});
 
-	it('changes the selection', () => {
+	it('changes the selection', (done) => {
 		const fakeOnChange = (evt) =>{
 			
 		}
@@ -42,6 +44,8 @@ describe('DatasetSelector', () => {
           />);
 		selector.find('select').first().simulate('change', event);
 		expect(onChangeSpy.calledWith(datasets[2])).to.equal(true);
+
+		done();
 	});
 
 });

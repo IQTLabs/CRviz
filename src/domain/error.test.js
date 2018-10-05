@@ -12,7 +12,7 @@ const reducer = combineReducers({ error: errorReducer });
 
 describe("Error Reducer", () => {
 	describe("setError", () => {
-	  it("sets the Error", () => {
+	  it("sets the Error", (done) => {
 	    const message = "This is an Error";
 
 	    const action = setError(new Error(message));
@@ -21,18 +21,22 @@ describe("Error Reducer", () => {
 	    const expectedError = new Error(message);
 
 	    expect(getError(result).message).to.equal(expectedError.message);
+
+	    done();
 	  });
 
-	  it("can not set a non error", () => {
+	  it("can not set a non error", (done) => {
 	    const message = "This is an Error";
 
 	    const action = setError(message);
 	    const result = reducer({}, action);
 
 	    expect(getError(result)).to.equal(null);
+
+	    done();
 	  });
 
-	  it("clears the Error", () => {
+	  it("clears the Error", (done) => {
 	    const message = "This is an Error";
 	    const error = new Error(message);
 
@@ -40,6 +44,8 @@ describe("Error Reducer", () => {
 	    const result = reducer({error}, action);
 
 	    expect(getError(result)).to.equal(null);
+
+	    done();
 	  });
 	});
 });
