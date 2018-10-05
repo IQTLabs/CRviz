@@ -41,7 +41,6 @@ function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig
 
   // If coloring groupings, don't color devices with the same value
   const isColoringGroup = contains(coloredField, hierarchyConfig);
-  console.log(isColoringGroup);
 
   const values = pipe(
     map(getValue),
@@ -139,7 +138,7 @@ const createStylesheet = (coloring) => {
 }
 
 const colorNodes = ({ nodes, colorMap, getValue, coloredField, isColoringGroup }) => {
-  console.log(isColoringGroup);
+  
   nodes
     .filter((d) => d.height === 0)
     .select("circle")

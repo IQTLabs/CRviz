@@ -84,7 +84,7 @@ const packWithLabel = () => {
    */
   Object.keys(options).forEach((key) => {
     pack[key] = (...values) => {
-      console.log(values);
+
       if (values.length === 0) {
         return options[key];
       }
