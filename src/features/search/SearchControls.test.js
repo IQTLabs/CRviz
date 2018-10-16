@@ -4,10 +4,10 @@ import { Provider } from 'react-redux'
 import { createEpicMiddleware } from 'redux-observable';
 
 import configureMockStore from 'redux-mock-store';
-import hash from "hash-it"
 import { expect } from "chai"
 
 import SearchControls from './SearchControls';
+const uuidv4 = require('uuid/v4');
 
 const dataset = [
           { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
@@ -21,7 +21,7 @@ const configuration = {
   ]
 };
 
-const dsHash = hash(dataset);
+const owner = uuidv4();
 
 let initialState = {
   'dataset':{
@@ -42,7 +42,7 @@ describe('SearchControls', () => {
 		const epicMiddleware = createEpicMiddleware();
 		const mockStore = configureMockStore([epicMiddleware]);
 		initialState.dataset.datasets = {};
-		initialState.dataset.datasets[dsHash] = { 'dataset': dataset, 'configuration': configuration }
+		initialState.dataset.datasets[owner] = { 'dataset': dataset, 'configuration': configuration }
 		store  = mockStore(initialState);
 	});
 
@@ -50,7 +50,7 @@ describe('SearchControls', () => {
 		
 	});
 
-	it('renders the control', () => {
+	it('renders the control', (done) => {
 		const wrapper = mount(
 			<Provider store={store}>
 				<SearchControls />
@@ -61,12 +61,14 @@ describe('SearchControls', () => {
 		expect(wrapper.find('input#search-string').first().prop("type")).to.equal("search");
 		expect(wrapper.find('svg').first().prop('role')).to.equal('img');
 		expect(wrapper.find('svg').first().prop('data-icon')).to.equal('search');
+
+		done();
 	});
 
 	//i am deliberately overwriting the mocked store's dispatch method with my own method
 	//so that i can recieve the dispatched actions to ensure that ui events properly 
 	//emit the desired action
-	it('accepts text input and clicks the search button', () => {
+	it('accepts text input and clicks the search button', (done) => {
 		const expectedAction = {
 			type: 'SEARCH_DATASET',
 			payload: {
@@ -80,6 +82,7 @@ describe('SearchControls', () => {
 		const event ={target: {value: "test"}}
 		const fakeDispatch = (evt) =>{
 			expect(evt).to.deep.equal(expectedAction);
+			done();
 		}
 		store.dispatch = fakeDispatch;
 		const wrapper = mount(
@@ -92,7 +95,7 @@ describe('SearchControls', () => {
 		wrapper.find('label.button').first().simulate('click');
 	});
 
-	it('recieves a result set and displays the number of results and a clear button', () => {
+	it('recieves a result set and displays the number of results and a clear button', (done) => {
 		const expectedText = "2 Results found";
 		const newState = {
 		  queryString: 'uid',
@@ -110,9 +113,11 @@ describe('SearchControls', () => {
 		expect(newWrap.find('svg')).to.have.length(2);
 		expect(newWrap.find('svg').last().prop('role')).to.equal('img');
 		expect(newWrap.find('svg').last().prop('data-icon')).to.equal('times-circle');
+
+		done();
 	});
 
-	it('clears the search', () => {
+	it('clears the search', (done) => {
 		const newState = {
 		  queryString: 'uid',
 		  searchIndices: [],
@@ -131,6 +136,7 @@ describe('SearchControls', () => {
 		}
 		const fakeDispatch = (evt) =>{
 			expect(evt).to.deep.equal(expectedAction);
+			done();
 		}
 		store.dispatch = fakeDispatch;
 		const wrapper = shallow( <SearchControls />, {

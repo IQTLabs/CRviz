@@ -20,8 +20,9 @@ const defaultState = {
   datasets: {}
 };
 const defaultItemState = {
-  hash: "",
+  owner: "",
   dataset: [],
+  filtered: null,
   values: {},
   configuration: {
     fields: []
@@ -112,7 +113,9 @@ const valuesFor = (dataset, configuration) => {
  * }
 */
 const setDataset = createAction("SET_DATASET");
+const setFilteredDataset = createAction("SET_FILTERED_DATASET");
 const removeDataset = createAction("REMOVE_DATASET");
+const removeFilteredDataset = createAction("REMOVE_FILTERED_DATASET");
 const setIsFetching = createAction("SET_IS_FETCHING");
 
 // REDUCERS
@@ -120,7 +123,7 @@ const reducer = handleActions(
   {
     [setDataset]: (state, { payload }) => {
       const dataset = payload.dataset;
-      const hash = payload.hash;
+      const owner = payload.owner;
       const configuration = configurationFor(
         payload.dataset || [],
         payload.configuration || {}
@@ -129,9 +132,9 @@ const reducer = handleActions(
       const values = valuesFor(dataset, configuration);
       const isFetching = false;
       const lastUpdated = new Date();
-      state.datasets[hash] = {
-        hash: hash,
+      state.datasets[owner] = {
         dataset: dataset,
+        filtered: null,
         values: values,
         configuration: configuration,
         isFetching: isFetching,
@@ -139,18 +142,32 @@ const reducer = handleActions(
       }
       return { ...state};
     },
+    [setFilteredDataset]: (state, { payload }) => {
+      const filtered = payload.filtered;
+      const owner = payload.owner;
+
+      state.datasets[owner].filtered = filtered;
+      return { ...state};
+    },
     [removeDataset]: (state, { payload }) => {
-      const hash = payload.hash;
-      if(state.datasets.hasOwnProperty(hash))
-        delete state.datasets[hash];
+      const owner = payload.owner;
+      if(state.datasets.hasOwnProperty(owner))
+        delete state.datasets[owner];
+
+      return { ...state }
+    },
+    [removeFilteredDataset]: (state, { payload }) => {
+      const owner = payload.owner;
+      if(state.datasets.hasOwnProperty(owner))
+        state.datasets[owner].filtered = null;
 
       return { ...state }
     },
     [setIsFetching]: (state, { payload }) => {
-      const hash = payload.hash;
+      const owner = payload.owner;
       const isFetching = !!payload.isFetching;
-      if(state.datasets.hasOwnProperty(hash))
-        state.datasets[hash].isFetching = isFetching;
+      if(state.datasets.hasOwnProperty(owner))
+        state.datasets[owner].isFetching = isFetching;
       return { ...state, isFetching};
     }
   },
@@ -159,8 +176,9 @@ const reducer = handleActions(
 
 // SELECTORS
 
-const selectDataset = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].dataset ? state.dataset.datasets[hash].dataset : defaultItemState.dataset;
-const selectConfiguration = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].configuration ? state.dataset.datasets[hash].configuration : defaultItemState.configuration;
+const selectDataset = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].dataset ? state.dataset.datasets[owner].dataset : defaultItemState.dataset;
+const selectFilteredDataset = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].filtered ? state.dataset.datasets[owner].filtered : defaultItemState.filtered;
+const selectConfiguration = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].configuration ? state.dataset.datasets[owner].configuration : defaultItemState.configuration;
 const selectMergedConfiguration = (state) => {
   let fields = [];
   const ds = state.dataset.datasets;
@@ -175,7 +193,7 @@ const selectMergedConfiguration = (state) => {
 
   return { fields: fields };
 }
-const selectValues = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].values ? state.dataset.datasets[hash].values : defaultItemState.values;
+const selectValues = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].values ? state.dataset.datasets[owner].values : defaultItemState.values;
 const selectMergedValues = (state) => {
   let vals = {};
   const ds = state.dataset.datasets;
@@ -193,10 +211,11 @@ const selectMergedValues = (state) => {
 
   return vals;
 }
-const getIsFetching = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].isFetching ? state.dataset.datasets[hash].isFetching : defaultItemState.isFetching;
-const getLastUpdated = (state, hash) => state.dataset.datasets[hash] && state.dataset.datasets[hash].lastUpdated ? state.dataset.datasets[hash].lastUpdated : defaultItemState.lastUpdated;
+const getIsFetching = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].isFetching ? state.dataset.datasets[owner].isFetching : defaultItemState.isFetching;
+const getLastUpdated = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].lastUpdated ? state.dataset.datasets[owner].lastUpdated : defaultItemState.lastUpdated;
 
 
 export default reducer;
 
-export { setDataset, selectDataset, removeDataset, selectConfiguration, selectMergedConfiguration, selectValues, selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };
+export { setDataset, selectDataset, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
+  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };
