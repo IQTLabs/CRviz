@@ -44,7 +44,7 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "REACT_APP_VERSION=$npm_package_version react-app-rewired start",
+    "start": "REACT_APP_VERSION=$npm_package_version PORT=5000 react-app-rewired start",
     "build": "REACT_APP_VERSION=$npm_package_version react-app-rewired build",
     "coverage": "nyc report --reporter=text-lcov > coverage/coverage.lcov && codecov",
     "test": "NODE_ENV=test NODE_PATH=./src nyc mocha --opts ./.mocha --exit",
