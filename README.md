@@ -32,9 +32,12 @@ docker run -dp 80:5000 crviz
 
 The static files in the `./build` directory should be ready for deployment.
 
+To serve the application locally, run `npm start`.
+Changes made in your code will be automatically reloaded on http://localhost:5000.
+
 ## Data Input
 
-This tool supports loading datasets from URLs or by uploading local files. When loading dataset from a URL, ensure that [Cross-Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) is enabled at that URL. 
+This tool supports loading datasets from URLs or by uploading local files. When loading dataset from a URL, ensure that [Cross-Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) is enabled at that URL.
 
 In both cases, the tool expects the data to be in the format described below.
 For examples, see [`./sample_data`](./sample_data).
