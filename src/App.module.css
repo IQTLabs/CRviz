@@ -149,6 +149,11 @@ input[name=hideControls]:checked ~ .canvas {
   align-items: center;
   justify-content: space-between;
   border-bottom: 2px dashed rgba(125, 125, 125, 0.5);
+  cursor: pointer;
+}
+
+.accordionHeader:hover {
+  color: #C62f39;
 }
 
 .hidden {
