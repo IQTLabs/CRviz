@@ -118,6 +118,11 @@ class App extends Component {
               <MiscControls />
             </div>
           }
+          { !hasDataset &&
+            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
+              Please Select a dataset to Continue
+            </div>
+          }
 
           <div className={style.accordionHeader} onClick={this.toggleShowFiltering}>
             Filtering  {!showFiltering && <FontAwesomeIcon icon={faPlusCircle} />}{showFiltering && <FontAwesomeIcon onClick={this.toggleShowFiltering} icon={faMinusCircle} />}
@@ -125,6 +130,11 @@ class App extends Component {
           <div>
 
           </div>
+          { !hasDataset &&
+            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showFiltering }) }>
+              Please Select a dataset to Continue
+            </div>
+          }
         </div>
 
         <div className={ style.canvas }>

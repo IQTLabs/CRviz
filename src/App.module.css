@@ -35,6 +35,11 @@
   flex: 0 0;
 }
 
+.dimSection {
+  justify-content: center;
+  opacity: 0.20;
+}
+
 .controls .hierarchySection {
   overflow: auto;
   flex: 0 1 auto;
