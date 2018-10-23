@@ -89,6 +89,9 @@ Here are some quick commands to get started:
 - `npm test`: Run the test suit and watch for changes.
 - `npm build`: Build a production optimized bundle of the app.
 
+### Tools
+- [React developer tools](https://reactjs.org/blog/2015/09/02/new-react-developer-tools.html#installation)
+
 ### Project Structure
 
 - `src/domain` contains Redux reducers, action creators, selectors, and any other domain specific functions.
