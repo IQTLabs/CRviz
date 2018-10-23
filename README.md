@@ -26,9 +26,10 @@ docker run -dp 80:5000 crviz
 ```
 
 ### Without Docker
-
-1. Update npm (npm install -g npm)
-2. Run `npm install && npm build`
+1. Install or update npm (`sudo apt install npm`, `npm install -g npm`)
+2. Clone CRViz repo `git clone https://github.com/CyberReboot/CRviz.git`
+3. `cd CRViz`
+4. Run `npm install && npm build`
 
 The static files in the `./build` directory should be ready for deployment.
 
