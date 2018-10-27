@@ -20,7 +20,7 @@
     "http-signature": "^1.1.1",
     "lodash.debounce": "^4.0.8",
     "lunr": "^2.2.0",
-    "mini.css": "^2.3.7",
+    "mini.css": "^3.0.1",
     "normalize.css": "^8.0.0",
     "ramda": "^0.25.0",
     "rc": "^1.2.7",
