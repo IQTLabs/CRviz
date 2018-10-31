@@ -7,7 +7,7 @@ import { faDownload } from "@fortawesome/free-solid-svg-icons";
 function DatasetDownload({ className, selected, url, disabled }) {
   return (
     <span className={ className }>
-      <a className="button" href={ url } download={ selected + ".json" }
+      <a className="button circular" href={ url } download={ selected + ".json" }
         title="Download" disabled={disabled} >
         <FontAwesomeIcon icon={faDownload} />
       </a>
