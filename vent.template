@@ -9,4 +9,5 @@ uri_prefix1 = http://
 priority = 10
 
 [docker]
+port = {'5000/tcp': ('0.0.0.0', 5001)}
 publish_all_ports = True
