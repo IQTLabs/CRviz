@@ -326,10 +326,10 @@ class DatasetControls extends React.Component {
                 }
                 <div>
                   <span className={ style.centerSpan }>
-                    <div className="button" title="Ok" onClick={this.onUrlOk}>
+                    <div className="button circular" title="Ok" onClick={this.onUrlOk}>
                         <FontAwesomeIcon icon={faCheck} />
                     </div>
-                    <div className="button" title="Cancel" onClick={this.onUrlCancel}>
+                    <div className="button circular" title="Cancel" onClick={this.onUrlCancel}>
                         <FontAwesomeIcon icon={faTimes} />
                     </div>
                   </span>

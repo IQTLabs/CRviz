@@ -14,6 +14,7 @@ function DatasetUpload({ className, selected, onChange, ownerUuid }) {
         type="file"
         id={inputId}
         value=''
+        style={{'display':'none'}}
         onChange={(evt) => onChange(evt.target.files[0])}
       />
 
@@ -21,7 +22,7 @@ function DatasetUpload({ className, selected, onChange, ownerUuid }) {
       { isNil(selected) ? "No file selected" : selected }
     </span>
 
-      <label htmlFor={inputId} className="button" title="Upload data from file">
+      <label htmlFor={inputId} className="button circular" title="Upload data from file">
         <FontAwesomeIcon icon={faUpload} />
       </label>
     </span>

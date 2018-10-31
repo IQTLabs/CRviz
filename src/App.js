@@ -153,7 +153,7 @@ class App extends Component {
                 </span>
                 <div>
                   <span className={ style.centerSpan }>
-                    <div className="button" title="Ok" onClick={this.onErrorClose}>
+                    <div className="button circular" title="Ok" onClick={this.onErrorClose}>
                         <FontAwesomeIcon icon={faCheck} />
                     </div>
                   </span>
