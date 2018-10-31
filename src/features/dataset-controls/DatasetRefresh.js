@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from 'prop-types';
 
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faRedo from "@fortawesome/fontawesome-free-solid/faRedoAlt";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRedoAlt } from "@fortawesome/free-solid-svg-icons";
 
-function DatasetRefresh({ className, onClick }) {
+function DatasetRefresh({ className, onClick, disabled }) {
   return (
     <span className={ className }>
-      <div className="button" title="Refresh" onClick={() => onClick()}>
-        <FontAwesomeIcon icon={faRedo} />
+      <div className="button" disabled={disabled} title="Refresh" onClick={() => onClick()}>
+        <FontAwesomeIcon icon={faRedoAlt} />
       </div>
     </span>
   );

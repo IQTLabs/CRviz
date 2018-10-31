@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/CyberReboot/CRviz.svg?branch=master)](https://travis-ci.org/CyberReboot/CRviz)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6fe34768060e4f75a9ad8d20c0c31fec)](https://www.codacy.com/app/CyberReboot/CRviz?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CyberReboot/CRviz&amp;utm_campaign=Badge_Grade)
+[![codecov](https://codecov.io/gh/CyberReboot/CRviz/branch/master/graph/badge.svg?token=ORXmFYC3MM)](https://codecov.io/gh/CyberReboot/CRviz)
 [![Docker Hub Downloads](https://img.shields.io/docker/pulls/cyberreboot/crviz.svg)](https://hub.docker.com/u/cyberreboot) [![Greenkeeper badge](https://badges.greenkeeper.io/CyberReboot/CRviz.svg)](https://greenkeeper.io/)
+
 
 CRviz is our first attempt at visualizing networks differently. It's still an early prototype, and it's still under development. That said, we want to share the tool in this formative stage both because we think that our approach has the potential to improve the scalability and legibility of network data, and also because we're actively looking for feedback. So please send us your suggestions and comments!
 
@@ -24,15 +26,19 @@ docker run -dp 80:5000 crviz
 ```
 
 ### Without Docker
-
-1. Update npm (npm install -g npm)
-2. Run `npm install && npm build`
+1. Install or update npm (`sudo apt install npm`, `npm install -g npm`)
+2. Clone CRViz repo `git clone https://github.com/CyberReboot/CRviz.git`
+3. `cd CRViz`
+4. Run `npm install && npm build`
 
 The static files in the `./build` directory should be ready for deployment.
 
+To serve the application locally, run `npm start`.
+Changes made in your code will be automatically reloaded on http://localhost:5000.
+
 ## Data Input
 
-This tool supports loading datasets from URLs or by uploading local files. When loading dataset from a URL, ensure that [Cross-Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) is enabled at that URL. 
+This tool supports loading datasets from URLs or by uploading local files. When loading dataset from a URL, ensure that [Cross-Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) is enabled at that URL.
 
 In both cases, the tool expects the data to be in the format described below.
 For examples, see [`./sample_data`](./sample_data).
@@ -83,6 +89,9 @@ Here are some quick commands to get started:
 - `npm start`: Start the hot reloading development server.
 - `npm test`: Run the test suit and watch for changes.
 - `npm build`: Build a production optimized bundle of the app.
+
+### Tools
+- [React developer tools](https://reactjs.org/blog/2015/09/02/new-react-developer-tools.html#installation)
 
 ### Project Structure
 

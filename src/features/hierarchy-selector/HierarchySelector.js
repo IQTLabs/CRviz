@@ -19,7 +19,7 @@ import {
   remove
 } from "ramda";
 
-import { selectConfiguration, selectValues, getFieldId } from "domain/dataset";
+import { selectMergedConfiguration, selectMergedValues, getFieldId } from "domain/dataset";
 import { setHierarchyConfig, selectControls, showNodes } from "domain/controls";
 
 import SelectedFieldList from './SelectedFieldList';
@@ -129,6 +129,7 @@ class HierarchySelector extends React.Component {
             <SelectedFieldList
               style={ selectedFieldListStyle }
               fields={ hierarchyConfig }
+              values={ values }
               droppableId={ SELECTED_FIELD_LIST_ID }
               getFieldId={ getFieldId }
               dragState={ dragState }
@@ -174,8 +175,8 @@ const findFieldIndex = (list, fieldId) => {
 }
 
 const mapStateToProps = (state) => ({
-  configuration: selectConfiguration(state),
-  values: selectValues(state),
+  configuration: selectMergedConfiguration(state),
+  values: selectMergedValues(state),
   controls: selectControls(state)
 });
 

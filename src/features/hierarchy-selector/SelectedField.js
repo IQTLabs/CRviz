@@ -8,6 +8,7 @@ import classNames from "classnames";
 function SelectedField({
   style,
   displayName,
+  count = 0,
   index,
   draggableId,
   dragIndex,
@@ -20,7 +21,7 @@ function SelectedField({
         return (
           <Field
             style={style}
-            displayName={displayName}
+            displayName={displayName + " (" + count + ")"}
             dragIndex={dragIndex}
             provided={provided}
             animated={animated}

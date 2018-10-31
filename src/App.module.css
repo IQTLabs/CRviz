@@ -30,9 +30,14 @@
 }
 
 .controls .section {
-  border-top: 2px dashed rgba(125, 125, 125, 0.5);
+  border-bottom: 2px dashed rgba(125, 125, 125, 0.5);
   padding: 1rem 0;
   flex: 0 0;
+}
+
+.dimSection {
+  justify-content: center;
+  opacity: 0.20;
 }
 
 .controls .hierarchySection {
@@ -91,4 +96,71 @@ input[name=hideControls]:checked ~ .controls {
 input[name=hideControls]:checked ~ .canvas {
   transform: translate3d(-18.5rem, 0, 0);
   margin-right: -18.5rem;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modalMain {
+  position:fixed;
+  background: white;
+  flex: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  padding: 1rem;
+  margin: 1rem;
+  width: auto;
+  height: auto;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+
+.modalMain span {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+.justifySpan {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.icon {
+  padding-right: 1em;
+}
+
+.centerSpan {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.accordionHeader {
+  font-weight: bold;
+  display: flex;
+  flex-flow: row no-wrap;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px dashed rgba(125, 125, 125, 0.5);
+  cursor: pointer;
+}
+
+.accordionHeader:hover {
+  color: #C62f39;
+}
+
+.hidden {
+  display: none;
 }

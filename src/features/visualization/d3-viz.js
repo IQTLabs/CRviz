@@ -116,7 +116,7 @@ function d3Viz(rootNode) {
 
     const sizeUpdated = !allEqProps(["width", "height"], props, nextProps);
 
-    const legendUpdated = !allEqProps(["coloredField"], props, nextProps);
+    const legendUpdated = !allEqProps(["coloredField", "hierarchyConfig", "data"], props, nextProps);
 
     props = nextProps;
 

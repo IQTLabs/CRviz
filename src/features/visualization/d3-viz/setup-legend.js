@@ -7,7 +7,6 @@ import {
   fromPairs,
   toPairs,
   identity,
-  reject,
   map,
   path,
   pipe,
@@ -26,9 +25,9 @@ function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig
 
     function update({ nodes }) {
       state.nodes = nodes;
+      nodes.classed('viz-coloredNode', coloredField);
       if (!coloredField) {
-        nodes.select('circle').attr('class', null);
-        nodes.classed('viz-coloredNode', false);
+        nodes.select('circle').attr('class', null);  
         return;
       }
     }
@@ -46,7 +45,6 @@ function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig
   const values = pipe(
     map(getValue),
     uniq,
-    reject(equals("Unknown")),
     sortBy(identity)
   )(data);
 
@@ -67,9 +65,9 @@ function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig
 
   function update({ nodes }) {
     state.nodes = nodes;
+    nodes.classed('viz-coloredNode', coloredField);
     if (!coloredField) {
-      nodes.select('circle').attr('class', null);
-      nodes.classed('viz-coloredNode', false);
+      nodes.select('circle').attr('class', null);   
       return;
     }
 
@@ -140,7 +138,7 @@ const createStylesheet = (coloring) => {
 }
 
 const colorNodes = ({ nodes, colorMap, getValue, coloredField, isColoringGroup }) => {
-
+  
   nodes
     .filter((d) => d.height === 0)
     .select("circle")
@@ -154,8 +152,7 @@ const colorNodes = ({ nodes, colorMap, getValue, coloredField, isColoringGroup }
     .classed("viz-coloredNode", (d) => {
       const { disabled } = colorMap[getValue(d.data)] || {};
       return !disabled &&
-        equals(d.data.field, coloredField) &&
-        d.data.fieldValue !== "Unknown";
+        equals(d.data.field, coloredField) 
     })
     .select("circle")
     .attr('class', (d) => {

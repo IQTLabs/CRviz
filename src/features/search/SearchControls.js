@@ -2,20 +2,19 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
-import faTimesCircle from "@fortawesome/fontawesome-free-solid/faTimesCircle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch,  faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 
 import { selectDataset, selectConfiguration } from "domain/dataset";
 
-import { getSearchIndex, getSearchResults } from "epics/index-dataset-epic";
+import { getSearchIndices, getSearchResults } from "epics/index-dataset-epic";
 import { searchDataset } from "epics/search-dataset-epic";
 
 import style from "./SearchControls.module.css";
 
 const defaultState = {
   queryString: '',
-  searchIndex: null,
+  searchIndices: [],
   results: [],
   hasSearch: false
 }
@@ -31,7 +30,7 @@ class Search extends React.Component {
     var data = {
       dataset: this.props.dataset,
       configuration: this.props.configuration,
-      searchIndex: this.props.searchIndex,
+      searchIndices: this.props.searchIndices,
       queryString: this.state.queryString,
       results: this.state.results
     }
@@ -69,13 +68,13 @@ class Search extends React.Component {
             onKeyPress={this.handleKeyPress}
           />
 
-          <label htmlFor="search-string" className="button" onClick={() => this.handleSearch()}>
+          <label htmlFor="search-string" className="button" onClick={() => this.handleSearch()} title="Search">
             <FontAwesomeIcon icon={faSearch} />
           </label>
         </span>
         { this.state.hasSearch &&
           <span>
-            <label id="search-results"> {this.props.results.length}&nbsp;Results found </label>
+            <label id="search-results"> {this.props.results.length} Results found </label>
             <label htmlFor="search-results" className="button" onClick={() => this.clearSearch()}>
               <FontAwesomeIcon icon={faTimesCircle} />
               </label>
@@ -96,11 +95,12 @@ Search.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const hash = Object.keys(state.dataset.datasets)[0] || ""
   return {
-    dataset: selectDataset(state),
-    configuration: selectConfiguration(state),
-    searchIndex: getSearchIndex(state),
-    queryString: state.dataset.queryString,
+    dataset: selectDataset(state, hash),
+    configuration: selectConfiguration(state, hash),
+    searchIndices: getSearchIndices(state),
+    queryString: state.search.queryString,
     results: getSearchResults(state)
   };
 }
