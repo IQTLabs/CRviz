@@ -25,27 +25,31 @@ function MiscControls({
   return (
     <div className={style.container}>
       <div className={`${style.checkboxContainer} input-group`}>
-        <input
-          type="checkbox"
-          id="show-node-check"
-          checked={controls.shouldShowNodes}
-          onChange={(evt) => showNodes(evt.target.checked)}
-        />
-        <label htmlFor="show-node-check" className="switch">
-          Show nodes
-        </label>
+        <div className={ style.switch }>
+          <input
+            type="checkbox"
+            id="show-node-check"
+            checked={controls.shouldShowNodes}
+            onChange={(evt) => showNodes(evt.target.checked)}
+          />
+          <label htmlFor="show-node-check" className={ style.switchLabel }>
+          </label>
+        </div>
+        <label >Show nodes</label>
       </div>
 
       <div className={`${style.checkboxContainer} input-group`}>
-        <input
-          type="checkbox"
-          id="dark-theme-check"
-          checked={controls.darkTheme}
-          onChange={(evt) => useDarkTheme(evt.target.checked)}
-        />
-        <label htmlFor="dark-theme-check" className="switch">
-          Use dark theme
-        </label>
+        <div className={ style.switch }>
+          <input
+            type="checkbox"
+            id="dark-theme-check"
+            checked={controls.darkTheme}
+            onChange={(evt) => useDarkTheme(evt.target.checked)}
+          />
+          <label htmlFor="dark-theme-check" className={ style.switchLabel }> 
+          </label>
+        </div>
+        <label>Use dark theme</label>
       </div>
 
       <div className={`input-group ${style.colorBy}`}>

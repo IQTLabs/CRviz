@@ -68,14 +68,14 @@ class Search extends React.Component {
             onKeyPress={this.handleKeyPress}
           />
 
-          <label htmlFor="search-string" className="button" onClick={() => this.handleSearch()} title="Search">
+          <label htmlFor="search-string" className="button circular" onClick={() => this.handleSearch()} title="Search">
             <FontAwesomeIcon icon={faSearch} />
           </label>
         </span>
         { this.state.hasSearch &&
           <span>
             <label id="search-results"> {this.props.results.length} Results found </label>
-            <label htmlFor="search-results" className="button" onClick={() => this.clearSearch()}>
+            <label htmlFor="search-results" className="button circular" onClick={() => this.clearSearch()}>
               <FontAwesomeIcon icon={faTimesCircle} />
               </label>
           </span>
