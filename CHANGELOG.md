@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.4-alpha.1"></a>
+## [0.2.4-alpha.1](https://github.com/CyberReboot/CRviz/compare/v0.2.4-alpha.0...v0.2.4-alpha.1) (2018-11-01)
+
+
+
 <a name="0.2.4-alpha.0"></a>
 ## [0.2.4-alpha.0](https://github.com/CyberReboot/CRviz/compare/v0.2.3...v0.2.4-alpha.0) (2018-09-20)
 
