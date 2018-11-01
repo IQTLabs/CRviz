@@ -21,7 +21,7 @@
     "http-signature": "^1.1.1",
     "lodash.debounce": "^4.0.8",
     "lunr": "^2.2.0",
-    "mini.css": "^2.3.7",
+    "mini.css": "^3.0.1",
     "normalize.css": "^8.0.0",
     "ramda": "^0.25.0",
     "rc": "^1.2.7",
@@ -44,7 +44,7 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "REACT_APP_VERSION=$npm_package_version react-app-rewired start",
+    "start": "REACT_APP_VERSION=$npm_package_version PORT=5000 react-app-rewired start",
     "build": "REACT_APP_VERSION=$npm_package_version react-app-rewired build",
     "coverage": "nyc report --reporter=text-lcov > coverage/coverage.lcov && codecov",
     "test": "NODE_ENV=test NODE_PATH=./src nyc mocha --opts ./.mocha --exit",

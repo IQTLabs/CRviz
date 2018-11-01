@@ -9,12 +9,12 @@ function DatasetTimedRefresh({ className, interval, timerIsRunning, disabled, on
     <span className={ className }>
       <input type='text' title="Refresh interval in seconds" value={interval} onChange={(evt) => onIntervalChange(evt.target.value)}/>
       {!timerIsRunning && 
-	      <div className="button" disabled={disabled} title="Start Refresh Timer" onClick={() => onStartClick()}>
+	      <div className="button circular" disabled={disabled} title="Start Refresh Timer" onClick={() => onStartClick()}>
 	        <FontAwesomeIcon icon={faSyncAlt} />
 	      </div>
   	  }
   	  {timerIsRunning && 
-	      <div className="button" disabled={disabled} title="Stop Refresh Timer" onClick={() => onStopClick()}>
+	      <div className="button circular" disabled={disabled} title="Stop Refresh Timer" onClick={() => onStopClick()}>
 	        <FontAwesomeIcon icon={faStopCircle} />
 	      </div>
   	  }

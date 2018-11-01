@@ -1,5 +1,11 @@
 .checkboxContainer {
   margin-left: 2.2rem;
+  margin-bottom: 0.33rem;
+  display: flex;
+  flex-direction: row;
+  flex-grow: 0;
+  flex-shrink: 0;
+  align-items: center;
 }
 
 .colorBy {
@@ -21,4 +27,39 @@
   width: 100%;
   margin-left: 0;
   margin-right: 0;
+}
+
+.switch {
+    position: relative; width: 3rem;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.switch input[type=checkbox] {
+    display: none;
+}
+.switchLabel {
+    display: block; overflow: hidden; cursor: pointer;
+    height: 1rem; padding: 0; line-height: 1rem;
+    border: 0px solid #FFFFFF; border-radius: 1.5rem;
+    background-color: #C9C9C9;
+}
+.switchLabel:before {
+    content: "";
+    display: block; width: 1.5rem; height: 1.5rem; margin: -0.25rem;
+    background: #e0e0e0;
+    position: absolute; top: 0; bottom: 0;
+    right: 2rem;
+    border-radius: 1.5rem;
+}
+.switch input[type=checkbox]:checked + .switchLabel {
+    background-color: #DCDCDC;
+}
+.switch input[type=checkbox]:checked + .switchLabel, .switch input[type=checkbox]:checked + .switchLabel:before {
+   border-color: #DCDCDC;
+}
+.switch input[type=checkbox]:checked + .switchLabel .switch-inner {
+    margin-left: 0;
+}
+.switch input[type=checkbox]:checked + .switchLabel:before {
+    right: 0px; 
+    background-color: #0277BD; 
 }
