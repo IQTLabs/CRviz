@@ -9,7 +9,7 @@ import style from "./DatasetControls.module.css";
 
 const onRefresh = () =>{ }
 describe('DatasetRefresh', () => {
-	it('renders the control', () => {
+	it('renders the control', (done) => {
 		const refresh = mount(<DatasetRefresh
               className={style.urlRefresh}
               onClick={onRefresh}
@@ -17,9 +17,11 @@ describe('DatasetRefresh', () => {
 		expect(refresh.find('div.button')).to.have.length(1);
 		expect(refresh.find('svg').first().prop('role')).to.equal('img');
 		expect(refresh.find('svg').first().prop('data-icon')).to.equal('redo-alt');
+
+		done();
 	});
 
-	it('clicks the button', () => {
+	it('clicks the button', (done) => {
 		const spy = sinon.spy();
 		const refresh = shallow(<DatasetRefresh
               className={style.urlRefresh}
@@ -27,6 +29,8 @@ describe('DatasetRefresh', () => {
             />);
 		refresh.find('div.button').simulate("click");
 		expect(spy.calledOnce).to.equal(true);
+
+		done();
 	});
 
 });

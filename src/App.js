@@ -30,6 +30,7 @@ class App extends Component {
   state = {
     showData: true,
     showGrouping: false,
+    showFiltering: false,
     uuid1: uuidv4(),
     uuid2: uuidv4(),
   }
@@ -37,14 +38,24 @@ class App extends Component {
   toggleShowData = () =>{
     this.setState({
       showData: !this.state.showData,
-      showGrouping: false
+      showGrouping: false,
+      showFiltering: false,
     });
   }
 
   toggleShowGrouping = () =>{
     this.setState({
       showData: false,
-      showGrouping: !this.state.showGrouping
+      showGrouping: !this.state.showGrouping,
+      showFiltering: false
+    });
+  }
+
+  toggleShowFiltering = () =>{
+    this.setState({
+      showData: false,
+      showGrouping: false,
+      showFiltering: !this.state.showFiltering
     });
   }
 
@@ -59,6 +70,7 @@ class App extends Component {
 
     const showData = this.state.showData;
     const showGrouping = this.state.showGrouping;
+    const showFiltering = this.state.showFiltering;
 
     return (
       <div className={
@@ -74,27 +86,27 @@ class App extends Component {
         </label>
         <div className={ style.controls }>
           <Header />
-          <div className={style.accordionHeader}>
-            Data  {!showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faPlusCircle} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faMinusCircle} />}
-          </div> 
+          <div className={style.accordionHeader} onClick={this.toggleShowData}>
+            Data  {!showData && <FontAwesomeIcon icon={faPlusCircle} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faMinusCircle} />}
+          </div>
           <div>
             <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
               <DatasetControls uuid={ this.state.uuid1 } datasets={ datasets }/>
-            </div> 
+            </div>
 
             <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
               <DatasetControls uuid={ this.state.uuid2 } datasets={ datasets }/>
-            </div> 
-          </div>    
+            </div>
+          </div>
 
-          { hasDataset && showData &&
-            <div className={ style.section }>
+          { hasDataset &&
+            <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
               <SearchControls />
             </div>
           }
-          <div className={style.accordionHeader} >
-            Grouping  {!showGrouping && <FontAwesomeIcon onClick={this.toggleShowGrouping} icon={faPlusCircle} />}{showGrouping && <FontAwesomeIcon  onClick={this.toggleShowGrouping} icon={faMinusCircle} />}
-          </div> 
+          <div className={style.accordionHeader} onClick={this.toggleShowGrouping}>
+            Grouping  {!showGrouping && <FontAwesomeIcon icon={faPlusCircle} />}{showGrouping && <FontAwesomeIcon  onClick={this.toggleShowGrouping} icon={faMinusCircle} />}
+          </div>
           { hasDataset &&
             <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
               <HierarchySelector />
@@ -104,6 +116,23 @@ class App extends Component {
           { hasDataset &&
             <div className={ classNames({ [style.section]: true, [style.hidden]: !showGrouping }) }>
               <MiscControls />
+            </div>
+          }
+          { !hasDataset &&
+            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
+              Please Select a dataset to Continue
+            </div>
+          }
+
+          <div className={style.accordionHeader} onClick={this.toggleShowFiltering}>
+            Filtering  {!showFiltering && <FontAwesomeIcon icon={faPlusCircle} />}{showFiltering && <FontAwesomeIcon onClick={this.toggleShowFiltering} icon={faMinusCircle} />}
+          </div>
+          <div>
+
+          </div>
+          { !hasDataset &&
+            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showFiltering }) }>
+              Please Select a dataset to Continue
             </div>
           }
         </div>
@@ -124,7 +153,7 @@ class App extends Component {
                 </span>
                 <div>
                   <span className={ style.centerSpan }>
-                    <div className="button" title="Ok" onClick={this.onErrorClose}>
+                    <div className="button circular" title="Ok" onClick={this.onErrorClose}>
                         <FontAwesomeIcon icon={faCheck} />
                     </div>
                   </span>
