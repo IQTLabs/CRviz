@@ -1,11 +1,15 @@
 {
-  "runtime~main.js": "/CRviz/static/js/runtime~main.574e5d29.js",
-  "runtime~main.js.map": "/CRviz/static/js/runtime~main.574e5d29.js.map",
-  "vendors.css": "/CRviz/static/css/vendors.6d81a003.chunk.css",
-  "vendors.js": "/CRviz/static/js/vendors.98a1907d.chunk.js",
-  "vendors.js.map": "/CRviz/static/js/vendors.98a1907d.chunk.js.map",
-  "main.css": "/CRviz/static/css/main.fbce5e7a.chunk.css",
-  "main.js": "/CRviz/static/js/main.9104ebc3.chunk.js",
-  "main.js.map": "/CRviz/static/js/main.9104ebc3.chunk.js.map",
-  "index.html": "/CRviz/index.html"
+  "main.css": "/CRviz/static/css/main.15e87638.chunk.css",
+  "main.js": "/CRviz/static/js/main.2a06abc8.chunk.js",
+  "main.js.map": "/CRviz/static/js/main.2a06abc8.chunk.js.map",
+  "static/css/1.be677608.chunk.css": "/CRviz/static/css/1.be677608.chunk.css",
+  "static/js/1.922cfad9.chunk.js": "/CRviz/static/js/1.922cfad9.chunk.js",
+  "static/js/1.922cfad9.chunk.js.map": "/CRviz/static/js/1.922cfad9.chunk.js.map",
+  "runtime~main.js": "/CRviz/static/js/runtime~main.76bbc707.js",
+  "runtime~main.js.map": "/CRviz/static/js/runtime~main.76bbc707.js.map",
+  "static/css/1.be677608.chunk.css.map": "/CRviz/static/css/1.be677608.chunk.css.map",
+  "static/css/main.15e87638.chunk.css.map": "/CRviz/static/css/main.15e87638.chunk.css.map",
+  "index.html": "/CRviz/index.html",
+  "precache-manifest.4e7251feaef9b014c0afc09ce33f0945.js": "/CRviz/precache-manifest.4e7251feaef9b014c0afc09ce33f0945.js",
+  "service-worker.js": "/CRviz/service-worker.js"
 }
