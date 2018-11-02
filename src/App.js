@@ -113,16 +113,20 @@ class App extends Component {
               <MiscControls />
             </div>
           }
-          { !hasDataset &&
-            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
-              Please Select a dataset to Continue
+          { !hasDataset && <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
+              Please select a dataset to continue
             </div>
           }
 
         </div>
 
         <div className={ style.canvas }>
-          <Visualization />
+	  { dataset.length===0 &&
+	    <span className={ style.modalMain }>
+              Current dataset is empty
+            </span>
+	  }
+	  <Visualization />
         </div>
         <Modal isOpen={ error !== null } onRequestClose={this.onErrorClose} contentLabel="An Error has occurred">
             <div className={ style.modal }>
