@@ -70,7 +70,6 @@ class App extends Component {
 
     const showData = this.state.showData;
     const showGrouping = this.state.showGrouping;
-    const showFiltering = this.state.showFiltering;
 
     return (
       <div className={
@@ -92,10 +91,6 @@ class App extends Component {
           <div>
             <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
               <DatasetControls uuid={ this.state.uuid1 } datasets={ datasets }/>
-            </div>
-
-            <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
-              <DatasetControls uuid={ this.state.uuid2 } datasets={ datasets }/>
             </div>
           </div>
 
@@ -124,17 +119,6 @@ class App extends Component {
             </div>
           }
 
-          <div className={style.accordionHeader} onClick={this.toggleShowFiltering}>
-            Filtering  {!showFiltering && <FontAwesomeIcon icon={faPlusCircle} />}{showFiltering && <FontAwesomeIcon onClick={this.toggleShowFiltering} icon={faMinusCircle} />}
-          </div>
-          <div>
-
-          </div>
-          { !hasDataset &&
-            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showFiltering }) }>
-              Please Select a dataset to Continue
-            </div>
-          }
         </div>
 
         <div className={ style.canvas }>
