@@ -28,7 +28,9 @@ class Header extends React.Component {
 	render() {
 		return (
 			<div className={ style.header }>
-			  <img src={ logo } className={ style.logo } alt='' />
+			  <a href="http://www.cyberreboot.org/" target="_blank" rel="noopener noreferrer">
+			  	<img src={ logo } className={ style.logo } alt='Cyber Reboot' />
+			  </a>
 			  <span className={ style.appName }>CRviz</span>
 			  <span className={ style.infoIcon }>
 				<label id="showInfo" onMouseEnter={this.showTooltip} onMouseLeave={this.hideTooltip}>
