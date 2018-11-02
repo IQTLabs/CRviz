@@ -126,7 +126,7 @@ class App extends Component {
               Current dataset is empty
             </span>
 	  }
-	  <Visualization />
+          <Visualization />
         </div>
         <Modal isOpen={ error !== null } onRequestClose={this.onErrorClose} contentLabel="An Error has occurred">
             <div className={ style.modal }>
