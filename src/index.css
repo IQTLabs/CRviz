@@ -48,7 +48,7 @@ select {
   height: 2em;
   float: right;
   margin: 0.4em 0;
-  padding: 0.2em 1em;
+  padding: 0.2em 1em 0.2em 0.25em;
   font-size: 1em;
   line-height: 1.75; 
   -ms-word-break: normal;
