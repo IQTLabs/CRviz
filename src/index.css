@@ -6,6 +6,56 @@ html, body, #root {
   height: 100%;
 }
 
+.select {
+    overflow: hidden;   
+    position: relative;
+    display: block;
+}
+
+.select:after {
+    content: '\f107';
+    display: inline-block;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    right: 0.2em;
+    top: 0.5em;
+    height: 2em;
+    width: 1.25em;
+    padding-left: 0.25em;
+    margin-left:0.25em;
+    position: absolute;
+    pointer-events: none;
+}
+
+/* IE11 hide native button (thanks Matt!) */
+select::-ms-expand {
+display: none;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* Add some styling */
+  
+  display: block;
+  width: 95%;
+  max-width: 20em;
+  height: 2em;
+  float: right;
+  margin: 0.4em 0;
+  padding: 0.2em 1em 0.2em 0.25em;
+  font-size: 1em;
+  line-height: 1.75; 
+  -ms-word-break: normal;
+  word-break: normal;
+}
+
+
+
 * {
   box-sizing: border-box;
 }
