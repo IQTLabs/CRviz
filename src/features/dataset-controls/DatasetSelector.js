@@ -5,7 +5,7 @@ import { isNil, find, propEq } from "ramda";
 function DatasetSelector({ className, selected, datasets, onChange }) {
   return (
     <div className={className}>
-      <label class="select">
+      <label className="select">
       <select
         onChange={(evt) => onChange(find(eqUrl(evt.target.value), datasets)) }
         value={isNil(selected) ? "" : selected.url}

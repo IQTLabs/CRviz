@@ -151,9 +151,9 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const hash = Object.keys(state.dataset.datasets)[0] || ""
+  const owner = Object.keys(state.dataset.datasets)[0] || ""
   return {
-    dataset: selectDataset(state, hash),
+    dataset: selectDataset(state, owner),
     darkTheme: selectControls(state).darkTheme,
     error: getError(state)
   }
