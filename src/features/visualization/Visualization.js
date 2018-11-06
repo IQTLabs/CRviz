@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { selectDataset, selectConfiguration } from "domain/dataset";
 import { getQueryString } from "epics/index-dataset-epic";
 import { selectControls } from "domain/controls";
+import { getLastUpdated } from "domain/dataset";
 
 import d3Viz from './d3-viz';
 import styles from './Visualization.module.css';
@@ -24,6 +25,7 @@ class Visualization extends React.PureComponent {
       fields: this.props.configuration.fields || [],
       showNodes: this.props.controls.shouldShowNodes,
       coloredField: this.props.controls.colorBy,
+      lastUpdated: this.props.lastUpdated,
       data: this.props.dataset || [],
       queryString: this.props.queryString
     });
@@ -39,11 +41,12 @@ class Visualization extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  const hash = Object.keys(state.dataset.datasets)[0] || ""
+  const owner = Object.keys(state.dataset.datasets)[0] || ""
   return {
-    dataset: selectDataset(state, hash),
-    configuration: selectConfiguration(state, hash),
+    dataset: selectDataset(state, owner),
+    configuration: selectConfiguration(state, owner),
     controls: selectControls(state),
+    lastUpdated: getLastUpdated(state, owner),
     queryString: getQueryString(state)
   };
 };

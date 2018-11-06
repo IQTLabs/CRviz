@@ -65,7 +65,6 @@ class App extends Component {
 
   render() {
     const { dataset, darkTheme, error } = this.props;
-
     const hasDataset = dataset && dataset.length > 0;
 
     const showData = this.state.showData;
@@ -121,12 +120,15 @@ class App extends Component {
         </div>
 
         <div className={ style.canvas }>
-	  { dataset.length===0 &&
-	    <span className={ style.modalMain }>
-              Current dataset is empty
-            </span>
+	  { hasDataset && dataset.length===0 && dataset.lastUpdated !== null &&
+		<span className={ style.modalMain }>
+		  Current dataset is empty
+		</span>
 	  }
           <Visualization />
+	  { 
+	    alert("lastUpdated: "+dataset.lastUpdated)
+	  }
         </div>
         <Modal isOpen={ error !== null } onRequestClose={this.onErrorClose} contentLabel="An Error has occurred">
             <div className={ style.modal }>
