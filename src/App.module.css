@@ -164,3 +164,25 @@ input[name=hideControls]:checked ~ .canvas {
 .hidden {
   display: none;
 }
+
+.emptyDataset {
+  position:fixed;
+  background: transparent;
+  flex: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: 2em;
+  padding: 1rem;
+  margin: 1rem;
+  width: auto;
+  height: auto;
+  top:50%;
+  left:60%;
+  transform: translate(-50%,-50%);
+}
+
+.emptyDataset span {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
