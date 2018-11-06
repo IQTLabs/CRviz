@@ -6,7 +6,7 @@ import Modal from 'react-modal';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faDizzy, faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 
-import { selectDataset } from 'domain/dataset';
+import { selectDataset, getLastUpdated } from 'domain/dataset';
 import { selectControls } from 'domain/controls';
 import { getError, clearError } from "domain/error";
 
@@ -64,12 +64,14 @@ class App extends Component {
   }
 
   render() {
-    const { dataset, darkTheme, error } = this.props;
-
+    const { dataset, darkTheme, error, lastUpdated } = this.props;
     const hasDataset = dataset && dataset.length > 0;
 
     const showData = this.state.showData;
     const showGrouping = this.state.showGrouping;
+
+    console.log(lastUpdated);
+    console.log(dataset.length);
 
     return (
       <div className={
@@ -113,13 +115,18 @@ class App extends Component {
               <MiscControls />
             </div>
           }
-          { !hasDataset &&
-            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
-              Please Select a dataset to Continue
+          { !hasDataset && <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
+              Please select a dataset to continue
             </div>
           }
-
         </div>
+        { dataset.length===0 && lastUpdated !== null &&
+          <div  className={ style.emptyDataset }>
+            <span>
+              Current dataset is empty
+            </span>
+          </div>
+        }
 
         <div className={ style.canvas }>
           <Visualization />
@@ -155,7 +162,8 @@ const mapStateToProps = state => {
   return {
     dataset: selectDataset(state, owner),
     darkTheme: selectControls(state).darkTheme,
-    error: getError(state)
+    error: getError(state),
+    lastUpdated: getLastUpdated(state, owner),
   }
 }
 
