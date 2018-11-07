@@ -21,6 +21,7 @@ html, body, #root {
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color:#111111;
     right: 0.2em;
     top: 0.5em;
     height: 2em;
