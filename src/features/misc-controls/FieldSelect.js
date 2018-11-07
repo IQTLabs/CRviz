@@ -23,22 +23,26 @@ function FieldSelect({
 }) {
 
   return (
-    <select
-      className={className}
-      name={name}
-      onChange={(evt) => onChange(stringToField(fields, evt.target.value))}
-      value={isNil(value) ? "" : fieldToString(value)}
-    >
-      <option value="">&mdash;None&mdash;</option>
-      {sortBy(getCount(getFieldId, values), fields).map((field) => {
-        const key = getFieldId(field);
-        return (
-          <option key={key} value={key}>
-            {field.displayName} ({values[getFieldId(field)].length})
-          </option>
-        );
-      })}
-    </select>
+    <div className={className}>
+      <label className="select">
+        <select
+          
+          name={name}
+          onChange={(evt) => onChange(stringToField(fields, evt.target.value))}
+          value={isNil(value) ? "" : fieldToString(value)}
+        >
+          <option value="">&mdash;None&mdash;</option>
+          {sortBy(getCount(getFieldId, values), fields).map((field) => {
+            const key = getFieldId(field);
+            return (
+              <option key={key} value={key}>
+                {field.displayName} ({values[getFieldId(field)].length})
+              </option>
+            );
+          })}
+        </select>
+      </label>
+    </div>
   );
 }
 
