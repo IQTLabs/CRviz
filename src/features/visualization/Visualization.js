@@ -39,10 +39,10 @@ class Visualization extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  const hash = Object.keys(state.dataset.datasets)[0] || ""
+  const owner = Object.keys(state.dataset.datasets)[0] || ""
   return {
-    dataset: selectDataset(state, hash),
-    configuration: selectConfiguration(state, hash),
+    dataset: selectDataset(state, owner),
+    configuration: selectConfiguration(state, owner),
     controls: selectControls(state),
     queryString: getQueryString(state)
   };

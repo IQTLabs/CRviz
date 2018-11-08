@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.4"></a>
+## [0.2.4](https://github.com/CyberReboot/CRviz/compare/v0.2.4-alpha.2...v0.2.4) (2018-11-07)
+
+
+### Bug Fixes
+
+* Fixes [#172](https://github.com/CyberReboot/CRviz/issues/172) text notification of an empty dataset ([406ee0d](https://github.com/CyberReboot/CRviz/commit/406ee0d))
+* fixes [#186](https://github.com/CyberReboot/CRviz/issues/186) - added styling to make select tags look the same across browsers ([a9f5de3](https://github.com/CyberReboot/CRviz/commit/a9f5de3))
+
+
+
 <a name="0.2.4-alpha.2"></a>
 ## [0.2.4-alpha.2](https://github.com/CyberReboot/CRviz/compare/v0.2.4-alpha.1...v0.2.4-alpha.2) (2018-11-01)
 

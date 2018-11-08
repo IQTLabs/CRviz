@@ -23,6 +23,7 @@
   transform: translateZ(0);
   display: flex;
   flex-direction: column;
+  height: 100%
 }
 
 :global(.darkTheme) .controls {
@@ -49,6 +50,7 @@
   flex: 1 1;
   transition: transform 0.25s;
   transform: translateZ(0);
+  height: 100%
 }
 
 input[name=hideControls] {
@@ -163,4 +165,26 @@ input[name=hideControls]:checked ~ .canvas {
 
 .hidden {
   display: none;
+}
+
+.emptyDataset {
+  position:fixed;
+  background: transparent;
+  flex: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: 2em;
+  padding: 1rem;
+  margin: 1rem;
+  width: auto;
+  height: auto;
+  top:50%;
+  left:60%;
+  transform: translate(-50%,-50%);
+}
+
+.emptyDataset span {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
 }

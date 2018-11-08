@@ -57,6 +57,7 @@ function MiscControls({
         <div className={style.fieldSelect}>
           <FieldSelect
             name="colorBy"
+            className={style.selector}
             onChange={colorBy}
             fields={fields}
             values={values}
