@@ -214,6 +214,11 @@ class DatasetControls extends React.Component {
         refreshInterval: numInt,
       });
     }
+    else if(!interval){
+      this.setState({
+        refreshInterval: null,
+      });
+    }
   }
 
   render() {
