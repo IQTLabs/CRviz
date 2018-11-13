@@ -27,7 +27,7 @@
     "rc": "^1.2.7",
     "react": "^16.6.3",
     "react-beautiful-dnd": "^9.0.0",
-    "react-dom": "^16.4.2",
+    "react-dom": "^16.6.3",
     "react-modal": "^3.5.1",
     "react-portal-tooltip": "^2.4.0",
     "react-redux": "^5.0.6",
