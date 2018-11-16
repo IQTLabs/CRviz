@@ -4,10 +4,10 @@ import classNames from 'classnames';
 import Modal from 'react-modal';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faDizzy, faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faDizzy, faPlusCircle, faMinusCircle, faHome } from "@fortawesome/free-solid-svg-icons";
 
 import { selectDataset, getLastUpdated } from 'domain/dataset';
-import { selectControls } from 'domain/controls';
+import { setHierarchyConfig, showNodes, colorBy, selectControls } from 'domain/controls';
 import { getError, clearError } from "domain/error";
 
 import Header from 'features/header/Header';
@@ -63,15 +63,18 @@ class App extends Component {
     this.props.clearError();
   }
 
+  resetControls = () => {
+    this.props.colorBy(null);
+    this.props.setHierarchyConfig([]);
+    this.props.showNodes(true);
+  }
+
   render() {
     const { dataset, darkTheme, error, lastUpdated } = this.props;
     const hasDataset = dataset && dataset.length > 0;
 
     const showData = this.state.showData;
     const showGrouping = this.state.showGrouping;
-
-    console.log(lastUpdated);
-    console.log(dataset.length);
 
     return (
       <div className={
@@ -87,6 +90,11 @@ class App extends Component {
         </label>
         <div className={ style.controls }>
           <Header />
+          <div className={ classNames({ [style.centerSpan]: true }) }>
+            <div className="button circular" title="Reset Controls" size="3x" onClick={this.resetControls}>
+              <FontAwesomeIcon icon={faHome} />
+            </div>
+          </div>
           <div className={style.accordionHeader} onClick={this.toggleShowData}>
             Data  {!showData && <FontAwesomeIcon icon={faPlusCircle} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faMinusCircle} />}
           </div>
@@ -115,7 +123,8 @@ class App extends Component {
               <MiscControls />
             </div>
           }
-          { !hasDataset && <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
+          { !hasDataset && 
+            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
               Please select a dataset to continue
             </div>
           }
@@ -168,7 +177,10 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-  clearError
+  clearError,
+  setHierarchyConfig, 
+  showNodes, 
+  colorBy, 
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

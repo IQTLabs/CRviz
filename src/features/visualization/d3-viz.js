@@ -34,6 +34,7 @@ function d3Viz(rootNode) {
    */
   const zoomRoot = root
     .append("div")
+    .attr("data-node", "zoomRoot")
     .style("position", "relative")
     .style("width", "100%")
     .style("height", "100%");
