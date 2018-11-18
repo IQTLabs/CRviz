@@ -23,7 +23,7 @@
     "lunr": "^2.2.0",
     "mini.css": "^3.0.1",
     "normalize.css": "^8.0.0",
-    "ramda": "^0.25.0",
+    "ramda": "^0.26.0",
     "rc": "^1.2.7",
     "react": "^16.6.3",
     "react-beautiful-dnd": "^10.0.0",
