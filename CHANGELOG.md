@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.4"></a>
+## [0.2.4](https://github.com/CyberReboot/CRviz/compare/v0.2.4-alpha.2...v0.2.4) (2018-11-07)
+
+
+### Bug Fixes
+
+* Fixes [#172](https://github.com/CyberReboot/CRviz/issues/172) text notification of an empty dataset ([406ee0d](https://github.com/CyberReboot/CRviz/commit/406ee0d))
+* fixes [#186](https://github.com/CyberReboot/CRviz/issues/186) - added styling to make select tags look the same across browsers ([a9f5de3](https://github.com/CyberReboot/CRviz/commit/a9f5de3))
+
+
+
+<a name="0.2.4-alpha.2"></a>
+## [0.2.4-alpha.2](https://github.com/CyberReboot/CRviz/compare/v0.2.4-alpha.1...v0.2.4-alpha.2) (2018-11-01)
+
+
+### Bug Fixes
+
+* **package:** update boom to version 7.2.1 ([5e6d180](https://github.com/CyberReboot/CRviz/commit/5e6d180))
+* css updates ([06eaa90](https://github.com/CyberReboot/CRviz/commit/06eaa90))
+* **package:** update mini.css to version 3.0.1 ([48acc78](https://github.com/CyberReboot/CRviz/commit/48acc78))
+* **package:** update mini.css to version 3.0.1 ([aeb16a3](https://github.com/CyberReboot/CRviz/commit/aeb16a3))
+* Closes [#155](https://github.com/CyberReboot/CRviz/issues/155) ([e3e2cf4](https://github.com/CyberReboot/CRviz/commit/e3e2cf4))
+* Closes [#166](https://github.com/CyberReboot/CRviz/issues/166) ([fe0199b](https://github.com/CyberReboot/CRviz/commit/fe0199b))
+* Fixes [#168](https://github.com/CyberReboot/CRviz/issues/168) ([b83f842](https://github.com/CyberReboot/CRviz/commit/b83f842))
+* Fixes [#168](https://github.com/CyberReboot/CRviz/issues/168) - corrects issue with UTs not exiting as expected ([12a7c33](https://github.com/CyberReboot/CRviz/commit/12a7c33))
+* Fixes [#175](https://github.com/CyberReboot/CRviz/issues/175) - added text stating that a dataset needs loaded ([c655483](https://github.com/CyberReboot/CRviz/commit/c655483))
+
+
+### Features
+
+* **Filtering:** [#111](https://github.com/CyberReboot/CRviz/issues/111) - added filter reducer for place to store and manage filtering ([dbac497](https://github.com/CyberReboot/CRviz/commit/dbac497))
+* **Filtering:** Closes [#111](https://github.com/CyberReboot/CRviz/issues/111) ([8235f74](https://github.com/CyberReboot/CRviz/commit/8235f74))
+
+
+
+<a name="0.2.4-alpha.1"></a>
+## [0.2.4-alpha.1](https://github.com/CyberReboot/CRviz/compare/v0.2.4-alpha.0...v0.2.4-alpha.1) (2018-11-01)
+
+
+
 <a name="0.2.4-alpha.0"></a>
 ## [0.2.4-alpha.0](https://github.com/CyberReboot/CRviz/compare/v0.2.3...v0.2.4-alpha.0) (2018-09-20)
 

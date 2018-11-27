@@ -20,6 +20,7 @@
 
 .fieldSelect {
   flex: 1 1;
+  align-items: center;
 }
 
 .fieldSelect select {
@@ -62,4 +63,18 @@
 .switch input[type=checkbox]:checked + .switchLabel:before {
     right: 0px; 
     background-color: #0277BD; 
+}
+
+.selectorContainer {
+  display: flex;
+  align-items: center;
+}
+
+.selector {
+  flex: 1;
+}
+
+.selector select {
+  width: 100%;
+  margin: 0;
 }
