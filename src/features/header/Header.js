@@ -41,7 +41,7 @@ class Header extends React.Component {
 			        About CRviz:<br/>
 			        Home: <a href="https://www.cyberreboot.org/projects/crviz/">https://www.cyberreboot.org/projects/crviz/</a><br/>
 			        Version: { process.env.REACT_APP_VERSION } <br/>
-			        Copyright © 2018 In-Q-Tel, Inc.
+			        Copyright © 2017-2018 IQT Labs LLC.
 			      </div>
 			    </ToolTip>
 	    	  </span>
