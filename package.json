@@ -13,6 +13,7 @@
     "css-element-queries": "^1.0.2",
     "d3": "^5.4.0",
     "d3-scale-chromatic": "^1.2.0",
+    "d3-svg-annotation": "^2.3.1",
     "debug": "^4.0.1",
     "deep-extend": "^0.5.1",
     "extend": "^3.0.2",
