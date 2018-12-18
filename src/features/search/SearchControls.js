@@ -15,7 +15,6 @@ import style from "./SearchControls.module.css";
 const defaultState = {
   queryString: '',
   searchIndices: [],
-  results: [],
   hasSearch: false
 }
 
@@ -32,7 +31,7 @@ class Search extends React.Component {
       configuration: this.props.configuration,
       searchIndices: this.props.searchIndices,
       queryString: this.state.queryString,
-      results: this.state.results
+      results: this.props.results
     }
     this.props.searchDataset(data);
   }
