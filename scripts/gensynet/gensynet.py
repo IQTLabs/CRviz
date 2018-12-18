@@ -328,7 +328,7 @@ def randomize_subnet_breakdown(count, minimum, maximum):
             subnets[s] += 1
             nodes_left -= 1
         else:
-            subnetIDs.remove(s) 
+            subnetIDs.remove(s)
     return subnets
 
 
@@ -490,7 +490,7 @@ def main():
 
                     subnets = randomize_subnet_breakdown(nodect, minimum, maximum)
 
-                for i,e in enumerate(subnets):
+                for i, _ in enumerate(subnets):
                     print('\tSubnet #{} has {} hosts.'.format(i, subnets[i]))
 
                 if (nodect > 252):
