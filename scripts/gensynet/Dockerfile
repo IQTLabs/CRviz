@@ -1,5 +1,5 @@
-FROM python:3-alpine3.6
-MAINTAINER Charlie Lewis <clewis@iqt.org>
+FROM python:3-alpine3.7
+LABEL maintainer="rashley-iqt <rashley@iqt.org>"
 
 COPY . /gensynet
 WORKDIR /gensynet
