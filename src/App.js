@@ -4,10 +4,10 @@ import classNames from 'classnames';
 import Modal from 'react-modal';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faDizzy, faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faDizzy, faPlusCircle, faMinusCircle, faHome } from "@fortawesome/free-solid-svg-icons";
 
-import { selectDataset } from 'domain/dataset';
-import { selectControls } from 'domain/controls';
+import { selectDataset, getLastUpdated } from 'domain/dataset';
+import { setHierarchyConfig, showNodes, colorBy, selectControls } from 'domain/controls';
 import { getError, clearError } from "domain/error";
 
 import Header from 'features/header/Header';
@@ -63,14 +63,18 @@ class App extends Component {
     this.props.clearError();
   }
 
-  render() {
-    const { dataset, darkTheme, error } = this.props;
+  resetControls = () => {
+    this.props.colorBy(null);
+    this.props.setHierarchyConfig([]);
+    this.props.showNodes(true);
+  }
 
+  render() {
+    const { dataset, darkTheme, error, lastUpdated } = this.props;
     const hasDataset = dataset && dataset.length > 0;
 
     const showData = this.state.showData;
     const showGrouping = this.state.showGrouping;
-    const showFiltering = this.state.showFiltering;
 
     return (
       <div className={
@@ -86,16 +90,17 @@ class App extends Component {
         </label>
         <div className={ style.controls }>
           <Header />
+          <div className={ classNames({ [style.centerSpan]: true }) }>
+            <div className="button circular" title="Reset Controls" size="3x" onClick={this.resetControls}>
+              <FontAwesomeIcon icon={faHome} />
+            </div>
+          </div>
           <div className={style.accordionHeader} onClick={this.toggleShowData}>
             Data  {!showData && <FontAwesomeIcon icon={faPlusCircle} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faMinusCircle} />}
           </div>
           <div>
             <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
               <DatasetControls uuid={ this.state.uuid1 } datasets={ datasets }/>
-            </div>
-
-            <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
-              <DatasetControls uuid={ this.state.uuid2 } datasets={ datasets }/>
             </div>
           </div>
 
@@ -118,24 +123,19 @@ class App extends Component {
               <MiscControls />
             </div>
           }
-          { !hasDataset &&
+          { !hasDataset && 
             <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
-              Please Select a dataset to Continue
-            </div>
-          }
-
-          <div className={style.accordionHeader} onClick={this.toggleShowFiltering}>
-            Filtering  {!showFiltering && <FontAwesomeIcon icon={faPlusCircle} />}{showFiltering && <FontAwesomeIcon onClick={this.toggleShowFiltering} icon={faMinusCircle} />}
-          </div>
-          <div>
-
-          </div>
-          { !hasDataset &&
-            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showFiltering }) }>
-              Please Select a dataset to Continue
+              Please select a dataset to continue
             </div>
           }
         </div>
+        { dataset.length===0 && lastUpdated !== null &&
+          <div  className={ style.emptyDataset }>
+            <span>
+              Current dataset is empty
+            </span>
+          </div>
+        }
 
         <div className={ style.canvas }>
           <Visualization />
@@ -167,16 +167,20 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const hash = Object.keys(state.dataset.datasets)[0] || ""
+  const owner = Object.keys(state.dataset.datasets)[0] || ""
   return {
-    dataset: selectDataset(state, hash),
+    dataset: selectDataset(state, owner),
     darkTheme: selectControls(state).darkTheme,
-    error: getError(state)
+    error: getError(state),
+    lastUpdated: getLastUpdated(state, owner),
   }
 }
 
 const mapDispatchToProps = {
-  clearError
+  clearError,
+  setHierarchyConfig, 
+  showNodes, 
+  colorBy, 
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
