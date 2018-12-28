@@ -50,11 +50,13 @@ function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig
 
   const scheme = extendColorScheme(colorScheme, values.length);
 
-  const configs = scheme.map((color, index) => ({
-    color,
-    disabled: false,
-    className: `legend-color-${index}`
-  }));
+  const configs = scheme.map((color, index) => {
+    return {
+      color,
+      disabled: false,
+      className: `legend-color-${index}`
+    }
+  });
 
   const coloring = zip(values, configs);
   const colorMap = fromPairs(coloring);
