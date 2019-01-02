@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.6"></a>
+## [0.2.6](https://github.com/CyberReboot/CRviz/compare/v0.2.4...v0.2.6) (2018-12-28)
+
+
+### Bug Fixes
+
+* Closes [#206](https://github.com/CyberReboot/CRviz/issues/206) - corrects issue with field paths ([a54efc9](https://github.com/CyberReboot/CRviz/commit/a54efc9))
+* **dependencies:** removed react-app-rewired ([6c77798](https://github.com/CyberReboot/CRviz/commit/6c77798)), closes [#209](https://github.com/CyberReboot/CRviz/issues/209) [#210](https://github.com/CyberReboot/CRviz/issues/210) [#211](https://github.com/CyberReboot/CRviz/issues/211)
+* package.json to reduce vulnerabilities ([f619494](https://github.com/CyberReboot/CRviz/commit/f619494))
+* **package:** update ramda to version 0.26.0 ([b77e495](https://github.com/CyberReboot/CRviz/commit/b77e495))
+* **package:** update react-beautiful-dnd to version 10.0.0 ([1207e7b](https://github.com/CyberReboot/CRviz/commit/1207e7b))
+* **package:** update react-redux to version 6.0.0 ([2abb684](https://github.com/CyberReboot/CRviz/commit/2abb684))
+* Closes [#191](https://github.com/CyberReboot/CRviz/issues/191) - corrected styling on Color By select element ([ddfcd9e](https://github.com/CyberReboot/CRviz/commit/ddfcd9e))
+* Closes [#193](https://github.com/CyberReboot/CRviz/issues/193) - sets App Canvas to 100% height of parent element ([2e0e0f9](https://github.com/CyberReboot/CRviz/commit/2e0e0f9))
+* closes [#195](https://github.com/CyberReboot/CRviz/issues/195) - refresh interval validation handles empty string correctly ([00c337f](https://github.com/CyberReboot/CRviz/commit/00c337f))
+* css fix for darkTheme ([2533ab7](https://github.com/CyberReboot/CRviz/commit/2533ab7))
+
+
+### Features
+
+* adds a button to reset display options (except dark theme and zoom) ([b080567](https://github.com/CyberReboot/CRviz/commit/b080567)), closes [#101](https://github.com/CyberReboot/CRviz/issues/101)
+
+
+
 <a name="0.2.5"></a>
 ## [0.2.5](https://github.com/CyberReboot/CRviz/compare/v0.2.4...v0.2.5) (2018-12-14)
 

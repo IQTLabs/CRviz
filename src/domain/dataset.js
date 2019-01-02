@@ -34,7 +34,12 @@ const defaultItemState = {
 /**
  * Return a string that uniquely identify the field
  */
-const getFieldId = (field) => field.path.join(".")
+const getFieldId = (field) => {
+  if(field.path.length >= 1 && field.path[0])
+    return field.path.join(".")
+  else
+    return " ";
+}
 
 /**
  * Returns an array of paths to literal values and arrays in a POJO.

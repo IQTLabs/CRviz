@@ -89,7 +89,8 @@ const generateIndex = (payload) => {
   const idx = lunr(function () {
     this.ref('id');
     if(configuration && configuration.fields){
-      configuration.fields.map((field) => { return this.field(field.displayName.toLowerCase()); })
+      const filteredFields = configuration.fields.filter(f => !f.displayName.includes("/"))
+      filteredFields.map((field) => { return this.field(field.displayName.toLowerCase()); })
     }
     flat.map((item) => { return this.add(item); })
   });
