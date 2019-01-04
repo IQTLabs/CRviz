@@ -70,7 +70,9 @@ function d3Viz(rootNode) {
     .style("width", "100%")
     .style("height", "100%");
 
-  const svg = transformRoot.append("svg").style("overflow", "visible");
+  const svg = transformRoot.append("svg")
+                           .style("overflow", "visible")
+                           .attr("class", "nodeRoot");
 
   const tooltip = root.append("div").classed("viz-tooltip", true);
   const legend = root.append("div").classed("viz-legend", true);

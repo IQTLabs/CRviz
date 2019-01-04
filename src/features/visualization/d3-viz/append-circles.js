@@ -1,4 +1,6 @@
+import { select, event as d3Event } from "d3-selection";
 import { path } from "d3-path";
+import { annotation, annotationCalloutCircle } from "d3-svg-annotation";
 import datumKey from "./datum-key";
 
 const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }) => {
@@ -10,8 +12,8 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
     .selectAll(`g.${className("node")}`)
     .data(data, datumKey);
 
-  nodes.exit().remove();
-  //console.log(nodes);
+  nodes.exit().remove();  
+
   const nodesEnter = nodes.enter().append("g").classed(className("node"), true);
   nodesEnter
     .merge(nodes)
@@ -64,6 +66,44 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
     .merge(countLabelsEnter).text((d) => d.value )
     .style("display", showNodes ? 'none' : 'block')
 
+
+  // const annotations = [{
+  //     'data': { 'id': 'test' },
+  //     'x': 1024,
+  //     'y': 512,
+  //     'dx': 50,
+  //     'dy': 50,
+  //     'note':{
+  //       title: 'test',
+  //       'label': 'does this even work?'
+  //     },
+  //     'subject': { 'radius': 25 },
+  //     'color': "black"
+  //   }];
+  const annotations = mapNodesToAnnotationArray(nodes.data());
+  const makeAnnotations = annotation()
+                          .annotations(annotations)
+                          .type(annotationCalloutCircle)
+                          .on('subjectover', function(annotation) {
+                            annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
+                              .classed("hidden", false)
+                          })
+                          .on('subjectout', function(annotation) {
+                            annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
+                              .classed("hidden", true)
+                          })
+
+
+  // console.log("canvas : %o", canvas);
+  // const canvas = 
+  const annotationRoot = select(".nodeRoot")
+                         .append("g")
+                         .attr("class", "annotation-root")
+                         .call(makeAnnotations);
+
+  select(".nodeRoot").selectAll("g.annotation-connector, g.annotation-note")
+        .classed("hidden", true)
+
   return [
     nodes.merge(nodesEnter),
     labels.merge(labelsEnter),
@@ -90,5 +130,23 @@ const getLabelShape = (d) => {
 }
 
 const className = (name) => `viz-${name}`;
+
+const mapNodesToAnnotationArray = (nodes) =>{
+  const dataNodes = nodes.filter(n => n.depth >= 1);
+
+  const annotations = dataNodes.map( d => ({
+    'data': d.data,
+    'x': d.x,
+    'y': d.y,
+    'dx': 50,
+    'dy': 50,
+    'note':{
+      'label': d.data.uid || ''
+    },
+    'subject': { 'radius': d.r }
+  }));
+
+  return annotations;
+}
 
 export default appendCircles;

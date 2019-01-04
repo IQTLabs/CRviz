@@ -55,7 +55,9 @@ select {
   word-break: normal;
 }
 
-
+.hidden {
+  display: none;
+}
 
 * {
   box-sizing: border-box;
