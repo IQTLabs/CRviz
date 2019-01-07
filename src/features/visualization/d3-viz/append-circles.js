@@ -3,7 +3,7 @@ import { path } from "d3-path";
 import { annotation, annotationCalloutCircle } from "d3-svg-annotation";
 import datumKey from "./datum-key";
 
-const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }) => {
+const appendCircles = ({ nodeRoot, annotationRoot, labelRoot, packedData, showNodes, hasSearch }) => {
   const isInternal = (d) => d.depth > 0 && d.height > 0;
 
   const data = packedData.descendants();
@@ -66,43 +66,26 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
     .merge(countLabelsEnter).text((d) => d.value )
     .style("display", showNodes ? 'none' : 'block')
 
-
-  // const annotations = [{
-  //     'data': { 'id': 'test' },
-  //     'x': 1024,
-  //     'y': 512,
-  //     'dx': 50,
-  //     'dy': 50,
-  //     'note':{
-  //       title: 'test',
-  //       'label': 'does this even work?'
-  //     },
-  //     'subject': { 'radius': 25 },
-  //     'color': "black"
-  //   }];
-  const annotations = mapNodesToAnnotationArray(nodes.data());
+  const groupNodes = nodeRoot.selectAll(`g.${className("groupingNode")}`).data();
+  console.log("groupNodes: %o", groupNodes);
+  const annotations = mapNodesToAnnotationArray(groupNodes);
   const makeAnnotations = annotation()
                           .annotations(annotations)
                           .type(annotationCalloutCircle)
-                          .on('subjectover', function(annotation) {
-                            annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
-                              .classed("hidden", false)
-                          })
-                          .on('subjectout', function(annotation) {
-                            annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
-                              .classed("hidden", true)
-                          })
+                          // .on('subjectover', function(annotation) {
+                          //   annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
+                          //     .classed("hidden", false)
+                          // })
+                          // .on('subjectout', function(annotation) {
+                          //   annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
+                          //     .classed("hidden", true)
+                          // })
 
 
-  // console.log("canvas : %o", canvas);
-  // const canvas = 
-  const annotationRoot = select(".nodeRoot")
-                         .append("g")
-                         .attr("class", "annotation-root")
-                         .call(makeAnnotations);
+  annotationRoot.call(makeAnnotations);
 
-  select(".nodeRoot").selectAll("g.annotation-connector, g.annotation-note")
-        .classed("hidden", true)
+  // select(".nodeRoot").selectAll("g.annotation-connector, g.annotation-note")
+  //       .classed("hidden", true)
 
   return [
     nodes.merge(nodesEnter),
@@ -132,18 +115,18 @@ const getLabelShape = (d) => {
 const className = (name) => `viz-${name}`;
 
 const mapNodesToAnnotationArray = (nodes) =>{
-  const dataNodes = nodes.filter(n => n.depth >= 1);
-
-  const annotations = dataNodes.map( d => ({
+  console.log(nodes);
+  const annotations = nodes.map( d => ({
     'data': d.data,
     'x': d.x,
     'y': d.y,
-    'dx': 50,
-    'dy': 50,
+    'dx': d.r,
+    'dy': -1 * (d.labelY + (d.labelSize/2)),
     'note':{
-      'label': d.data.uid || ''
+      'label': d.data.fieldValue || '',
+      'title': d.data.fieldValue || ''
     },
-    'subject': { 'radius': d.r }
+    'subject': { 'radius': d.r -1 }
   }));
 
   return annotations;

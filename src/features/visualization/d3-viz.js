@@ -79,6 +79,9 @@ function d3Viz(rootNode) {
 
   const nodeRoot = svg.append("g");
 
+  const annotationRoot = svg.append("g")
+                         .attr("class", "annotation-root")
+
   // State
   let props = {
     hierarchyConfig: null,
@@ -162,11 +165,15 @@ function d3Viz(rootNode) {
   const rerender = (props, state) => {
     const [nodes, labels, countLabels] = appendCircles({
       nodeRoot: nodeRoot,
+      annotationRoot: annotationRoot,
       labelRoot: labelRoot,
       packedData: state.packedData,
       showNodes: props.showNodes,
       hasSearch: props.queryString !== ''
     });
+
+    // console.log("nodes: %o", nodes);
+    // console.log("packed: %o", state.packedData);
 
     setupTooltip({
       tooltip: tooltip,
