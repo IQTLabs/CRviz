@@ -34,6 +34,7 @@ function d3Viz(rootNode) {
    */
   const zoomRoot = root
     .append("div")
+    .attr("data-node", "zoomRoot")
     .style("position", "relative")
     .style("width", "100%")
     .style("height", "100%");
@@ -69,12 +70,17 @@ function d3Viz(rootNode) {
     .style("width", "100%")
     .style("height", "100%");
 
-  const svg = transformRoot.append("svg").style("overflow", "visible");
+  const svg = transformRoot.append("svg")
+                           .style("overflow", "visible")
+                           .attr("class", "nodeRoot");
 
   const tooltip = root.append("div").classed("viz-tooltip", true);
   const legend = root.append("div").classed("viz-legend", true);
 
   const nodeRoot = svg.append("g");
+
+  const annotationRoot = svg.append("g")
+                         .attr("class", "annotation-root")
 
   // State
   let props = {
@@ -159,11 +165,15 @@ function d3Viz(rootNode) {
   const rerender = (props, state) => {
     const [nodes, labels, countLabels] = appendCircles({
       nodeRoot: nodeRoot,
+      annotationRoot: annotationRoot,
       labelRoot: labelRoot,
       packedData: state.packedData,
       showNodes: props.showNodes,
       hasSearch: props.queryString !== ''
     });
+
+    // console.log("nodes: %o", nodes);
+    // console.log("packed: %o", state.packedData);
 
     setupTooltip({
       tooltip: tooltip,

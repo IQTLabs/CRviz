@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# To convert a CSV file to a JSON file useable within CRviz, run 
+# To convert a CSV file to a JSON file useable within CRviz, run
 # the script as follows:
 #       csv_to_json.py [-o OUTPUT] CSVFILE
 #
@@ -14,18 +14,17 @@
 import argparse
 import csv
 import json
-import os
 
 from os import path
 
 
-def convert_csv_to_json(input, output):
+def convert_csv_to_json(input_f, output_f):
     '''Takes the name of a CSV file and converts it to a CRviz-compatible json file named by output.
     Returns True if everything works out, or False if not.'''
-    csvf = open(input, 'r')
+    csvf = open(input_f, 'r')
 
     try:
-        jsonf = open(output, 'w', newline="\n")
+        jsonf = open(output_f, 'w', newline="\n")
         jsonf.write('{ "dataset": [\n')
 
         reader = csv.DictReader(csvf)
@@ -40,7 +39,7 @@ def convert_csv_to_json(input, output):
     except IOError:
         print("ERROR: Couldn't open the output file for writing.")
         return False
-    
+
     csvf.close()
     jsonf.close()
 
