@@ -1,4 +1,3 @@
-import { select, event as d3Event } from "d3-selection";
 import { path } from "d3-path";
 import { annotation, annotationCalloutCircle } from "d3-svg-annotation";
 import datumKey from "./datum-key";
