@@ -55,25 +55,6 @@ select {
   word-break: normal;
 }
 
-.annotation path {
-  stroke: black;
-  fill: none;
-}
-
-.annotation-subject path {
-  stroke: transparent;
-  fill: none;
-}
-
-.annotation path.connector-arrow, 
-.title text, .annotation text,
-.annotation.callout.circle .annotation-subject path{
-  fill: var(--accent-color);
-}
-.annotation-note-bg {
-  fill: white;
-}
-
 .annotation-note-title {
   font-weight: bold;
 }

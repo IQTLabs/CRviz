@@ -82,7 +82,7 @@ function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig
     update({ nodes: state.nodes });
   }
 
-  return { update };
+  return { update, colorMap };
 }
 
 const updateLegend = ({ legend, colorMap, toggleValue }) => {
