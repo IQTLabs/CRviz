@@ -59,6 +59,16 @@ select {
   font-weight: bold;
 }
 
+.annotation-note-label tspan {
+  font-size: 16px;
+  fill: black;
+}
+
+:global(.darkTheme) .annotation-note-label tspan {
+  font-size: 16px;
+  fill: white;
+}
+
 .hidden {
   display: none;
 }

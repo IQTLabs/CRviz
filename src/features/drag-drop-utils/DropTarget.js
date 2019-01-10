@@ -11,7 +11,7 @@ import { Droppable } from "react-beautiful-dnd";
  * Note: this cannot be used nested inside SelectedFieldList, because they need
  * to accept the same type, and react-beautiful-dnd doesn't allow that.
  */
-function DropTarget({ style, droppableId, isDropDisabled, fields }) {
+function DropTarget({ style, initialItemText, subsequentItemText, droppableId, isDropDisabled, fields }) {
   return (
     <div
       className={classNames({
@@ -21,7 +21,7 @@ function DropTarget({ style, droppableId, isDropDisabled, fields }) {
       <div className={style.draggable}>
         <div className={style.field}>
           <span className={style.groupBy}>
-            { fields.length === 0 ? 'Group by' : 'Then by' }
+            { fields.length === 0 ? initialItemText : subsequentItemText }
           </span>
 
           <Droppable

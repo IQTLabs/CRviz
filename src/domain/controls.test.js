@@ -1,6 +1,10 @@
 import {
   default as controls,
   setHierarchyConfig,
+  setKeyFields,
+  getKeyFields,
+  setIgnoredFields,
+  getIgnoredFields,
   showNodes,
   useDarkTheme,
   colorBy,
@@ -24,6 +28,30 @@ describe("Controls reducer", () => {
         darkTheme: false,
         colorBy: null
       });
+
+      done();
+    });
+  });
+
+  describe("setKeyFields", () => {
+    it("sets the fields to use as a key for comparison", (done) => {
+      const keys = [{ path: ["uid"], displayName: "UID" }];
+      const action = setKeyFields(keys);
+      const result = reducer({}, action);
+
+      expect(getKeyFields(result)).to.deep.equal(keys);
+
+      done();
+    });
+  });
+
+  describe("setIgnoreFields", () => {
+    it("sets the fields to ignore in comparison", (done) => {
+      const ignored = [{ path: ["timestamp"], displayName: "Timestamp" }];
+      const action = setIgnoredFields(ignored);
+      const result = reducer({}, action);
+
+      expect(getIgnoredFields(result)).to.deep.equal(ignored);
 
       done();
     });
