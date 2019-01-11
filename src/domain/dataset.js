@@ -223,4 +223,4 @@ const getLastUpdated = (state, owner) => state.dataset.datasets[owner] && state.
 export default reducer;
 
 export { setDataset, selectDataset, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
-  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };
+  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated, valuesFor  };
