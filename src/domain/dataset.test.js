@@ -11,7 +11,10 @@ import {
   selectValues,
   selectMergedValues,
   setIsFetching,
-  getIsFetching
+  getIsFetching,
+  setDatasetDiff,
+  removeDatasetDiff,
+  selectDatasetDiff
 } from "./dataset";
 
 import { combineReducers } from "redux";
@@ -309,6 +312,64 @@ describe("Dataset Reducer", () => {
           'value': ["test1", "test2", "test4", "test5"]
         }
         expect(selectMergedValues(initialState)).to.deep.equal(expectedValues);
+
+        done();
+      });
+    });
+
+    describe("setDatasetDiffs", () => {
+      it("sets the diff between 2 datasets", (done) => {
+        const ds1Owner = uuidv4();
+        const ds2Owner = uuidv4();
+        const ds1 = [
+          { 'uid': "uid1", 'role': { 'role': "role1", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role1", 'confidence': 80 } }
+        ];
+        const ds2 = [
+          { 'uid': "uid1", 'role': { 'role': "role1", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role2", 'confidence': 80 } }
+        ];
+        const differences =[{
+          key:"uid2",
+          fields: [{
+            field: { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false },
+            startValue: "role1",
+            endValue: "role2"
+          }]
+        }];     
+
+        const action = setDatasetDiff({ 'start': ds1Owner, 'end': ds2Owner, 'differences': differences });
+        const result = reducer({}, action);
+
+        expect(selectDatasetDiff(result, ds1Owner, ds2Owner)).to.deep.equal(differences);
+
+        done();
+      });
+
+      it("removes the diff between 2 datasets", (done) => {
+        const ds1Owner = uuidv4();
+        const ds2Owner = uuidv4();
+        const ds1 = [
+          { 'uid': "uid1", 'role': { 'role': "role1", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role1", 'confidence': 80 } }
+        ];
+        const ds2 = [
+          { 'uid': "uid1", 'role': { 'role': "role1", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role2", 'confidence': 80 } }
+        ];
+        const differences =[{
+          key:"uid2",
+          fields: [{
+            field: { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false },
+            startValue: "role1",
+            endValue: "role2"
+          }]
+        }];     
+
+        const action = removeDatasetDiff({ 'start': ds1Owner, 'end': ds2Owner});
+        const result = reducer({ diffs:[{ 'start': ds1Owner, 'end': ds2Owner, 'differences': differences }] }, action);
+
+        expect(selectDatasetDiff(result, ds1Owner, ds2Owner)).to.equal(null);
 
         done();
       });
