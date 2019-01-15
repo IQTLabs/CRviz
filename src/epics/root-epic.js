@@ -14,7 +14,8 @@ const rootEpic = combineEpics(
   searchDatasetEpic,
   indexDatasetEpic,
   refreshDatasetEpic,
-  filterDatasetEpic
+  filterDatasetEpic,
+  diffDatasetEpic
 );
 
 export default rootEpic;

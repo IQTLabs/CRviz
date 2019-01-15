@@ -21,6 +21,7 @@ import {
 
 import { selectMergedConfiguration, selectMergedValues, getFieldId } from "domain/dataset";
 import { setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields } from "domain/controls";
+import { diffDataset } from "epics/diff-dataset-epic";
 
 import SelectedFieldList from 'features/drag-drop-utils/SelectedFieldList';
 import AvailableFieldList from 'features/drag-drop-utils/AvailableFieldList';
@@ -105,7 +106,7 @@ class ComparisonSelector extends React.Component {
 
     if(updatedIgnored){
     	this.props.setIgnoredFields(updatedIgnored);
-	}
+	  }
   }
 
   removeField = (fieldId) => {
@@ -237,7 +238,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   setKeyFields,
-  setIgnoredFields
+  setIgnoredFields,
+  diffDataset
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ComparisonSelector);
