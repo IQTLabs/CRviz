@@ -6,6 +6,7 @@ import searchDatasetEpic from './search-dataset-epic';
 import indexDatasetEpic from './index-dataset-epic';
 import refreshDatasetEpic from './refresh-dataset-epic';
 import filterDatasetEpic from './filter-dataset-epic';
+import diffDatasetEpic from './diff-dataset-epic';
 
 const rootEpic = combineEpics(
   loadDatasetEpic,

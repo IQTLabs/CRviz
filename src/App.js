@@ -132,7 +132,7 @@ class App extends Component {
           </div>
           { hasDataset &&
             <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
-              <ComparisonSelector />
+              <ComparisonSelector startUuid={ this.state.uuid1 } endUuid={ this.state.uuid2 } />
             </div>
           }
           { !hasDataset && 

@@ -19,7 +19,7 @@ import {
   remove
 } from "ramda";
 
-import { selectMergedConfiguration, selectMergedValues, getFieldId } from "domain/dataset";
+import { selectMergedConfiguration, selectMergedValues, getFieldId, selectDataset } from "domain/dataset";
 import { setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields } from "domain/controls";
 import { diffDataset } from "epics/diff-dataset-epic";
 
@@ -91,21 +91,25 @@ class ComparisonSelector extends React.Component {
 
   updateKeyFields = (fieldId, newIndex) =>{
     const keyFields = this.props.keyFields;
+    const ignoredFields = this.props.ignoredFields;
 
     const updatedKeys = this.getUpdatedFields(fieldId, newIndex, keyFields);
     
     if(updatedKeys){
     	this.props.setKeyFields(updatedKeys);
+      this.updateDiff(updatedKeys, ignoredFields);
     }
   }
 
   updateIgnoreFields = (fieldId, newIndex) =>{
+    const keyFields = this.props.keyFields;
     const ignoredFields = this.props.ignoredFields;
 
     const updatedIgnored = this.getUpdatedFields(fieldId, newIndex, ignoredFields);
 
     if(updatedIgnored){
     	this.props.setIgnoredFields(updatedIgnored);
+      this.updateDiff(keyFields, updatedIgnored);
 	  }
   }
 
@@ -116,13 +120,34 @@ class ComparisonSelector extends React.Component {
     const ignoredFields = this.props.ignoredFields;
     const ignoredIndex = findFieldIndex(ignoredFields, fieldId);
 
+    let updatedKeys = null;
+    let updatedIgnored = null;
+
     if (keyIndex !== null) {
-      this.props.setKeyFields(remove(keyIndex, 1, keyFields ))
+      updatedKeys = remove(keyIndex, 1, keyFields );
+      this.props.setKeyFields(updatedKeys);
     }
 
     if (ignoredIndex !== null) {
-      this.props.setIgnoredFields(remove(ignoredIndex, 1, ignoredFields ))
+      updatedIgnored = remove(ignoredIndex, 1, ignoredFields );
+      this.props.setIgnoredFields(updatedIgnored);      
     }
+
+    if(updatedKeys || updatedIgnored){
+      this.updateDiff(updatedKeys || keyFields, updatedIgnored || ignoredFields);
+    }
+  }
+
+  updateDiff = (keyFields, ignoredFields) => {
+    const toDiff ={
+      'start': this.props.start,
+      'end': this.props.end,
+      'configuration': this.props.configuration,
+      'key': keyFields,
+      'ignore': ignoredFields,
+    }
+
+    this.props.diffDataset(toDiff);
   }
 
   render() {
@@ -215,6 +240,10 @@ class ComparisonSelector extends React.Component {
 }
 
 ComparisonSelector.propTypes = {
+  startUuid: PropTypes.string,
+  start: PropTypes.array,
+  endUuid: PropTypes.string,
+  end: PropTypes.array,
   keyFields: PropTypes.array.isRequired,
   ignoredFields: PropTypes.array.isRequired,
   configuration: PropTypes.shape({
@@ -223,13 +252,14 @@ ComparisonSelector.propTypes = {
 };
 
 const findFieldIndex = (list, fieldId) => {
-	console.log("comparison list: %o", list);
   const matchId = compose(equals(fieldId), getFieldId)
   const index = findIndex(matchId, list)
   return index === -1 ? null : index;
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
+  start: selectDataset(state, ownProps.startUuid),
+  end: selectDataset(state, ownProps.endUuid),
   keyFields: getKeyFields(state),
   ignoredFields: getIgnoredFields(state),
   configuration: selectMergedConfiguration(state),

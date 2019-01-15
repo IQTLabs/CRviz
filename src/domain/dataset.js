@@ -214,8 +214,8 @@ const reducer = handleActions(
 
 // SELECTORS
 
-const selectDataset = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].dataset ? state.dataset.datasets[owner].dataset : defaultItemState.dataset;
-const selectFilteredDataset = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].filtered ? state.dataset.datasets[owner].filtered : defaultItemState.filtered;
+const selectDataset = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].dataset ? state.dataset.datasets[owner].dataset : defaultItemState.dataset;
+const selectFilteredDataset = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].filtered ? state.dataset.datasets[owner].filtered : defaultItemState.filtered;
 const selectDatasetDiff = (state, start, end) => {
   let diff = null;
   const idx = state.dataset.diffs.findIndex(d => d.start === start && d.end === end);
@@ -225,7 +225,7 @@ const selectDatasetDiff = (state, start, end) => {
   }
   return diff;
 }
-const selectConfiguration = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].configuration ? state.dataset.datasets[owner].configuration : defaultItemState.configuration;
+const selectConfiguration = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].configuration ? state.dataset.datasets[owner].configuration : defaultItemState.configuration;
 const selectMergedConfiguration = (state) => {
   let fields = [];
   const ds = state.dataset.datasets;
@@ -240,7 +240,7 @@ const selectMergedConfiguration = (state) => {
 
   return { fields: fields };
 }
-const selectValues = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].values ? state.dataset.datasets[owner].values : defaultItemState.values;
+const selectValues = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].values ? state.dataset.datasets[owner].values : defaultItemState.values;
 const selectMergedValues = (state) => {
   let vals = {};
   const ds = state.dataset.datasets;
