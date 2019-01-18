@@ -22,6 +22,7 @@ import appendCircles from "./d3-viz/append-circles";
 import setupZoom from "./d3-viz/setup-zoom";
 import setupTooltip from "./d3-viz/setup-tooltip";
 import setupLegend from "./d3-viz/setup-legend";
+import setupAnnotations from "./d3-viz/setup-annotations";
 import datumKey from "./d3-viz/datum-key";
 
 function d3Viz(rootNode) {
@@ -141,6 +142,8 @@ function d3Viz(rootNode) {
     if (sizeUpdated || dataUpdated) {
       resetZoom(props, state);
     }
+
+    resetAnnotations(props, state);
   }
 
   const repack = (props, state) => {
@@ -165,15 +168,11 @@ function d3Viz(rootNode) {
   const rerender = (props, state) => {
     const [nodes, labels, countLabels] = appendCircles({
       nodeRoot: nodeRoot,
-      annotationRoot: annotationRoot,
       labelRoot: labelRoot,
       packedData: state.packedData,
       showNodes: props.showNodes,
       hasSearch: props.queryString !== ''
     });
-
-    // console.log("nodes: %o", nodes);
-    // console.log("packed: %o", state.packedData);
 
     setupTooltip({
       tooltip: tooltip,
@@ -228,6 +227,15 @@ function d3Viz(rootNode) {
       state.selectedNode = datum;
       state.zoom.zoomTo(datum);
     });
+  };
+
+  const resetAnnotations = (props, state) =>{
+    //const annotations = 
+    setupAnnotations({
+      nodeRoot: nodeRoot,
+      annotationRoot: annotationRoot,
+      colorMap: state.legend && state.legend.colorMap ? state.legend.colorMap : []
+    })
   };
 
   return {

@@ -6,12 +6,20 @@ import { of, throwError } from 'rxjs';
 import { QueryParseError } from 'lunr';
 
 import rootEpic from './root-epic'
-import { setDataset, selectDataset, selectConfiguration, selectFilteredDataset } from 'domain/dataset'
+import { 
+	setDataset,
+	selectDataset,
+	selectConfiguration,
+	selectMergedConfiguration,
+	selectFilteredDataset,
+	selectDatasetDiff 
+} from 'domain/dataset'
 import { getError, setError } from 'domain/error'
 import { setFilter } from 'domain/filter'
 import { loadDataset, CSVconvert } from "./load-dataset-epic"
 import { uploadDataset, fromJson } from "./upload-dataset-epic"
 import { searchDataset } from "./search-dataset-epic"
+import { diffDataset } from "./diff-dataset-epic"
 import { filterDataset } from "./filter-dataset-epic"
 import { fetchDataset, buildAuthHeader } from "./fetch-dataset-epic"
 import refreshDatasetEpic from "./refresh-dataset-epic"
@@ -553,6 +561,50 @@ describe("filterDatasetEpic", () => {
 
 		expect(selectFilteredDataset(store.getState(), owner)).to.equal(null);
 
+		done();
+	});
+});
+
+describe("diffDatasetEpic", () => {
+	let store;
+	const startOwner = uuidv4();
+	const startData = [
+		  { uid: "uid1", role: { role: "role", confidence: 80 } },
+		  { uid: "uid2", role: { role: "role", confidence: 80 } }
+		];
+	const endOwner = uuidv4();
+	const endData = [
+		  { uid: "uid3", role: { role: "role", confidence: 80 } },
+		  { uid: "uid2", role: { role: "other-role", confidence: 80 } }
+		];
+
+	beforeEach(() => {
+		store  = configureStore();
+		const startAction$ = setDataset({ 'owner': startOwner, 'dataset': startData });		
+		store.dispatch(startAction$);
+		const endAction$ = setDataset({ 'owner': endOwner, 'dataset': endData });		
+		store.dispatch(endAction$);
+	});
+
+	afterEach(() => {
+	});
+
+	it("diff a dataset", (done) => {
+		const config = selectMergedConfiguration(store.getState());
+		const key = config.fields.filter(f => f.displayName === 'uid')
+		const ignore =[];
+
+		const action$ = diffDataset({
+			'start': { 'owner': startOwner, 'dataset': startData }, 
+			'end': { 'owner': endOwner, 'dataset':endData }, 
+			'configuration': config,
+			'key': key, 'ignore':ignore
+		});
+		store.dispatch(action$);
+		const diffs = selectDatasetDiff(store.getState(), startOwner, endOwner);
+		expect(diffs.added.length).to.equal(1);
+		expect(diffs.removed.length).to.equal(1);
+		expect(diffs.changed.length).to.equal(1);
 		done();
 	});
 });

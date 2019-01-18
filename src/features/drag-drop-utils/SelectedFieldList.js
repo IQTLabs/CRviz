@@ -41,7 +41,7 @@ class SelectedFieldList extends React.Component {
   }
 
   render() {
-    const { style, fields, values, getFieldId, droppableId, dragState } = this.props;
+    const { style, initialItemText, subsequentItemText, fields, values, getFieldId, droppableId, dragState } = this.props;
 
     const draggingOver = isDraggingOver(droppableId, dragState);
     return (
@@ -57,6 +57,8 @@ class SelectedFieldList extends React.Component {
               >
                 <List
                   style={style}
+                  initialItemText={initialItemText}
+                  subsequentItemText={subsequentItemText}
                   fields={fields}
                   values={values}
                   getFieldId={getFieldId}
@@ -82,6 +84,8 @@ function List({
   values,
   getFieldId,
   style,
+  initialItemText,
+  subsequentItemText,
   droppableId,
   dragState,
   toAnimate
@@ -96,6 +100,8 @@ function List({
     return (
       <SelectedField
         style={style}
+        initialItemText={initialItemText}
+        subsequentItemText={subsequentItemText}
         draggableId={id}
         key={id}
         displayName={field.displayName}

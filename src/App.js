@@ -12,6 +12,7 @@ import { getError, clearError } from "domain/error";
 
 import Header from 'features/header/Header';
 import HierarchySelector from 'features/hierarchy-selector/HierarchySelector';
+import ComparisonSelector from 'features/comparison-selector/ComparisonSelector';
 import MiscControls from 'features/misc-controls/MiscControls';
 import SearchControls from 'features/search/SearchControls';
 import Visualization from 'features/visualization/Visualization';
@@ -38,14 +39,25 @@ class App extends Component {
   toggleShowData = () =>{
     this.setState({
       showData: !this.state.showData,
+      showComparison: false,
       showGrouping: false,
       showFiltering: false,
+    });
+  }
+
+  toggleShowComparison = () =>{
+    this.setState({
+      showData: false,
+      showComparison: !this.state.showComparison,
+      showGrouping: false,
+      showFiltering: false
     });
   }
 
   toggleShowGrouping = () =>{
     this.setState({
       showData: false,
+      showComparison: false,
       showGrouping: !this.state.showGrouping,
       showFiltering: false
     });
@@ -54,6 +66,7 @@ class App extends Component {
   toggleShowFiltering = () =>{
     this.setState({
       showData: false,
+      showComparison: false,
       showGrouping: false,
       showFiltering: !this.state.showFiltering
     });
@@ -74,6 +87,7 @@ class App extends Component {
     const hasDataset = dataset && dataset.length > 0;
 
     const showData = this.state.showData;
+    const showComparison = this.state.showComparison;
     const showGrouping = this.state.showGrouping;
 
     return (
@@ -102,6 +116,9 @@ class App extends Component {
             <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
               <DatasetControls uuid={ this.state.uuid1 } datasets={ datasets }/>
             </div>
+            <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
+              <DatasetControls uuid={ this.state.uuid2 } datasets={ datasets }/>
+            </div>
           </div>
 
           { hasDataset &&
@@ -109,6 +126,21 @@ class App extends Component {
               <SearchControls />
             </div>
           }
+
+          <div className={style.accordionHeader} onClick={this.toggleShowComparison}>
+            Comparison  {!showComparison && <FontAwesomeIcon icon={faPlusCircle} />}{showComparison && <FontAwesomeIcon  onClick={this.toggleShowComparison} icon={faMinusCircle} />}
+          </div>
+          { hasDataset &&
+            <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
+              <ComparisonSelector startUuid={ this.state.uuid1 } endUuid={ this.state.uuid2 } />
+            </div>
+          }
+          { !hasDataset && 
+            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
+              Please select datasets to continue
+            </div>
+          }
+
           <div className={style.accordionHeader} onClick={this.toggleShowGrouping}>
             Grouping  {!showGrouping && <FontAwesomeIcon icon={faPlusCircle} />}{showGrouping && <FontAwesomeIcon  onClick={this.toggleShowGrouping} icon={faMinusCircle} />}
           </div>

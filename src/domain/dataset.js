@@ -17,7 +17,8 @@ import {
 } from "ramda";
 
 const defaultState = {
-  datasets: {}
+  datasets: {},
+  diffs:[]
 };
 const defaultItemState = {
   owner: "",
@@ -108,7 +109,6 @@ const valuesFor = (dataset, configuration) => {
   }, configuration.fields));
 };
 
-
 // ACTIONS
 
 /**
@@ -119,8 +119,10 @@ const valuesFor = (dataset, configuration) => {
 */
 const setDataset = createAction("SET_DATASET");
 const setFilteredDataset = createAction("SET_FILTERED_DATASET");
+const setDatasetDiff = createAction("SET_DATASET_DIFF");
 const removeDataset = createAction("REMOVE_DATASET");
 const removeFilteredDataset = createAction("REMOVE_FILTERED_DATASET");
+const removeDatasetDiff = createAction("REMOVE_DATASET_DIFF");
 const setIsFetching = createAction("SET_IS_FETCHING");
 
 // REDUCERS
@@ -154,6 +156,25 @@ const reducer = handleActions(
       state.datasets[owner].filtered = filtered;
       return { ...state};
     },
+    [setDatasetDiff]: (state, { payload }) => {
+      const start = payload.start;
+      const end = payload.end;
+      const differences = payload.differences
+      const newDiff = {
+        'start': start,
+        'end': end,
+        'differences': differences
+      }
+
+      const idx = state.diffs.findIndex(d => d.start === start && d.end === end);
+
+      if(idx === -1){
+        state.diffs.push(newDiff);
+      } else {
+        state.diffs[idx] = newDiff;
+      }
+      return { ...state};
+    },
     [removeDataset]: (state, { payload }) => {
       const owner = payload.owner;
       if(state.datasets.hasOwnProperty(owner))
@@ -165,6 +186,17 @@ const reducer = handleActions(
       const owner = payload.owner;
       if(state.datasets.hasOwnProperty(owner))
         state.datasets[owner].filtered = null;
+
+      return { ...state }
+    },
+    [removeDatasetDiff]: (state, { payload }) => {
+      const start = payload.start;
+      const end = payload.end;
+      const idx = state.diffs.findIndex(d => d.start === start && d.end === end);
+
+      if(idx !== -1){
+        state.diffs.splice(idx, 1);
+      }
 
       return { ...state }
     },
@@ -180,10 +212,18 @@ const reducer = handleActions(
 );
 
 // SELECTORS
-
-const selectDataset = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].dataset ? state.dataset.datasets[owner].dataset : defaultItemState.dataset;
-const selectFilteredDataset = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].filtered ? state.dataset.datasets[owner].filtered : defaultItemState.filtered;
-const selectConfiguration = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].configuration ? state.dataset.datasets[owner].configuration : defaultItemState.configuration;
+const selectDatasets = (state) => state.dataset && state.dataset.datasets ? state.dataset.datasets : {};
+const selectDataset = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].dataset ? state.dataset.datasets[owner].dataset : defaultItemState.dataset;
+const selectFilteredDataset = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].filtered ? state.dataset.datasets[owner].filtered : defaultItemState.filtered;
+const selectDatasetDiff = (state, start, end) => {
+  let diff = null;
+  const idx = state.dataset.diffs.findIndex(d => d.start === start && d.end === end);
+  if(idx !== -1){
+    diff = state.dataset.diffs[idx].differences;;
+  }
+  return diff;
+}
+const selectConfiguration = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].configuration ? state.dataset.datasets[owner].configuration : defaultItemState.configuration;
 const selectMergedConfiguration = (state) => {
   let fields = [];
   const ds = state.dataset.datasets;
@@ -198,7 +238,7 @@ const selectMergedConfiguration = (state) => {
 
   return { fields: fields };
 }
-const selectValues = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].values ? state.dataset.datasets[owner].values : defaultItemState.values;
+const selectValues = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].values ? state.dataset.datasets[owner].values : defaultItemState.values;
 const selectMergedValues = (state) => {
   let vals = {};
   const ds = state.dataset.datasets;
@@ -222,5 +262,5 @@ const getLastUpdated = (state, owner) => state.dataset.datasets[owner] && state.
 
 export default reducer;
 
-export { setDataset, selectDataset, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
-  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated };
+export { setDataset, selectDataset, selectDatasets, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
+  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated, valuesFor, setDatasetDiff, removeDatasetDiff, selectDatasetDiff  };

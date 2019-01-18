@@ -22,12 +22,12 @@ import {
 import { selectMergedConfiguration, selectMergedValues, getFieldId } from "domain/dataset";
 import { setHierarchyConfig, selectControls, showNodes } from "domain/controls";
 
-import SelectedFieldList from './SelectedFieldList';
-import AvailableFieldList from './AvailableFieldList';
-import DropTarget from './DropTarget';
+import SelectedFieldList from 'features/drag-drop-utils/SelectedFieldList';
+import AvailableFieldList from 'features/drag-drop-utils/AvailableFieldList';
+import DropTarget from 'features/drag-drop-utils/DropTarget';
 
-import availableFieldListStyle from './AvailableFieldList.module.css';
-import selectedFieldListStyle from './SelectedFieldList.module.css';
+import availableFieldListStyle from 'features/drag-drop-utils/AvailableFieldList.module.css';
+import selectedFieldListStyle from 'features/drag-drop-utils/SelectedFieldList.module.css';
 
 const SELECTED_FIELD_LIST_ID = 'SelectedFieldList';
 const AVAILABLE_FIELD_LIST_ID = 'AvailableFieldList';
@@ -128,6 +128,8 @@ class HierarchySelector extends React.Component {
           <div style={{ marginBottom: '2rem' }}>
             <SelectedFieldList
               style={ selectedFieldListStyle }
+              initialItemText="Group By"
+              subsequentItemText="Then By"
               fields={ hierarchyConfig }
               values={ values }
               droppableId={ SELECTED_FIELD_LIST_ID }
@@ -137,6 +139,8 @@ class HierarchySelector extends React.Component {
 
           <DropTarget
             style={ selectedFieldListStyle }
+            initialItemText="Group By"
+            subsequentItemText="Then By"
             isDropDisabled={ path(['source', 'droppableId'], dragState) === SELECTED_FIELD_LIST_ID }
             droppableId= { DROP_TARGET_ID }
             fields={ this.props.controls.hierarchyConfig }

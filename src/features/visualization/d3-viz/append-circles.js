@@ -1,8 +1,7 @@
 import { path } from "d3-path";
-import { annotation, annotationCalloutCircle } from "d3-svg-annotation";
 import datumKey from "./datum-key";
 
-const appendCircles = ({ nodeRoot, annotationRoot, labelRoot, packedData, showNodes, hasSearch }) => {
+const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }) => {
   const isInternal = (d) => d.depth > 0 && d.height > 0;
 
   const data = packedData.descendants();
@@ -65,24 +64,6 @@ const appendCircles = ({ nodeRoot, annotationRoot, labelRoot, packedData, showNo
     .merge(countLabelsEnter).text((d) => d.value )
     .style("display", showNodes ? 'none' : 'block')
 
-  const groupNodes = nodeRoot.selectAll(`g.${className("groupingNode")}`).data();
-  console.log("groupNodes: %o", groupNodes);
-  const annotations = mapNodesToAnnotationArray(groupNodes);
-  const makeAnnotations = annotation()
-                          .annotations(annotations)
-                          .type(annotationCalloutCircle)
-                          // .on('subjectover', function(annotation) {
-                          //   annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
-                          //     .classed("hidden", false)
-                          // })
-                          // .on('subjectout', function(annotation) {
-                          //   annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
-                          //     .classed("hidden", true)
-                          // })
-
-
-  annotationRoot.call(makeAnnotations);
-
   // select(".nodeRoot").selectAll("g.annotation-connector, g.annotation-note")
   //       .classed("hidden", true)
 
@@ -112,23 +93,5 @@ const getLabelShape = (d) => {
 }
 
 const className = (name) => `viz-${name}`;
-
-const mapNodesToAnnotationArray = (nodes) =>{
-  console.log(nodes);
-  const annotations = nodes.map( d => ({
-    'data': d.data,
-    'x': d.x,
-    'y': d.y,
-    'dx': d.r,
-    'dy': -1 * (d.labelY + (d.labelSize/2)),
-    'note':{
-      'label': d.data.fieldValue || '',
-      'title': d.data.fieldValue || ''
-    },
-    'subject': { 'radius': d.r -1 }
-  }));
-
-  return annotations;
-}
 
 export default appendCircles;
