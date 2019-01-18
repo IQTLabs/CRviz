@@ -166,7 +166,6 @@ function d3Viz(rootNode) {
   };
 
   const rerender = (props, state) => {
-    console.log(state.legend);
     const [nodes, labels, countLabels] = appendCircles({
       nodeRoot: nodeRoot,
       labelRoot: labelRoot,
@@ -231,13 +230,12 @@ function d3Viz(rootNode) {
   };
 
   const resetAnnotations = (props, state) =>{
-    const annotations = setupAnnotations({
+    //const annotations = 
+    setupAnnotations({
       nodeRoot: nodeRoot,
       annotationRoot: annotationRoot,
       colorMap: state.legend && state.legend.colorMap ? state.legend.colorMap : []
     })
-
-    console.log(annotations);
   };
 
   return {

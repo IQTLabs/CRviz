@@ -2,6 +2,7 @@ import {
   default as datasetReducer,
   setDataset,
   selectDataset,
+  selectDatasets,
   removeDataset,
   setFilteredDataset,
   selectFilteredDataset,
@@ -27,6 +28,30 @@ const reducer = combineReducers({ dataset: datasetReducer });
 describe("Dataset Reducer", () => {
   describe("actions", () => {
     describe("setDataset", () => {
+      it("selects all datasets at once", (done) => {
+        const owner1 = uuidv4();
+        const owner2 = uuidv4();
+        const dataset = [
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
+        ];
+        const configuration = {
+          fields: [
+            { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+            { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
+          ]
+        };
+
+        const action1 = setDataset({ 'owner': owner1, 'dataset': dataset, 'configuration': configuration });
+        const action2 = setDataset({ 'owner': owner2, 'dataset': dataset, 'configuration': configuration });
+        reducer({}, action1);
+        const result2 = reducer({}, action2);
+
+        const datasets = selectDatasets(result2);
+        expect(Object.keys(datasets).length).to.equal(2);
+        done();
+      });
+      
       it("sets the dataset and configuration", (done) => {
         const owner = uuidv4();
         const dataset = [
@@ -321,14 +346,6 @@ describe("Dataset Reducer", () => {
       it("sets the diff between 2 datasets", (done) => {
         const ds1Owner = uuidv4();
         const ds2Owner = uuidv4();
-        const ds1 = [
-          { 'uid': "uid1", 'role': { 'role': "role1", 'confidence': 80 } },
-          { 'uid': "uid2", 'role': { 'role': "role1", 'confidence': 80 } }
-        ];
-        const ds2 = [
-          { 'uid': "uid1", 'role': { 'role': "role1", 'confidence': 80 } },
-          { 'uid': "uid2", 'role': { 'role': "role2", 'confidence': 80 } }
-        ];
         const differences =[{
           key:"uid2",
           fields: [{
@@ -349,14 +366,6 @@ describe("Dataset Reducer", () => {
       it("removes the diff between 2 datasets", (done) => {
         const ds1Owner = uuidv4();
         const ds2Owner = uuidv4();
-        const ds1 = [
-          { 'uid': "uid1", 'role': { 'role': "role1", 'confidence': 80 } },
-          { 'uid': "uid2", 'role': { 'role': "role1", 'confidence': 80 } }
-        ];
-        const ds2 = [
-          { 'uid': "uid1", 'role': { 'role': "role1", 'confidence': 80 } },
-          { 'uid': "uid2", 'role': { 'role': "role2", 'confidence': 80 } }
-        ];
         const differences =[{
           key:"uid2",
           fields: [{
@@ -364,10 +373,18 @@ describe("Dataset Reducer", () => {
             startValue: "role1",
             endValue: "role2"
           }]
-        }];     
+        }]; 
+
+        const initialState = {
+          dataset:{ 
+            diffs:[
+              { 'start': ds1Owner, 'end': ds2Owner, 'differences': differences }
+            ]
+          }
+        };
 
         const action = removeDatasetDiff({ 'start': ds1Owner, 'end': ds2Owner});
-        const result = reducer({ diffs:[{ 'start': ds1Owner, 'end': ds2Owner, 'differences': differences }] }, action);
+        const result = reducer(initialState, action);
 
         expect(selectDatasetDiff(result, ds1Owner, ds2Owner)).to.equal(null);
 

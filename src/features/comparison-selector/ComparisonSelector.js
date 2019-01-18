@@ -140,8 +140,14 @@ class ComparisonSelector extends React.Component {
 
   updateDiff = (keyFields, ignoredFields) => {
     const toDiff ={
-      'start': this.props.start,
-      'end': this.props.end,
+      'start': {
+        'owner': this.props.startUuid,
+        'dataset': this.props.start
+      },
+      'end':{
+        'owner': this.props.endUuid,
+        'dataset': this.props.end
+      },
       'configuration': this.props.configuration,
       'key': keyFields,
       'ignore': ignoredFields,

@@ -109,7 +109,6 @@ const valuesFor = (dataset, configuration) => {
   }, configuration.fields));
 };
 
-
 // ACTIONS
 
 /**
@@ -213,13 +212,12 @@ const reducer = handleActions(
 );
 
 // SELECTORS
-
+const selectDatasets = (state) => state.dataset && state.dataset.datasets ? state.dataset.datasets : {};
 const selectDataset = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].dataset ? state.dataset.datasets[owner].dataset : defaultItemState.dataset;
 const selectFilteredDataset = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].filtered ? state.dataset.datasets[owner].filtered : defaultItemState.filtered;
 const selectDatasetDiff = (state, start, end) => {
   let diff = null;
   const idx = state.dataset.diffs.findIndex(d => d.start === start && d.end === end);
-
   if(idx !== -1){
     diff = state.dataset.diffs[idx].differences;;
   }
@@ -264,5 +262,5 @@ const getLastUpdated = (state, owner) => state.dataset.datasets[owner] && state.
 
 export default reducer;
 
-export { setDataset, selectDataset, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
+export { setDataset, selectDataset, selectDatasets, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
   selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated, valuesFor, setDatasetDiff, removeDatasetDiff, selectDatasetDiff  };

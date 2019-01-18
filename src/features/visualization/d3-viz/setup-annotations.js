@@ -1,7 +1,6 @@
 import { annotation, annotationCalloutCircle } from "d3-svg-annotation";
 
 const setupAnnotations = ({nodeRoot, annotationRoot, colorMap}) =>{
-	console.log(nodeRoot);
 	const groupNodes = nodeRoot.selectAll(`g.${className("groupingNode")}`).data();
 
     const annotations = mapNodesToAnnotationArray(groupNodes, colorMap);
@@ -21,8 +20,6 @@ const setupAnnotations = ({nodeRoot, annotationRoot, colorMap}) =>{
 }
 
 const mapNodesToAnnotationArray = (nodes, colorMap) =>{
-  console.log(nodes);
-  console.log(colorMap);
   const annotations = nodes.map( d => ({
     'data': d.data,
     'x': d.x,

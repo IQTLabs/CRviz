@@ -19,7 +19,10 @@ const colorBy = createAction("COLOR_BY");
 const reducer = handleActions(
   {
     [setHierarchyConfig]: (state, { payload }) => ({ ...state, hierarchyConfig: payload }),
-    [setKeyFields]: (state, { payload }) => ({ ...state, keyFields: payload }),
+    [setKeyFields]: (state, { payload }) => { 
+      const keyFields = payload;
+      return {...state, keyFields: keyFields }
+    },
     [setIgnoredFields]: (state, { payload }) => ({ ...state, ignoredFields: payload }),
     [showNodes]: (state, { payload }) => ({ ...state, shouldShowNodes: !!payload }), // Convert payload to boolean for easier debugging
     [useDarkTheme]: (state, { payload }) => ({ ...state, darkTheme: !!payload }), // Convert payload to boolean for easier debugging
