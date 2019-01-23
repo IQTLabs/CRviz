@@ -1,13 +1,14 @@
 sudo: false
 
-services:
-  - docker
-
 language: node_js
 node_js:
 - '11'
 
-dist: trusty
+dist: xenial
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install docker-ce
 
 install:
   - npm install -g codecov
