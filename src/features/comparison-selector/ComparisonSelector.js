@@ -19,8 +19,10 @@ import {
   remove
 } from "ramda";
 
-import { selectMergedConfiguration, selectMergedValues, getFieldId, selectDataset } from "domain/dataset";
-import { setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields } from "domain/controls";
+import { 
+  selectMergedConfiguration, selectMergedValues, getFieldId, selectDataset,
+  setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields
+} from "domain/dataset";
 import { diffDataset } from "epics/diff-dataset-epic";
 
 import SelectedFieldList from 'features/drag-drop-utils/SelectedFieldList';

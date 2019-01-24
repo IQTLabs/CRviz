@@ -16,11 +16,11 @@ import {
   uniq
 } from "ramda";
 
-import { getKeyFields, getIgnoredFields, getHashFields } from "./controls";
-
 const defaultState = {
   datasets: {},
-  diffs:[]
+  diffs:[],
+  keyFields: [],
+  ignoredFields: []
 };
 const defaultItemState = {
   owner: "",
@@ -36,6 +36,14 @@ const defaultItemState = {
   lastUpdated: null,
 };
 
+const getHashFields = (allFields, ignoredFields) => {
+  if(!ignoredFields || ignoredFields.length === 0){
+    return allFields;
+  }
+
+  return allFields.filter(f => !ignoredFields.includes(f));
+}
+
 const addHashKey = async (keys, obj) => {
   const hashKey = keys.reduce( (h, k) => h + path(k.path, obj) + ":", "");
   obj["HASH_KEY"] = hashKey;
@@ -47,6 +55,7 @@ const addHashWithoutIgnored = async (fields, obj) => {
 }
 
 const applyHashes = async (dataset, configuration) => {
+  console.log("Applying Hashes for %o", dataset);
   dataset.forEach((i) => {
     if(configuration.keyFields){
       addHashKey(configuration.keyFields, i);
@@ -151,6 +160,8 @@ const removeDataset = createAction("REMOVE_DATASET");
 const removeFilteredDataset = createAction("REMOVE_FILTERED_DATASET");
 const removeDatasetDiff = createAction("REMOVE_DATASET_DIFF");
 const setIsFetching = createAction("SET_IS_FETCHING");
+const setKeyFields = createAction("SET_KEY_FIELDS");
+const setIgnoredFields = createAction("SET_IGNORED_FIELDS");
 
 // REDUCERS
 const reducer = handleActions(
@@ -237,13 +248,44 @@ const reducer = handleActions(
       if(state.datasets.hasOwnProperty(owner))
         state.datasets[owner].isFetching = isFetching;
       return { ...state, isFetching};
+    },
+    [setKeyFields]: (state, { payload }) => { 
+      const keyFields = payload;
+      const datasets = selectDatasets(state);
+      console.log(datasets);
+      if(state.dataset && state.dataset.datasets){
+        Object.keys(state.dataset.datasets).forEach((ds) => {
+          ds.configuration.keyFields = keyFields
+          applyHashes(ds.dataset, ds.configuration);
+        });
+      }
+
+      return {...state, keyFields: keyFields };
+    },
+    [setIgnoredFields]: (state, { payload }) => {
+      const ignoredFields = payload;
+
+      if(state.dataset && state.dataset.datasets){
+        const allFields = selectMergedConfiguration(state).fields;
+        const hashFields = getHashFields(allFields, ignoredFields);
+
+        Object.keys(state.dataset.datasets).forEach((ds) => {      
+          ds.configuration.hashFields = hashFields
+          applyHashes(ds.dataset, ds.configuration);
+        });
+      }
+
+      return { ...state, ignoredFields: ignoredFields };
     }
   },
   defaultState
 );
 
 // SELECTORS
-const selectDatasets = (state) => state.dataset && state.dataset.datasets ? state.dataset.datasets : {};
+const selectDatasets = (state) => {
+  console.log(state);
+  return state.dataset && state.dataset.datasets ? state.dataset.datasets : {};
+};
 const selectDataset = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].dataset ? state.dataset.datasets[owner].dataset : defaultItemState.dataset;
 const selectFilteredDataset = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].filtered ? state.dataset.datasets[owner].filtered : defaultItemState.filtered;
 const selectDatasetDiff = (state, start, end) => {
@@ -289,9 +331,12 @@ const selectMergedValues = (state) => {
 }
 const getIsFetching = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].isFetching ? state.dataset.datasets[owner].isFetching : defaultItemState.isFetching;
 const getLastUpdated = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].lastUpdated ? state.dataset.datasets[owner].lastUpdated : defaultItemState.lastUpdated;
+const getKeyFields = (state) => state.dataset && state.dataset.keyFields ? state.dataset.keyFields : [];
+const getIgnoredFields = (state) => state.dataset && state.dataset.ignoredFields ? state.dataset.ignoredFields : [];
 
 
 export default reducer;
 
 export { setDataset, selectDataset, selectDatasets, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
-  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated, valuesFor, setDatasetDiff, removeDatasetDiff, selectDatasetDiff, applyHashes };
+  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields, getHashFields, getLastUpdated, valuesFor, 
+  setDatasetDiff, removeDatasetDiff, selectDatasetDiff, applyHashes };

@@ -15,7 +15,11 @@ import {
   getIsFetching,
   setDatasetDiff,
   removeDatasetDiff,
-  selectDatasetDiff
+  selectDatasetDiff,
+  setKeyFields,
+  getKeyFields,
+  setIgnoredFields,
+  getIgnoredFields,
 } from "./dataset";
 
 import { combineReducers } from "redux";
@@ -387,6 +391,45 @@ describe("Dataset Reducer", () => {
         const result = reducer(initialState, action);
 
         expect(selectDatasetDiff(result, ds1Owner, ds2Owner)).to.equal(null);
+
+        done();
+      });
+    });
+
+    describe("setKeyFields", () => {
+      it("sets the fields to use as a key for comparison", (done) => {
+        const keys = [{ path: ["uid"], displayName: "UID" }];
+        const action = setKeyFields(keys);
+        const owner = uuidv4();
+        const ds = [
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
+        ];
+        const configuration = {
+          fields: [
+            { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+            { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
+          ]
+        };
+        const dataset = {
+          datasets:[]
+        }
+        dataset.datasets[owner] ={ 'dataset': ds, 'configuration': configuration }
+        const result = reducer( {dataset: dataset}, action);
+
+        expect(getKeyFields(result)).to.deep.equal(keys);
+
+        done();
+      });
+    });
+
+    describe("setIgnoreFields", () => {
+      it("sets the fields to ignore in comparison", (done) => {
+        const ignored = [{ path: ["timestamp"], displayName: "Timestamp" }];
+        const action = setIgnoredFields(ignored);
+        const result = reducer({}, action);
+
+        expect(getIgnoredFields(result)).to.deep.equal(ignored);
 
         done();
       });
