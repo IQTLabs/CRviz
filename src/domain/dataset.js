@@ -16,6 +16,8 @@ import {
   uniq
 } from "ramda";
 
+import { getKeyFields, getIgnoredFields, getHashFields } from "./controls";
+
 const defaultState = {
   datasets: {},
   diffs:[]
@@ -26,10 +28,31 @@ const defaultItemState = {
   filtered: null,
   values: {},
   configuration: {
-    fields: []
+    fields: [],
+    keyields: [],
+    hashFields: []
   },
   isFetching: false,
-  lastUpdated: null
+  lastUpdated: null,
+};
+
+const addHashKey = async (keys, obj) => {
+  const hashKey = keys.reduce( (h, k) => h + path(k.path, obj) + ":", "");
+  obj["HASH_KEY"] = hashKey;
+}
+
+const addHashWithoutIgnored = async (fields, obj) => {
+  const hash = fields.reduce( (h, f) => h + path(f.path, obj) + "|", "");
+  obj["HASH_WITHOUT_IGNORED"] = hash;
+}
+
+const applyHashes = async (dataset, configuration) => {
+  dataset.forEach((i) => {
+    if(configuration.keyFields){
+      addHashKey(configuration.keyFields, i);
+    }
+    addHashWithoutIgnored(configuration.hashFields, i);
+  });
 };
 
 /**
@@ -89,10 +112,14 @@ const fieldsFor = (obj, overrides = []) => {
 /**
  * Returns a configuration with any missing items populated
  */
-const configurationFor = (dataset, configuration = {}) => {
+const configurationFor = (dataset, keyFields, ignoredFields, configuration = {}) => {
+  const fields = fieldsFor(dataset[0] || {}, configuration.fields);
+  const hashFields = getHashFields(fields, ignoredFields);
   return {
     ...configuration,
-    fields: fieldsFor(dataset[0] || {}, configuration.fields)
+    fields: fieldsFor(dataset[0] || {}, configuration.fields),
+    keyFields: keyFields,
+    hashFields: hashFields
   };
 };
 
@@ -131,8 +158,12 @@ const reducer = handleActions(
     [setDataset]: (state, { payload }) => {
       const dataset = payload.dataset;
       const owner = payload.owner;
+      const keyFields = getKeyFields(state);
+      const ignoredFields = getIgnoredFields(state);
       const configuration = configurationFor(
         payload.dataset || [],
+        keyFields,
+        ignoredFields,
         payload.configuration || {}
       );
 
@@ -263,4 +294,4 @@ const getLastUpdated = (state, owner) => state.dataset.datasets[owner] && state.
 export default reducer;
 
 export { setDataset, selectDataset, selectDatasets, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
-  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated, valuesFor, setDatasetDiff, removeDatasetDiff, selectDatasetDiff  };
+  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, getLastUpdated, valuesFor, setDatasetDiff, removeDatasetDiff, selectDatasetDiff, applyHashes };

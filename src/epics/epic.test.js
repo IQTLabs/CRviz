@@ -12,7 +12,8 @@ import {
 	selectConfiguration,
 	selectMergedConfiguration,
 	selectFilteredDataset,
-	selectDatasetDiff 
+	selectDatasetDiff,
+	applyHashes
 } from 'domain/dataset'
 import { getError, setError } from 'domain/error'
 import { setFilter } from 'domain/filter'
@@ -593,15 +594,24 @@ describe("diffDatasetEpic", () => {
 		const config = selectMergedConfiguration(store.getState());
 		const key = config.fields.filter(f => f.displayName === 'uid')
 		const ignore =[];
+		config.keyFields = key;
+		config.hashFields = config.fields;
+
+		const startDs = { 'owner': startOwner, 'dataset': startData };
+		applyHashes(startDs.dataset, config);
+
+		const endDs = { 'owner': endOwner, 'dataset':endData };
+		applyHashes(endDs.dataset, config);
 
 		const action$ = diffDataset({
-			'start': { 'owner': startOwner, 'dataset': startData }, 
-			'end': { 'owner': endOwner, 'dataset':endData }, 
+			'start': startDs, 
+			'end': endDs, 
 			'configuration': config,
 			'key': key, 'ignore':ignore
 		});
 		store.dispatch(action$);
 		const diffs = selectDatasetDiff(store.getState(), startOwner, endOwner);
+		
 		expect(diffs.added.length).to.equal(1);
 		expect(diffs.removed.length).to.equal(1);
 		expect(diffs.changed.length).to.equal(1);

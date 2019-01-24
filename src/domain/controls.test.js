@@ -1,3 +1,10 @@
+import { createEpicMiddleware } from 'redux-observable';
+import configureMockStore from 'redux-mock-store';
+import rootEpic from 'epics/root-epic'
+import { 
+  default as dataset,
+  setDataset 
+} from "./dataset";
 import {
   default as controls,
   setHierarchyConfig,
@@ -13,9 +20,12 @@ import {
 import { combineReducers } from "redux";
 import { expect } from "chai"
 
-const reducer = combineReducers({ controls });
+const uuidv4 = require('uuid/v4');
+const reducer = combineReducers({ dataset, controls });
 
 describe("Controls reducer", () => {
+  
+
   describe("setHierarchyConfig", () => {
     it("sets the hierarchy config", (done) => {
       const hierarchyConfig = [{ path: ["uid"], displayName: "UID" }];
@@ -26,7 +36,9 @@ describe("Controls reducer", () => {
         hierarchyConfig: hierarchyConfig,
         shouldShowNodes: true,
         darkTheme: false,
-        colorBy: null
+        colorBy: null,
+        keyFields: [],
+        ignoredFields: []
       });
 
       done();
@@ -37,7 +49,22 @@ describe("Controls reducer", () => {
     it("sets the fields to use as a key for comparison", (done) => {
       const keys = [{ path: ["uid"], displayName: "UID" }];
       const action = setKeyFields(keys);
-      const result = reducer({}, action);
+      const owner = uuidv4();
+      const ds = [
+        { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+        { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
+      ];
+      const configuration = {
+        fields: [
+          { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+          { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
+        ]
+      };
+      const dataset = {
+        datasets:[]
+      }
+      dataset.datasets[owner] ={ 'dataset': ds, 'configuration': configuration }
+      const result = reducer( {dataset: dataset}, action);
 
       expect(getKeyFields(result)).to.deep.equal(keys);
 

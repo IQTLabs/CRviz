@@ -81,7 +81,7 @@ describe("Dataset Reducer", () => {
         };
 
         expect(selectDataset(result, owner)).to.deep.equal(dataset);
-        expect(selectConfiguration(result, owner)).to.deep.equal(expectedConfiguration);
+        expect(selectConfiguration(result, owner).fields).to.deep.equal(expectedConfiguration.fields);
 
         done();
       });
@@ -144,7 +144,7 @@ describe("Dataset Reducer", () => {
 
         const action = setDataset({ 'owner': owner, 'dataset': dataset });
         const result = reducer({}, action);
-        expect(selectConfiguration(result, owner)).to.deep.equal(expectedConfiguration);
+        expect(selectConfiguration(result, owner).fields).to.deep.equal(expectedConfiguration.fields);
 
         done();
       });
