@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import { connect } from "react-redux";
 
-import { selectDataset, selectConfiguration } from "domain/dataset";
+import { selectDatasetIntersection, selectMergedConfiguration } from "domain/dataset";
 import { getQueryString } from "epics/index-dataset-epic";
 import { selectControls } from "domain/controls";
 
@@ -38,11 +38,10 @@ class Visualization extends React.PureComponent {
   }
 }
 
-const mapStateToProps = (state) => {
-  const owner = Object.keys(state.dataset.datasets)[0] || ""
+const mapStateToProps = (state, ownProps) => {
   return {
-    dataset: selectDataset(state, owner),
-    configuration: selectConfiguration(state, owner),
+    dataset: selectDatasetIntersection(state, ownProps.startUid, ownProps.endUid),
+    configuration: selectMergedConfiguration(state),
     controls: selectControls(state),
     queryString: getQueryString(state)
   };

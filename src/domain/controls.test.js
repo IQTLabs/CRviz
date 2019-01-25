@@ -1,6 +1,3 @@
-import { 
-  default as dataset
-} from "./dataset";
 import {
   default as controls,
   setHierarchyConfig,
@@ -12,8 +9,7 @@ import {
 import { combineReducers } from "redux";
 import { expect } from "chai"
 
-const uuidv4 = require('uuid/v4');
-const reducer = combineReducers({ dataset, controls });
+const reducer = combineReducers({ controls });
 
 describe("Controls reducer", () => {
   

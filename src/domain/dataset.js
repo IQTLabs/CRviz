@@ -29,7 +29,7 @@ const defaultItemState = {
   values: {},
   configuration: {
     fields: [],
-    keyields: [],
+    keyFields: [],
     hashFields: []
   },
   isFetching: false,
@@ -44,22 +44,20 @@ const getHashFields = (allFields, ignoredFields) => {
   return allFields.filter(f => !ignoredFields.includes(f));
 }
 
-const addHashKey = async (keys, obj) => {
+const addHashKey = (keys, obj) => {
+  //console.log("addHashKey keys: %o", keys);
   const hashKey = keys.reduce( (h, k) => h + path(k.path, obj) + ":", "");
   obj["HASH_KEY"] = hashKey;
 }
 
-const addHashWithoutIgnored = async (fields, obj) => {
+const addHashWithoutIgnored = (fields, obj) => {
   const hash = fields.reduce( (h, f) => h + path(f.path, obj) + "|", "");
   obj["HASH_WITHOUT_IGNORED"] = hash;
 }
 
-const applyHashes = async (dataset, configuration) => {
-  console.log("Applying Hashes for %o", dataset);
+const applyHashes = (dataset, configuration) => {
   dataset.forEach((i) => {
-    if(configuration.keyFields){
-      addHashKey(configuration.keyFields, i);
-    }
+    addHashKey(configuration.keyFields.length > 0 ? configuration.keyFields : configuration.hashFields, i);
     addHashWithoutIgnored(configuration.hashFields, i);
   });
 };
@@ -177,6 +175,7 @@ const reducer = handleActions(
         ignoredFields,
         payload.configuration || {}
       );
+      applyHashes(dataset, configuration);
 
       const values = valuesFor(dataset, configuration);
       const isFetching = false;
@@ -251,11 +250,12 @@ const reducer = handleActions(
     },
     [setKeyFields]: (state, { payload }) => { 
       const keyFields = payload;
-      const datasets = selectDatasets(state);
-      console.log(datasets);
-      if(state.dataset && state.dataset.datasets){
-        Object.keys(state.dataset.datasets).forEach((ds) => {
-          ds.configuration.keyFields = keyFields
+      const datasets = _selectDatasets(state);
+
+      if(datasets){
+        Object.keys(datasets).forEach((key) => {
+          const ds = datasets[key];
+          ds.configuration.keyFields = keyFields;
           applyHashes(ds.dataset, ds.configuration);
         });
       }
@@ -264,12 +264,14 @@ const reducer = handleActions(
     },
     [setIgnoredFields]: (state, { payload }) => {
       const ignoredFields = payload;
+      const datasets = _selectDatasets(state);
 
-      if(state.dataset && state.dataset.datasets){
-        const allFields = selectMergedConfiguration(state).fields;
+      if(datasets){
+        const allFields = _selectMergedConfiguration(state).fields;
         const hashFields = getHashFields(allFields, ignoredFields);
 
-        Object.keys(state.dataset.datasets).forEach((ds) => {      
+        Object.keys(datasets).forEach((key) => {
+          const ds = datasets[key];    
           ds.configuration.hashFields = hashFields
           applyHashes(ds.dataset, ds.configuration);
         });
@@ -281,11 +283,35 @@ const reducer = handleActions(
   defaultState
 );
 
+//methods where we need to deal with state both inside and outside of the reducer
+//outside of the reducer state represents the entire state tree, but inside of the
+//reducer the provided state is only the state for the reducer's subset of the 
+//state tree.  to avoid duplication of code these methods will be called be used
+//internally from the reducer.  and methods that recieve the full state tree will 
+//pare the tree down to just the relevant attributes. in these cases the
+//variable "dataset" will represent the segment of the state tree owned by the datset reducer.
+const _selectDatasets = (dataset) => {
+  return dataset.datasets || {};
+}
+const _selectMergedConfiguration = (dataset) => {
+  let fields = [];
+  const ds = dataset.datasets;
+  for (var key in ds){
+    for (var f of ds[key].configuration.fields){ 
+      // eslint-disable-next-line no-loop-func
+      if(!fields.some(field => field.displayName === f.displayName)){
+        fields.push(f);
+      }
+    }
+  }
+
+  return { fields: fields };
+}
+
 // SELECTORS
 const selectDatasets = (state) => {
-  console.log(state);
-  return state.dataset && state.dataset.datasets ? state.dataset.datasets : {};
-};
+  return _selectDatasets(state.dataset);
+}
 const selectDataset = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].dataset ? state.dataset.datasets[owner].dataset : defaultItemState.dataset;
 const selectFilteredDataset = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].filtered ? state.dataset.datasets[owner].filtered : defaultItemState.filtered;
 const selectDatasetDiff = (state, start, end) => {
@@ -298,18 +324,7 @@ const selectDatasetDiff = (state, start, end) => {
 }
 const selectConfiguration = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].configuration ? state.dataset.datasets[owner].configuration : defaultItemState.configuration;
 const selectMergedConfiguration = (state) => {
-  let fields = [];
-  const ds = state.dataset.datasets;
-  for (var key in ds){
-    for (var f of ds[key].configuration.fields){ 
-      // eslint-disable-next-line no-loop-func
-      if(!fields.some(field => field.displayName === f.displayName)){
-        fields.push(f);
-      }
-    }
-  }
-
-  return { fields: fields };
+  return _selectMergedConfiguration(state.dataset)
 }
 const selectValues = (state, owner) => state.dataset && state.dataset.datasets[owner] && state.dataset.datasets[owner].values ? state.dataset.datasets[owner].values : defaultItemState.values;
 const selectMergedValues = (state) => {
@@ -333,10 +348,43 @@ const getIsFetching = (state, owner) => state.dataset.datasets[owner] && state.d
 const getLastUpdated = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].lastUpdated ? state.dataset.datasets[owner].lastUpdated : defaultItemState.lastUpdated;
 const getKeyFields = (state) => state.dataset && state.dataset.keyFields ? state.dataset.keyFields : [];
 const getIgnoredFields = (state) => state.dataset && state.dataset.ignoredFields ? state.dataset.ignoredFields : [];
+const selectDatasetIntersection = (state, startOwner, endOwner) => {
+  let ds = [];
+  const start = selectDataset(state, startOwner);
+  const end = selectDataset(state, endOwner);
+  if(start.length > 0 && end.length === 0){
+    ds = start;
+  } else if(start.length === 0 && end.length > 0){
+    ds = end;
+  } else if(start.length > 0 && end.length > 0) {
+    start.forEach((s) => {
+      const idx = end.findIndex(e => e.HASH_KEY === s.HASH_KEY);
+      if(idx === -1){
+        s.isRemoved = true;
+      } else {
+        s.isRemoved = false;
+      }
+      s.isChanged = false;
+      s.isAdded = false;
+      ds.push(s);
+    });
+    end.forEach((e) => {
+      const idx = ds.findIndex(i => i.HASH_KEY === e.HASH_KEY);
+      if(idx === -1){
+        e.isAdded = true;
+        ds.push(e);
+      } else if(ds[idx].HASH_WITHOUT_IGNORED !== e.HASH_WITHOUT_IGNORED){
+        ds[idx].isChanged = true;
+      }
+    })
+  }
+
+  return ds;
+}
 
 
 export default reducer;
 
 export { setDataset, selectDataset, selectDatasets, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
   selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields, getHashFields, getLastUpdated, valuesFor, 
-  setDatasetDiff, removeDatasetDiff, selectDatasetDiff, applyHashes };
+  setDatasetDiff, removeDatasetDiff, selectDatasetDiff, selectDatasetIntersection, applyHashes };
