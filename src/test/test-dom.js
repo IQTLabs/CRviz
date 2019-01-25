@@ -5,7 +5,7 @@ in cases where the code calls things like window.alert.
 */
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-process.env.NODE_ENV = 'test'
+process.env.NODE_ENV = 'test';
 
 const { JSDOM } = require('jsdom');
 
@@ -13,7 +13,7 @@ const jsdom = new JSDOM('<!doctype html><html><body></body></html>');
 const { window } = jsdom;
 
 function copyProps(src, target) {
-  window.alert = (msg) => {  }
+  window.alert = (msg) => {  };
   const props = Object.getOwnPropertyNames(src)
     .filter(prop => typeof target[prop] === 'undefined')
     .reduce((result, prop) => ({
@@ -21,7 +21,7 @@ function copyProps(src, target) {
       [prop]: Object.getOwnPropertyDescriptor(src, prop),
     }), {});
   Object.defineProperties(target, props);
-}
+};
 
 global.window = window;
 global.document = window.document;
