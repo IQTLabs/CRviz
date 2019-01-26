@@ -1,5 +1,4 @@
 import { ofType } from 'redux-observable';
-import { path } from "ramda";
 import { of } from "rxjs";
 import { switchMap, map } from 'rxjs/operators';
 
@@ -14,54 +13,15 @@ const diffDatasetEpic = (action$, store) => {
       ofType(DIFF_DATASET)
       ,switchMap(({ payload }) => {
         return of(payload).pipe(
-        	map(applyHashes)
-            ,map(generateDiff)
-            ,map((payload) =>
-              setDatasetDiff(payload)
-            )
-          );
+        	map(generateDiff)
+          ,map((payload) =>
+            setDatasetDiff(payload)
+          )
+        );
       })
     );
 };
 
-
-const addHashKey = (keys, obj) => {
-  const hashKey = keys.reduce( (h, k) => h + path(k.path, obj) + ":", "");
-  obj["HASH_KEY"] = hashKey;
-}
-
-const addHashWithoutIgnored = (fields, obj) => {
-  const hash = fields.reduce( (h, f) => h + path(f.path, obj) + "|", "");
-  obj["HASH_WITHOUT_IGNORED"] = hash;
-}
-
-const applyHashes = (payload) => {
-  const startDs = payload.start.dataset;
-  const endDS = payload.end.dataset;
-  const configuration = payload.configuration;
-  const key = payload.key;
-  const ignore = payload.ignore;
-  const hashFields = configuration.fields.filter(f => !ignore.includes(f));
-
-  if(startDs){
-  	startDs.forEach((i) => {
-  		if(key){
-  			addHashKey(key, i);
-  		}
-  		addHashWithoutIgnored(hashFields, i);
-  	});
-  }
-
-  if(endDS){
-  	endDS.forEach((i) => {
-  		if(key){
-  			addHashKey(key, i);
-  		}
-  		addHashWithoutIgnored(hashFields, i);
-  	});
-  }
-  return payload;
-};
 
 const generateDiff = (payload) => {
   const startOwner = payload.start.owner;

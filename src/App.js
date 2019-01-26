@@ -170,7 +170,7 @@ class App extends Component {
         }
 
         <div className={ style.canvas }>
-          <Visualization />
+          <Visualization startUid={this.state.uuid1} endUid={this.state.uuid2} />
         </div>
         <Modal isOpen={ error !== null } onRequestClose={this.onErrorClose} contentLabel="An Error has occurred">
             <div className={ style.modal }>

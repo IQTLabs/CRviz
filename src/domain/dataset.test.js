@@ -1,8 +1,9 @@
 import {
-  default as datasetReducer,
+  default as dataset,
   setDataset,
   selectDataset,
   selectDatasets,
+  selectDatasetIntersection,
   removeDataset,
   setFilteredDataset,
   selectFilteredDataset,
@@ -15,7 +16,11 @@ import {
   getIsFetching,
   setDatasetDiff,
   removeDatasetDiff,
-  selectDatasetDiff
+  selectDatasetDiff,
+  setKeyFields,
+  getKeyFields,
+  setIgnoredFields,
+  getIgnoredFields,
 } from "./dataset";
 
 import { combineReducers } from "redux";
@@ -23,7 +28,7 @@ import { expect } from "chai"
 
 const uuidv4 = require('uuid/v4');
 
-const reducer = combineReducers({ dataset: datasetReducer });
+const reducer = combineReducers({ dataset });
 
 describe("Dataset Reducer", () => {
   describe("actions", () => {
@@ -46,10 +51,80 @@ describe("Dataset Reducer", () => {
         const action2 = setDataset({ 'owner': owner2, 'dataset': dataset, 'configuration': configuration });
         reducer({}, action1);
         const result2 = reducer({}, action2);
-
         const datasets = selectDatasets(result2);
         expect(Object.keys(datasets).length).to.equal(2);
         done();
+      });
+
+      describe("selects database intersections", () => {
+        it("start only", (done) => {
+          const owner1 = uuidv4();
+          const owner2 = uuidv4();
+          const dataset1 = [
+            { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+            { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
+          ];
+          const configuration = {
+            fields: [
+              { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+              { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
+            ]
+          };
+
+          const action1 = setDataset({ 'owner': owner1, 'dataset': dataset1, 'configuration': configuration });
+          const result = reducer({}, action1);
+          const dataset = selectDatasetIntersection(result, owner1, owner2);
+          expect(dataset.length).to.equal(2);
+          done();
+        });
+
+        it("end only", (done) => {
+          const owner1 = uuidv4();
+          const owner2 = uuidv4();
+          const dataset2 = [
+            { 'uid': "uid3", 'role': { 'role': "role", 'confidence': 80 } },
+            { 'uid': "uid4", 'role': { 'role': "role", 'confidence': 80 } }
+          ];
+          const configuration = {
+            fields: [
+              { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+              { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
+            ]
+          };
+
+          const action2 = setDataset({ 'owner': owner2, 'dataset': dataset2, 'configuration': configuration });
+          const result = reducer({}, action2);
+          const dataset = selectDatasetIntersection(result, owner1, owner2);
+          expect(dataset.length).to.equal(2);
+          done();
+        });
+
+        it("superset", (done) => {
+          const owner1 = uuidv4();
+          const owner2 = uuidv4();
+          const dataset1 = [
+            { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+            { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
+          ];
+          const dataset2 = [
+            { 'uid': "uid3", 'role': { 'role': "role", 'confidence': 80 } },
+            { 'uid': "uid4", 'role': { 'role': "role", 'confidence': 80 } }
+          ];
+          const configuration = {
+            fields: [
+              { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+              { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
+            ]
+          };
+
+          const action1 = setDataset({ 'owner': owner1, 'dataset': dataset1, 'configuration': configuration });
+          const action2 = setDataset({ 'owner': owner2, 'dataset': dataset2, 'configuration': configuration });
+          reducer({}, action1);
+          const result2 = reducer({}, action2);
+          const dataset = selectDatasetIntersection(result2, owner1, owner2);
+          expect(dataset.length).to.equal(4);
+          done();
+        });
       });
       
       it("sets the dataset and configuration", (done) => {
@@ -81,7 +156,7 @@ describe("Dataset Reducer", () => {
         };
 
         expect(selectDataset(result, owner)).to.deep.equal(dataset);
-        expect(selectConfiguration(result, owner)).to.deep.equal(expectedConfiguration);
+        expect(selectConfiguration(result, owner).fields).to.deep.equal(expectedConfiguration.fields);
 
         done();
       });
@@ -144,7 +219,7 @@ describe("Dataset Reducer", () => {
 
         const action = setDataset({ 'owner': owner, 'dataset': dataset });
         const result = reducer({}, action);
-        expect(selectConfiguration(result, owner)).to.deep.equal(expectedConfiguration);
+        expect(selectConfiguration(result, owner).fields).to.deep.equal(expectedConfiguration.fields);
 
         done();
       });
@@ -387,6 +462,65 @@ describe("Dataset Reducer", () => {
         const result = reducer(initialState, action);
 
         expect(selectDatasetDiff(result, ds1Owner, ds2Owner)).to.equal(null);
+
+        done();
+      });
+    });
+
+    describe("setKeyFields", () => {
+      it("sets the fields to use as a key for comparison", (done) => {
+        const owner1 = uuidv4();
+        const owner2 = uuidv4();
+        const dataset = [
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
+        ];
+        const configuration = {
+          fields: [
+            { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+            { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
+          ]
+        };
+
+        const action1 = setDataset({ 'owner': owner1, 'dataset': dataset, 'configuration': configuration });
+        const action2 = setDataset({ 'owner': owner2, 'dataset': dataset, 'configuration': configuration });
+        reducer({}, action1);
+        reducer({}, action2);
+
+        const keys = [{ path: ["uid"], displayName: "UID" }];
+        const action = setKeyFields(keys);
+        const result = reducer( {}, action);
+
+        expect(getKeyFields(result)).to.deep.equal(keys);
+
+        done();
+      });
+    });
+
+    describe("setIgnoreFields", () => {
+      it("sets the fields to ignore in comparison", (done) => {
+        const owner1 = uuidv4();
+        const owner2 = uuidv4();
+        const dataset = [
+          { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },
+          { 'uid': "uid2", 'role': { 'role': "role", 'confidence': 80 } }
+        ];
+        const configuration = {
+          fields: [
+            { 'path': ["uid"], 'displayName': "UID", 'groupable': true },
+            { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
+          ]
+        };
+
+        const action1 = setDataset({ 'owner': owner1, 'dataset': dataset, 'configuration': configuration });
+        const action2 = setDataset({ 'owner': owner2, 'dataset': dataset, 'configuration': configuration });
+        reducer({}, action1);
+        reducer({}, action2);
+
+        const ignored = [{ path: ["timestamp"], displayName: "Timestamp" }];
+        const action = setIgnoredFields(ignored);
+        const result = reducer( {}, action);
+        expect(getIgnoredFields(result)).to.deep.equal(ignored);
 
         done();
       });

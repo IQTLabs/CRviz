@@ -19,6 +19,18 @@
   opacity: 1;
 }
 
+.viz :global(.viz-node.viz-isChanged) circle {
+  fill: white;
+}
+
+.viz :global(.viz-node.viz-isAdded) circle {
+  fill: blue;
+}
+
+.viz :global(.viz-node.viz-isRemoved) circle {
+  fill: orange;
+}
+
 .viz :global(.viz-node.viz-searchExcluded) circle {
   opacity: 0.2;
 }
@@ -165,4 +177,8 @@
 
 :global(.darkTheme) .viz :global(.viz-legend) {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+:global(.darkTheme) .viz :global(.viz-node.viz-isChanged) circle {
+  fill: white;
 }
