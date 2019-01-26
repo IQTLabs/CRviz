@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.0-alpha"></a>
+# [0.3.0-alpha](https://github.com/CyberReboot/CRviz/compare/v0.2.6...v0.3.0-alpha) (2019-01-26)
+
+
+### Bug Fixes
+
+* package.json & package-lock.json to reduce vulnerabilities ([50541d0](https://github.com/CyberReboot/CRviz/commit/50541d0))
+
+
+### Features
+
+* **time series:** add actions to store for containing diffs ([108b4c8](https://github.com/CyberReboot/CRviz/commit/108b4c8))
+* **Time Series:** closes [#217](https://github.com/CyberReboot/CRviz/issues/217) - Dataset Diffing ([7a0f7f8](https://github.com/CyberReboot/CRviz/commit/7a0f7f8))
+* **Time Series:** Time Series comparison interface ([c1abb1e](https://github.com/CyberReboot/CRviz/commit/c1abb1e))
+
+
+
 <a name="0.2.6"></a>
 ## [0.2.6](https://github.com/CyberReboot/CRviz/compare/v0.2.4...v0.2.6) (2018-12-28)
 
