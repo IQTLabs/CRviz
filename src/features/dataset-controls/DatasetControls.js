@@ -101,9 +101,6 @@ class DatasetControls extends React.Component {
 
     this.props.removeDataset({owner: this.props.uuid});
     this.props.removeSearchIndex({owner: this.props.uuid});
-    this.props.setHierarchyConfig([]);
-    this.props.colorBy(null);
-    this.props.showNodes(true);
     this.props.stopRefresh();
 
     const showUrlEntry = dataset === CUSTOM_DATASET;
@@ -125,8 +122,6 @@ class DatasetControls extends React.Component {
   }
 
   onUpload = (file) => {
-    this.props.setHierarchyConfig([]);
-    this.props.colorBy(null);
     this.props.uploadDataset({ 'owner': this.props.uuid, 'file': file });
     this.props.stopRefresh();
     this.setState({
@@ -363,8 +358,11 @@ DatasetControls.defaultProps = {
   uuid: uuidv4(),
   datasets: [],
   dataset: null,
+  hierarchyConfig: [],
+  configHasChanged: false,
   isFetching: false,
   lastUpdated: new Date(),
+  
 };
 
 DatasetControls.propTypes = {
@@ -386,6 +384,8 @@ DatasetControls.propTypes = {
   isFetching: PropTypes.bool,
   lastUpdated: PropTypes.instanceOf(Date),
   setError: PropTypes.func.isRequired,
+  hierarchyConfig: PropTypes.array,
+  configHasChanged: PropTypes.bool
 };
 
 const mapStateToProps = (state, ownProps) => {
