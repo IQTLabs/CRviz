@@ -56,7 +56,7 @@
     "prepare": "npm run snyk-protect"
   },
   "pre-commit": {
-    "run":[
+    "run": [
       "lint",
       "test"
     ]
