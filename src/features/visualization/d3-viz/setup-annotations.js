@@ -7,14 +7,14 @@ const setupAnnotations = ({nodeRoot, annotationRoot, colorMap}) =>{
     const makeAnnotations = annotation()
                             .annotations(annotations)
                             .type(annotationCalloutCircle)
-                            // .on('subjectover', function(annotation) {
-                            //   annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
-                            //     .classed("hidden", false)
-                            // })
-                            // .on('subjectout', function(annotation) {
-                            //   annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
-                            //     .classed("hidden", true)
-                            // })
+                            .on('subjectover', function(annotation) {
+                              annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
+                                .classed("hidden", false)
+                            })
+                            .on('subjectout', function(annotation) {
+                              annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
+                                .classed("hidden", true)
+                            })
 
     return annotationRoot.call(makeAnnotations);
 }

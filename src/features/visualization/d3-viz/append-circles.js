@@ -1,4 +1,5 @@
 import { path } from "d3-path";
+import { select } from "d3-selection";
 import datumKey from "./datum-key";
 
 const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }) => {
@@ -67,8 +68,8 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
     .merge(countLabelsEnter).text((d) => d.value )
     .style("display", showNodes ? 'none' : 'block')
 
-  // select(".nodeRoot").selectAll("g.annotation-connector, g.annotation-note")
-  //       .classed("hidden", true)
+  select(".nodeRoot").selectAll("g.annotation-connector, g.annotation-note")
+         .classed("hidden", true)
 
   return [
     nodes.merge(nodesEnter),

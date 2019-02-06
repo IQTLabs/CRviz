@@ -182,3 +182,11 @@
 :global(.darkTheme) .viz :global(.viz-node.viz-isChanged) circle {
   fill: white;
 }
+
+:global(.darkTheme) .viz :global(.viz-node.viz-isAdded) circle {
+  fill: blue;
+}
+
+:global(.darkTheme) .viz :global(.viz-node.viz-isRemoved) circle {
+  fill: orange;
+}
