@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.7"></a>
+## [0.2.7](https://github.com/CyberReboot/CRviz/compare/v0.2.6...v0.2.7) (2019-02-08)
+
+
+### Bug Fixes
+
+* package.json & package-lock.json to reduce vulnerabilities ([0dd6f01](https://github.com/CyberReboot/CRviz/commit/0dd6f01))
+* package.json & package-lock.json to reduce vulnerabilities ([50541d0](https://github.com/CyberReboot/CRviz/commit/50541d0))
+
+
+
 <a name="0.2.6"></a>
 ## [0.2.6](https://github.com/CyberReboot/CRviz/compare/v0.2.4...v0.2.6) (2018-12-28)
 
