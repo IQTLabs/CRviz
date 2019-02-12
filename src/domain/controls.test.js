@@ -1,5 +1,6 @@
 import {
   default as controls,
+  setControls,
   setHierarchyConfig,
   showNodes,
   useDarkTheme,
@@ -13,6 +14,23 @@ const reducer = combineReducers({ controls });
 
 describe("Controls reducer", () => {
   
+  describe("setControls", () => {
+    it("sets the Control tree", (done) => {
+      const controls = {
+        'hierarchyConfig': [{ path: ["uid"], displayName: "UID" }],
+        'shouldShowNodes': false,
+        'darkTheme': true,
+        'colorBy': { path: ["uid"], displayName: "UID" }
+      }
+
+      const action = setControls(controls);
+      const result = reducer({}, action);
+
+      expect(selectControls(result)).to.deep.equal(controls);
+
+      done();
+    });
+  });
 
   describe("setHierarchyConfig", () => {
     it("sets the hierarchy config", (done) => {

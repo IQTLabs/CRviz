@@ -9,6 +9,7 @@ const defaultState = {
 
 // ACTIONS
 
+const setControls = createAction("SET_CONTROLS");
 const setHierarchyConfig = createAction("SET_HIERARCHY_CONFIG");
 const showNodes = createAction("SHOW_NODES");
 const useDarkTheme = createAction("USE_DARK_THEME");
@@ -16,6 +17,20 @@ const colorBy = createAction("COLOR_BY");
 
 const reducer = handleActions(
   {
+    [setControls]: (state, { payload }) =>{
+      const hierarchyConfig = payload.hierarchyConfig || defaultState.hierarchyConfig;
+      const shouldShowNodes = !!payload.shouldShowNodes;
+      const darkTheme = !!payload.darkTheme;
+      const colorBy = payload.colorBy || defaultState.colorBy
+
+      return { 
+        ...state,
+        hierarchyConfig: hierarchyConfig,
+        shouldShowNodes: shouldShowNodes,
+        darkTheme: darkTheme,
+        colorBy: colorBy
+      }
+    },
     [setHierarchyConfig]: (state, { payload }) => ({ ...state, hierarchyConfig: payload }),
     [showNodes]: (state, { payload }) => ({ ...state, shouldShowNodes: !!payload }), // Convert payload to boolean for easier debugging
     [useDarkTheme]: (state, { payload }) => ({ ...state, darkTheme: !!payload }), // Convert payload to boolean for easier debugging
@@ -27,4 +42,4 @@ const reducer = handleActions(
 const selectControls = (state) => state.controls;
 
 export default reducer;
-export { setHierarchyConfig, showNodes, colorBy, useDarkTheme, selectControls };
+export { setControls, setHierarchyConfig, showNodes, colorBy, useDarkTheme, selectControls };

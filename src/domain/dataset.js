@@ -143,6 +143,28 @@ const valuesFor = (dataset, configuration) => {
   }, configuration.fields));
 };
 
+const configureDataset = (dataset, initialConfig, keyFields, ignoredFields) => {
+  const configuration = configurationFor(
+    dataset || [],
+    keyFields,
+    ignoredFields,
+    initialConfig || {}
+  );
+  applyHashes(dataset, configuration);
+
+  const values = valuesFor(dataset, configuration);
+  const isFetching = false;
+  const lastUpdated = new Date();
+  return {
+    dataset: dataset,
+    filtered: null,
+    values: values,
+    configuration: configuration,
+    isFetching: isFetching,
+    lastUpdated: lastUpdated
+  }
+}
+
 // ACTIONS
 
 /**
@@ -151,6 +173,7 @@ const valuesFor = (dataset, configuration) => {
  *   configuration: {} // Configuration
  * }
 */
+const setDatasets = createAction("SET_DATASETS");
 const setDataset = createAction("SET_DATASET");
 const setFilteredDataset = createAction("SET_FILTERED_DATASET");
 const setDatasetDiff = createAction("SET_DATASET_DIFF");
@@ -164,30 +187,26 @@ const setIgnoredFields = createAction("SET_IGNORED_FIELDS");
 // REDUCERS
 const reducer = handleActions(
   {
+    [setDatasets]: (state, { payload }) => {
+      const datasets = payload.datasets;
+      const keyFields = payload.keyFields || getKeyFields(state);
+      const ignoredFields = payload.ignoredFields || getIgnoredFields(state);
+
+      Object.keys(datasets).forEach((owner) =>{
+        const dataset = datasets[owner].dataset;
+        const initialConfig = datasets[owner].configuration;
+        state.datasets[owner] = configureDataset(dataset, initialConfig, keyFields, ignoredFields);
+      })
+      
+      return { ...state};
+    },
     [setDataset]: (state, { payload }) => {
       const dataset = payload.dataset;
       const owner = payload.owner;
+      const initialConfig = payload.configuration;
       const keyFields = getKeyFields(state);
       const ignoredFields = getIgnoredFields(state);
-      const configuration = configurationFor(
-        payload.dataset || [],
-        keyFields,
-        ignoredFields,
-        payload.configuration || {}
-      );
-      applyHashes(dataset, configuration);
-
-      const values = valuesFor(dataset, configuration);
-      const isFetching = false;
-      const lastUpdated = new Date();
-      state.datasets[owner] = {
-        dataset: dataset,
-        filtered: null,
-        values: values,
-        configuration: configuration,
-        isFetching: isFetching,
-        lastUpdated: lastUpdated
-      }
+      state.datasets[owner] = configureDataset(dataset, initialConfig, keyFields, ignoredFields);
       return { ...state};
     },
     [setFilteredDataset]: (state, { payload }) => {
@@ -385,6 +404,6 @@ const selectDatasetIntersection = (state, startOwner, endOwner) => {
 
 export default reducer;
 
-export { setDataset, selectDataset, selectDatasets, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
-  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields, getHashFields, getLastUpdated, valuesFor, 
-  setDatasetDiff, removeDatasetDiff, selectDatasetDiff, selectDatasetIntersection, applyHashes };
+export { setDatasets, setDataset, selectDataset, selectDatasets, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration,
+  selectValues, selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields, getHashFields, getLastUpdated, 
+  valuesFor, setDatasetDiff, removeDatasetDiff, selectDatasetDiff, selectDatasetIntersection, applyHashes };

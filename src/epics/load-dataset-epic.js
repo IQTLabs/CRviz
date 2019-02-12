@@ -7,7 +7,8 @@ import { isNil, is } from "ramda";
 import { buildIndex } from './index-dataset-epic';
 
 import { setError } from "domain/error"
-import { setDataset } from "domain/dataset";
+import { setDatasets, setKeyFields, setIgnoredFields } from "domain/dataset";
+import { setControls } from "domain/controls";
 import { setHierarchyConfig, colorBy } from "domain/controls";
 
 const loadDataset = createAction("LOAD_DATASET");
@@ -21,16 +22,17 @@ const loadDatasetEpic = (action$, store) => {
         ,mergeMap((payload) => {
           const owner = payload.owner;
           return of(
-            setDataset({
-              owner: owner,
-              dataset: payload.dataset,
-              configuration: payload.configuration
+            setDatasets({
+              datasets: payload.datasets,
             })
-            ,buildIndex({
-                owner: owner,
-                dataset: payload.dataset,
-                configuration: payload.configuration || null
-            })
+            ,setKeyFields(payload.keyFields)
+            ,setIgnoredFields(payload.ignoredFields)
+            ,setControls(payload.controls)
+            // ,buildIndex({
+            //     owner: owner,
+            //     dataset: payload.dataset,
+            //     configuration: payload.configuration || null
+            // })
           )
         })
         ,concat(of(setHierarchyConfig(store.value.controls.hierarchyConfig || []), colorBy(store.value.controls.colorBy)))
@@ -100,12 +102,23 @@ const CSVconvert = (data) => {
 const formatPayload = (data) => {
   const owner = data.owner;
   const content = data.content;
-  const config = content.configuration;
-  var temp = {};
+  const datasets = content.datasets;
+  const keyFields = content.keyFields || [];
+  const ignoredFields = content.ignoredFields || [];
+  const controls = content.controls || {};
+
+  var final = { datasets: {} };
+
+  if(datasets){
+    final.datasets =  datasets;
+  }
   if(!isNil(content.dataset) && is(Array, content.dataset)){
-    temp = content.dataset;
+    final[owner] = { 'dataset': content.dataset };
+    if(content.configuration){
+      final[owner].configuration = content.configuration;
+    }
   } else if(isNil(content.dataset) && is(Array, content)) {
-    temp  = content;
+    final[owner] = { 'dataset': content };
   } else if(isNil(content.dataset)) {
     let obj = {};
     Object.entries(content).forEach( (entry) =>{
@@ -113,12 +126,12 @@ const formatPayload = (data) => {
       let value = entry[1]
       obj[key] = value;
       })
-    temp = [obj];
+    final[owner] = { 'dataset': [obj] };
   } else {
     throw ValidationError('Data in invalid format');
   }
 
-  data = { 'owner': owner, 'dataset': temp, 'configuration': config };
+  data = { 'datasets': final, 'keyFields': keyFields, 'ignoredFields': ignoredFields, 'controls': controls };
   return data;
 };
 
