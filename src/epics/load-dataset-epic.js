@@ -4,7 +4,7 @@ import { of } from "rxjs";
 import { map, mergeMap, catchError, concat } from 'rxjs/operators';
 import { isNil, is } from "ramda";
 
-import { buildIndex } from './index-dataset-epic';
+import { buildIndices } from './index-dataset-epic';
 
 import { setError } from "domain/error"
 import { setDatasets, setKeyFields, setIgnoredFields } from "domain/dataset";
@@ -20,19 +20,12 @@ const loadDatasetEpic = (action$, store) => {
       return of(payload).pipe(
         map(formatPayload)
         ,mergeMap((payload) => {
-          const owner = payload.owner;
           return of(
-            setDatasets({
-              datasets: payload.datasets,
-            })
+            setDatasets(payload)
             ,setKeyFields(payload.keyFields)
             ,setIgnoredFields(payload.ignoredFields)
             ,setControls(payload.controls)
-            // ,buildIndex({
-            //     owner: owner,
-            //     dataset: payload.dataset,
-            //     configuration: payload.configuration || null
-            // })
+            ,buildIndices(payload)
           )
         })
         ,concat(of(setHierarchyConfig(store.value.controls.hierarchyConfig || []), colorBy(store.value.controls.colorBy)))
@@ -103,16 +96,16 @@ const formatPayload = (data) => {
   const owner = data.owner;
   const content = data.content;
   const datasets = content.datasets;
+  console.log(datasets);
   const keyFields = content.keyFields || [];
   const ignoredFields = content.ignoredFields || [];
   const controls = content.controls || {};
 
-  var final = { datasets: {} };
+  var final = {};
 
   if(datasets){
-    final.datasets =  datasets;
-  }
-  if(!isNil(content.dataset) && is(Array, content.dataset)){
+    final =  datasets;
+  } else if(!isNil(content.dataset) && is(Array, content.dataset)){
     final[owner] = { 'dataset': content.dataset };
     if(content.configuration){
       final[owner].configuration = content.configuration;

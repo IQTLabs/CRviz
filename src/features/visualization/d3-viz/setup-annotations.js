@@ -34,7 +34,6 @@ const mapNodesToAnnotationArray = (nodes, colorMap) =>{
     'color': colorMap[d.data.fieldValue] && !colorMap[d.data.fieldValue].disabled ? 
                 colorMap[d.data.fieldValue].color : "black"
   }));
-  console.log("annotation array: %o", annotations);
   return annotations;
 }
 
