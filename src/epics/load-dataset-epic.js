@@ -94,7 +94,6 @@ const formatPayload = (data) => {
   const owner = data.owner;
   const content = data.content;
   const datasets = content.datasets;
-  console.log(datasets);
   const keyFields = content.keyFields || [];
   const ignoredFields = content.ignoredFields || [];
   const controls = content.controls || {};

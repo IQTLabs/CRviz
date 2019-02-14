@@ -25,8 +25,6 @@ const sanitizeForExport = (datasets) =>{
 			delete item.CRVIZ;
 		});
 	});
-	console.log("dataset without CRVIZ: %o", result);
-	console.log("dataset with CRVIZ: %o", datasets);
 	return result;
 }
 

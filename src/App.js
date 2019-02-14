@@ -6,7 +6,7 @@ import Modal from 'react-modal';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faDizzy, faPlusCircle, faMinusCircle, faHome } from "@fortawesome/free-solid-svg-icons";
 
-import { selectDataset, getLastUpdated } from 'domain/dataset';
+import { selectDatasets, getLastUpdated } from 'domain/dataset';
 import { setHierarchyConfig, showNodes, colorBy, selectControls } from 'domain/controls';
 import { getError, clearError } from "domain/error";
 
@@ -32,8 +32,6 @@ class App extends Component {
     showData: true,
     showGrouping: false,
     showFiltering: false,
-    uuid1: uuidv4(),
-    uuid2: uuidv4(),
   }
 
   toggleShowData = () =>{
@@ -83,7 +81,7 @@ class App extends Component {
   }
 
   render() {
-    const { dataset, darkTheme, error, lastUpdated } = this.props;
+    const { dataset, darkTheme, error, lastUpdated, uuids } = this.props;
     const hasDataset = dataset && dataset.length > 0;
 
     const showData = this.state.showData;
@@ -114,11 +112,13 @@ class App extends Component {
           </div>
           <div>
             <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
-              <DatasetControls uuid={ this.state.uuid1 } datasets={ datasets }/>
+              <DatasetControls uuid={ uuids[0] } datasets={ datasets }/>
             </div>
-            <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
-              <DatasetControls uuid={ this.state.uuid2 } datasets={ datasets }/>
-            </div>
+            { uuids.length > 1 &&
+              <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
+                <DatasetControls uuid={ uuids[1] } datasets={ datasets }/>
+              </div>
+            }
           </div>
 
           { hasDataset &&
@@ -170,7 +170,7 @@ class App extends Component {
         }
 
         <div className={ style.canvas }>
-          <Visualization startUid={this.state.uuid1} endUid={this.state.uuid2} />
+          <Visualization startUid={uuids[0]} endUid={uuids[1] || null} />
         </div>
         <Modal isOpen={ error !== null } onRequestClose={this.onErrorClose} contentLabel="An Error has occurred">
             <div className={ style.modal }>
@@ -199,12 +199,15 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const owner = Object.keys(state.dataset.datasets)[0] || ""
+  const datasets = selectDatasets(state);
+  const uuids = Object.keys(datasets) || [uuidv4()];
+  const dataset = datasets[uuids[0]] && datasets[uuids[0]].dataset ? datasets[uuids[0]].dataset : [];
   return {
-    dataset: selectDataset(state, owner),
+    dataset: dataset,
     darkTheme: selectControls(state).darkTheme,
     error: getError(state),
-    lastUpdated: getLastUpdated(state, owner),
+    lastUpdated: getLastUpdated(state, uuids[0]),
+    uuids: uuids
   }
 }
 
