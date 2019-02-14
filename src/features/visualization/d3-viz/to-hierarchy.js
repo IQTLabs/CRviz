@@ -40,7 +40,10 @@ const countSearchResults = (children) => {
   var result = 0;
 
   for(var c in children){
-    result += (children[c].searchResultCount || 0) + (children[c].isSearchResult || 0) +
+    if(!('CRVIZ' in children[c])){
+      children[c]['CRVIZ'] = {};
+    }
+    result += (children[c].CRVIZ._searchResultCount || 0) + (children[c].CRVIZ._isSearchResult || 0) +
               (
                 !isNil(children[c].values)
                   ? countSearchResults(children[c].values) : 0
@@ -59,7 +62,7 @@ const entriesToHierarchy = (fieldValue, field, hierarchyConfig, entries) => {
       fieldValue,
       field,
       children: chain(getLeaves, entries),
-      searchResultCount: countSearchResults(entries)
+      CRVIZ:{ _SEARCH_RESULT_COUNT: countSearchResults(entries) }
     }
   }
 
@@ -78,7 +81,7 @@ const entriesToHierarchy = (fieldValue, field, hierarchyConfig, entries) => {
         return entry;
       }
     }, entries),
-    searchResultCount: countSearchResults(entries)
+    CRVIZ:{ _SEARCH_RESULT_COUNT: countSearchResults(entries) }
   };
 };
 

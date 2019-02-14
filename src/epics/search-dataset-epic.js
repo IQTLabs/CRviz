@@ -49,10 +49,10 @@ const performSearch = (data) => {
     }
   }
 
-  data.dataset.forEach((el) => { el.isSearchResult = false; });
+  data.dataset.forEach((el) => { el.CRVIZ._isSearchResult = false; });
   results.forEach((r) => {
     if(data.dataset[r.ref]){
-      data.dataset[r.ref].isSearchResult = true;
+      data.dataset[r.ref].CRVIZ._isSearchResult = true;
       data.results.push(data.dataset[r.ref]);
     }
   });

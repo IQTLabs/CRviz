@@ -43,8 +43,8 @@ const showTooltip = (event, fields, offsetTop, offsetLeft, tooltip) => {
 const content = (datum, fields) => {
   if (datum.depth > 0 && datum.height > 0) {
     let cont = `${ datum.data.fieldValue } (${datum.value})`;
-    if(datum.data.searchResultCount > 0){
-      cont += `<br/><span>${datum.data.searchResultCount} search results</span>`
+    if(datum.data.CRVIZ._searchResultCount > 0){
+      cont += `<br/><span>${datum.data.CRVIZ._searchResultCount} search results</span>`
     }
     return cont;
   } else if (datum.height === 0) {

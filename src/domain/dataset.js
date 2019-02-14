@@ -47,16 +47,19 @@ const getHashFields = (allFields, ignoredFields) => {
 const addHashKey = (keys, obj) => {
   //console.log("addHashKey keys: %o", keys);
   const hashKey = keys.reduce( (h, k) => h + path(k.path, obj) + ":", "");
-  obj["HASH_KEY"] = hashKey;
+  obj.CRVIZ["_HASH_KEY"] = hashKey;
 }
 
 const addHashWithoutIgnored = (fields, obj) => {
   const hash = fields.reduce( (h, f) => h + path(f.path, obj) + "|", "");
-  obj["HASH_WITHOUT_IGNORED"] = hash;
+  obj.CRVIZ["_HASH_WITHOUT_IGNORED"] = hash;
 }
 
 const applyHashes = (dataset, configuration) => {
   dataset.forEach((i) => {
+    if(!('CRVIZ' in i)){
+      i['CRVIZ'] = {};
+    }
     addHashKey(configuration.keyFields.length > 0 ? configuration.keyFields : configuration.hashFields, i);
     addHashWithoutIgnored(configuration.hashFields, i);
   });
@@ -377,23 +380,23 @@ const selectDatasetIntersection = (state, startOwner, endOwner) => {
     ds = end;
   } else if(start.length > 0 && end.length > 0) {
     start.forEach((s) => {
-      const idx = end.findIndex(e => e.HASH_KEY === s.HASH_KEY);
+      const idx = end.findIndex(e => e.CRVIZ._HASH_KEY === s.CRVIZ._HASH_KEY);
       if(idx === -1){
-        s.isRemoved = true;
+        s.CRVIZ._isRemoved = true;
       } else {
-        s.isRemoved = false;
+        s.CRVIZ._isRemoved = false;
       }
-      s.isChanged = false;
-      s.isAdded = false;
+      s.CRVIZ._isChanged = false;
+      s.CRVIZ._isAdded = false;
       ds.push(s);
     });
     end.forEach((e) => {
-      const idx = ds.findIndex(i => i.HASH_KEY === e.HASH_KEY);
+      const idx = ds.findIndex(i => i.CRVIZ._HASH_KEY === e.CRVIZ._HASH_KEY);
       if(idx === -1){
-        e.isAdded = true;
+        e.CRVIZ._isAdded = true;
         ds.push(e);
-      } else if(ds[idx].HASH_WITHOUT_IGNORED !== e.HASH_WITHOUT_IGNORED){
-        ds[idx].isChanged = true;
+      } else if(ds[idx].CRVIZ._HASH_WITHOUT_IGNORED !== e.CRVIZ._HASH_WITHOUT_IGNORED){
+        ds[idx].CRVIZ._isChanged = true;
       }
     })
   }
