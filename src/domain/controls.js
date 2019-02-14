@@ -18,12 +18,10 @@ const colorBy = createAction("COLOR_BY");
 const reducer = handleActions(
   {
     [setControls]: (state, { payload }) =>{
-      console.log(payload.hierarchyConfig);
       const hierarchyConfig = payload.hierarchyConfig || defaultState.hierarchyConfig;
       const shouldShowNodes = ('shouldShowNodes' in payload) ? !!payload.shouldShowNodes : true;
       const darkTheme = ('darkTheme' in payload) ? !!payload.darkTheme : false;
       const colorBy = payload.colorBy || defaultState.colorBy
-      console.log(hierarchyConfig);
       return { 
         ...state,
         hierarchyConfig: hierarchyConfig,

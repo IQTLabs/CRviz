@@ -1,7 +1,7 @@
 import { createAction } from "redux-actions";
 import { ofType } from 'redux-observable';
 import { of } from "rxjs";
-import { map, mergeMap, catchError, concat } from 'rxjs/operators';
+import { map, mergeMap, catchError } from 'rxjs/operators';
 import { isNil, is } from "ramda";
 
 import { buildIndices } from './index-dataset-epic';
@@ -9,7 +9,6 @@ import { buildIndices } from './index-dataset-epic';
 import { setError } from "domain/error"
 import { setDatasets, setKeyFields, setIgnoredFields } from "domain/dataset";
 import { setControls } from "domain/controls";
-import { setHierarchyConfig, colorBy } from "domain/controls";
 
 const loadDataset = createAction("LOAD_DATASET");
 
@@ -28,7 +27,6 @@ const loadDatasetEpic = (action$, store) => {
             ,buildIndices(payload)
           )
         })
-        ,concat(of(setHierarchyConfig(store.value.controls.hierarchyConfig || []), colorBy(store.value.controls.colorBy)))
         ,catchError((error) => {
           if (is(ValidationError, error)) {
             return of(setError(error));
