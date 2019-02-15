@@ -97,11 +97,16 @@ class App extends Component {
   }
 
   removeDatasetEntry = (uuid) =>{
-    if(this.state.uuids.includes(uuid)){
-      this.state.uuids.splice(this.state.uuids.indexOf(uuid), 1);
+    const uuids = this.state.uuids;
+    console.log("uuids to remove %o", uuid);
+    console.log("uuids at remove %o", uuids);
+    if(uuids.includes(uuid)){
+      const newUuids = uuids.splice(uuids.indexOf(uuid), 1);
+      console.log("uuids after remove %o", newUuids);
+      this.setState({uuids: newUuids})
     }
-    this.props.removeSearchIndex(uuid);
-    this.props.removeDataset(uuid);
+    this.props.removeSearchIndex({'owner': uuid});
+    this.props.removeDataset({'owner': uuid});
   }
 
   render() {
@@ -138,14 +143,12 @@ class App extends Component {
           <div>
             {uuids.map((uuid, index) => {
               return(
-                <div  key={ uuid } >
+                <div  key={ uuid } className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
                   <div className={style.dataControlHeader}>
                     t{index}
                     {index > 0 && <FontAwesomeIcon icon={faMinusCircle} onClick={ () => {this.removeDatasetEntry(uuid)}} />}
                   </div>
-                  <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
-                    <DatasetControls uuid={ uuid } datasets={ datasets }/>
-                  </div>
+                  <DatasetControls uuid={ uuid } datasets={ datasets }/>
                 </div>
               )
             })}
