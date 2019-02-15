@@ -191,8 +191,27 @@ input[name=hideControls]:checked ~ .canvas {
   transform: translate(-50%,-50%);
 }
 
+.label {
+  font-weight: bold;
+  flex: 0 0 6rem;
+}
+
 .emptyDataset span {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
+}
+
+.selectorContainer {
+  display: flex;
+  align-items: center;
+}
+
+.selector {
+  flex: 1;
+}
+
+.selector select {
+  width: 100%;
+  margin: 0;
 }
