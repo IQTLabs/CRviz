@@ -4,11 +4,15 @@ import classNames from 'classnames';
 import Modal from 'react-modal';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faDizzy, faPlusCircle, faMinusCircle, faHome } from "@fortawesome/free-solid-svg-icons";
+import { 
+  faCheck, faDizzy, faPlus, faMinusCircle, faHome, faAngleDoubleDown, faAngleDoubleUp,
+  //faFileExport, faFileImport
+} from "@fortawesome/free-solid-svg-icons";
 
-import { selectDatasets, getLastUpdated } from 'domain/dataset';
+import { selectDatasets, getLastUpdated, removeDataset } from 'domain/dataset';
 import { setHierarchyConfig, showNodes, colorBy, selectControls } from 'domain/controls';
 import { getError, clearError } from "domain/error";
+import { removeSearchIndex } from "epics/index-dataset-epic";
 
 import Header from 'features/header/Header';
 import HierarchySelector from 'features/hierarchy-selector/HierarchySelector';
@@ -32,6 +36,12 @@ class App extends Component {
     showData: true,
     showGrouping: false,
     showFiltering: false,
+    uuids: [uuidv4()]
+  }
+
+  componentWillReceiveProps = (nextProps) =>{
+    const uniqueUuids = Array.from(new Set(nextProps.uuids.concat(this.state.uuids)));
+    this.setState({uuids: uniqueUuids});
   }
 
   toggleShowData = () =>{
@@ -80,10 +90,25 @@ class App extends Component {
     this.props.showNodes(true);
   }
 
+  addDatasetEntry = () => {
+    const uuids = this.state.uuids;
+    uuids.push(uuidv4());
+    this.setState({uuids: uuids})
+  }
+
+  removeDatasetEntry = (uuid) =>{
+    if(this.state.uuids.includes(uuid)){
+      this.state.uuids.splice(this.state.uuids.indexOf(uuid), 1);
+    }
+    this.props.removeSearchIndex(uuid);
+    this.props.removeDataset(uuid);
+  }
+
   render() {
-    const { dataset, darkTheme, error, lastUpdated, uuids } = this.props;
+    const { dataset, darkTheme, error, lastUpdated} = this.props;
     const hasDataset = dataset && dataset.length > 0;
 
+    const uuids = this.state.uuids;
     const showData = this.state.showData;
     const showComparison = this.state.showComparison;
     const showGrouping = this.state.showGrouping;
@@ -108,17 +133,27 @@ class App extends Component {
             </div>
           </div>
           <div className={style.accordionHeader} onClick={this.toggleShowData}>
-            Data  {!showData && <FontAwesomeIcon icon={faPlusCircle} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faMinusCircle} />}
+            Data  {!showData && <FontAwesomeIcon icon={faAngleDoubleUp} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faAngleDoubleDown} />}
           </div>
           <div>
-            <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
-              <DatasetControls uuid={ uuids[0] } datasets={ datasets }/>
-            </div>
-            { uuids.length > 1 &&
-              <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
-                <DatasetControls uuid={ uuids[1] } datasets={ datasets }/>
+            {uuids.map((uuid, index) => {
+              return(
+                <div  key={ uuid } >
+                  <div className={style.dataControlHeader}>
+                    t{index}
+                    {index > 0 && <FontAwesomeIcon icon={faMinusCircle} onClick={ () => {this.removeDatasetEntry(uuid)}} />}
+                  </div>
+                  <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
+                    <DatasetControls uuid={ uuid } datasets={ datasets }/>
+                  </div>
+                </div>
+              )
+            })}
+            <span className={ style.centerSpan }>
+              <div className="button circular" title="Add Dataset" onClick={this.addDatasetEntry}>
+                <FontAwesomeIcon icon={faPlus} />
               </div>
-            }
+            </span>
           </div>
 
           { hasDataset &&
@@ -128,11 +163,11 @@ class App extends Component {
           }
 
           <div className={style.accordionHeader} onClick={this.toggleShowComparison}>
-            Comparison  {!showComparison && <FontAwesomeIcon icon={faPlusCircle} />}{showComparison && <FontAwesomeIcon  onClick={this.toggleShowComparison} icon={faMinusCircle} />}
+            Comparison  {!showComparison && <FontAwesomeIcon icon={faAngleDoubleUp} />}{showComparison && <FontAwesomeIcon  onClick={this.toggleShowComparison} icon={faAngleDoubleDown} />}
           </div>
           { hasDataset &&
             <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
-              <ComparisonSelector startUuid={ this.state.uuid1 } endUuid={ this.state.uuid2 } />
+              <ComparisonSelector startUid={uuids[0]} endUid={uuids[1] || null} />
             </div>
           }
           { !hasDataset && 
@@ -142,7 +177,7 @@ class App extends Component {
           }
 
           <div className={style.accordionHeader} onClick={this.toggleShowGrouping}>
-            Grouping  {!showGrouping && <FontAwesomeIcon icon={faPlusCircle} />}{showGrouping && <FontAwesomeIcon  onClick={this.toggleShowGrouping} icon={faMinusCircle} />}
+            Grouping  {!showGrouping && <FontAwesomeIcon icon={faAngleDoubleUp} />}{showGrouping && <FontAwesomeIcon  onClick={this.toggleShowGrouping} icon={faAngleDoubleDown} />}
           </div>
           { hasDataset &&
             <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
@@ -216,6 +251,8 @@ const mapDispatchToProps = {
   setHierarchyConfig, 
   showNodes, 
   colorBy, 
+  removeDataset,
+  removeSearchIndex,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
