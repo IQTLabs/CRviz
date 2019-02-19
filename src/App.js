@@ -38,16 +38,22 @@ class App extends Component {
     showGrouping: false,
     showFiltering: false,
     uuids: [uuidv4()],
+    datasetAdded: false,
     startUuid: null,
     endUuid: null,
   }
 
   componentWillReceiveProps = (nextProps) =>{
-    const uniqueUuids = Array.from(new Set(nextProps.uuids.concat(this.state.uuids)));
+    const uniqueUuids = this.state.datasetAdded || nextProps.uuids.length === 0
+                        ? Array.from(new Set(nextProps.uuids.concat(this.state.uuids)))
+                        : nextProps.uuids;
     if(!this.state.startUuid){
       this.setState({startUuid: uniqueUuids[0]});
     }
-    this.setState({uuids: uniqueUuids});
+    this.setState({
+      uuids: uniqueUuids,
+      datasetAdded: false
+    });
   }
 
   toggleShowData = () =>{
@@ -104,12 +110,11 @@ class App extends Component {
     if(this.state.endUuid === null){
       this.setEndUuid(newItem);
     }
+    this.setState({datasetAdded: true});
   }
 
   removeDatasetEntry = (uuid) =>{
     const uuids = this.state.uuids;
-    console.log("uuids to remove %o", uuid);
-    console.log("uuids at remove %o", uuids);
     if(uuids.includes(uuid)){
       const newUuids = uuids.splice(uuids.indexOf(uuid), 1);
       console.log("uuids after remove %o", newUuids);
@@ -158,7 +163,7 @@ class App extends Component {
             </div>
           </div>
           <div className={style.accordionHeader} onClick={this.toggleShowData}>
-            Data  {!showData && <FontAwesomeIcon icon={faAngleDoubleUp} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faAngleDoubleDown} />}
+            Data  {!showData && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faAngleDoubleUp} />}
           </div>
           <div className={ classNames({ [style.section]: true, [style.hidden]: !showData })}>
             {uuids.map((uuid, index) => {
@@ -186,7 +191,7 @@ class App extends Component {
           }
 
           <div className={style.accordionHeader} onClick={this.toggleShowComparison}>
-            Comparison  {!showComparison && <FontAwesomeIcon icon={faAngleDoubleUp} />}{showComparison && <FontAwesomeIcon  onClick={this.toggleShowComparison} icon={faAngleDoubleDown} />}
+            Comparison  {!showComparison && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showComparison && <FontAwesomeIcon  onClick={this.toggleShowComparison} icon={faAngleDoubleUp} />}
           </div>
           { hasDataset &&
             <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
@@ -240,7 +245,7 @@ class App extends Component {
           }
 
           <div className={style.accordionHeader} onClick={this.toggleShowGrouping}>
-            Grouping  {!showGrouping && <FontAwesomeIcon icon={faAngleDoubleUp} />}{showGrouping && <FontAwesomeIcon  onClick={this.toggleShowGrouping} icon={faAngleDoubleDown} />}
+            Grouping  {!showGrouping && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showGrouping && <FontAwesomeIcon  onClick={this.toggleShowGrouping} icon={faAngleDoubleUp} />}
           </div>
           { hasDataset &&
             <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showGrouping }) }>
