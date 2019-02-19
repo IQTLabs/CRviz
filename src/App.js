@@ -11,7 +11,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { selectDatasets, getLastUpdated, removeDataset } from 'domain/dataset';
-import { setHierarchyConfig, showNodes, colorBy, selectControls } from 'domain/controls';
+import { 
+  setHierarchyConfig, showNodes, colorBy, selectControls, setStartDataset, setEndDataset
+} from 'domain/controls';
 import { getError, clearError } from "domain/error";
 import { removeSearchIndex } from "epics/index-dataset-epic";
 
@@ -47,11 +49,12 @@ class App extends Component {
     const uniqueUuids = this.state.datasetAdded || nextProps.uuids.length === 0
                         ? Array.from(new Set(nextProps.uuids.concat(this.state.uuids)))
                         : nextProps.uuids;
-    if(!this.state.startUuid){
-      this.setState({startUuid: uniqueUuids[0]});
-    }
+    const startUuid = nextProps.startUuid || this.state.startUuid || uniqueUuids[0];
+    const endUuid = nextProps.endUuid || this.state.endUuid;
     this.setState({
       uuids: uniqueUuids,
+      startUuid: startUuid,
+      endUuid: endUuid,
       datasetAdded: false
     });
   }
@@ -107,17 +110,16 @@ class App extends Component {
     const newItem = uuidv4()
     uuids.push(newItem);
     this.setState({uuids: uuids});
-    if(this.state.endUuid === null){
+    this.setState({datasetAdded: true});
+    if(this.state.endUuid === null && uuids.length > 1){
       this.setEndUuid(newItem);
     }
-    this.setState({datasetAdded: true});
   }
 
   removeDatasetEntry = (uuid) =>{
     const uuids = this.state.uuids;
     if(uuids.includes(uuid)){
       const newUuids = uuids.splice(uuids.indexOf(uuid), 1);
-      console.log("uuids after remove %o", newUuids);
       this.setState({uuids: newUuids})
     }
     this.props.removeSearchIndex({'owner': uuid});
@@ -126,10 +128,12 @@ class App extends Component {
 
   setStartUuid = (uuid) =>{
     this.setState({startUuid: uuid});
+    this.props.setStartDataset(uuid);
   }
 
   setEndUuid = (uuid) =>{
     this.setState({endUuid: uuid});
+    this.props.setEndDataset(uuid);
   }
 
   render() {
@@ -305,12 +309,15 @@ const mapStateToProps = state => {
   const datasets = selectDatasets(state);
   const uuids = Object.keys(datasets) || [uuidv4()];
   const dataset = datasets[uuids[0]] && datasets[uuids[0]].dataset ? datasets[uuids[0]].dataset : [];
+  const controls = selectControls(state);
   return {
     dataset: dataset,
-    darkTheme: selectControls(state).darkTheme,
+    darkTheme: controls.darkTheme,
     error: getError(state),
     lastUpdated: getLastUpdated(state, uuids[0]),
-    uuids: uuids
+    uuids: uuids,
+    startUuid: controls.start,
+    endUuid: controls.end
   }
 }
 
@@ -321,6 +328,8 @@ const mapDispatchToProps = {
   colorBy, 
   removeDataset,
   removeSearchIndex,
+  setStartDataset,
+  setEndDataset
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

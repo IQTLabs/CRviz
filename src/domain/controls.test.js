@@ -1,6 +1,8 @@
 import {
   default as controls,
   setControls,
+  setStartDataset,
+  setEndDataset,
   setHierarchyConfig,
   showNodes,
   useDarkTheme,
@@ -20,13 +22,33 @@ describe("Controls reducer", () => {
         'hierarchyConfig': [{ path: ["uid"], displayName: "UID" }],
         'shouldShowNodes': false,
         'darkTheme': true,
-        'colorBy': { path: ["uid"], displayName: "UID" }
+        'colorBy': { path: ["uid"], displayName: "UID" },
+        'start': 't0',
+        'end': 'tn',
       }
 
       const action = setControls(controls);
       const result = reducer({}, action);
 
       expect(selectControls(result)).to.deep.equal(controls);
+
+      done();
+    });
+  });
+
+  describe("set start and end datasets", () => {
+    it("set the start dataset", (done) => {
+      const action = setStartDataset('t0');
+      const result = reducer({}, action);
+      expect(selectControls(result).start).to.equal('t0');
+
+      done();
+    });
+
+    it("set the end dataset", (done) => {
+      const action = setEndDataset('tn');
+      const result = reducer({}, action);
+      expect(selectControls(result).end).to.equal('tn');
 
       done();
     });
@@ -42,7 +64,9 @@ describe("Controls reducer", () => {
         hierarchyConfig: hierarchyConfig,
         shouldShowNodes: true,
         darkTheme: false,
-        colorBy: null
+        colorBy: null,
+        'start': null,
+        'end': null,
       });
 
       done();
