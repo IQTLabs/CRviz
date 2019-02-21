@@ -86,7 +86,6 @@ const generateIndex = (payload) => {
   const dataset = payload.dataset;
   const configuration = !isNil(payload.configuration) && !isEmpty(payload.configuration) 
                         ? payload.configuration : configurationFor(dataset);
-  console.log("configuration to flatten with: %o", configuration);
   var flat = flattenDataset(dataset, configuration);
   const idx = lunr(function () {
     this.ref('id');
