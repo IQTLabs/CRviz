@@ -97,6 +97,8 @@ const formatPayload = (data) => {
   const keyFields = content.keyFields || [];
   const ignoredFields = content.ignoredFields || [];
   const controls = content.controls || {};
+  const includeData = ('includeData' in data) ? data.includeData : true;
+  const includeControls = ('includeControls' in data) ? data.includeControls: false;
 
   var final = {};
 
@@ -121,7 +123,12 @@ const formatPayload = (data) => {
     throw ValidationError('Data in invalid format');
   }
 
-  data = { 'datasets': final, 'keyFields': keyFields, 'ignoredFields': ignoredFields, 'controls': controls };
+  data = { 
+          'datasets': includeData ? final : {},
+          'keyFields': includeData ? keyFields : {},
+          'ignoredFields': includeData ? ignoredFields : {},
+          'controls': includeControls ? controls : {}
+        };
   return data;
 };
 

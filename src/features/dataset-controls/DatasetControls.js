@@ -127,7 +127,12 @@ class DatasetControls extends React.Component {
   }
 
   onUpload = (file) => {
-    this.props.uploadDataset({ 'owner': this.props.uuid, 'file': file });
+    this.props.uploadDataset({ 
+      'owner': this.props.uuid, 
+      'file': file,
+      'includeData': true,
+      'includeControls': false,
+    });
     this.props.stopRefresh();
     this.setState({
       selected: null,
