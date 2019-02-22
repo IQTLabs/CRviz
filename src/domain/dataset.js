@@ -92,7 +92,7 @@ const pathsIn = (obj) =>
  * Return all fields for an object
  */
 const fieldsFor = (obj, overrides = []) => {
-  const paths = pathsIn(obj);
+  const paths = pathsIn(obj).filter(p => p[0] !== 'CRVIZ');
   return map((path) => {
     const override = find(propEq('path', path), overrides) || {};
     return merge(

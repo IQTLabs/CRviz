@@ -62,7 +62,7 @@ describe("indexDatasetEpic", () => {
 	    const action$ = buildIndices({ 'datasets': datasets });
 	    store.dispatch(action$);
 
-	    const expectedFields = []//['uid', 'role.role', 'role.confidence'];
+	    const expectedFields = ['uid', 'role.role', 'role.confidence'];
 	    const idx = getSearchIndex(store.getState(), owner)
 
 	    expect(idx.fields).to.deep.equal(expectedFields);

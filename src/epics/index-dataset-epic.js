@@ -1,5 +1,5 @@
 import { ofType } from 'redux-observable';
-import { isNil } from "ramda";
+import { isNil, isEmpty } from "ramda";
 import { of } from "rxjs";
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -85,8 +85,8 @@ const generateIndex = (payload) => {
   let indices = [];
   Object.keys(payload.datasets).forEach((owner) => {
     const dataset = payload.datasets[owner].dataset;
-    const configuration = payload.datasets[owner].configuration || configurationFor(dataset);
-
+    const configuration = !isNil(payload.datasets[owner].configuration) && !isEmpty(payload.datasets[owner].configuration) 
+                        ? payload.datasets[owner].configuration : configurationFor(dataset);
     var flat = flattenDataset(dataset, configuration);
     const idx = lunr(function () {
       this.ref('id');

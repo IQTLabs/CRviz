@@ -39,7 +39,6 @@ const reducer = handleActions(
       }
     },
     [setStartDataset]: (state, { payload }) => {
-      console.log("payload for setStartDataset: %o", payload)
       return { ...state, start: payload }
     },
     [setEndDataset]: (state, { payload }) => ({ ...state, end: payload }),
