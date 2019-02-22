@@ -20,15 +20,45 @@
 }
 
 .viz :global(.viz-node.viz-isChanged) circle {
-  fill: white;
+  animation: delta 2s infinite;
+}
+
+@keyframes delta {
+  0% {
+    -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  },
+  100% {
+
+  }
 }
 
 .viz :global(.viz-node.viz-isAdded) circle {
-  fill: blue;
+  animation: plus 2s infinite;
+}
+
+@keyframes plus {
+  0% {
+    -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
+    clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
+  },
+  100% {
+
+  }
 }
 
 .viz :global(.viz-node.viz-isRemoved) circle {
-  fill: orange;
+  animation: minus 2s infinite;
+}
+
+@keyframes minus {
+  0% {
+    -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+    clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+  },
+  100% {
+
+  }
 }
 
 .viz :global(.viz-node.viz-searchExcluded) circle {
