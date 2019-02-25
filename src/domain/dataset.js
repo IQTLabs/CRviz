@@ -373,7 +373,18 @@ const getIgnoredFields = (state) => state.dataset && state.dataset.ignoredFields
 const selectDatasetIntersection = (state, startOwner, endOwner) => {
   let ds = [];
   const start = selectDataset(state, startOwner);
+  start.forEach((s)=>{
+    s.CRVIZ._isRemoved = false;
+    s.CRVIZ._isChanged = false;
+    s.CRVIZ._isAdded = false;
+  });
   const end = selectDataset(state, endOwner);
+  end.forEach((e)=>{
+    e.CRVIZ._isRemoved = false;
+    e.CRVIZ._isChanged = false;
+    e.CRVIZ._isAdded = false;
+  });
+  
   if(start.length > 0 && end.length === 0){
     ds = start;
   } else if(start.length === 0 && end.length > 0){
@@ -400,7 +411,6 @@ const selectDatasetIntersection = (state, startOwner, endOwner) => {
       }
     })
   }
-
   return ds;
 }
 

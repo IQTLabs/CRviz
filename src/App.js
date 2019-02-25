@@ -293,9 +293,9 @@ class App extends Component {
                   <label className="select">
                   <select
                     onChange={(evt) => this.setStartUuid(evt.target.value)}
-                    value={isNil(startUuid) ? "" : startUuid}
+                    value={isNil(startUuid) ? "UNSET" : startUuid}
                   >
-                    <option value="">&mdash;None&mdash;</option>
+                    <option value="UNSET">&mdash;None&mdash;</option>
                     {uuids.map((uuid, index) => {
                       return (
                         <option key={uuid} value={uuid}>
@@ -313,9 +313,9 @@ class App extends Component {
                   <label className="select">
                   <select
                     onChange={(evt) => this.setEndUuid(evt.target.value)}
-                    value={isNil(endUuid) ? "" : endUuid}
+                    value={isNil(endUuid) ? "UNSET" : endUuid}
                   >
-                    <option value="">&mdash;None&mdash;</option>
+                    <option value="UNSET">&mdash;None&mdash;</option>
                     {uuids.map((uuid, index) => {
                       return (
                         <option key={uuid} value={uuid}>
