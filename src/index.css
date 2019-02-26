@@ -60,17 +60,21 @@ select {
 }
 
 .annotation-note-label tspan {
-  font-size: 16px;
+  font-size: 1em;
   fill: black;
 }
 
 :global(.darkTheme) .annotation-note-label tspan {
-  font-size: 16px;
+  font-size: 1em;
   fill: white;
 }
 
 .hidden {
   display: none;
+}
+
+.hiddenSubject path{
+  stroke:transparent;
 }
 
 * {

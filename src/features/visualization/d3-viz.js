@@ -230,11 +230,18 @@ function d3Viz(rootNode) {
   };
 
   const resetAnnotations = (props, state) =>{
-    //const annotations = 
-    setupAnnotations({
+    const annotations = setupAnnotations({
       nodeRoot: nodeRoot,
       annotationRoot: annotationRoot,
       colorMap: state.legend && state.legend.colorMap ? state.legend.colorMap : []
+    })
+
+    annotations.annotations()
+    .forEach((a)=>{
+      a.type.a.selectAll("g.annotation-connector, g.annotation-note")
+      .classed("hidden", a.data.depth > 1);
+      a.type.a.selectAll("g.annotation-subject")
+      .classed("hiddenSubject", a.data.depth > 1);
     })
   };
 
