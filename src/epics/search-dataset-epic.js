@@ -48,7 +48,7 @@ const performSearch = (data) => {
       results = [...temp];
     }
   }
-
+  
   data.dataset.forEach((el) => { el.isSearchResult = false; });
   results.forEach((r) => {
     if(data.dataset[r.ref]){
