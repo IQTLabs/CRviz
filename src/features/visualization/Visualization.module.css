@@ -20,7 +20,20 @@
 }
 
 .viz :global(.viz-node.viz-isChanged) circle {
+  -webkit-animation-name: delta;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
   animation: delta 2s infinite;
+}
+
+@-webkit-keyframes delta {
+  0% {
+    -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  },
+  100% {
+
+  }
 }
 
 @keyframes delta {
@@ -34,12 +47,23 @@
 }
 
 .viz :global(.viz-node.viz-isAdded) circle {
+  -webkit-animation-name: plus;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
   animation: plus 2s infinite;
+}
+
+@-webkit-keyframes plus {
+  0% {
+    clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
+  },
+  100% {
+
+  }
 }
 
 @keyframes plus {
   0% {
-    -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
     clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
   },
   100% {
@@ -48,7 +72,20 @@
 }
 
 .viz :global(.viz-node.viz-isRemoved) circle {
+  -webkit-animation-name: minus;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
   animation: minus 2s infinite;
+}
+
+@-webkit-keyframes minus {
+  0% {
+    -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+    clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+  },
+  100% {
+
+  }
 }
 
 @keyframes minus {

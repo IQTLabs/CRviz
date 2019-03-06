@@ -7,7 +7,7 @@ import { isNil, is } from "ramda";
 import { buildIndices } from './index-dataset-epic';
 
 import { setError } from "domain/error"
-import { setDatasets, setKeyFields, setIgnoredFields } from "domain/dataset";
+import { setDatasets, setKeyFields, setIgnoredFields, configureDataset } from "domain/dataset";
 import { setControls } from "domain/controls";
 
 const loadDataset = createAction("LOAD_DATASET");
@@ -122,6 +122,12 @@ const formatPayload = (data) => {
   } else {
     throw ValidationError('Data in invalid format');
   }
+
+  Object.keys(final).forEach((owner) =>{
+    const dataset = final[owner].dataset;
+    const initialConfig = final[owner].configuration;
+    final[owner] = configureDataset(dataset, initialConfig, keyFields, ignoredFields);
+  })
 
   data = { 
           'datasets': includeData ? final : {},

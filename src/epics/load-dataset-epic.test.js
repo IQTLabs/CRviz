@@ -3,7 +3,7 @@ import configureMockStore from 'redux-mock-store';
 import { createEpicMiddleware } from 'redux-observable';
 
 import rootEpic from './root-epic'
-import { setDatasets } from 'domain/dataset'
+import { setDatasets, applyHashes, configurationFor } from 'domain/dataset'
 import { loadDataset, CSVconvert } from "./load-dataset-epic"
 import { fromJson } from "./upload-dataset-epic"
 
@@ -25,9 +25,6 @@ describe("loadDatasetEpic", () => {
 		epicMiddleware.run(rootEpic);
 	});
 
-	afterEach(() => {
-		
-	});
 	describe("loading various datasets", () => {
 		it("loads the dataset with default config", (done) => {
 			const owner = uuidv4();
@@ -53,7 +50,8 @@ describe("loadDatasetEpic", () => {
 	        const configuration = {
 	          fields: [
 	            { path: ["uid"], displayName: "UID", groupable: true },
-	            { path: ["role", "role"], displayName: "Role", groupable: false }
+	            { path: ["role", "role"], displayName: "Role", groupable: false },
+	            { path: ["role", "confidence"], displayName: "Role.confidence", groupable: false }
 	          ]
 	        };
 
@@ -61,7 +59,7 @@ describe("loadDatasetEpic", () => {
 			store.dispatch(action$);
 			let typeToCheck = setDatasets.toString();	
 			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.datasets[owner].dataset).to.equal(dataset);
-			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.datasets[owner].configuration).to.equal(configuration);
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.datasets[owner].configuration.fields).to.deep.equal(configuration.fields);
 
 			done();
 		});
@@ -69,13 +67,21 @@ describe("loadDatasetEpic", () => {
 		it("loads a simple object", (done) => {
 			const owner = uuidv4();
 			const data = { uid: "uid1", role: { role: "role", confidence: 80 } };
+			const expected_data = { 
+				uid: "uid1", 
+				role: { role: "role", confidence: 80 },
+				CRVIZ: {
+		         '_HASH_KEY': "uid1:role:80:",
+		         '_HASH_WITHOUT_IGNORED': "uid1|role|80|"
+			    }
+			};
 
 			const action$ = loadDataset({ 'owner': owner, 'content': data });
 			store.dispatch(action$);
 			let typeToCheck = setDatasets.toString();
 
 			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.datasets[owner].dataset.length).to.equal(1);
-			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.datasets[owner].dataset[0]).to.deep.equal(data);
+			expect(store.getActions().filter(a => a.type === typeToCheck)[0].payload.datasets[owner].dataset[0]).to.deep.equal(expected_data);
 
 			done();
 		});
@@ -87,7 +93,8 @@ describe("loadDatasetEpic", () => {
 		  { uid: "uid1", role: { role: "role", confidence: 80 } },
 		  { uid: "uid2", role: { role: "role", confidence: 80 } }
 		];
-
+		const config = configurationFor(data, [], []);
+		applyHashes(data, config);
 		const action$ = loadDataset({ 'owner': owner, 'content': data });
 		store.dispatch(action$);
 		expect(store.getState()).to.deep.equal(initialState);

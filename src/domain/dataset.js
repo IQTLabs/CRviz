@@ -60,6 +60,10 @@ const applyHashes = (dataset, configuration) => {
     if(!('CRVIZ' in i)){
       i['CRVIZ'] = {};
     }
+    if(!configuration.hashFields){
+      configuration.hashFields = getHashFields(configuration.fields, configuration.ignoredFields || []);
+    }
+
     addHashKey(configuration.keyFields.length > 0 ? configuration.keyFields : configuration.hashFields, i);
     addHashWithoutIgnored(configuration.hashFields, i);
   });
@@ -192,14 +196,7 @@ const reducer = handleActions(
   {
     [setDatasets]: (state, { payload }) => {
       const datasets = payload.datasets;
-      const keyFields = payload.keyFields || getKeyFields(state);
-      const ignoredFields = payload.ignoredFields || getIgnoredFields(state);
-
-      Object.keys(datasets).forEach((owner) =>{
-        const dataset = datasets[owner].dataset;
-        const initialConfig = datasets[owner].configuration;
-        state.datasets[owner] = configureDataset(dataset, initialConfig, keyFields, ignoredFields);
-      })
+      state.datasets = datasets
       
       return { ...state};
     },
@@ -273,7 +270,6 @@ const reducer = handleActions(
     [setKeyFields]: (state, { payload }) => { 
       const keyFields = payload;
       const datasets = _selectDatasets(state);
-
       if(datasets){
         Object.keys(datasets).forEach((key) => {
           const ds = datasets[key];
@@ -419,4 +415,4 @@ export default reducer;
 
 export { setDatasets, setDataset, selectDataset, selectDatasets, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration,
   selectValues, selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields, getHashFields, getLastUpdated, 
-  valuesFor, setDatasetDiff, removeDatasetDiff, selectDatasetDiff, selectDatasetIntersection, applyHashes };
+  valuesFor, setDatasetDiff, removeDatasetDiff, selectDatasetDiff, selectDatasetIntersection, applyHashes, configureDataset };

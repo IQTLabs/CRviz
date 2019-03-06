@@ -51,9 +51,10 @@ const performSearch = (data) => {
 
   data.dataset.forEach((el) => { el.CRVIZ._isSearchResult = false; });
   results.forEach((r) => {
-    if(data.dataset[r.ref]){
-      data.dataset[r.ref].CRVIZ._isSearchResult = true;
-      data.results.push(data.dataset[r.ref]);
+    const res = data.dataset.find(i => i.CRVIZ["_HASH_KEY"] === r.ref);
+    if(res){
+      res.CRVIZ._isSearchResult = true;
+      data.results.push(res);
     }
   });
 };
