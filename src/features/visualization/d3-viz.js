@@ -80,8 +80,8 @@ function d3Viz(rootNode) {
 
   const nodeRoot = svg.append("g");
 
-  const annotationRoot = svg.append("g")
-                         .attr("class", "annotation-root")
+  const annotationRoot = svg.append("g").attr("class", "annotation-root")
+
 
   // State
   let props = {
@@ -129,6 +129,7 @@ function d3Viz(rootNode) {
 
     if (dataUpdated) {
       repack(props, state);
+      resetAnnotations(props, state);
     }
 
     rerender(props, state);
@@ -142,8 +143,6 @@ function d3Viz(rootNode) {
     if (sizeUpdated || dataUpdated) {
       resetZoom(props, state);
     }
-
-    resetAnnotations(props, state);
   }
 
   const repack = (props, state) => {
@@ -230,18 +229,10 @@ function d3Viz(rootNode) {
   };
 
   const resetAnnotations = (props, state) =>{
-    const annotations = setupAnnotations({
-      nodeRoot: nodeRoot,
+    setupAnnotations({
+      packedData: state.packedData,
       annotationRoot: annotationRoot,
       colorMap: state.legend && state.legend.colorMap ? state.legend.colorMap : []
-    })
-
-    annotations.annotations()
-    .forEach((a)=>{
-      a.type.a.selectAll("g.annotation-connector, g.annotation-note")
-      .classed("hidden", a.data.depth > 1);
-      a.type.a.selectAll("g.annotation-subject")
-      .classed("hiddenSubject", a.data.depth > 1);
     })
   };
 

@@ -55,18 +55,15 @@ select {
   word-break: normal;
 }
 
-.annotation-note-title {
-  font-weight: bold;
+.viz-d3-tip {
+  background: blue;
 }
 
-.annotation-note-label tspan {
-  font-size: 1em;
-  fill: black;
-}
-
-:global(.darkTheme) .annotation-note-label tspan {
-  font-size: 1em;
-  fill: white;
+.viz-d3-tip text {
+  fill: #fff;
+  font-size: 1 em;
+  stroke: none;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .hidden {
