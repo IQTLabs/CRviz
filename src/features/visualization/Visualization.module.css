@@ -255,6 +255,10 @@
 
 .viz :global(.viz-annotation-text) {
   fill: black;
-  text-anchor: middle;
+  text-anchor: start;
   dominant-baseline: central;
+}
+
+.viz :global(g.viz-annotation-hidden) {
+  display:none;
 }
