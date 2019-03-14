@@ -1,6 +1,7 @@
 import { selectAll } from "d3";
 import { path } from "d3-path";
 import datumKey from "./datum-key";
+import className from "./class-name";
 
 const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }) => {
   const isInternal = (d) => d.depth > 0 && d.height > 0;
@@ -35,7 +36,6 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
     })
     .on("mouseout", (d) => {
       const node = selectAll(`g.${className("annotation")}[data-key="${datumKey(d)}"]`);
-      console.log("d %o", d);
       node.classed(className("annotation-hidden"), d.depth > 1);
     })
     .order();
@@ -101,7 +101,5 @@ const getLabelShape = (d) => {
   return shape.toString();
 
 }
-
-const className = (name) => `viz-${name}`;
 
 export default appendCircles;

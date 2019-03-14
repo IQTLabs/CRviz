@@ -10,7 +10,6 @@
   stroke-width: 0;
 }
 
-
 .viz :global(.viz-node) circle {
   fill: black;
 }
@@ -19,21 +18,21 @@
   opacity: 1;
 }
 
+.viz :global(.viz-isChanged-fixed) circle {
+  fill:black;
+  -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+:global(.darkTheme) .viz :global(.viz-isChanged-fixed) circle {
+  fill:white;
+}
+
 .viz :global(.viz-isChanged) circle {
   -webkit-animation-name: delta;
   -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
-  animation: delta 2s infinite;
-}
-
-@-webkit-keyframes delta {
-  0% {
-    -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  },
-  100% {
-
-  }
+  animation: delta 5s infinite;
 }
 
 @keyframes delta {
@@ -46,15 +45,28 @@
   }
 }
 
+.viz :global(.viz-isAdded-fixed) circle {
+  fill: black;
+  -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
+  clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
+}
+
+:global(.darkTheme) .viz :global(.viz-isAdded-fixed) circle {
+  fill: white;
+  -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
+  clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
+}
+
 .viz :global(.viz-isAdded) circle {
   -webkit-animation-name: plus;
   -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
-  animation: plus 2s infinite;
+  animation: plus 5s infinite;
 }
 
 @-webkit-keyframes plus {
   0% {
+    -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
     clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
   },
   100% {
@@ -64,6 +76,7 @@
 
 @keyframes plus {
   0% {
+    -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
     clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
   },
   100% {
@@ -71,21 +84,23 @@
   }
 }
 
+.viz :global(.viz-isRemoved-fixed) circle {
+  fill: black;
+  -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+  clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+}
+
+:global(.darkTheme) .viz :global(.viz-isRemoved-fixed) circle {
+  fill: white;
+  -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+  clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+}
+
 .viz :global(.viz-isRemoved) circle {
   -webkit-animation-name: minus;
   -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
-  animation: minus 2s infinite;
-}
-
-@-webkit-keyframes minus {
-  0% {
-    -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
-    clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
-  },
-  100% {
-
-  }
+  animation: minus 5s infinite;
 }
 
 @keyframes minus {
@@ -253,10 +268,18 @@
   font-weight: bold;
 }
 
+:global(.darkTheme) .viz :global(.viz-annotation-title) {
+  fill: white;
+}
+
 .viz :global(.viz-annotation-text) {
   fill: black;
   text-anchor: start;
   dominant-baseline: central;
+}
+
+:global(.darkTheme) .viz :global(.viz-annotation-text) {
+  fill: white;
 }
 
 .viz :global(g.viz-annotation-hidden) {

@@ -193,7 +193,7 @@ function d3Viz(rootNode) {
     });
 
     if(state.legend != null){
-      state.legend.update({ nodes: state.nodes })
+      state.legend.update({ nodes: state.nodes, annotations: state.annotations })
     }
   };
 
@@ -229,7 +229,7 @@ function d3Viz(rootNode) {
   };
 
   const resetAnnotations = (props, state) =>{
-    setupAnnotations({
+    state.annotations = setupAnnotations({
       packedData: state.packedData,
       annotationRoot: annotationRoot,
       colorMap: state.legend && state.legend.colorMap ? state.legend.colorMap : []

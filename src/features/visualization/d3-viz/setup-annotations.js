@@ -1,4 +1,5 @@
 import datumKey from "./datum-key";
+import className from "./class-name";
 
 const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
   const data = packedData.descendants().filter(d => d.depth > 0 && d.height > 0);
@@ -38,7 +39,7 @@ const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
   .select(`g.${className("added-container")}`)
   .merge(annotationsEnter
     .append('g')
-      .classed(className("isAdded"), true)
+      .classed(className("isAdded-fixed"), true)
     .append('circle')
       .attr('r', leafRadius)
       .attr('cx', (d) => (d.r * Math.cos(baseAngle + 2*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (3*leafRadius))
@@ -59,7 +60,7 @@ const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
   .select(`g.${className("changed-container")}`)
   .merge(annotationsEnter
     .append('g')
-      .classed(className("isChanged"), true)
+      .classed(className("isChanged-fixed"), true)
     .append('circle')
       .attr('r', leafRadius)
       .attr('cx', (d) => (d.r * Math.cos(baseAngle + 4*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (3*leafRadius))
@@ -80,7 +81,7 @@ const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
   .select(`g.${className("removed-container")}`)
   .merge(annotationsEnter
     .append('g')
-      .classed(className("isRemoved"), true)
+      .classed(className("isRemoved-fixed"), true)
     .append('circle')
       .attr('r', leafRadius)
       .attr('cx', (d) => (d.r * Math.cos(baseAngle + 6*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (3*leafRadius))
@@ -97,6 +98,7 @@ const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
       .text((d) => !isNaN(d.data.CRVIZ["_removedCount"]) ? ": " + d.data.CRVIZ["_removedCount"] : ": 0")
   );
 
+  return annotations;
 }
 
 const getAngleOfLeafNodeDiameter = (radius, leafRadius) => {
@@ -104,26 +106,5 @@ const getAngleOfLeafNodeDiameter = (radius, leafRadius) => {
   const ratio = (2*leafRadius)/c;
   return ratio*2*Math.PI;
 }
-
-// const mapNodesToAnnotationArray = (nodes, colorMap) =>{
-//   const annotations = nodes.map( d => ({
-//     'data': { 'fieldData': d.data, 'height': d.height, 'depth': d.depth }, 
-//     className: className("annotation"),
-//     'x': d.x,
-//     'y': d.y,
-//     'dx': d.r,
-//     'dy': -1 * (d.labelY + (d.labelSize/2)),
-//     'note':{
-//       'label': d.data.fieldValue || '',
-//       'title': d.data.fieldValue || ''
-//     },
-//     'subject': { 'radius': d.r -1 },
-//     'color': colorMap[d.data.fieldValue] && !colorMap[d.data.fieldValue].disabled ? 
-//                 colorMap[d.data.fieldValue].color : "black"
-//   }));
-//   return annotations;
-// }
-
-const className = (name) => `viz-${name}`;
 
 export default setupAnnotations;

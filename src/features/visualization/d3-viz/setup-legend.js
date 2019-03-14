@@ -65,8 +65,9 @@ function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig
 
   const state = { nodes: [] }
 
-  function update({ nodes }) {
+  function update({ nodes, annotations }) {
     state.nodes = nodes;
+    state.annotations = annotations;
     nodes.classed('viz-coloredNode', coloredField);
     if (!coloredField) {
       nodes.select('circle').attr('class', null);   
@@ -140,7 +141,6 @@ const createStylesheet = (coloring) => {
 }
 
 const colorNodes = ({ nodes, colorMap, getValue, coloredField, isColoringGroup }) => {
-  
   nodes
     .filter((d) => d.height === 0)
     .select("circle")
