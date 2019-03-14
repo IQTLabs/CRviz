@@ -196,7 +196,9 @@ const reducer = handleActions(
   {
     [setDatasets]: (state, { payload }) => {
       const datasets = payload.datasets;
-      state.datasets = datasets
+      Object.keys(datasets).forEach((key) => {
+        state.datasets[key] = datasets[key];
+      })
       
       return { ...state};
     },

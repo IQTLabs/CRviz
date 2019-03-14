@@ -67,7 +67,8 @@ class App extends Component {
   }
 
   componentWillReceiveProps = (nextProps) =>{
-    const uniqueUuids = this.state.datasetAdded || nextProps.uuids.length === 0
+    const datasetAdded = this.state.datasetAdded && (nextProps.uuids.length !== this.state.uuids.length)
+    const uniqueUuids = datasetAdded || nextProps.uuids.length === 0
                         ? Array.from(new Set(nextProps.uuids.concat(this.state.uuids)))
                         : nextProps.uuids;
     const startUuid = nextProps.startUuid || this.state.startUuid || uniqueUuids[0];
@@ -76,7 +77,7 @@ class App extends Component {
       uuids: uniqueUuids,
       startUuid: startUuid,
       endUuid: endUuid,
-      datasetAdded: false
+      datasetAdded: datasetAdded
     });
   }
 
@@ -194,11 +195,10 @@ class App extends Component {
     const uuids = this.state.uuids;
     const newItem = uuidv4()
     uuids.push(newItem);
-    this.setState({uuids: uuids});
-    this.setState({datasetAdded: true});
-    if(this.state.endUuid === null && uuids.length > 1){
-      this.setEndUuid(newItem);
-    }
+    this.setState({
+      uuids: uuids,
+      datasetAdded: true
+    });
   }
 
   removeDatasetEntry = (uuid) =>{
