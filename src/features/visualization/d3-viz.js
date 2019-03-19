@@ -24,6 +24,7 @@ import setupTooltip from "./d3-viz/setup-tooltip";
 import setupLegend from "./d3-viz/setup-legend";
 import setupAnnotations from "./d3-viz/setup-annotations";
 import datumKey from "./d3-viz/datum-key";
+import { measureText } from "./d3-viz/text-utils"
 
 function d3Viz(rootNode) {
   const root = select(rootNode);
@@ -98,6 +99,7 @@ function d3Viz(rootNode) {
   const state = {
     packedData: null,
     nodes: null,
+    annotations: null,
     labels: null,
     countLabels: null,
     zoom: null,
@@ -159,13 +161,19 @@ function d3Viz(rootNode) {
     // Doesn't seem to have a noticable performance impact.
     const packed = pack(hierarchy);
     const padding = packed.leaves()[0].r;
-    pack.padding((d) => padding * d.height);
+    pack.padding((d) => {
+      let pad = padding * d.height;
+      if(d.height > 1){
+        pad = padding * ((d.height + measureText(d.data.fieldValue)[0]));
+      }
+      return pad;
+    });
 
     state.packedData = pack(hierarchy);
   };
 
   const rerender = (props, state) => {
-    const [nodes, labels, countLabels] = appendCircles({
+    const [nodes] = appendCircles({
       nodeRoot: nodeRoot,
       labelRoot: labelRoot,
       packedData: state.packedData,
@@ -173,15 +181,13 @@ function d3Viz(rootNode) {
       hasSearch: props.queryString !== ''
     });
 
-    setupTooltip({
-      tooltip: tooltip,
-      fields: props.fields,
-      nodeRoot: nodeRoot
-    });
+    // setupTooltip({
+    //   tooltip: tooltip,
+    //   fields: props.fields,
+    //   nodeRoot: nodeRoot
+    // });
 
     state.nodes = nodes;
-    state.labels = labels;
-    state.countLabels = countLabels;
   };
 
   const resetLegend = (props, state) => {
@@ -202,8 +208,6 @@ function d3Viz(rootNode) {
       zoomRoot: zoomRoot,
       transformRoot: transformRoot,
       nodes: state.nodes,
-      labels: state.labels,
-      countLabels: state.countLabels,
       width: props.width,
       height: props.height,
       packedData: state.packedData

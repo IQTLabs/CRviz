@@ -15,15 +15,16 @@ import {
   zip
 } from "ramda";
 
+import className from "./class-name";
 import { colorScheme, extendColorScheme } from './color-scheme';
 
 function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig }) {
   if (!coloredField) {
     legend.style("display", "none");
 
-    const state = { nodes: [] }
+    const state = { nodes: [], annotations: [] }
 
-    function update({ nodes }) {
+    function update({ nodes, annotations }) {
       state.nodes = nodes;
       nodes.classed('viz-coloredNode', coloredField);
       if (!coloredField) {
@@ -67,7 +68,7 @@ function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig
 
   function update({ nodes, annotations }) {
     state.nodes = nodes;
-    state.annotations = annotations;
+    //state.annotations = annotations;
     nodes.classed('viz-coloredNode', coloredField);
     if (!coloredField) {
       nodes.select('circle').attr('class', null);   
@@ -75,6 +76,7 @@ function setupLegend({ legend, data, hierarchyConfig, coloredField, legendConfig
     }
 
     colorNodes({ nodes, colorMap, getValue, coloredField, isColoringGroup });
+    colorAnnotations({ annotations, colorMap, getValue, coloredField, isColoringGroup })
     updateLegend({ legend, colorMap, toggleValue })
   }
 
@@ -164,6 +166,37 @@ const colorNodes = ({ nodes, colorMap, getValue, coloredField, isColoringGroup }
         && !disabled
         && className;
     });
+}
+
+const colorAnnotations = ({ annotations, colorMap, getValue, coloredField, isColoringGroup }) => {
+  console.log("annotations: %o", annotations);
+  if(annotations){
+    annotations
+      .select(`g.${className("total-container")}`)
+      .attr('class', (d) => {
+        const { disabled, className } = colorMap[getValue(d.data)] || {};
+        console.log(className)
+        return isColoringGroup
+          && equals(d.data.field, coloredField)
+          && !disabled
+          && className;
+      });
+  }
+  // nodes
+  //   .filter((d) => d.height > 0)
+  //   .classed("viz-coloredNode", (d) => {
+  //     const { disabled } = colorMap[getValue(d.data)] || {};
+  //     return !disabled &&
+  //       equals(d.data.field, coloredField) 
+  //   })
+  //   .select("circle")
+  //   .attr('class', (d) => {
+  //     const { disabled, className } = colorMap[getValue(d.data)] || {};
+  //     return isColoringGroup
+  //       && equals(d.data.field, coloredField)
+  //       && !disabled
+  //       && className;
+  //   });
 }
 
 export default setupLegend;

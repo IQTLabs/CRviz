@@ -12,11 +12,10 @@ const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
   annotations.exit().remove();
 
   const annotationsEnter = annotations.enter().append("g")
-  .attr('id', (d) => "annotation-" + datumKey(d))
   .classed(className("annotation"), true)
   .classed(className("annotation-hidden"), (d) =>  d.depth > 1);
 
-  const baseAngle = -60 * (Math.PI/180);
+  const baseAngle = -70 * (Math.PI/180);
   const titleAngle = baseAngle;
   annotationsEnter
     .merge(annotations)
@@ -25,105 +24,141 @@ const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
     .order();
 
   //title
-  annotations
-  .select(`text.${className("annotation-title")}`)
-  .merge(annotationsEnter
-    .append("text")
-    .classed(className("annotation-title"), true)
-    .attr('x', (d) => (d.r * Math.cos(titleAngle)) + (9*leafRadius))
-    .attr('y', (d) => (d.r * Math.sin(titleAngle)))
-    .text((d) => d.data.fieldValue)
-  );
+  const newTitles = annotationsEnter.append("text")
+    .classed(className("annotation-title"), true);
+  const mergedTitles = annotations.select(`text.${className("annotation-title")}`)
+    .merge(newTitles);
+
+  mergedTitles
+  .attr('x', (d) => ((d.r + 2*leafRadius) * Math.cos(titleAngle)) + (9*leafRadius))
+  .attr('y', (d) => ((d.r + 2*leafRadius) * Math.sin(titleAngle)))
+  .text((d) => d.data.fieldValue);
+
   //totals
-  const totalAngleOffset = 2.5;
-  annotations
-  .select(`g.${className("total-container")}`)
-  .merge(annotationsEnter
+  const totalAngleOffset = 2.5;    
+  const newTotalContainer = annotationsEnter
+    .append('g')
+      .classed(className("total-container"), true);;
+  const newCircles = newTotalContainer
     .append('g')
       .classed(className("leafNode"), true)
     .append('circle')
       .attr('r', leafRadius)
-      .attr('cx', (d) => (d.r * Math.cos(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (3*leafRadius))
-      .attr('cy', (d) => (d.r * Math.sin(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
-  );
 
   annotations
   .select(`g.${className("total-container")}`)
-  .merge(annotationsEnter
-    .append("text")
-      .classed(className("annotation-text"), true)
-      .attr('x', (d) => (d.r * Math.cos(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (6*leafRadius))
-      .attr('y', (d) => (d.r * Math.sin(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
-      .text((d) => !isNaN(d.value) ? ": " + d.value : ": 0")
-  );
+  .select(`g.${className("leafNode")}`)
+  .select('circle')
+  .merge(newCircles)
+    .attr('cx', (d) => ((d.r + 2*leafRadius) * Math.cos(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
+    .attr('cy', (d) => ((d.r + 2*leafRadius) * Math.sin(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))));
+
+  const newTotalText = newTotalContainer
+  .append("text")
+    .classed(className("annotation-text"), true);
+
+  annotations
+  .select(`g.${className("total-container")}`)
+  .select('text')
+  .merge(newTotalText)
+    .attr('x', (d) => ((d.r + 2*leafRadius) * Math.cos(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (2*leafRadius))
+    .attr('y', (d) => ((d.r + 2*leafRadius) * Math.sin(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
+    .text((d) => !isNaN(d.value) ? ": " + d.value : ": 0");
+
   //added nodes
   const addedAngleOffset = 4.5;
-  annotations
-  .select(`g.${className("added-container")}`)
-  .merge(annotationsEnter
+  const newAddedContainer = annotationsEnter
+    .append('g')
+      .classed(className("added-container"), true);;
+  const newPluses = newAddedContainer
     .append('g')
       .classed(className("isAdded-fixed"), true)
     .append('circle')
       .attr('r', leafRadius)
-      .attr('cx', (d) => (d.r * Math.cos(baseAngle + addedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (3*leafRadius))
-      .attr('cy', (d) => (d.r * Math.sin(baseAngle + addedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
-  );
 
   annotations
   .select(`g.${className("added-container")}`)
-  .merge(annotationsEnter
-    .append("text")
-      .classed(className("annotation-text"), true)
-      .attr('x', (d) => (d.r * Math.cos(baseAngle + addedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (6*leafRadius))
-      .attr('y', (d) => (d.r * Math.sin(baseAngle + addedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
-      .text((d) => !isNaN(d.data.CRVIZ["_addedCount"]) ? ": " + d.data.CRVIZ["_addedCount"] : ": 0")
-  );
+  .select(`g.${className("isAdded-fixed")}`)
+  .select('circle')
+  .merge(newPluses)
+    .attr('cx', (d) => ((d.r + 2*leafRadius) * Math.cos(baseAngle + addedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
+    .attr('cy', (d) => ((d.r + 2*leafRadius) * Math.sin(baseAngle + addedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))));
+
+  const newAddedText = newAddedContainer
+  .append("text")
+    .classed(className("annotation-text"), true);
+
+  annotations
+  .select(`g.${className("added-container")}`)
+  .select('text')
+  .merge(newAddedText)
+    .attr('x', (d) => ((d.r + 2*leafRadius) * Math.cos(baseAngle + addedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (2*leafRadius))
+    .attr('y', (d) => ((d.r + 2*leafRadius) * Math.sin(baseAngle + addedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
+    .text((d) => !isNaN(d.data.CRVIZ["_addedCount"]) ? ": " + d.data.CRVIZ["_addedCount"] : ": 0");
+
   //changed nodes
   const changedAngleOffset = 6.5;
-  annotations
-  .select(`g.${className("changed-container")}`)
-  .merge(annotationsEnter
+  const newChangedContainer = annotationsEnter
+    .append('g')
+      .classed(className("changed-container"), true);;
+  const newDeltas = newChangedContainer
     .append('g')
       .classed(className("isChanged-fixed"), true)
     .append('circle')
       .attr('r', leafRadius)
-      .attr('cx', (d) => (d.r * Math.cos(baseAngle + changedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (3*leafRadius))
-      .attr('cy', (d) => (d.r * Math.sin(baseAngle + changedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
-  );
 
   annotations
   .select(`g.${className("changed-container")}`)
-  .merge(annotationsEnter
-    .append("text")
-      .classed(className("annotation-text"), true)
-      .attr('x', (d) => (d.r * Math.cos(baseAngle + changedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (6*leafRadius))
-      .attr('y', (d) => (d.r * Math.sin(baseAngle + changedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
-      .text((d) => !isNaN(d.data.CRVIZ["_changedCount"]) ? ": " + d.data.CRVIZ["_changedCount"] : ": 0")
-  );
+  .select(`g.${className("isChanged-fixed")}`)
+  .select('circle')
+  .merge(newDeltas)
+    .attr('cx', (d) => ((d.r + 2*leafRadius) * Math.cos(baseAngle + changedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
+    .attr('cy', (d) => ((d.r + 2*leafRadius) * Math.sin(baseAngle + changedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))));
+
+  const newChangedText = newChangedContainer
+  .append("text")
+    .classed(className("annotation-text"), true);
+
+  annotations
+  .select(`g.${className("changed-container")}`)
+  .select('text')
+  .merge(newChangedText)
+    .attr('x', (d) => ((d.r + 2*leafRadius) * Math.cos(baseAngle + changedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (2*leafRadius))
+    .attr('y', (d) => ((d.r + 2*leafRadius) * Math.sin(baseAngle + changedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
+    .text((d) => !isNaN(d.data.CRVIZ["_changedCount"]) ? ": " + d.data.CRVIZ["_changedCount"] : ": 0");
+
   //removed nodes
   const removedAngleOffset = 8.5;
-  annotations
-  .select(`g.${className("removed-container")}`)
-  .merge(annotationsEnter
+  const newRemovedContainer = annotationsEnter
+    .append('g')
+      .classed(className("removed-container"), true);;
+  const newMinuses = newRemovedContainer
     .append('g')
       .classed(className("isRemoved-fixed"), true)
     .append('circle')
       .attr('r', leafRadius)
-      .attr('cx', (d) => (d.r * Math.cos(baseAngle + removedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (3*leafRadius))
-      .attr('cy', (d) => (d.r * Math.sin(baseAngle + removedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
-  );
 
   annotations
   .select(`g.${className("removed-container")}`)
-  .merge(annotationsEnter
-    .append("text")
-      .classed(className("annotation-text"), true)
-      .attr('x', (d) => (d.r * Math.cos(baseAngle + removedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (6*leafRadius))
-      .attr('y', (d) => (d.r * Math.sin(baseAngle + removedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
-      .text((d) => !isNaN(d.data.CRVIZ["_removedCount"]) ? ": " + d.data.CRVIZ["_removedCount"] : ": 0")
-  );
+  .select(`g.${className("isRemoved-fixed")}`)
+  .select('circle')
+  .merge(newMinuses)
+    .attr('cx', (d) => ((d.r + 2*leafRadius) * Math.cos(baseAngle + removedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
+    .attr('cy', (d) => ((d.r + 2*leafRadius) * Math.sin(baseAngle + removedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))));
 
-  return annotations;
+  const newRemovedText = newRemovedContainer
+  .append("text")
+    .classed(className("annotation-text"), true);
+
+  annotations
+  .select(`g.${className("removed-container")}`)
+  .select('text')
+  .merge(newRemovedText)
+    .attr('x', (d) => ((d.r + 2*leafRadius) * Math.cos(baseAngle + removedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))) + (2*leafRadius))
+    .attr('y', (d) => ((d.r + 2*leafRadius) * Math.sin(baseAngle + removedAngleOffset*getAngleOfLeafNodeDiameter(d.r, leafRadius))))
+    .text((d) => !isNaN(d.data.CRVIZ["_removedCount"]) ? ": " + d.data.CRVIZ["_removedCount"] : ": 0");
+
+  return annotations.merge(annotationsEnter);
 }
 
 const getAngleOfLeafNodeDiameter = (radius, leafRadius) => {
