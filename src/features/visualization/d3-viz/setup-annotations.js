@@ -44,13 +44,13 @@ const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
       .classed(className("total-container"), true);;
   const newCircles = newTotalContainer
     .append('g')
-      .classed(className("leafNode"), true)
+      .classed(className("node"), true)
     .append('circle')
       .attr('r', offsetIncrement)
 
   annotations
   .select(`g.${className("total-container")}`)
-  .select(`g.${className("leafNode")}`)
+  .select(`g.${className("node")}`)
   .select('circle')
   .merge(newCircles)
     .attr('cx', (d) => ((d.r + 2*offsetIncrement) * Math.cos(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))))

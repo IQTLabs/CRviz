@@ -88,7 +88,7 @@ const countChanged = (children) => {
     result += (children[c].CRVIZ._changedCount || 0) + (children[c].CRVIZ._isChanged || 0) +
               (
                 !isNil(children[c].values)
-                  ? countAdded(children[c].values) : 0
+                  ? countChanged(children[c].values) : 0
               );
   }
 
@@ -109,7 +109,7 @@ const countRemoved = (children) => {
     result += (children[c].CRVIZ._removedCount || 0) + (children[c].CRVIZ._isRemoved || 0) +
               (
                 !isNil(children[c].values)
-                  ? countAdded(children[c].values) : 0
+                  ? countRemoved(children[c].values) : 0
               );
   }
 
