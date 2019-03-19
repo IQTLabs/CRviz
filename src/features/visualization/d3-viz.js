@@ -164,7 +164,7 @@ function d3Viz(rootNode) {
     pack.padding((d) => {
       let pad = padding * d.height;
       if(d.height > 1){
-        pad = padding * ((d.height + measureText(d.data.fieldValue)[0]));
+        pad = padding * ((d.height + measureText(d.data.fieldValue)[0])*0.70);
       }
       return pad;
     });
