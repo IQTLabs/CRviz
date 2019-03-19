@@ -169,7 +169,6 @@ const colorNodes = ({ nodes, colorMap, getValue, coloredField, isColoringGroup }
 }
 
 const colorAnnotations = ({ annotations, colorMap, getValue, coloredField, isColoringGroup }) => {
-  console.log("annotations: %o", annotations);
   if(annotations){
     annotations
       .select(`g.${className("total-container")}`)

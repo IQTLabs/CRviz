@@ -64,7 +64,7 @@ const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
   .select(`g.${className("total-container")}`)
   .select('text')
   .merge(newTotalText)
-    .attr('x', (d) => ((d.r + 2*offsetIncrement) * Math.cos(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))) + (2*offsetIncrement))
+    .attr('x', (d) => ((d.r + 2*offsetIncrement) * Math.cos(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))) + (1.25*offsetIncrement))
     .attr('y', (d) => ((d.r + 2*offsetIncrement) * Math.sin(baseAngle + totalAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))))
     .text((d) => !isNaN(d.value) ? ": " + d.value : ": 0");
 
@@ -95,7 +95,7 @@ const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
   .select(`g.${className("added-container")}`)
   .select('text')
   .merge(newAddedText)
-    .attr('x', (d) => ((d.r + 2*offsetIncrement) * Math.cos(baseAngle + addedAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))) + (2*offsetIncrement))
+    .attr('x', (d) => ((d.r + 2*offsetIncrement) * Math.cos(baseAngle + addedAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))) + (1.25*offsetIncrement))
     .attr('y', (d) => ((d.r + 2*offsetIncrement) * Math.sin(baseAngle + addedAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))))
     .text((d) => !isNaN(d.data.CRVIZ["_addedCount"]) ? ": " + d.data.CRVIZ["_addedCount"] : ": 0");
 
@@ -126,7 +126,7 @@ const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
   .select(`g.${className("changed-container")}`)
   .select('text')
   .merge(newChangedText)
-    .attr('x', (d) => ((d.r + 2*offsetIncrement) * Math.cos(baseAngle + changedAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))) + (2*offsetIncrement))
+    .attr('x', (d) => ((d.r + 2*offsetIncrement) * Math.cos(baseAngle + changedAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))) + (1.25*offsetIncrement))
     .attr('y', (d) => ((d.r + 2*offsetIncrement) * Math.sin(baseAngle + changedAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))))
     .text((d) => !isNaN(d.data.CRVIZ["_changedCount"]) ? ": " + d.data.CRVIZ["_changedCount"] : ": 0");
 
@@ -157,7 +157,7 @@ const setupAnnotations = ({packedData, annotationRoot, colorMap}) =>{
   .select(`g.${className("removed-container")}`)
   .select('text')
   .merge(newRemovedText)
-    .attr('x', (d) => ((d.r + 2*offsetIncrement) * Math.cos(baseAngle + removedAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))) + (2*offsetIncrement))
+    .attr('x', (d) => ((d.r + 2*offsetIncrement) * Math.cos(baseAngle + removedAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))) + (1.25*offsetIncrement))
     .attr('y', (d) => ((d.r + 2*offsetIncrement) * Math.sin(baseAngle + removedAngleOffset*getAngleOfLeafNodeDiameter(d.r, offsetIncrement))))
     .text((d) => !isNaN(d.data.CRVIZ["_removedCount"]) ? ": " + d.data.CRVIZ["_removedCount"] : ": 0");
 
