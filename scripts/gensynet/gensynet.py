@@ -6,26 +6,27 @@
 # An interactive script that generates a JSON file that can be used for
 # creating imaginary (enterprise) network profiles
 #
-# INTERNAL USE ONLY; i.e., user input validation is nearly non-existent.
+# Be warned: user input validation is nearly non-existent.
 #
 # Cyber Reboot
 # alice@cyberreboot.org
 #
 
-import argparse
 from datetime import datetime as dt
+from random import *
+from time import strftime
+
+import argparse
 import ipaddress
 import json
 import math
-from random import *
 import string
 import sys
-import time
 import uuid
 
-VERBOSE = False
+VERBOSE = True
 NET_SUMMARY = False
-VERSION = '0.81'
+VERSION = '0.90'
 DEBUG = False
 OLDVERSION = False
 
@@ -209,89 +210,10 @@ def build_configs(subnets, host_count, dev_div, domain=None):
 
 
 
-def build_configs_deprecated(total, net_div, dev_div, domain=None):
-    """Returns a json object of subnet specifications, or None upon error"""
-    global VERBOSE
-    total_subnets = calculate_subnets(total, net_div)
-    if total_subnets < 1:
-        if VERBOSE:
-            print("WARNING: Could not break down nodes into the requested subnets.")
-        return None
-
-    jsons = []
-    host_counter = []
-    ncount = 0
-    roles = dict.fromkeys(dev_div.keys(), 0)
-
-    class_b,class_c = divide(total_subnets, 254)
-    for n in net_div:
-        if VERBOSE:
-            ncount += 1
-            print("Starting net_div {} of {}".format(ncount, len(net_div)))
-        nodes = round(total * .01 * n[0])
-        grouped_nodes = round(252 * .01 * n[1])
-        q,r = divide(nodes, grouped_nodes)
-        if class_b > 254:
-            print("WARNING: You're about to see some really sick IPs. Have fun.")
-        while q > 0:
-            if class_c == 0:
-                class_b -= 1
-                class_c = 255
-            class_c -= 1
-            start_ip = '10.{}.{}.1'.format(class_b, class_c)
-            netmask = '10.{}.{}.0/24'.format(class_b, class_c)
-            jsons.append({
-                        "start_ip"  : start_ip,
-                        "subnet"   : netmask,
-                        "hosts"     : grouped_nodes,
-                        "roles"     : roles.copy()
-                    })
-            host_counter.append(grouped_nodes)
-            if VERBOSE:
-                print("Initialized subnet {} with {} hosts starting at {}".format(len(jsons), grouped_nodes, start_ip))
-            q -= 1
-        if r > 0:
-            if class_c == 0:
-                class_b -= 1
-                class_c = 255
-            class_c -= 1
-            start_ip = '10.{}.{}.1'.format(class_b, class_c)
-            netmask = '10.{}.{}.0/24'.format(class_b,class_c)
-            jsons.append({
-                        "start_ip"  : start_ip,
-                        "subnet"   : netmask,
-                        "hosts"     : r,
-                        "roles"     : roles.copy()
-                    })
-            host_counter.append(r)
-            if VERBOSE:
-                print("Initialized subnet {} with {} hosts starting at {}".format(len(jsons), r, start_ip))
-    if len(jsons) != total_subnets:
-        print("BUG: Number of subnets created not equal to predicted {}".format(total_subnets))
-
-    if DEBUG:
-        print("DEBUG: host_counter = {}\ttotal subnets = {}".format(host_counter, total_subnets))
-
-    total_hosts = 0
-    for dev in dev_div:
-        ct = dev_div[dev]
-        total_hosts += ct
-        if (DEBUG):
-            print("DEBUG: dev = {}\tcount = {}\ttotal = {}\thost_counter = {}".format(dev, dev_div[dev], total_hosts, host_counter))
-        while ct > 0:
-            randomnet = randrange(0, total_subnets)
-            if host_counter[randomnet] > 0:
-                jsons[randomnet]['roles'][dev] += 1
-                host_counter[randomnet] -= 1
-                ct -= 1
-    if total_hosts != total:
-        print("BUG: Number of devices in breakdown did not add up to {}".format(total))
-
-    return jsons
-
-
 def randomize_subnet_breakdown(count, minimum, maximum):
-    '''Returns an array of host counts (where index = subnet), or None if the input is ridiculous.'''
+    '''
+        Returns an array of host counts (where index = subnet), or None if the input is ridiculous.
+    '''
     subnets = []
     nodes_left = count
 
@@ -333,7 +255,24 @@ def randomize_subnet_breakdown(count, minimum, maximum):
 
 
 
-def build_network(subnets, fname=None, randomspace=False, prettyprint=True):
+def print_network(network_jsn, fname=None, prettyprint=True):
+    '''
+       Prints the array of network hosts to file fname, or to console if fname is not specified.
+    '''
+
+    indent = 2 if prettyprint else None
+    if fname:
+        with open(fname, 'w') as ofile:
+            ofile.write("{}".format(json.dumps(network_jsn, indent=indent)))
+    else:
+        return json.dumps(outobj, indent=indent)
+
+
+def build_network(subnets, randomspace=False):
+    '''
+       Returns an array of host data on a network, in json format.
+    '''
+
     global VERBOSE
     outobj = []
     subnets_togo = len(subnets)
@@ -388,35 +327,38 @@ def build_network(subnets, fname=None, randomspace=False, prettyprint=True):
                 host['IP'] = str(ip)
 
             outobj.append(host)
-
             hosts_togo -= 1
 
-    indent = 2 if prettyprint else None
-    if fname:
-        with open(fname, 'w') as ofile:
-            ofile.write("{}".format(json.dumps(outobj, indent=indent)))
+    return outobj
+
+
+def config_check(configs, out):
+    if NET_SUMMARY or VERBOSE:
+        print("\nBased on the following config:\n")
+        print(json.dumps(configs, indent=4))
+        print("\nSaved network profile to {}".format(out))
     else:
-        return json.dumps(outobj, indent=indent)
+        print("\n Saved network profile to {}".format(out))
+
 
 def main():
     global VERBOSE, VERSION, NET_SUMMARY, OLDVERSION
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v', '--verbose', help='Provide program feedback', action="store_true")
-    parser.add_argument('-s', '--summarize', help='Prints network configurations to output', action="store_true")
-    parser.add_argument('-d', '--deprecate', help='Use the deprecated version for building subnets', action='store_true')
+    parser.add_argument('-q', '--quiet', help='Provide program feedback', action="store_true")
+    parser.add_argument('-p', '--prints', help='Prints summary of network configurations to output', action="store_true")
+    parser.add_argument('-s', '--save', help='FIlename to output configuration')
     parser.add_argument('--version', help='Prints version', action="store_true")
     args = parser.parse_args()
+
     if args.version:
         print("{} v{}".format(sys.argv[0], VERSION))
         sys.exit()
-    if args.verbose:
-        VERBOSE = True
-    if args.summarize:
+    if args.quiet:
+        VERBOSE = False
+    if args.prints:
         NET_SUMMARY = True
-    if args.deprecate:
-        OLDVERSION = True
 
-    outname = '{}.json'.format(time.strftime("%Y%m%d-%H%M%S"))
+    outname = args.save if args.save else strftime("%Y%m%d-%H%M%S")
 
     print('\n\n\tSYNTHETIC NETWORK NODE GENERATOR\n')
 
@@ -424,7 +366,7 @@ def main():
         nodect = int(input("How many network nodes? [500]: ") or "500")
 
         if nodect > 4000000:
-            print("That ({}) is just exorbitant. Next time try less than {}.".format(nodect, 4000000))
+            print("That ("+str(nodect)+") is just exorbitant. Next time try less than 4000000.")
             sys.exit()
 
                                 #  setting subnet breakdown ----------------
@@ -495,7 +437,7 @@ def main():
 
                 if (nodect > 252):
                     subnets_finished = input("Is this breakout of subnets OK? [Yes]: ") or "Yes"
-                    if subnets_finished.lower() == 'yes' or subnets_finished.lower() == 'y':
+                    if subnets_finished.lower() in ['yes', 'y']:
                         break
                 else:
                     break
@@ -527,23 +469,32 @@ def main():
         domain = input("Domain name to use (press ENTER to auto-generate): ") or generate_fqdn()
         randomize = input("Randomize IP addresses in subnet? [Yes]: ") or "Yes"
         cont = input("Ready to generate json (No to start over)? [Yes]: ") or "Yes"
-        if cont.lower() == 'yes' or cont.lower() == 'y':
+        if cont.lower() in ['yes', 'y']:
             break
 
-    if OLDVERSION:
-        net_configs = build_configs_deprecated(nodect, net_breakdown, dev_breakdown, domain)
+    net_configs = build_configs(subnets, nodect, dev_breakdown, domain)
+
+    cont = input("Build complete. Would you like to use this to create a time-series? [No]: ") or "Yes"
+    tcount = 0
+    outname_full = outname+'_t'+str(tcount)+'.json' if cont.lower() in ['yes', 'y'] else outname+'.json'
+
+    config_check(net_configs, outname_full)
+
+    ntwk = build_network(net_configs, randomspace=True) if randomize.lower() in ['yes', 'y'] else \
+           build_network(net_configs)
+
+    if ntwk:
+        print_network(ntwk, outname_full)
     else:
-        net_configs = build_configs(subnets, nodect, dev_breakdown, domain)
-    if NET_SUMMARY or VERBOSE:
-        print("\nBased on the following config:\n")
-        print(json.dumps(net_configs, indent=4))
-        print("\nSaved network profile to {}".format(outname))
-    else:
-        print("\n Saved network profile to {}".format(outname))
-    if randomize.lower() == 'yes' or randomize.lower() == 'y':
-        build_network(net_configs, outname, randomspace=True)
-    else:
-        build_network(net_configs, outname)
+        print("Error building out the network hosts.")
+        sys.exit()
+                              # creating a time series -------------------
+    while cont.lower() in ['yes', 'y']:
+        tcount += 1
+        outname_full = outname + '_t'+str(tcount)+'.json'
+        config_check(net_configs, outname_full)
+        print_network(ntwk, outname_full)
+        cont = input("Build complete. Would you like to build another? [No]: ") or "Yes"
 
 
 if __name__ == "__main__":
