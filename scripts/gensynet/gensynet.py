@@ -430,6 +430,9 @@ def timeseries_breakdown(total_nodes):
 
     return (total_add, total_rm, total_mod)
 
+def update_timestamps(nodes):
+    for node in nodes:
+        node['record']['timestamp'] = str(dt.now())
 
 def main():
     global VERBOSE, VERSION, NET_SUMMARY, OLDVERSION
@@ -531,7 +534,9 @@ def main():
     print("Build complete.\n")
 
     if nodect > 252:
-        cont = input("Would you like to use this to create a time-series? [No]: ") or "Yes"
+        cont = input("Would you like to use this to create a time-series? [No]: ") or 'No'
+    else:
+        cont = 'No'
 
     tcount = 0
     outname_full = outname+'_t'+str(tcount)+'.json' if cont.lower() in ['yes', 'y'] else outname+'.json'
@@ -553,7 +558,7 @@ def main():
         net_configs, ntwk = del_hosts(net_configs, ntwk, nodes_del)
         net_configs, ntwk = add_hosts(net_configs, ntwk, nodes_add)
         #net_configs, ntwk = mod_hosts(net_configs, ntwk, nodes_mod)
-        #update_timestamps(ntwk)
+        update_timestamps(ntwk)
 
         tcount += 1
         outname_full = outname + '_t'+str(tcount)+'.json'
