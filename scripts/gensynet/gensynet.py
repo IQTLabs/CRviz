@@ -35,12 +35,6 @@ def randstring(size):
     return ''.join(choice(string.ascii_lowercase + string.digits)
                     for _ in range(size))
 
-
-def divide(dividend, divisor):
-    quotient = math.floor(dividend/divisor)
-    remainder = dividend % divisor
-    return (quotient, remainder)
-
 # you'll want to make sure that prefix is some string that
 # is prefixed by some number.
 def generate_ip(prefix, octets=4):
@@ -182,7 +176,8 @@ def build_configs(subnets, host_count, dev_div, domain=None):
         ip_addr.append(addy)
         jsons.append({
                     "start_ip"  : '10.{}.{}.2'.format(addy[0],addy[1]),
-                    "subnet"   : '10.{}.{}.0/24'.format(addy[0], addy[1]),
+                    "subnet"    : '10.{}.{}.0/24'.format(addy[0], addy[1]),
+                    "domain"    : domain if domain else None,
                     "hosts"     : n,
                     "roles"     : roles.copy()
                 })
@@ -204,10 +199,8 @@ def build_configs(subnets, host_count, dev_div, domain=None):
                     break
             dev_total -= 1
     if labeled_hosts != host_count:
-        print("WARNING: Labeled hosts ({}) didn't equal host count ({})".format(labeled_hosts, host_count))
-
+        print("SANITYCHECK FAIL: Labeled host count ({}) != host count ({})".format(labeled_hosts, host_count))
     return jsons
-
 
 
 def randomize_subnet_breakdown(count, minimum, maximum):
@@ -268,9 +261,38 @@ def print_network(network_jsn, fname=None, prettyprint=True):
         return json.dumps(outobj, indent=indent)
 
 
+def make_host(net, role, ip_addr):
+    '''
+       Returns a host's metadata, in json form.
+    '''
+    host = {
+        'uid':generate_uuid(),
+        'mac':generate_mac(),
+        'rDNS_host':randstring(randrange(4,9)),
+        'subnet':net['subnet'],
+        'IP': str(ip_addr),
+        'record': {
+            'source':record(),
+            'timestamp':str(dt.now())
+        },
+        'role': {
+            'role': role,
+            'confidence': randrange(55,100)
+        }
+    }
+
+    if 'domain' in net:
+        host['rDNS_domain'] = net['domain']
+    host['os'] = { 'os':generate_os_type(role) }
+    if host['os']['os'] != 'Unknown':
+        host['os']['confidence'] = randrange(55,100)
+
+    return host
+
+
 def build_network(subnets, randomspace=False):
     '''
-       Returns an array of host data on a network, in json format.
+       Returns a network, in the form of an array of hosts in json format.
     '''
 
     global VERBOSE
@@ -284,48 +306,24 @@ def build_network(subnets, randomspace=False):
         subnets_togo -= 1
 
         while (hosts_togo > 0):
-            host = {
-                'uid':generate_uuid(),
-                'mac':generate_mac(),
-                'rDNS_host':randstring(randrange(4,9)),
-                'subnet':n['subnet']
-            }
-
-            if 'domain' in n:
-                host['rDNS_domain'] = n['domain']
-
-            host['record'] = {
-                'source':record(),
-                'timestamp': str(dt.now())
-            }
-
-            while True:
+            a_role = choice(list(role_ct.keys()))
+            while role_ct[a_role] == 0:
+                del(role_ct[a_role])
                 a_role = choice(list(role_ct.keys()))
-                if role_ct[a_role] > 0:
-                    role_ct[a_role] -= 1
-                    host['role'] = {
-                        'role': a_role,
-                        'confidence': randrange(55,100)
-                    }
-                    break
-                else:
-                    del(role_ct[a_role])
+            role_ct[a_role] -= 1
 
-            host['os'] = { 'os': generate_os_type(host['role']['role']) }
-            if host['os']['os'] != 'Unknown':
-                host['os']['confidence'] = randrange(55,100)
-
-            if (randomspace):
+            ip_addr = start_ip  # prefix; find suffix
+            if randomspace:
                 while True:
-                    ip = start_ip + randrange(0, 254)
+                    ip = randrange(0, 254)
                     if ip not in ip_taken:
-                        host['IP'] = str(ip)
+                        ip_addr += ip
                         ip_taken.append(ip)
                         break
             else:
-                ip = start_ip + hosts_togo
-                host['IP'] = str(ip)
+                ip_addr += hosts_togo
 
+            host = make_host(n, a_role, ip_addr)
             outobj.append(host)
             hosts_togo -= 1
 
@@ -500,6 +498,8 @@ def main():
                               # creating a time series -------------------
     while cont.lower() in ['yes', 'y']:
         nodes_add, nodes_del, nodes_mod = timeseries_breakdown(len(ntwk))
+
+        #del_hosts(ntwk, nodes_del)
 
         tcount += 1
         outname_full = outname + '_t'+str(tcount)+'.json'
