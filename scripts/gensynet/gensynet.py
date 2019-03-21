@@ -236,7 +236,7 @@ def randomize_subnet_breakdown(count, minimum, maximum):
                 # divvy up the rest of the nodes among the existing subnets
     subnetIDs = [x for x in iter(range(len(subnets)))]
     while (nodes_left > 0):
-        s = choice(subnetIDs) # pick a randum subnet
+        s = choice(subnetIDs) # pick a random subnet
         if DEBUG:
             print("DEBUG: looping with s={}, count={}, left={}".format(s, subnets[s], nodes_left))
         if subnets[s] < maximum:
@@ -305,7 +305,7 @@ def build_network(subnets, randomspace=False):
         ip_taken = []
         subnets_togo -= 1
 
-        while (hosts_togo > 0):
+        while hosts_togo > 0:
             a_role = choice(list(role_ct.keys()))
             while role_ct[a_role] == 0:
                 del(role_ct[a_role])
@@ -326,8 +326,9 @@ def build_network(subnets, randomspace=False):
             host = make_host(n, a_role, ip_addr)
             outobj.append(host)
             hosts_togo -= 1
+        n['ip_taken'] = ip_taken
 
-    return outobj
+    return subnets, outobj
 
 
 def config_check(configs, out):
@@ -339,6 +340,53 @@ def config_check(configs, out):
         print("\n Saved network profile to {}".format(out))
 
 
+def add_hosts(subnets, hosts, add_ct):
+    '''
+        Adds the specified number (add_ct) of hosts from the `hosts` array;
+        returns the list unchanged if there's an error.
+        The configuration of subnets also gets updated and returned.
+    '''
+    while add_ct > 0:
+        n = randrange(0, len(subnets))
+        new_nodes = randrange(1, math.floor(add_ct/2)) if add_ct > 4 else add_ct
+        while new_nodes+subnets[n]['hosts'] > 254:
+            new_nodes = randrange(1, new_nodes)
+            print("Picking another number of nodes ({}|{})".format(new_nodes,subnets[n]['hosts']))
+        subnets[n]['hosts'] += new_nodes
+        add_ct -= new_nodes
+        if VERBOSE:
+            print("Adding {} new nodes to subnet {}".format(new_nodes, subnets[n]['subnet']))
+        while new_nodes > 0:
+            role = choice(list(subnets[n]['roles'].keys()))
+            subnets[n]['roles'][role] += 1
+            ip_addr = ipaddress.ip_address(subnets[n]['start_ip'])
+            while True:
+                ip = randrange(0, 254)
+                if ip not in subnets[n]['ip_taken']:
+                    ip_addr += ip
+                    subnets[n]['ip_taken'].append(ip)
+                    break
+            if VERBOSE:
+                print("Adding "+role+" to subnet "+subnets[n]['subnet'])
+            hosts.append(make_host(subnets[n],role,ip_addr)) 
+            new_nodes -= 1
+    return subnets, hosts
+
+def del_hosts(subnets, hosts, del_ct):
+    '''
+        Deletes the specified number (del_ct) of hosts from the `hosts` array;
+        returns the list unchanged if there's an error.
+        The configuration of subnets also gets updated and returned.
+    '''
+    while del_ct in range(1,len(hosts)):
+        h = hosts.pop(randrange(0, len(hosts)))
+        for n in subnets:
+            if n['subnet'] == h['subnet']:
+                n['hosts'] -= 1
+        del_ct -= 1
+
+    return subnets, hosts
+
 def timeseries_breakdown(total_nodes):
     '''
         Returns a tuple specifying breakdown of nodes that need to be added, removed, and modified.
@@ -349,6 +397,8 @@ def timeseries_breakdown(total_nodes):
     happy = 'No'
     while happy.lower() not in ['yes','y']:
         total_percentage = int(input("What percent of the network should change? [0]: ") or "0")
+        if total_percentage == 0:
+            return (0, 0, 0)
         while total_percentage not in range(0, 101):
             total_percentage = int(input("Illegal percentage value; try again [0]: ") or "0")
 
@@ -378,7 +428,7 @@ def timeseries_breakdown(total_nodes):
     total_mod = math.floor(total_changes * percent_modded/100)
     total_rm = math.floor(total_changes * percent_removed/100)
 
-    return (total_add, total_mod, total_rm)
+    return (total_add, total_rm, total_mod)
 
 
 def main():
@@ -459,7 +509,8 @@ def main():
                 while (remainder > 0):
                     if (remainder < category_count):
                         category_count = remainder
-                    category_count = int(input("   {} (MAX={}) [{}]: ".format(category, remainder, category_count)) or category_count)
+                    category_count = int(input("   {} (MAX={}) [{}]: ".format(category, remainder, category_count)) \
+                                     or category_count)
                     remainder -= category_count
                     if (remainder < 0 or category_count < 0):
                         print("Illegal value '{}'".format(category_count))
@@ -487,8 +538,8 @@ def main():
 
     config_check(net_configs, outname_full)
 
-    ntwk = build_network(net_configs, randomspace=True) if randomize.lower() in ['yes', 'y'] else \
-           build_network(net_configs)
+    net_configs, ntwk = build_network(net_configs, randomspace=True) if randomize.lower() in ['yes', 'y'] else \
+                        build_network(net_configs)
 
     if ntwk:
         print_network(ntwk, outname_full)
@@ -499,7 +550,10 @@ def main():
     while cont.lower() in ['yes', 'y']:
         nodes_add, nodes_del, nodes_mod = timeseries_breakdown(len(ntwk))
 
-        #del_hosts(ntwk, nodes_del)
+        net_configs, ntwk = del_hosts(net_configs, ntwk, nodes_del)
+        net_configs, ntwk = add_hosts(net_configs, ntwk, nodes_add)
+        #net_configs, ntwk = mod_hosts(net_configs, ntwk, nodes_mod)
+        #update_timestamps(ntwk)
 
         tcount += 1
         outname_full = outname + '_t'+str(tcount)+'.json'
