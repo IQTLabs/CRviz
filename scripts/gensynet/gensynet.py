@@ -341,6 +341,48 @@ def config_check(configs, out):
         print("\n Saved network profile to {}".format(out))
 
 
+def timeseries_breakdown(total_nodes):
+    '''
+        Returns a tuple specifying breakdown of nodes that need to be added, removed, and modified.
+    '''
+    if total_nodes < 100:
+        return (-1, -1, -1)
+
+    happy = 'No'
+    while happy.lower() not in ['yes','y']:
+        total_percentage = int(input("What percent of the network should change? [0]: ") or "0")
+        while total_percentage not in range(0, 101):
+            total_percentage = int(input("Illegal percentage value; try again [0]: ") or "0")
+
+        print("Of this total percentage, what percentage of nodes should be:")
+        total = 100
+
+        percent_modded = int(input("\t...modified? [0]: ") or "0")
+        while percent_modded not in range(0,101):
+            percent_modded = int(input("Illegal percentage value; try again [0]: ") or "0")
+        total -= percent_modded
+
+        if total == 0:
+            print("\t...added? 0")
+            percent_added = 0
+        else:
+            percent_added = int(input("\t...added? [0]: ") or "0")
+            while percent_added not in range(0,total+1):
+                percent_added = int(input("Illegal percentage value; try again [0]: ") or "0")
+        total -= percent_added
+
+        percent_removed = total
+        print("\t...removed? "+str(percent_removed))
+        happy = input("Happy with this breakdown? [Yes]: ") or "Yes"
+
+    total_changes = math.floor(total_nodes * total_percentage/100)
+    total_add = math.floor(total_changes * percent_added/100)
+    total_mod = math.floor(total_changes * percent_modded/100)
+    total_rm = math.floor(total_changes * percent_removed/100)
+
+    return (total_add, total_mod, total_rm)
+
+
 def main():
     global VERBOSE, VERSION, NET_SUMMARY, OLDVERSION
     parser = argparse.ArgumentParser()
@@ -364,83 +406,47 @@ def main():
 
     while True:
         nodect = int(input("How many network nodes? [500]: ") or "500")
-
-        if nodect > 4000000:
+        if nodect not in range(1, 4000000):
             print("That ("+str(nodect)+") is just exorbitant. Next time try less than 4000000.")
             sys.exit()
 
                                 #  setting subnet breakdown ----------------
-        if OLDVERSION:
-            if (nodect > 50):
-                print('Default Node distribution of {} nodes across Class C subnets: '.format(nodect))
-                print('   30% of the nodes will occupy subnets that are 70% populated')
-                print('   45% of the nodes will occupy subnets that are 20% populated')
-                print('   25% of the nodes will occupy subnets that are 90% populated')
-                net_breakdown = [(30,70), (45,20), (25,90)]
-                print('Total subnets: {}'.format(calculate_subnets(nodect, net_breakdown)))
-                set_net = input("Manually set network node distribution? [No]: ") or "No"
+        MAX_max = MAX_min = -1
+        while True:
+            subnets = []
+            if nodect <= 252:
+                subnets.append(nodect)
             else:
-                set_net = "No"
-                net_breakdown = [(100, 100)]
-                print('Total subnets: 1')
-
-            if (set_net.lower() != 'no' and set_net.lower() != 'n'):
-                net_breakdown = []
-                percent = 100
-                print("Please enter what percentage of the {} nodes would consume what percentage".format(nodect))
-                print("of the Class C address space...")
-                while percent > 0:
-                    nodes = int(input("   Percent of nodes (MAX={}): ".format(percent)) or "100")
-                    density = int(input("   Percent of class C space occupied: ") or "100")
-                    if (nodes <= 100 and nodes > 1):
-                        percent = percent - nodes
+                if MAX_max == -1:
+                    MAX_max = 150
+                while True:
+                    maximum = int(input('Max hosts in subnet (UP TO 252) [{}]: '.format(MAX_max)) or MAX_max)
+                    if maximum not in range(3, 253):
+                        print("Illegal 'maximum' value.")
                     else:
-                        print("Illegal node percentage value ({})".format(nodes))
-                        continue
-                    if (density > 100 or density < 1):
-                        print("Illegal density percentage value ({})".format(density))
-                        continue
-                    net_breakdown.append((nodes, density))
-                subnets = calculate_subnets(nodect, net_breakdown)
-                print('Total subnets: {}'.format(subnets))
-        else:
-            MAX_max = MAX_min = -1
-            while True:
-                subnets = []
-                if nodect <= 252:
-                    subnets.append(nodect)
-                else:
-                    if MAX_max == -1:
-                        MAX_max = 150
-                    while True:
-                        maximum = int(input('Max hosts in subnet (UP TO 252) [{}]: '.format(MAX_max)) or MAX_max)
-                        if (maximum < 3 or maximum > 252):
-                            print("Illegal 'maximum' value.")
-                        else:
-                            break
-
-                    if MAX_min == -1 or maximum != MAX_max:
-                        MAX_min = 254-maximum
-                    while True:
-                        minimum = int(input('Min hosts in subnet (UP TO {}) [{}]: '.format(MAX_min, MAX_min)) or MAX_min)
-                        if (minimum < 2 or minimum > MAX_min):
-                            print("Illegal 'minimum' value.")
-                        else:
-                            break
-                    MAX_min = minimum
-                    MAX_max = maximum
-
-                    subnets = randomize_subnet_breakdown(nodect, minimum, maximum)
-
-                for i, _ in enumerate(subnets):
-                    print('\tSubnet #{} has {} hosts.'.format(i, subnets[i]))
-
-                if (nodect > 252):
-                    subnets_finished = input("Is this breakout of subnets OK? [Yes]: ") or "Yes"
-                    if subnets_finished.lower() in ['yes', 'y']:
                         break
-                else:
+                if MAX_min == -1 or maximum != MAX_max:
+                    MAX_min = 254-maximum
+                while True:
+                    minimum = int(input('Min hosts in subnet (UP TO {}) [{}]: '.format(MAX_min, MAX_min)) or MAX_min)
+                    if minimum not in range(2, MAX_min+1):
+                        print("Illegal 'minimum' value.")
+                    else:
+                        break
+                MAX_min = minimum
+                MAX_max = maximum
+
+                subnets = randomize_subnet_breakdown(nodect, minimum, maximum)
+
+            for i, _ in enumerate(subnets):
+                print('\tSubnet #{} has {} hosts.'.format(i, subnets[i]))
+
+            if (nodect > 252):
+                subnets_finished = input("Is this breakout of subnets OK? [Yes]: ") or "Yes"
+                if subnets_finished.lower() in ['yes', 'y']:
                     break
+            else:
+                break
 
                                 #  setting device breakdown ----------------
         dev_breakdown = get_default_dev_distro(nodect)
@@ -473,8 +479,11 @@ def main():
             break
 
     net_configs = build_configs(subnets, nodect, dev_breakdown, domain)
+    print("Build complete.\n")
 
-    cont = input("Build complete. Would you like to use this to create a time-series? [No]: ") or "Yes"
+    if nodect > 252:
+        cont = input("Would you like to use this to create a time-series? [No]: ") or "Yes"
+
     tcount = 0
     outname_full = outname+'_t'+str(tcount)+'.json' if cont.lower() in ['yes', 'y'] else outname+'.json'
 
@@ -490,6 +499,8 @@ def main():
         sys.exit()
                               # creating a time series -------------------
     while cont.lower() in ['yes', 'y']:
+        nodes_add, nodes_del, nodes_mod = timeseries_breakdown(len(ntwk))
+
         tcount += 1
         outname_full = outname + '_t'+str(tcount)+'.json'
         config_check(net_configs, outname_full)
