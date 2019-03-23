@@ -57,6 +57,13 @@
   height: 100%
 }
 
+.sliderContainer {
+  padding-right: 2em;
+  position:absolute;
+  bottom:0;
+  right:0;
+}
+
 input[name=hideControls] {
   display: none;
 }

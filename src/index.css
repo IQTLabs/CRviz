@@ -55,6 +55,13 @@ select {
   word-break: normal;
 }
 
+text.svg-icon{
+  font-family: "Font Awesome 5 Free";
+  cursor: pointer;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
 .viz-d3-tip {
   background: blue;
 }

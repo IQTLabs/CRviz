@@ -64,16 +64,6 @@
   animation: plus 5s infinite;
 }
 
-@-webkit-keyframes plus {
-  0% {
-    -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
-    clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
-  },
-  100% {
-
-  }
-}
-
 @keyframes plus {
   0% {
     -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
@@ -171,7 +161,6 @@
   border: 1px solid black;
   padding: 1rem;
   white-space: nowrap;
-  pointer-events: none;
 }
 
 .viz :global(.viz-legend) {
@@ -224,7 +213,6 @@
   border: 1px solid rgb(100, 100, 100);
   padding: 1rem;
   white-space: nowrap;
-  pointer-events: none;
 }
 
 :global(.darkTheme) .viz :global(.viz-node) circle {
@@ -274,7 +262,7 @@
 
 .viz :global(.viz-annotation-text) {
   fill: black;
-  text-anchor: start;
+  text-anchor: middle;
   dominant-baseline: central;
 }
 
@@ -282,6 +270,24 @@
   fill: white;
 }
 
-.viz :global(g.viz-annotation-hidden) {
+.viz :global(.viz-annotation-hidden) {
   display:none;
+}
+
+.viz :global(.viz-annotation-hidden) circle {
+  display:none;
+}
+
+/*Ring Menu*/
+.viz :global(.viz-ring-menu){
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 2s ease-in-out;
+  -webkit-transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+}
+
+circle.bg-circle{
+  stroke: transparent;
+  fill: white !important;
 }

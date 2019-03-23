@@ -1,4 +1,3 @@
-import { selectAll } from "d3";
 import datumKey from "./datum-key";
 import className from "./class-name";
 
@@ -27,14 +26,6 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
     .classed(className("leafNode"), (d) => d.height === 0)
     .attr("transform", (d) => `translate(${[d.x, d.y].join(",")})`)
     .attr("display", (d) => !showNodes && d.height === 0 ? 'none' : null)
-    .on("mouseover", (d) => {
-      const node = selectAll(`g.${className("annotation")}[data-key="${datumKey(d)}"]`);
-      node.classed(className("annotation-hidden"), false);
-    })
-    .on("mouseout", (d) => {
-      const node = selectAll(`g.${className("annotation")}[data-key="${datumKey(d)}"]`);
-      node.classed(className("annotation-hidden"), d.depth > 1);
-    })
     .order();
 
   const circles = nodes.select("circle").merge(nodesEnter.append("circle"));

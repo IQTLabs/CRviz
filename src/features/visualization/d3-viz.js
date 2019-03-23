@@ -24,7 +24,6 @@ import setupTooltip from "./d3-viz/setup-tooltip";
 import setupLegend from "./d3-viz/setup-legend";
 import setupAnnotations from "./d3-viz/setup-annotations";
 import datumKey from "./d3-viz/datum-key";
-import { measureText } from "./d3-viz/text-utils"
 
 function d3Viz(rootNode) {
   const root = select(rootNode);
@@ -161,13 +160,7 @@ function d3Viz(rootNode) {
     // Doesn't seem to have a noticable performance impact.
     const packed = pack(hierarchy);
     const padding = packed.leaves()[0].r;
-    pack.padding((d) => {
-      let pad = padding * d.height;
-      if(d.height > 1){
-        pad = padding * ((d.height + measureText(d.data.fieldValue)[0])*0.70);
-      }
-      return pad;
-    });
+    pack.padding((d) => padding * d.height);
 
     state.packedData = pack(hierarchy);
   };
@@ -181,11 +174,11 @@ function d3Viz(rootNode) {
       hasSearch: props.queryString !== ''
     });
 
-    // setupTooltip({
-    //   tooltip: tooltip,
-    //   fields: props.fields,
-    //   nodeRoot: nodeRoot
-    // });
+    setupTooltip({
+      tooltip: tooltip,
+      fields: props.fields,
+      nodeRoot: nodeRoot
+    });
 
     state.nodes = nodes;
   };
@@ -240,7 +233,6 @@ function d3Viz(rootNode) {
     state.annotations = setupAnnotations({
       packedData: state.packedData,
       annotationRoot: annotationRoot,
-      colorMap: state.legend && state.legend.colorMap ? state.legend.colorMap : []
     })
   };
 
