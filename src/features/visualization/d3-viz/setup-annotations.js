@@ -7,9 +7,7 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   //sum up change counts because we only are interested in groups that have changes to display
   const data = packedData.descendants().filter(d => d.depth > 0 && d.height > 0 
     && d.data.CRVIZ && (d.data.CRVIZ["_addedCount"] + d.data.CRVIZ["_changedCount"] + d.data.CRVIZ["_removedCount"]) > 0);
-  const firstLeaf = packedData.descendants().filter(d => d.height === 0)[0];
-  const leafRadius = firstLeaf.r || 0;
-  const fontScale = ((2*leafRadius)/16) *100;
+  
   const annotations = annotationRoot
     .selectAll(`g.${className("annotation")}`)
     .data(data, datumKey);
@@ -33,18 +31,13 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   const newChangeIcon = newChangeIconContainer
   .append('text')
     .classed('svg-icon', true)
-    .style('font-size', (d) => fontScale +"%")
-    .text('\uf005');
-    // .append('g')
-    //   .classed(className("isChanged-fixed"), true)
-    // .append('circle')
-    //   .attr('r', leafRadius);
+    .classed('nag', true)
+    .style('font-size', (d) => (2 * ((2*d.leafRadius)/16) * 100) + "%")
+    .text('\uf06a');
 
   annotations
   .select(`g.${className("change-icon-container")}`)
   .select('text.svg-icon')
-  // .select(`g.${className("isChanged-fixed")}`)
-  // .select('circle')
   .merge(newChangeIcon)
     .attr('x', (d) => (d.r * Math.cos(baseAngle)))
     .attr('y', (d) => (d.r * Math.sin(baseAngle)))
@@ -54,6 +47,11 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
       annotation
       .select(`g.${className("change-icon-container")}`)
         .classed(className("annotation-hidden"), true);
+
+      annotation
+      .select(`g.${className("change-icon-container")}`)
+      .select('text.nag')
+        .classed('nag', false);
 
       annotation
       .select(`g.${className("ring-menu")}`)
@@ -72,7 +70,7 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
     .append('circle')
       .classed('bg-circle', true)
       .style('fill', 'white')
-      .attr('r', 6*leafRadius)
+      .attr('r', (d) =>  10*d.leafRadius)
 
   annotations
   .select(`g.${className("ring-menu")}`)
@@ -84,6 +82,7 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   const newX = newRingMenu
   .append('text')
     .classed('svg-icon', true)
+    .style('font-size', (d) => ((2*d.leafRadius)/16) *100 + "%")
     .text('\uf00d');
 
   annotations
@@ -92,7 +91,6 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   .merge(newX)
     .attr('x', (d) => d.r * Math.cos(baseAngle))
     .attr('y', (d) => (d.r * Math.sin(baseAngle)))
-    .style('font-size', (d) => fontScale +"%")
     .on("click", (d) => {
       const annotation = selectAll(`g.${className("annotation")}[data-key="${datumKey(d)}"]`);
 
@@ -109,124 +107,124 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   //totals 
   const newTotalContainer = newRingMenu
     .append('g')
-      .classed(className("total-container"), true);;
+      .classed(className("total-container"), true);
   const newCircles = newTotalContainer
     .append('g')
       .classed(className("leafNode"), true)
     .append('circle')
-      .attr('r', leafRadius)
+      .attr('r', (d) => d.leafRadius);
 
   annotations
   .select(`g.${className("total-container")}`)
   .select(`g.${className("leafNode")}`)
   .select('circle')
   .merge(newCircles)
-    .attr('cx', (d) => (d.r * Math.cos(baseAngle)) - 2*leafRadius)
-    .attr('cy', (d) => (d.r * Math.sin(baseAngle)) - 3*leafRadius);
+    .attr('cx', (d) => (d.r * Math.cos(baseAngle)) - 3*d.leafRadius)
+    .attr('cy', (d) => (d.r * Math.sin(baseAngle)) - 4*d.leafRadius);
 
   const newTotalText = newTotalContainer
   .append("text")
-    .classed(className("annotation-text"), true);
+    .classed(className("annotation-text"), true)
+    .style('font-size', (d) => ((2*d.leafRadius)/16) *100 +"%");
 
   annotations
   .select(`g.${className("total-container")}`)
   .select('text')
   .merge(newTotalText)
-    .style('font-size', (d) => fontScale +"%")
-    .attr('x', (d) => (d.r * Math.cos(baseAngle)) + 1.5*leafRadius)
-    .attr('y', (d) => (d.r * Math.sin(baseAngle)) - 3*leafRadius)
+    .attr('x', (d) => (d.r * Math.cos(baseAngle)) + 2.5*d.leafRadius)
+    .attr('y', (d) => (d.r * Math.sin(baseAngle)) - 4*d.leafRadius)
     .text((d) => !isNaN(d.value) ? ": " + d.value : ": 0");
 
   //added nodes
   const newAddedContainer = newRingMenu
     .append('g')
-      .classed(className("added-container"), true);;
+      .classed(className("added-container"), true);
   const newPluses = newAddedContainer
     .append('g')
       .classed(className("isAdded-fixed"), true)
     .append('circle')
-      .attr('r', leafRadius)
+      .attr('r', (d) => d.leafRadius);
 
   annotations
   .select(`g.${className("added-container")}`)
   .select(`g.${className("isAdded-fixed")}`)
   .select('circle')
   .merge(newPluses)
-    .attr('cx', (d) => (d.r * Math.cos(baseAngle)) - 4.5*leafRadius)
+    .attr('cx', (d) => (d.r * Math.cos(baseAngle)) - 7.5*d.leafRadius)
     .attr('cy', (d) => (d.r * Math.sin(baseAngle)));
 
   const newAddedText = newAddedContainer
   .append("text")
-    .classed(className("annotation-text"), true);
+    .classed(className("annotation-text"), true)
+    .style('font-size', (d) => ((2*d.leafRadius)/16) *100 +"%");
 
   annotations
   .select(`g.${className("added-container")}`)
   .select('text')
   .merge(newAddedText)
-    .style('font-size', (d) => fontScale +"%")
-    .attr('x', (d) => (d.r * Math.cos(baseAngle)) - 2.5*leafRadius)
+    .attr('x', (d) => (d.r * Math.cos(baseAngle)) - 5.5*d.leafRadius)
     .attr('y', (d) => (d.r * Math.sin(baseAngle)))
     .text((d) => !isNaN(d.data.CRVIZ["_addedCount"]) ? ": " + d.data.CRVIZ["_addedCount"] : ": 0");
 
   //changed nodes
   const newChangedContainer = newRingMenu
     .append('g')
-      .classed(className("changed-container"), true);;
+      .classed(className("changed-container"), true);
   const newDeltas = newChangedContainer
     .append('g')
       .classed(className("isChanged-fixed"), true)
     .append('circle')
-      .attr('r', leafRadius)
+      .attr('r', (d) => d.leafRadius);
 
   annotations
   .select(`g.${className("changed-container")}`)
   .select(`g.${className("isChanged-fixed")}`)
   .select('circle')
   .merge(newDeltas)
-    .attr('cx', (d) => (d.r * Math.cos(baseAngle)) - 1*leafRadius)
-    .attr('cy', (d) => (d.r * Math.sin(baseAngle)) + 3*leafRadius);
+    .attr('cx', (d) => (d.r * Math.cos(baseAngle)) - 2.5*d.leafRadius)
+    .attr('cy', (d) => (d.r * Math.sin(baseAngle)) + 4*d.leafRadius);
 
   const newChangedText = newChangedContainer
   .append("text")
-    .classed(className("annotation-text"), true);
+    .classed(className("annotation-text"), true)
+    .style('font-size', (d) => ((2*d.leafRadius)/16) *100 + "%");
 
   annotations
   .select(`g.${className("changed-container")}`)
   .select('text')
   .merge(newChangedText)
-    .style('font-size', (d) => fontScale +"%")
-    .attr('x', (d) => (d.r * Math.cos(baseAngle)) + 1.5*leafRadius)
-    .attr('y', (d) => (d.r * Math.sin(baseAngle)) + 3*leafRadius)
+    .attr('x', (d) => (d.r * Math.cos(baseAngle)) + 1*d.leafRadius)
+    .attr('y', (d) => (d.r * Math.sin(baseAngle)) + 4*d.leafRadius)
     .text((d) => !isNaN(d.data.CRVIZ["_changedCount"]) ? ": " + d.data.CRVIZ["_changedCount"] : ": 0");
 
   //removed nodes
   const newRemovedContainer = newRingMenu
     .append('g')
-      .classed(className("removed-container"), true);;
+      .classed(className("removed-container"), true);
   const newMinuses = newRemovedContainer
     .append('g')
       .classed(className("isRemoved-fixed"), true)
     .append('circle')
-      .attr('r', leafRadius)
+      .attr('r', (d) => d.leafRadius);
 
   annotations
   .select(`g.${className("removed-container")}`)
   .select(`g.${className("isRemoved-fixed")}`)
   .select('circle')
   .merge(newMinuses)
-    .attr('cx', (d) => (d.r * Math.cos(baseAngle)) + 2.5*leafRadius)
+    .attr('cx', (d) => (d.r * Math.cos(baseAngle)) + 4.5*d.leafRadius)
     .attr('cy', (d) => (d.r * Math.sin(baseAngle)));
 
   const newRemovedText = newRemovedContainer
   .append("text")
-    .classed(className("annotation-text"), true);
+    .classed(className("annotation-text"), true)
+    .style('font-size', (d) => ((2*d.leafRadius)/16) *100 +"%");
 
   annotations
   .select(`g.${className("removed-container")}`)
   .select('text')
   .merge(newRemovedText)
-    .style('font-size', (d) => fontScale +"%")
-    .attr('x', (d) => (d.r * Math.cos(baseAngle)) + 4.5*leafRadius)
+    .attr('x', (d) => (d.r * Math.cos(baseAngle)) + 6.5*d.leafRadius)
     .attr('y', (d) => (d.r * Math.sin(baseAngle)))
     .text((d) => !isNaN(d.data.CRVIZ["_removedCount"]) ? ": " + d.data.CRVIZ["_removedCount"] : ": 0");
 

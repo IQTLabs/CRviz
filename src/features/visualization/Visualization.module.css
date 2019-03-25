@@ -278,6 +278,55 @@
   display:none;
 }
 
+/*Nag Icon*/
+.viz :global(.nag) {
+  animation-name: nag;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+
+}
+@keyframes nag { 
+  0% { 
+    transform: rotateX(0deg); 
+  },
+  5% {
+    transform: rotateX(-5deg);
+  },
+  10%{
+    transform: rotateX(0deg); 
+  },
+  15% {
+    transform: rotateX(5deg); 
+  },
+  20% {
+    transform: rotateX(0deg); 
+  },
+  100% { 
+    transform: rotateX(0deg); 
+  }
+}
+/*@keyframes nag { 
+  0% { 
+    transform: translateX(0px) rotateX(0deg); 
+  },
+  5% {
+    transform: translateX(-3px) rotateX(-5deg);
+  },
+  10%{
+    transform: translateX(0px) rotateX(0deg); 
+  },
+  15% {
+    transform: translateX(3px) rotateX(5deg); 
+  },
+  20% {
+    transform: translateX(0px) rotateX(0deg); 
+  },
+  100% { 
+    transform: translateX(0px) rotateX(0deg); 
+  }
+}*/
+
 /*Ring Menu*/
 .viz :global(.viz-ring-menu){
   visibility: visible;
