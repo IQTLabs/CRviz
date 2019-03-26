@@ -7,7 +7,7 @@ import math
 import string
 import uuid
 
-DEBUG = False
+DEBUG = True
 NET_SUMMARY = False
 
 
@@ -86,7 +86,7 @@ def gen_os_type(role):
     elif role == 'VOIP phone':
         return choice(['Linux', 'Windows', 'Unknown'])
     # elif role == 'Unknown': # catch-all
-    return 'Unknown'
+    return choice(['Unknown', 'Windows', 'Linux', 'Mac OS X', 'BSD'])
 
 
 def gen_eth_vendor(role):
@@ -245,10 +245,11 @@ def make_host(net, role, ip_addr):
         },  
         'role': {
             'role': role,
-            'confidence': randrange(55,100)
         }   
     }   
 
+    if host['role']['role'] != 'Unknown':
+        host['role']['confidence']: randrange(55,100)
     if 'domain' in net:
         host['rDNS_domain'] = net['domain']
     host['os'] = { 'os':gen_os_type(role) }
@@ -284,7 +285,6 @@ def build_network(subnets, randomspace=False):
                 ip_addr = ipaddress.ip_address('.'.join(n['start_ip'].split('.')[0:3]) + '.0')
                 ip_addr += hosts_togo
 
-            print("Adding host with role '"+a_role+"' at "+str(ip_addr))
             host = make_host(n, a_role, ip_addr)
             hosts.append(host)
             hosts_togo -= 1
@@ -312,7 +312,6 @@ def add_hosts(subnets, hosts, add_ct):
         new_nodes = randrange(1, math.floor(add_ct/2)) if add_ct > 4 else add_ct
         while new_nodes+subnets[n]['hosts'] > 254:
             new_nodes = randrange(1, new_nodes)
-            print("Picking another number of nodes ({}|{})".format(new_nodes,subnets[n]['hosts']))
         subnets[n]['hosts'] += new_nodes
         add_ct -= new_nodes
         while new_nodes > 0:
@@ -321,7 +320,6 @@ def add_hosts(subnets, hosts, add_ct):
             if subnets[n]['ip_taken']:
                 ip_addr, subnets[n]['ip_taken'] = _gen_ip(subnets[n]['start_ip'],
                                                           ip_taken=subnets[n]['ip_taken'])
-                break
             else:
                 end_ip = ipaddress.ip_address(subnets[n]['start_ip']) + subnets[n]['hosts']-1
                 ip_addr, _ = _gen_ip(subnets[n]['start_ip'], end_ip=end_ip)
@@ -351,7 +349,6 @@ def mod_role(subnets, hosts, host=None):
     '''
         Modifies the host's role.
     '''
-    print("Entered mod_role")
     if not host:
         host = choice(hosts)
 
@@ -363,12 +360,20 @@ def mod_role(subnets, hosts, host=None):
             new_role = choice(list(net['roles'].keys()))
             while new_role == host['role']['role']:
                 new_role = choice(list(net['roles'].keys()))
-            print("DEBUG: Changing host's role to "+new_role+" from "+host['role']['role'])
+            if DEBUG:
+                print("DEBUG: Changing host's role to "+new_role+" from "+host['role']['role'])
             net['roles'][host['role']['role']] -= 1
             net['roles'][new_role] += 1
             host['role']['role'] = new_role
-            host['role']['confidence'] = randrange(55,100)
-            host['os'] = gen_os_type(new_role)
+            if host['role']['role'] != 'Unknown':
+                host['role']['confidence'] = randrange(55,100)
+            else:
+                del host['role']['confidence']
+            host['os']['os'] = gen_os_type(new_role)
+            if host['os']['os'] != 'Unknown':
+                host['os']['confidence'] = randrange(55,100)
+            else:
+                del host['os']['confidence']
             host['vendor'] = gen_eth_vendor(new_role)
             break
     return subnets, hosts
@@ -377,17 +382,22 @@ def mod_OS(subnets, hosts, host=None):
     '''
         Modifies the host's role. (The `subnets` is not modified.)
     '''
-    print("Entered mod_OS")
     if not host:
         host = choice(hosts)
     ct = 0
-    while ct > 3:
+    while ct < 3:
         new_os = gen_os_type(host['role'])
-        if new_os != host['os']:
-            host['os'] = new_os
-            print("DEBUG: Changing host's OS from "+new_os+" from "+host['os'])
+        if DEBUG:
+            print("DEBUG: Changing host's OS to "+new_os+" from "+host['os']['os'])
+        if new_os != host['os']['os']:
+            host['os']['os'] = new_os
+            if new_os == 'Unknown':
+                del host['os']['confidence']
+            else:
+                host['os']['confidence'] = randrange(55,100)
             return subnets, hosts
         ct += 1
+    # if OS couldn't be changed, change the role instead.
     return mod_role(subnets, hosts)
 
 
@@ -395,7 +405,6 @@ def mod_subnet(subnets, hosts, host=None):
     '''
         Modifies the host's subnet, and updates the `subnets` in kind.
     '''
-    print("Entered mod_subnet")
     if not host:
         host = choice(hosts)
 
