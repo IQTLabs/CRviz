@@ -27,23 +27,20 @@ def _gen_ip(start_ip, ip_taken=None, end_ip=None):
         Returns the new IP (or None if there was a problem) and an 
         updated `ip_taken` list.
     '''
-    ip = ipaddress.ip_address(start_ip)
-    ct = 254 - len(ip_taken)
-    if ip_taken:
+    if end_ip:
+        ip = ipaddress.ip_address(end_ip) + 1
+        if str(ip).endswith('.255'):
+            ip = None
+    else:
+        ip = ipaddress.ip_address('.'.join(start_ip.split('.')[0:3]) + '.0')
+        ct = 254 - len(ip_taken)
         while ct > 2:
             suffix = randrange(3, 252)
-            if ip_taken and suffix not in ip_taken:
+            if suffix not in ip_taken:
                 ip += suffix 
                 ip_taken.append(suffix)
                 break
             ct -= 1
-    elif end_ip:
-        ip = end_ip + 1
-        if str(ip).endswith('.255'):
-            ip = None
-    else: 
-        ip = None
-
     return str(ip), ip_taken
 
 
@@ -266,10 +263,9 @@ def build_network(subnets, randomspace=False):
     ''' 
        Returns a network, in the form of an array of hosts in json format.
     '''
-    outobj = []
+    hosts = []
     subnets_togo = len(subnets)
     for n in subnets:
-        start_ip = ipaddress.ip_address(n['start_ip'])
         role_ct = dict(n['roles'])
         hosts_togo = n['hosts'] # assumed to never be more than 253
         ip_taken = []
@@ -282,19 +278,19 @@ def build_network(subnets, randomspace=False):
                 a_role = choice(list(role_ct.keys()))
             role_ct[a_role] -= 1
 
-
             if randomspace:
-                ip_addr, ip_taken = _gen_ip(start_ip, ip_taken)
-                break
+                ip_addr, ip_taken = _gen_ip(n['start_ip'], ip_taken)
             else:
+                ip_addr = ipaddress.ip_address('.'.join(n['start_ip'].split('.')[0:3]) + '.0')
                 ip_addr += hosts_togo
 
+            print("Adding host with role '"+a_role+"' at "+str(ip_addr))
             host = make_host(n, a_role, ip_addr)
-            outobj.append(host)
+            hosts.append(host)
             hosts_togo -= 1
         n['ip_taken'] = ip_taken
 
-    return subnets, outobj
+    return subnets, hosts
 
 
 def print_netconfig(configs, out, summary=False, VERBOSE=False):
