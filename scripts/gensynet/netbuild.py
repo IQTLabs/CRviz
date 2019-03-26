@@ -7,7 +7,7 @@ import math
 import string
 import uuid
 
-DEBUG = True
+DEBUG = False
 NET_SUMMARY = False
 
 
