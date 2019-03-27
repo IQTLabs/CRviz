@@ -143,7 +143,7 @@
 .viz :global(.viz-label) {
   fill: black;
   text-anchor: middle;
-  dominant-baseline: central;
+  dominant-baseline: alphabetical;
 }
 
 .viz :global(.viz-labelShape) {
@@ -291,13 +291,13 @@
     transform: rotateX(0deg); 
   },
   5% {
-    transform: rotateX(-5deg);
+    transform: rotateX(-35deg);
   },
   10%{
     transform: rotateX(0deg); 
   },
   15% {
-    transform: rotateX(5deg); 
+    transform: rotateX(35deg); 
   },
   20% {
     transform: rotateX(0deg); 

@@ -1,3 +1,4 @@
+import { select } from "d3";
 import { path } from "d3-path";
 
 import datumKey from "./datum-key";
@@ -5,6 +6,9 @@ import className from "./class-name";
 
 const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }) => {
   const data = packedData.descendants();
+  const firstLeaf = packedData.leaves()[0];
+  const leafRadius = firstLeaf.r || 0;
+  const fontScale = ((2*leafRadius)/16) *100;
 
   const nodes = nodeRoot
     .selectAll(`g.${className("node")}`)
@@ -46,12 +50,16 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
     .attr("d", getLabelShape);
 
   const labels = nodes.select(`g.${className('label-group')}`).select('text');
-  labels
+  const mergedLabels = labels
   .merge(newLabels)
     .filter((d) => d.labelSize)
-    .style('font-size', (d) => ((2*d.leafRadius)/16) *200 + "%")
+    .style('font-size', (d, i, nodes) => (2 * d.height * fontScale) + "%")
     .attr('y', (d) => d.r - (d.labelSize/2))
     .text((d) => d.data.fieldValue);
+
+  mergedLabels.each( (d, i, nodes) => {
+    scaleAndTrimToLabelWidth(nodes[i], d);
+  })
 
   return [
     nodes.merge(nodesEnter),
@@ -74,6 +82,64 @@ const getLabelShape = (d) => {
   shape.closePath();
 
   return shape.toString();
+}
+
+const getLabelWidth = (datum) =>{
+  const top = datum.r - datum.labelSize;
+  const radius = datum.r;
+
+  const startAngle = Math.PI / 2 + Math.acos(top / radius);
+  const endAngle = Math.PI / 2 - Math.acos(top / radius);
+  const arcAngle = startAngle - endAngle;
+
+  //length of a chord across a circle with angle theta
+  //is calculated as:
+  // 2*radius * sin(theta/2)
+  return 2*radius*Math.sin(arcAngle/2);
+}
+
+const scaleAndTrimToLabelWidth = (node, datum) => {
+  const labelWidth = getLabelWidth(datum);
+  const labelHeight = datum.labelSize;
+  const minFontScale = 25;
+
+  let boxWidth = node.getBBox().width;
+  let boxHeight = node.getBBox().height;
+  let fontScale = 150;
+
+  //scale to height
+  do{
+
+    select(node)
+      .style('font-size', (d, i, nodes) => fontScale + "%")
+      .text(datum.data.fieldValue);
+
+    fontScale -= 5;
+    boxWidth = node.getBBox().width;
+    boxHeight = node.getBBox().height;
+  }
+  while (boxHeight > 0.80 * labelHeight && fontScale > minFontScale)
+
+  //trim to width
+  let labelText = datum.data.fieldValue;
+  do{
+
+    select(node)
+      .style('font-size', (d, i, nodes) => fontScale + "%")
+      .text(labelText);
+
+    labelText = labelText.substr(0, labelText.length - 5) + "...";
+    boxWidth = node.getBBox().width;
+    boxHeight = node.getBBox().height;
+  }
+  while (boxWidth > 0.80 * labelWidth)
+
+  // console.log("text: %o", datum.data.fieldValue);
+  // console.log("labelWidth: %o", labelWidth);
+  // console.log("labelHeight: %o", labelHeight);
+  // console.log("fontScale: %o", fontScale);
+  // console.log("boxWidth: %o", boxWidth);
+  // console.log("boxHeight: %o", boxHeight);
 }
 
 export default appendCircles;

@@ -24,11 +24,11 @@ const packWithLabel = () => {
     //
     // To ensure label display are consistent between siblings, all siblings
     // circles use the label size of the largest circle.
-    labelRatio: 0.20,
+    labelRatio: 0.25,
 
     // But we ensure smaller circle doesn't look like Ben Solo with its high
     // waisted pant.
-    maxLabelRatio: 0.30,
+    maxLabelRatio: 0.40,
 
     // The packing method for packing siblings node.
     // By default use the packGrid method. Can be set to use D3's packSiblings
@@ -129,6 +129,8 @@ const packChildren = (packSiblings, labelRatio, maxLabelRatio, padding, k) => (n
     nonleafChildren.forEach((node) => {
       node.labelSize = Math.min(labelSize, getLabelSize(maxLabelRatio)(node));
       node.r += node.labelSize / 2;
+
+
     });
   }
 
@@ -144,10 +146,6 @@ const packChildren = (packSiblings, labelRatio, maxLabelRatio, padding, k) => (n
 
   if (paddingSize) {
     children.forEach((child) => (child.r -= paddingSize));
-  }
-
-  if(children.length > 0){
-    node.leafRadius = children[0].r;
   }
 
   node.r = enclosingRadius + paddingSize;
