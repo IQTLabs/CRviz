@@ -2,44 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [0.2.10](https://github.com/CyberReboot/CRviz/compare/v0.2.9...v0.2.10) (2019-03-07)
+<a name="0.3.0-alpha"></a>
+# [0.3.0-alpha](https://github.com/CyberReboot/CRviz/compare/v0.2.6...v0.3.0-alpha) (2019-01-26)
 
 
 ### Bug Fixes
 
-* For [#258](https://github.com/CyberReboot/CRviz/issues/258), creates CRVIZ_SEARCH_REF property to use as ref for indexing ([43d0487](https://github.com/CyberReboot/CRviz/commit/43d0487))
-* update react-scripts to 2.1.5. fixes [#255](https://github.com/CyberReboot/CRviz/issues/255) ([9ace5a0](https://github.com/CyberReboot/CRviz/commit/9ace5a0))
-
-
-
-<a name="0.2.9"></a>
-## [0.2.9](https://github.com/CyberReboot/CRviz/compare/v0.2.8...v0.2.9) (2019-02-21)
-
-
-### Bug Fixes
-
-* remove hard coding of port and debug code ([c8ef2bf](https://github.com/CyberReboot/CRviz/commit/c8ef2bf))
-
-
-
-<a name="0.2.8"></a>
-## [0.2.8](https://github.com/CyberReboot/CRviz/compare/v0.2.7...v0.2.8) (2019-02-21)
-
-
-### Bug Fixes
-
-* **Search:** corrected bad check on configuration when flattening ([061c771](https://github.com/CyberReboot/CRviz/commit/061c771)), closes [#235](https://github.com/CyberReboot/CRviz/issues/235)
-
-
-
-<a name="0.2.7"></a>
-## [0.2.7](https://github.com/CyberReboot/CRviz/compare/v0.2.6...v0.2.7) (2019-02-08)
-
-
-### Bug Fixes
-
-* package.json & package-lock.json to reduce vulnerabilities ([0dd6f01](https://github.com/CyberReboot/CRviz/commit/0dd6f01))
 * package.json & package-lock.json to reduce vulnerabilities ([50541d0](https://github.com/CyberReboot/CRviz/commit/50541d0))
+
+
+### Features
+
+* **time series:** add actions to store for containing diffs ([108b4c8](https://github.com/CyberReboot/CRviz/commit/108b4c8))
+* **Time Series:** closes [#217](https://github.com/CyberReboot/CRviz/issues/217) - Dataset Diffing ([7a0f7f8](https://github.com/CyberReboot/CRviz/commit/7a0f7f8))
+* **Time Series:** Time Series comparison interface ([c1abb1e](https://github.com/CyberReboot/CRviz/commit/c1abb1e))
+
+
+
+<a name="0.3.0-alpha"></a>
+# [0.3.0-alpha](https://github.com/CyberReboot/CRviz/compare/v0.2.6...v0.3.0-alpha) (2019-01-26)
+
+
+### Bug Fixes
+
+* package.json & package-lock.json to reduce vulnerabilities ([50541d0](https://github.com/CyberReboot/CRviz/commit/50541d0))
+
+
+### Features
+
+* **time series:** add actions to store for containing diffs ([108b4c8](https://github.com/CyberReboot/CRviz/commit/108b4c8))
+* **Time Series:** closes [#217](https://github.com/CyberReboot/CRviz/issues/217) - Dataset Diffing ([7a0f7f8](https://github.com/CyberReboot/CRviz/commit/7a0f7f8))
+* **Time Series:** Time Series comparison interface ([c1abb1e](https://github.com/CyberReboot/CRviz/commit/c1abb1e))
 
 
 
