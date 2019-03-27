@@ -3,4 +3,3 @@
 --require jsdom
 --require ./src/test/test-dom.js
 --require ./src/test/ignore-styles.js
-src/**/*.test.js*
