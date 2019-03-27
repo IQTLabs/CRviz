@@ -1,4 +1,4 @@
-import { selectAll } from "d3";
+import { select, selectAll } from "d3";
 
 import datumKey from "./datum-key";
 import className from "./class-name";
@@ -120,6 +120,42 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
 
   annotations
   .select(`g.${className("total-container")}`)
+  .merge(newTotalContainer)
+  .on("click", (d) => {
+      const dk = datumKey(d);
+      const added = selectAll(`g.${className("isAdded")}`)
+      .filter((e) =>{
+        const ancestors = e.ancestors();
+        return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+      });
+        
+      const changed = selectAll(`g.${className("isChanged")}`)
+      .filter((e) =>{
+        const ancestors = e.ancestors();
+        return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+      });
+
+      const removed = selectAll(`g.${className("isRemoved")}`)
+      .filter((e) =>{
+        const ancestors = e.ancestors();
+        return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+      });
+      
+      const leaves = selectAll(`g.${className("leafNode")}`)
+      .filter((e) =>{
+        const ancestors = e.ancestors();
+        return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+      });
+
+      leaves.classed(className("ringMenuExcluded"), false);
+      added.classed(className("ringMenuExcluded"), false);
+      changed.classed(className("ringMenuExcluded"), false);
+      removed.classed(className("ringMenuExcluded"), false);
+    }
+  )
+
+  annotations
+  .select(`g.${className("total-container")}`)
   .select(`g.${className("leafNode")}`)
   .select('circle')
   .merge(newCircles)
@@ -151,6 +187,46 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
 
   annotations
   .select(`g.${className("added-container")}`)
+  .merge(newAddedContainer)
+  .on("click", (d) => {
+      const dk = datumKey(d);
+      const added = selectAll(`g.${className("isAdded")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+
+      if(!added.empty()){
+        const showHide = added.classed(className("ringMenuExcluded"));
+        
+        const changed = selectAll(`g.${className("isChanged")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+
+        const removed = selectAll(`g.${className("isRemoved")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+        
+        const leaves = selectAll(`g.${className("leafNode")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+
+        leaves.classed(className("ringMenuExcluded"), !showHide);
+        added.classed(className("ringMenuExcluded"), showHide);
+        changed.classed(className("ringMenuExcluded"), !showHide);
+        removed.classed(className("ringMenuExcluded"), !showHide);
+      }
+    }
+  )
+
+  annotations
+  .select(`g.${className("added-container")}`)
   .select(`g.${className("isAdded-fixed")}`)
   .select('circle')
   .merge(newPluses)
@@ -179,6 +255,47 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
       .classed(className("isChanged-fixed"), true)
     .append('circle')
       .attr('r', (d) => leafRadius);
+
+  annotations
+  .select(`g.${className("changed-container")}`)
+  .merge(newChangedContainer)
+  .on("click", (d) => {
+      console.log("datum key: %o", datumKey(d));
+      const dk = datumKey(d);
+      const changed = selectAll(`g.${className("isChanged")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+
+      if(!changed.empty()){
+        const showHide = changed.classed(className("ringMenuExcluded"));
+        
+        const removed = selectAll(`g.${className("isRemoved")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+
+        const added = selectAll(`g.${className("isAdded")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+        
+        const leaves = selectAll(`g.${className("leafNode")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+
+        leaves.classed(className("ringMenuExcluded"), !showHide);
+        added.classed(className("ringMenuExcluded"), !showHide);
+        changed.classed(className("ringMenuExcluded"), showHide);
+        removed.classed(className("ringMenuExcluded"), !showHide);
+      }
+    }
+  )
 
   annotations
   .select(`g.${className("changed-container")}`)
@@ -215,25 +332,42 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   .select(`g.${className("removed-container")}`)
   .merge(newRemovedContainer)
   .on("click", (d) => {
-      const groupNode = selectAll(`g.${className("groupingNode")}[data-key="${datumKey(d)}"]`);
-      const removed = groupNode
-      .selectAll(`g.${className("isRemoved")}`);
+      console.log("datum key: %o", datumKey(d));
+      const dk = datumKey(d);
+      const removed = selectAll(`g.${className("isRemoved")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
 
-      const showHide = removed.filter((d, i) => i === 0).classed(className("annotation-hidden"));
+      console.log("removed: %o", removed);
 
-      const changed = groupNode
-      .selectAll(`g.${className("isChanged")}`);
+      if(!removed.empty()){
+        const showHide = removed.classed(className("ringMenuExcluded"));
+        
+        const changed = selectAll(`g.${className("isChanged")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
 
-      const added = groupNode
-      .selectAll(`g.${className("isAdded")}`);
-      
-      const leaves = groupNode
-      .selectAll(`g.${className("leafNode")}`);
+        const added = selectAll(`g.${className("isAdded")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+        
+        const leaves = selectAll(`g.${className("leafNode")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
 
-      leaves.classed(className("annotation-hidden"), showHide);
-      added.classed(className("annotation-hidden"), showHide);
-      changed.classed(className("annotation-hidden"), showHide);
-      removed.classed(className("annotation-hidden"), !showHide);
+        leaves.classed(className("ringMenuExcluded"), !showHide);
+        added.classed(className("ringMenuExcluded"), !showHide);
+        changed.classed(className("ringMenuExcluded"), !showHide);
+        removed.classed(className("ringMenuExcluded"), showHide);
+      }
     }
   )
 

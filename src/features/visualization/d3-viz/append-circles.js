@@ -108,7 +108,7 @@ const scaleAndTrimToLabelWidth = (node, datum) => {
   let fontScale = 150;
 
   //scale to height
-  do{
+   while ((boxHeight > 0.66 * labelHeight || boxWidth > 0.80 * labelWidth) && fontScale > minFontScale){
 
     select(node)
       .style('font-size', (d, i, nodes) => fontScale + "%")
@@ -118,11 +118,11 @@ const scaleAndTrimToLabelWidth = (node, datum) => {
     boxWidth = node.getBBox().width;
     boxHeight = node.getBBox().height;
   }
-  while (boxHeight > 0.80 * labelHeight && fontScale > minFontScale)
+ 
 
   //trim to width
   let labelText = datum.data.fieldValue;
-  do{
+  while (boxWidth > 0.80 * labelWidth){
 
     select(node)
       .style('font-size', (d, i, nodes) => fontScale + "%")
@@ -132,14 +132,6 @@ const scaleAndTrimToLabelWidth = (node, datum) => {
     boxWidth = node.getBBox().width;
     boxHeight = node.getBBox().height;
   }
-  while (boxWidth > 0.80 * labelWidth)
-
-  // console.log("text: %o", datum.data.fieldValue);
-  // console.log("labelWidth: %o", labelWidth);
-  // console.log("labelHeight: %o", labelHeight);
-  // console.log("fontScale: %o", fontScale);
-  // console.log("boxWidth: %o", boxWidth);
-  // console.log("boxHeight: %o", boxHeight);
 }
 
 export default appendCircles;

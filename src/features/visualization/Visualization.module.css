@@ -107,6 +107,10 @@
   opacity: 0.2;
 }
 
+.viz :global(.viz-node.viz-ringMenuExcluded) circle {
+  opacity: 0.2;
+}
+
 .viz :global(.viz-rootNode) circle {
   fill: transparent;
 }
