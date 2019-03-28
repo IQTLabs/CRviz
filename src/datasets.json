@@ -1,14 +1,14 @@
 [
   {
-    "name": "Small (400 nodes)",
+    "name": "Sample: 400 nodes",
     "url": "https://raw.githubusercontent.com/cyberreboot/CRviz/master/sample_data/400.json"
   },
   {
-    "name": "Medium (1400 nodes)",
+    "name": "Sample: 1400 nodes",
     "url": "https://raw.githubusercontent.com/cyberreboot/CRviz/master/sample_data/1400.json"
   },
   {
-    "name": "Large (4000 nodes)",
+    "name": "Sample: 4000 nodes",
     "url": "https://raw.githubusercontent.com/cyberreboot/CRviz/master/sample_data/4000.json"
   }
 ]

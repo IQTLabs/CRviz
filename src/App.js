@@ -262,7 +262,7 @@ class App extends Component {
               return(
                 <div  key={ uuid } >
                   <div className={style.dataControlHeader}>
-                    t{index}
+                    Series {index}
                     {index > 0 && <FontAwesomeIcon icon={faMinusCircle} onClick={ () => {this.removeDatasetEntry(uuid)}} />}
                   </div>
                   <DatasetControls uuid={ uuid } datasets={ datasets }/>
