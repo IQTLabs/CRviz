@@ -378,7 +378,8 @@ class App extends Component {
           <Visualization startUid={startUuid} endUid={endUuid} />
         </div>
         <div className={ style.sliderContainer } >
-          <DatasetSlider points={uuids} startUuid={startUuid} endUuid={endUuid} />
+          <DatasetSlider points={uuids} startUuid={startUuid} endUuid={endUuid} 
+            setStartUuid={this.setStartUuid} setEndUuid={this.setEndUuid} />
         </div>
         <Modal isOpen={ error !== null } onRequestClose={this.onErrorClose} contentLabel="An Error has occurred">
             <div className={ style.modal }>
