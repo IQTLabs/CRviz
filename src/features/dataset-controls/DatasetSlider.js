@@ -27,40 +27,41 @@ class DatasetSlider extends React.Component {
     }
     
     onDrop = (e) => {
+      e.preventDefault();
       const source = e.dataTransfer.getData("text/plain");
       const slot = Number(e.target.dataset.slot);
-
-      if (isNaN(slot)) return;
-      
       const points = this.props.points;
+      const uuid = !isNaN(slot) ? points[slot] : null;  
+      console.log(slot);    
+      console.log(uuid);
       if (source === "min") {
-        this.props.setStartUuid(points[slot]);
+        this.props.setStartUuid(uuid);
       } else if (source === "max") {
-        this.props.setEndUuid(points[slot]);     }
+        this.props.setEndUuid(uuid);     }
     }
 
     onSlotClick = (e) => {
+      console.log("Slot click started");
       const slot = Number(e.target.dataset.slot);
 
       if (isNaN(slot)) return;
       
       const points = this.props.points;
-
       console.log(this.props.startUuid);
-      if(!this.props.startUuid){
+      if(!this.props.startUuid || this.props.startUuid === "UNSET"){
         this.props.setStartUuid(points[slot]);
       }
-      else if (!this.props.endUuid){
+      else if (!this.props.endUuid || this.props.endUuid === "UNSET"){
         this.props.setEndUuid(points[slot]);
       }
     }
 
-    onMinClick = (e) => {
-      this.props.setStartUuid(null);
+    onStartClick = (e) => {
+      this.props.setStartUuid("UNSET");
     }
 
-    onMaxClick = (e) => {
-      this.props.setEndUuid(null);
+    onEndClick = (e) => {
+      this.props.setEndUuid("UNSET");
     }
     
     MinSlider=()=> {
@@ -68,7 +69,6 @@ class DatasetSlider extends React.Component {
         <div data-slider="min" 
             onDragStart={this.onDragStart} 
             onDrag={this.onDrag}
-            onDoubleClick={this.onMinClick}
             draggable className={
           classNames({[style.sliderThumb]:true, [style.sliderThumbMin]:true})}>
         </div>
@@ -80,7 +80,6 @@ class DatasetSlider extends React.Component {
         <div data-slider="max" 
             onDragStart={this.onDragStart}  
             onDrag={this.onDrag}
-            onDoubleClick={this.onMaxClick}
             draggable className={classNames({[style.sliderThumb]:true, [style.sliderThumbMax]:true})}></div>
       );
     }
@@ -108,15 +107,17 @@ class DatasetSlider extends React.Component {
         );
       
         let currentLabel = "";
-        
+        let clickHandler = null;
         if (points[i] === startUuid){
           currentLabel = "Start";
           minThumb = <this.MinSlider />
+          clickHandler = this.onStartClick;
           maxThumb = null;
         } else if(points[i] === endUuid){
           currentLabel = "End";
           minThumb = null;
           maxThumb = <this.MaxSlider />
+          clickHandler = this.onEndClick;
         } else {
           minThumb = null;
           maxThumb = null;
@@ -126,7 +127,8 @@ class DatasetSlider extends React.Component {
           <div 
             
             key={points[i]}
-            className={style.slotScale}>
+            className={style.slotScale}
+            onClick={clickHandler}>
             {currentLabel}
           </div>
         );
