@@ -31,9 +31,8 @@ class DatasetSlider extends React.Component {
       const source = e.dataTransfer.getData("text/plain");
       const slot = Number(e.target.dataset.slot);
       const points = this.props.points;
-      const uuid = !isNaN(slot) ? points[slot] : null;  
-      console.log(slot);    
-      console.log(uuid);
+      const uuid = !isNaN(slot) ? points[slot] : "UNSET";  
+
       if (source === "min") {
         this.props.setStartUuid(uuid);
       } else if (source === "max") {
@@ -69,6 +68,7 @@ class DatasetSlider extends React.Component {
         <div data-slider="min" 
             onDragStart={this.onDragStart} 
             onDrag={this.onDrag}
+            onDoubleClick={this.onStartClick}
             draggable className={
           classNames({[style.sliderThumb]:true, [style.sliderThumbMin]:true})}>
         </div>
@@ -80,6 +80,7 @@ class DatasetSlider extends React.Component {
         <div data-slider="max" 
             onDragStart={this.onDragStart}  
             onDrag={this.onDrag}
+            onDoubleClick={this.onEndClick}
             draggable className={classNames({[style.sliderThumb]:true, [style.sliderThumbMax]:true})}></div>
       );
     }

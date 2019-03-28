@@ -107,8 +107,14 @@
   opacity: 0.2;
 }
 
-.viz :global(.viz-node.viz-ringMenuExcluded) circle {
+.viz :global(.viz-ringMenuExcluded) circle {
   opacity: 0.2;
+}
+
+.viz :global(.viz-ringMenuExcluded) text {
+  opacity: 0.2;
+  fill-opacity: 0.2;
+  stroke-opacity: 0.2;
 }
 
 .viz :global(.viz-rootNode) circle {
@@ -340,7 +346,11 @@
   -moz-transition: opacity 1s ease-in-out;
 }
 
-circle.bg-circle{
+.viz :global(circle.viz-bg-circle){
   stroke: transparent;
   fill: white !important;
+}
+
+:global(.darkTheme) .viz :global(circle.viz-bg-circle){
+  fill: rgb(130, 129, 129) !important;
 }
