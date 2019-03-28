@@ -111,6 +111,7 @@ const scaleAndTrimToLabelWidth = (node, datum) => {
    while ((boxHeight > 0.66 * labelHeight || boxWidth > 0.80 * labelWidth) && fontScale > minFontScale){
 
     select(node)
+      // eslint-disable-next-line
       .style('font-size', (d, i, nodes) => fontScale + "%")
       .text(datum.data.fieldValue);
 
