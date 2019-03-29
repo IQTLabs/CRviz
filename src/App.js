@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Modal from 'react-modal';
 
-import { isNil } from "ramda";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
   faCheck, faDizzy, faPlus, faMinusCircle, faHome, faAngleDoubleDown, faAngleDoubleUp,
@@ -288,46 +287,6 @@ class App extends Component {
           { hasDataset &&
             <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
               <ComparisonSelector startUid={startUuid} endUid={endUuid} />
-              <div className={style.selectorContainer}>
-                <span className={style.label}>Start</span>
-                <div className={style.selector}>
-                  <label className="select">
-                  <select
-                    onChange={(evt) => this.setStartUuid(evt.target.value)}
-                    value={isNil(startUuid) ? "UNSET" : startUuid}
-                  >
-                    <option value="UNSET">&mdash;None&mdash;</option>
-                    {uuids.map((uuid, index) => {
-                      return (
-                        <option key={uuid} value={uuid}>
-                          t{index}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  </label>
-                </div>
-              </div>
-              <div className={style.selectorContainer}>
-                <span className={style.label}>End</span>
-                <div className={style.selector}>
-                  <label className="select">
-                  <select
-                    onChange={(evt) => this.setEndUuid(evt.target.value)}
-                    value={isNil(endUuid) ? "UNSET" : endUuid}
-                  >
-                    <option value="UNSET">&mdash;None&mdash;</option>
-                    {uuids.map((uuid, index) => {
-                      return (
-                        <option key={uuid} value={uuid}>
-                          t{index}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  </label>
-                </div>
-              </div>
             </div>
           }
           { !hasDataset && 
@@ -377,7 +336,7 @@ class App extends Component {
         <div className={ style.canvas }>
           <Visualization startUid={startUuid} endUid={endUuid} />
         </div>
-        <div className={ style.sliderContainer } >
+        <div className={ classNames({ [style.sliderContainer]: true, [style.hidden]: !hasDataset }) } >
           <DatasetSlider points={uuids} startUuid={startUuid} endUuid={endUuid} 
             setStartUuid={this.setStartUuid} setEndUuid={this.setEndUuid} />
         </div>

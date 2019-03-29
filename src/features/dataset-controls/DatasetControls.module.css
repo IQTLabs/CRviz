@@ -147,7 +147,7 @@
 
 .sliderThumb {
   position: relative;
-  background-color:gray;
+  background-color:transparent;
   height:20px;
   width:20px;
   border-radius:50%;
@@ -157,11 +157,43 @@
 }
 
 .sliderThumbMin {
-  background-color:red;
+  background-color:#DCDCDC;
+}
+
+:global(.darkTheme) .sliderThumbMin {
+  background-color:#E0E0E0;
 }
 
 .sliderThumbMax {
-  background-color: blue;
+  background-color: #767777;
+  opacity: 0.99;
+}
+
+:global(.darkTheme) .sliderThumbMax {
+  background-color: #858585;
+}
+
+.sliderThumbMin::after{
+  display:inline-block;
+  position:relative;
+  content:"";
+  height: 6px;
+  background-color: #191919;
+  width: 12px;
+  top: -2.5px;
+  left:15px;
+}
+
+.sliderThumbMax::before
+{
+  display:inline-block;
+  position:relative;
+  content:"";
+  height: 6px;
+  background-color: #191919;
+  width: 12px;
+  top: -2.5px;
+  left:-15px;
 }
 
 .slot {
@@ -174,7 +206,7 @@
 
 .scaleMark {
  position: absolute;
- border: 0.5px solid orange;
+ border: 0.5px solid #191919;
  height: 1em;
 }
 
@@ -183,27 +215,30 @@
   display:inline-block;
   width:40px;
   height:20px;
-  color: blue;
+  color: #8D8E8F;
   user-select: none;
   
 }
 
+:global(.darkTheme) .slotScale {
+  color: #C9C9C9;
+}
+
 .slot >.sliderThumb {
-  top:3px
+  top:0px
 }
 
 .line {
   position: relative;
-  background-color: green;
+  background-color: #191919;
   height:2px;
   width: 40px;
   top: 12px;
 }
 
 .lineSelected {
-  height: 4px;
+  height: 5px;
   background-color: #191919;
-  width: 60px;
-  left: -10px;
+  width: 40px;
   top: 12px;
 }

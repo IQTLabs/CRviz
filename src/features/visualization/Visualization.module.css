@@ -47,14 +47,14 @@
 
 .viz :global(.viz-isAdded-fixed) circle {
   fill: black;
-  -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
-  clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
+  -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
+  clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
 }
 
 :global(.darkTheme) .viz :global(.viz-isAdded-fixed) circle {
   fill: white;
-  -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
-  clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
+  -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
+  clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
 }
 
 .viz :global(.viz-isAdded) circle {
@@ -66,8 +66,8 @@
 
 @keyframes plus {
   0% {
-    -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
-    clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%);
+    -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
+    clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
   },
   100% {
 
@@ -262,7 +262,7 @@
 .viz :global(.viz-annotation-title) {
   fill: black;
   text-anchor: middle;
-  dominant-baseline: central;
+  dominant-baseline: middle;
   font-weight: bold;
 }
 
@@ -273,7 +273,7 @@
 .viz :global(.viz-annotation-text) {
   fill: black;
   text-anchor: middle;
-  dominant-baseline: central;
+  dominant-baseline: middle;
 }
 
 :global(.darkTheme) .viz :global(.viz-annotation-text) {

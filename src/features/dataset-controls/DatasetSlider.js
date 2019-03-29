@@ -31,22 +31,20 @@ class DatasetSlider extends React.Component {
       const source = e.dataTransfer.getData("text/plain");
       const slot = Number(e.target.dataset.slot);
       const points = this.props.points;
-      const uuid = !isNaN(slot) ? points[slot] : "UNSET";  
+      if(isNaN(slot)) return;
 
       if (source === "min") {
-        this.props.setStartUuid(uuid);
+        this.props.setStartUuid(points[slot]);
       } else if (source === "max") {
-        this.props.setEndUuid(uuid);     }
+        this.props.setEndUuid(points[slot]);     }
     }
 
     onSlotClick = (e) => {
-      console.log("Slot click started");
       const slot = Number(e.target.dataset.slot);
 
       if (isNaN(slot)) return;
       
       const points = this.props.points;
-      console.log(this.props.startUuid);
       if(!this.props.startUuid || this.props.startUuid === "UNSET"){
         this.props.setStartUuid(points[slot]);
       }
@@ -122,19 +120,22 @@ class DatasetSlider extends React.Component {
         } else {
           minThumb = null;
           maxThumb = null;
+          clickHandler = this.onSlotClick;
         }
         
         currentScale.push(
-          <div 
-            
+          <div    
             key={points[i]}
+            data-slot={i}
             className={style.slotScale}
             onClick={clickHandler}>
             {currentLabel}
           </div>
         );
           
-        const lineIsSelected = startUuid !== null && endUuid !== null && i > points.indexOf(startUuid) && i < points.indexOf(endUuid);
+        const lineIsSelected = startUuid !== null && endUuid !== null && 
+          ((i > points.indexOf(startUuid) && i < points.indexOf(endUuid) && points.indexOf(startUuid) < points.indexOf(endUuid)) ||
+            (i < points.indexOf(startUuid) && i > points.indexOf(endUuid) && points.indexOf(startUuid) > points.indexOf(endUuid)));
 
         slider.push(
           <div 
@@ -150,7 +151,10 @@ class DatasetSlider extends React.Component {
                 [style.line]: true,
                 [style.lineSelected]: lineIsSelected
               })}/>
-              <span className={style.scaleMark}></span>
+              <span className={style.scaleMark} 
+                data-slot={i}
+                onDrop = {this.onDrop}
+                onClick = {this.onSlotClick}></span>
               {minThumb}
               {maxThumb}
           </div>
