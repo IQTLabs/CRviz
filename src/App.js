@@ -417,7 +417,9 @@ class App extends Component {
               <div>
                 <span className={ style.centerSpan }>
                   {options.action === IMPORT &&
-                    <div className="button circular" title="Ok" onClick={this.processOptions}>
+                    <div className="button circular" title="Ok" 
+                         disabled={options.action === IMPORT && !this.state.selectedFile} 
+                         onClick={this.processOptions}>
                         <FontAwesomeIcon icon={faCheck} />
                     </div>
                   }
