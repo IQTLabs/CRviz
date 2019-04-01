@@ -1,5 +1,6 @@
 import {
   default as dataset,
+  setDatasets,
   setDataset,
   selectDataset,
   selectDatasets,
@@ -46,13 +47,14 @@ describe("Dataset Reducer", () => {
             { 'path': ["role", "role"], 'displayName': "Role", 'groupable': false }
           ]
         };
+        let datasets ={};
+        datasets[owner1] = {'dataset': dataset, 'configuration': configuration }
+        datasets[owner2] = {'dataset': dataset, 'configuration': configuration }
 
-        const action1 = setDataset({ 'owner': owner1, 'dataset': dataset, 'configuration': configuration });
-        const action2 = setDataset({ 'owner': owner2, 'dataset': dataset, 'configuration': configuration });
-        reducer({}, action1);
-        const result2 = reducer({}, action2);
-        const datasets = selectDatasets(result2);
-        expect(Object.keys(datasets).length).to.equal(2);
+        const action = setDatasets({ 'datasets': datasets });
+        const result = reducer({}, action);
+        const selectedDatasets = selectDatasets(result);
+        expect(Object.keys(selectedDatasets).length).to.equal(2);
         done();
       });
 

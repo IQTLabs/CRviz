@@ -11,16 +11,21 @@ import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
 import { removeSearchIndex } from "epics/index-dataset-epic";
-import { showNodes, setHierarchyConfig, colorBy } from "domain/controls"
+import { showNodes, setHierarchyConfig, colorBy, selectControls } from "domain/controls"
 
 import { setError } from "domain/error"
-import { setDataset, selectDataset, removeDataset, getIsFetching, setIsFetching, getLastUpdated } from "domain/dataset";
+import { 
+  setDataset, selectDataset, selectDatasets, removeDataset, 
+  getIsFetching, setIsFetching, getLastUpdated, getKeyFields,
+  getIgnoredFields
+} from "domain/dataset";
 
 import DatasetSelector from "./DatasetSelector";
 import DatasetUpload from "./DatasetUpload";
 import DatasetDownload from "./DatasetDownload";
 import DatasetRefresh from "./DatasetRefresh";
 import DatasetTimedRefresh from "./DatasetTimedRefresh";
+import { getDataToExport } from "./export"
 
 import style from "./DatasetControls.module.css";
 
@@ -101,9 +106,6 @@ class DatasetControls extends React.Component {
 
     this.props.removeDataset({owner: this.props.uuid});
     this.props.removeSearchIndex({owner: this.props.uuid});
-    this.props.setHierarchyConfig([]);
-    this.props.colorBy(null);
-    this.props.showNodes(true);
     this.props.stopRefresh();
 
     const showUrlEntry = dataset === CUSTOM_DATASET;
@@ -125,9 +127,12 @@ class DatasetControls extends React.Component {
   }
 
   onUpload = (file) => {
-    this.props.setHierarchyConfig([]);
-    this.props.colorBy(null);
-    this.props.uploadDataset({ 'owner': this.props.uuid, 'file': file });
+    this.props.uploadDataset({ 
+      'owner': this.props.uuid, 
+      'file': file,
+      'includeData': true,
+      'includeControls': false,
+    });
     this.props.stopRefresh();
     this.setState({
       selected: null,
@@ -176,8 +181,12 @@ class DatasetControls extends React.Component {
   }
 
   getDownloadUrl = () => {
+    const datasets = this.props.fullDatasets;
+    const controls = this.props.controls;
+    const keyFields = this.props.keyFields;
+    const ignoredFields = this.props.ignoredFields;
     const urlObject = window.URL || window.webkitURL || window;
-    const json = JSON.stringify({'dataset': this.props.dataset});
+    const json = JSON.stringify(getDataToExport(datasets, keyFields, ignoredFields, controls));
     const blob = new Blob([json], {'type': "application/json"});
     const url = urlObject.createObjectURL(blob);;
     return url;
@@ -363,8 +372,11 @@ DatasetControls.defaultProps = {
   uuid: uuidv4(),
   datasets: [],
   dataset: null,
+  hierarchyConfig: [],
+  configHasChanged: false,
   isFetching: false,
   lastUpdated: new Date(),
+  
 };
 
 DatasetControls.propTypes = {
@@ -386,6 +398,12 @@ DatasetControls.propTypes = {
   isFetching: PropTypes.bool,
   lastUpdated: PropTypes.instanceOf(Date),
   setError: PropTypes.func.isRequired,
+  hierarchyConfig: PropTypes.array,
+  configHasChanged: PropTypes.bool,
+  fullDatasets: PropTypes.object,
+  controls: PropTypes.object,
+  keyFields: PropTypes.array,
+  ignoredFields: PropTypes.array
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -393,7 +411,11 @@ const mapStateToProps = (state, ownProps) => {
   return {
     dataset: selectDataset(state,owner),
     isFetching: getIsFetching(state, owner),
-    lastUpdated: getLastUpdated(state, owner)
+    lastUpdated: getLastUpdated(state, owner),
+    fullDatasets: selectDatasets(state),
+    controls: selectControls(state),
+    keyFields: getKeyFields(state),
+    ignoredFields: getIgnoredFields(state)
   };
 }
 

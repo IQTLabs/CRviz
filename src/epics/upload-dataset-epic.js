@@ -60,8 +60,15 @@ const fromReader = (owner, file) => {
 const fromJson = (payload) =>{
   const owner = payload.owner;
   const content = JSON.parse(payload.file);
+  const includeData = ('includeData' in payload) ? payload.includeData : true;
+  const includeControls = ('includeControls' in payload) ? payload.includeControls: false;
 
-  return {'owner': owner, 'content': content};
+  return {
+    'owner': owner,
+    'content': content, 
+    'includeData': includeData,
+    'includeControls': includeControls,
+  };
 }
 
 export default uploadDatasetEpic;

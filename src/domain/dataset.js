@@ -47,16 +47,23 @@ const getHashFields = (allFields, ignoredFields) => {
 const addHashKey = (keys, obj) => {
   //console.log("addHashKey keys: %o", keys);
   const hashKey = keys.reduce( (h, k) => h + path(k.path, obj) + ":", "");
-  obj["HASH_KEY"] = hashKey;
+  obj.CRVIZ["_HASH_KEY"] = hashKey;
 }
 
 const addHashWithoutIgnored = (fields, obj) => {
   const hash = fields.reduce( (h, f) => h + path(f.path, obj) + "|", "");
-  obj["HASH_WITHOUT_IGNORED"] = hash;
+  obj.CRVIZ["_HASH_WITHOUT_IGNORED"] = hash;
 }
 
 const applyHashes = (dataset, configuration) => {
   dataset.forEach((i) => {
+    if(!('CRVIZ' in i)){
+      i['CRVIZ'] = {};
+    }
+    if(!configuration.hashFields){
+      configuration.hashFields = getHashFields(configuration.fields, configuration.ignoredFields || []);
+    }
+
     addHashKey(configuration.keyFields.length > 0 ? configuration.keyFields : configuration.hashFields, i);
     addHashWithoutIgnored(configuration.hashFields, i);
   });
@@ -89,7 +96,7 @@ const pathsIn = (obj) =>
  * Return all fields for an object
  */
 const fieldsFor = (obj, overrides = []) => {
-  const paths = pathsIn(obj);
+  const paths = pathsIn(obj).filter(p => p[0] !== 'CRVIZ');
   return map((path) => {
     const override = find(propEq('path', path), overrides) || {};
     return merge(
@@ -143,6 +150,28 @@ const valuesFor = (dataset, configuration) => {
   }, configuration.fields));
 };
 
+const configureDataset = (dataset, initialConfig, keyFields, ignoredFields) => {
+  const configuration = configurationFor(
+    dataset || [],
+    keyFields,
+    ignoredFields,
+    initialConfig || {}
+  );
+  applyHashes(dataset, configuration);
+
+  const values = valuesFor(dataset, configuration);
+  const isFetching = false;
+  const lastUpdated = new Date();
+  return {
+    dataset: dataset,
+    filtered: null,
+    values: values,
+    configuration: configuration,
+    isFetching: isFetching,
+    lastUpdated: lastUpdated
+  }
+}
+
 // ACTIONS
 
 /**
@@ -151,6 +180,7 @@ const valuesFor = (dataset, configuration) => {
  *   configuration: {} // Configuration
  * }
 */
+const setDatasets = createAction("SET_DATASETS");
 const setDataset = createAction("SET_DATASET");
 const setFilteredDataset = createAction("SET_FILTERED_DATASET");
 const setDatasetDiff = createAction("SET_DATASET_DIFF");
@@ -164,30 +194,21 @@ const setIgnoredFields = createAction("SET_IGNORED_FIELDS");
 // REDUCERS
 const reducer = handleActions(
   {
+    [setDatasets]: (state, { payload }) => {
+      const datasets = payload.datasets;
+      Object.keys(datasets).forEach((key) => {
+        state.datasets[key] = datasets[key];
+      })
+      
+      return { ...state};
+    },
     [setDataset]: (state, { payload }) => {
       const dataset = payload.dataset;
       const owner = payload.owner;
+      const initialConfig = payload.configuration;
       const keyFields = getKeyFields(state);
       const ignoredFields = getIgnoredFields(state);
-      const configuration = configurationFor(
-        payload.dataset || [],
-        keyFields,
-        ignoredFields,
-        payload.configuration || {}
-      );
-      applyHashes(dataset, configuration);
-
-      const values = valuesFor(dataset, configuration);
-      const isFetching = false;
-      const lastUpdated = new Date();
-      state.datasets[owner] = {
-        dataset: dataset,
-        filtered: null,
-        values: values,
-        configuration: configuration,
-        isFetching: isFetching,
-        lastUpdated: lastUpdated
-      }
+      state.datasets[owner] = configureDataset(dataset, initialConfig, keyFields, ignoredFields);
       return { ...state};
     },
     [setFilteredDataset]: (state, { payload }) => {
@@ -251,7 +272,6 @@ const reducer = handleActions(
     [setKeyFields]: (state, { payload }) => { 
       const keyFields = payload;
       const datasets = _selectDatasets(state);
-
       if(datasets){
         Object.keys(datasets).forEach((key) => {
           const ds = datasets[key];
@@ -351,40 +371,50 @@ const getIgnoredFields = (state) => state.dataset && state.dataset.ignoredFields
 const selectDatasetIntersection = (state, startOwner, endOwner) => {
   let ds = [];
   const start = selectDataset(state, startOwner);
+  start.forEach((s)=>{
+    s.CRVIZ._isRemoved = false;
+    s.CRVIZ._isChanged = false;
+    s.CRVIZ._isAdded = false;
+  });
   const end = selectDataset(state, endOwner);
+  end.forEach((e)=>{
+    e.CRVIZ._isRemoved = false;
+    e.CRVIZ._isChanged = false;
+    e.CRVIZ._isAdded = false;
+  });
+  
   if(start.length > 0 && end.length === 0){
     ds = start;
   } else if(start.length === 0 && end.length > 0){
     ds = end;
   } else if(start.length > 0 && end.length > 0) {
     start.forEach((s) => {
-      const idx = end.findIndex(e => e.HASH_KEY === s.HASH_KEY);
+      const idx = end.findIndex(e => e.CRVIZ._HASH_KEY === s.CRVIZ._HASH_KEY);
       if(idx === -1){
-        s.isRemoved = true;
+        s.CRVIZ._isRemoved = true;
       } else {
-        s.isRemoved = false;
+        s.CRVIZ._isRemoved = false;
       }
-      s.isChanged = false;
-      s.isAdded = false;
+      s.CRVIZ._isChanged = false;
+      s.CRVIZ._isAdded = false;
       ds.push(s);
     });
     end.forEach((e) => {
-      const idx = ds.findIndex(i => i.HASH_KEY === e.HASH_KEY);
+      const idx = ds.findIndex(i => i.CRVIZ._HASH_KEY === e.CRVIZ._HASH_KEY);
       if(idx === -1){
-        e.isAdded = true;
+        e.CRVIZ._isAdded = true;
         ds.push(e);
-      } else if(ds[idx].HASH_WITHOUT_IGNORED !== e.HASH_WITHOUT_IGNORED){
-        ds[idx].isChanged = true;
+      } else if(ds[idx].CRVIZ._HASH_WITHOUT_IGNORED !== e.CRVIZ._HASH_WITHOUT_IGNORED){
+        ds[idx].CRVIZ._isChanged = true;
       }
     })
   }
-
   return ds;
 }
 
 
 export default reducer;
 
-export { setDataset, selectDataset, selectDatasets, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration, selectValues, 
-  selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields, getHashFields, getLastUpdated, valuesFor, 
-  setDatasetDiff, removeDatasetDiff, selectDatasetDiff, selectDatasetIntersection, applyHashes };
+export { setDatasets, setDataset, selectDataset, selectDatasets, removeDataset, setFilteredDataset, selectFilteredDataset, removeFilteredDataset, selectConfiguration, selectMergedConfiguration,
+  selectValues, selectMergedValues, getFieldId, configurationFor, setIsFetching, getIsFetching, setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields, getHashFields, getLastUpdated, 
+  valuesFor, setDatasetDiff, removeDatasetDiff, selectDatasetDiff, selectDatasetIntersection, applyHashes, configureDataset };

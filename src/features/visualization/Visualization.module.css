@@ -10,7 +10,6 @@
   stroke-width: 0;
 }
 
-
 .viz :global(.viz-node) circle {
   fill: black;
 }
@@ -19,20 +18,103 @@
   opacity: 1;
 }
 
-.viz :global(.viz-node.viz-isChanged) circle {
+.viz :global(.viz-isChanged-fixed) circle {
+  fill:black;
+  -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+:global(.darkTheme) .viz :global(.viz-isChanged-fixed) circle {
+  fill:white;
+}
+
+.viz :global(.viz-isChanged) circle {
+  -webkit-animation-name: delta;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  animation: delta 5s infinite;
+}
+
+@keyframes delta {
+  0% {
+    -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  },
+  100% {
+
+  }
+}
+
+.viz :global(.viz-isAdded-fixed) circle {
+  fill: black;
+  -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
+  clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
+}
+
+:global(.darkTheme) .viz :global(.viz-isAdded-fixed) circle {
   fill: white;
+  -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
+  clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
 }
 
-.viz :global(.viz-node.viz-isAdded) circle {
-  fill: blue;
+.viz :global(.viz-isAdded) circle {
+  -webkit-animation-name: plus;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  animation: plus 5s infinite;
 }
 
-.viz :global(.viz-node.viz-isRemoved) circle {
-  fill: orange;
+@keyframes plus {
+  0% {
+    -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
+    clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
+  },
+  100% {
+
+  }
+}
+
+.viz :global(.viz-isRemoved-fixed) circle {
+  fill: black;
+  -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+  clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+}
+
+:global(.darkTheme) .viz :global(.viz-isRemoved-fixed) circle {
+  fill: white;
+  -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+  clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+}
+
+.viz :global(.viz-isRemoved) circle {
+  -webkit-animation-name: minus;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  animation: minus 5s infinite;
+}
+
+@keyframes minus {
+  0% {
+    -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+    clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
+  },
+  100% {
+
+  }
 }
 
 .viz :global(.viz-node.viz-searchExcluded) circle {
   opacity: 0.2;
+}
+
+.viz :global(.viz-ringMenuExcluded) circle {
+  opacity: 0.2;
+}
+
+.viz :global(.viz-ringMenuExcluded) text {
+  opacity: 0.2;
+  fill-opacity: 0.2;
+  stroke-opacity: 0.2;
 }
 
 .viz :global(.viz-rootNode) circle {
@@ -71,7 +153,7 @@
 .viz :global(.viz-label) {
   fill: black;
   text-anchor: middle;
-  dominant-baseline: central;
+  dominant-baseline: alphabetical;
 }
 
 .viz :global(.viz-labelShape) {
@@ -89,7 +171,6 @@
   border: 1px solid black;
   padding: 1rem;
   white-space: nowrap;
-  pointer-events: none;
 }
 
 .viz :global(.viz-legend) {
@@ -142,7 +223,6 @@
   border: 1px solid rgb(100, 100, 100);
   padding: 1rem;
   white-space: nowrap;
-  pointer-events: none;
 }
 
 :global(.darkTheme) .viz :global(.viz-node) circle {
@@ -179,6 +259,98 @@
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-:global(.darkTheme) .viz :global(.viz-node.viz-isChanged) circle {
+.viz :global(.viz-annotation-title) {
+  fill: black;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-weight: bold;
+}
+
+:global(.darkTheme) .viz :global(.viz-annotation-title) {
   fill: white;
+}
+
+.viz :global(.viz-annotation-text) {
+  fill: black;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+:global(.darkTheme) .viz :global(.viz-annotation-text) {
+  fill: white;
+}
+
+.viz :global(.viz-annotation-hidden) {
+  display:none;
+}
+
+.viz :global(.viz-annotation-hidden) circle {
+  display:none;
+}
+
+/*Nag Icon*/
+.viz :global(.nag) {
+  animation-name: nag;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+
+}
+@keyframes nag { 
+  0% { 
+    transform: rotateX(0deg); 
+  },
+  5% {
+    transform: rotateX(-35deg);
+  },
+  10%{
+    transform: rotateX(0deg); 
+  },
+  15% {
+    transform: rotateX(35deg); 
+  },
+  20% {
+    transform: rotateX(0deg); 
+  },
+  100% { 
+    transform: rotateX(0deg); 
+  }
+}
+/*@keyframes nag { 
+  0% { 
+    transform: translateX(0px) rotateX(0deg); 
+  },
+  5% {
+    transform: translateX(-3px) rotateX(-5deg);
+  },
+  10%{
+    transform: translateX(0px) rotateX(0deg); 
+  },
+  15% {
+    transform: translateX(3px) rotateX(5deg); 
+  },
+  20% {
+    transform: translateX(0px) rotateX(0deg); 
+  },
+  100% { 
+    transform: translateX(0px) rotateX(0deg); 
+  }
+}*/
+
+/*Ring Menu*/
+.viz :global(.viz-ring-menu){
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 2s ease-in-out;
+  -webkit-transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+}
+
+.viz :global(circle.viz-bg-circle){
+  stroke: transparent;
+  fill: white !important;
+}
+
+:global(.darkTheme) .viz :global(circle.viz-bg-circle){
+  fill: rgb(130, 129, 129) !important;
 }

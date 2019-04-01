@@ -103,7 +103,6 @@ class HierarchySelector extends React.Component {
     }
 
     const hierarchyConfig = this.props.controls.hierarchyConfig;
-
     if (isEmpty(this.props.configuration.fields)) {
       return null;
     }

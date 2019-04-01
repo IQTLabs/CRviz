@@ -34,16 +34,16 @@ const generateDiff = (payload) => {
   	changed:[],
   	removed:[]
   };
-  diffs.added = diffs.added.concat(endDs.filter(ei => startDs.findIndex(si => si["HASH_KEY"] === ei["HASH_KEY"]) === -1).map(i => i["HASH_KEY"]));
-  diffs.removed = diffs.removed.concat(startDs.filter(si => endDs.findIndex(ei => ei["HASH_KEY"] === si["HASH_KEY"]) === -1).map(i => i["HASH_KEY"]));
+  diffs.added = diffs.added.concat(endDs.filter(ei => startDs.findIndex(si => si.CRVIZ["_HASH_KEY"] === ei.CRVIZ["_HASH_KEY"]) === -1).map(i => i.CRVIZ["_HASH_KEY"]));
+  diffs.removed = diffs.removed.concat(startDs.filter(si => endDs.findIndex(ei => ei.CRVIZ["_HASH_KEY"] === si.CRVIZ["_HASH_KEY"]) === -1).map(i => i.CRVIZ["_HASH_KEY"]));
 
   diffs.changed = diffs.changed.concat(
   	endDs.filter(
   		ei => startDs.findIndex(
-  			si => si["HASH_KEY"] === ei["HASH_KEY"] &&
-  						si["HASH_WITHOUT_IGNORED"] !== ei["HASH_WITHOUT_IGNORED"]
+  			si => si.CRVIZ["_HASH_KEY"] === ei.CRVIZ["_HASH_KEY"] &&
+  						si.CRVIZ["_HASH_WITHOUT_IGNORED"] !== ei.CRVIZ["_HASH_WITHOUT_IGNORED"]
   		) !== -1
-  	).map(i => i["HASH_KEY"])
+  	).map(i => i.CRVIZ["_HASH_KEY"])
   );
 
   //console.log("diffs to return: %o", diffs);

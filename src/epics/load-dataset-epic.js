@@ -1,14 +1,14 @@
 import { createAction } from "redux-actions";
 import { ofType } from 'redux-observable';
 import { of } from "rxjs";
-import { map, mergeMap, catchError, concat } from 'rxjs/operators';
+import { map, mergeMap, catchError } from 'rxjs/operators';
 import { isNil, is } from "ramda";
 
-import { buildIndex } from './index-dataset-epic';
+import { buildIndices } from './index-dataset-epic';
 
 import { setError } from "domain/error"
-import { setDataset } from "domain/dataset";
-import { setHierarchyConfig, colorBy } from "domain/controls";
+import { setDatasets, setKeyFields, setIgnoredFields, configureDataset } from "domain/dataset";
+import { setControls } from "domain/controls";
 
 const loadDataset = createAction("LOAD_DATASET");
 
@@ -19,21 +19,14 @@ const loadDatasetEpic = (action$, store) => {
       return of(payload).pipe(
         map(formatPayload)
         ,mergeMap((payload) => {
-          const owner = payload.owner;
           return of(
-            setDataset({
-              owner: owner,
-              dataset: payload.dataset,
-              configuration: payload.configuration
-            })
-            ,buildIndex({
-                owner: owner,
-                dataset: payload.dataset,
-                configuration: payload.configuration || null
-            })
+            setDatasets(payload)
+            ,setKeyFields(payload.keyFields)
+            ,setIgnoredFields(payload.ignoredFields)
+            ,setControls(payload.controls)
+            ,buildIndices(payload)
           )
         })
-        ,concat(of(setHierarchyConfig(store.value.controls.hierarchyConfig || []), colorBy(store.value.controls.colorBy)))
         ,catchError((error) => {
           if (is(ValidationError, error)) {
             return of(setError(error));
@@ -100,12 +93,24 @@ const CSVconvert = (data) => {
 const formatPayload = (data) => {
   const owner = data.owner;
   const content = data.content;
-  const config = content.configuration;
-  var temp = {};
-  if(!isNil(content.dataset) && is(Array, content.dataset)){
-    temp = content.dataset;
+  const datasets = content.datasets;
+  const keyFields = content.keyFields || [];
+  const ignoredFields = content.ignoredFields || [];
+  const controls = content.controls || {};
+  const includeData = ('includeData' in data) ? data.includeData : true;
+  const includeControls = ('includeControls' in data) ? data.includeControls: false;
+
+  var final = {};
+
+  if(datasets){
+    final =  datasets;
+  } else if(!isNil(content.dataset) && is(Array, content.dataset)){
+    final[owner] = { 'dataset': content.dataset };
+    if(content.configuration){
+      final[owner].configuration = content.configuration;
+    }
   } else if(isNil(content.dataset) && is(Array, content)) {
-    temp  = content;
+    final[owner] = { 'dataset': content };
   } else if(isNil(content.dataset)) {
     let obj = {};
     Object.entries(content).forEach( (entry) =>{
@@ -113,12 +118,23 @@ const formatPayload = (data) => {
       let value = entry[1]
       obj[key] = value;
       })
-    temp = [obj];
+    final[owner] = { 'dataset': [obj] };
   } else {
     throw ValidationError('Data in invalid format');
   }
 
-  data = { 'owner': owner, 'dataset': temp, 'configuration': config };
+  Object.keys(final).forEach((owner) =>{
+    const dataset = final[owner].dataset;
+    const initialConfig = final[owner].configuration;
+    final[owner] = configureDataset(dataset, initialConfig, keyFields, ignoredFields);
+  })
+
+  data = { 
+          'datasets': includeData ? final : {},
+          'keyFields': includeData ? keyFields : {},
+          'ignoredFields': includeData ? ignoredFields : {},
+          'controls': includeControls ? controls : {}
+        };
   return data;
 };
 

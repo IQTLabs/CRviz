@@ -73,15 +73,16 @@ function d3Viz(rootNode) {
 
   const svg = transformRoot.append("svg")
                            .style("overflow", "visible")
-                           .attr("class", "nodeRoot");
+                           .attr("class", "nodeRoot")
+                           .attr('viewBox', "0 0 100% 100%");
 
   const tooltip = root.append("div").classed("viz-tooltip", true);
   const legend = root.append("div").classed("viz-legend", true);
 
   const nodeRoot = svg.append("g");
 
-  const annotationRoot = svg.append("g")
-                         .attr("class", "annotation-root")
+  const annotationRoot = svg.append("g").attr("class", "annotation-root")
+
 
   // State
   let props = {
@@ -98,6 +99,7 @@ function d3Viz(rootNode) {
   const state = {
     packedData: null,
     nodes: null,
+    annotations: null,
     labels: null,
     countLabels: null,
     zoom: null,
@@ -129,6 +131,7 @@ function d3Viz(rootNode) {
 
     if (dataUpdated) {
       repack(props, state);
+      resetAnnotations(props, state);
     }
 
     rerender(props, state);
@@ -142,8 +145,6 @@ function d3Viz(rootNode) {
     if (sizeUpdated || dataUpdated) {
       resetZoom(props, state);
     }
-
-    resetAnnotations(props, state);
   }
 
   const repack = (props, state) => {
@@ -166,7 +167,7 @@ function d3Viz(rootNode) {
   };
 
   const rerender = (props, state) => {
-    const [nodes, labels, countLabels] = appendCircles({
+    const [nodes] = appendCircles({
       nodeRoot: nodeRoot,
       labelRoot: labelRoot,
       packedData: state.packedData,
@@ -181,8 +182,6 @@ function d3Viz(rootNode) {
     });
 
     state.nodes = nodes;
-    state.labels = labels;
-    state.countLabels = countLabels;
   };
 
   const resetLegend = (props, state) => {
@@ -194,7 +193,7 @@ function d3Viz(rootNode) {
     });
 
     if(state.legend != null){
-      state.legend.update({ nodes: state.nodes })
+      state.legend.update({ nodes: state.nodes, annotations: state.annotations })
     }
   };
 
@@ -203,8 +202,6 @@ function d3Viz(rootNode) {
       zoomRoot: zoomRoot,
       transformRoot: transformRoot,
       nodes: state.nodes,
-      labels: state.labels,
-      countLabels: state.countLabels,
       width: props.width,
       height: props.height,
       packedData: state.packedData
@@ -224,17 +221,19 @@ function d3Viz(rootNode) {
 
     nodeRoot.on("click.select", () => {
       const datum = select(d3Event.target).datum();
+      let zoomToNode = datum;
+      if(datum.height === 0 && datum.parent){
+        zoomToNode = datum.parent;
+      }
       state.selectedNode = datum;
-      state.zoom.zoomTo(datum);
+      state.zoom.zoomTo(zoomToNode);
     });
   };
 
   const resetAnnotations = (props, state) =>{
-    //const annotations = 
-    setupAnnotations({
-      nodeRoot: nodeRoot,
+    state.annotations = setupAnnotations({
+      packedData: state.packedData,
       annotationRoot: annotationRoot,
-      colorMap: state.legend && state.legend.colorMap ? state.legend.colorMap : []
     })
   };
 
