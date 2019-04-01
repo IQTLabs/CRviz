@@ -53,12 +53,12 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
   const mergedLabels = labels
   .merge(newLabels)
     .filter((d) => d.labelSize)
-    .style('font-size', (d, i, nodes) => (2 * d.height * fontScale) + "%")
+    .style('font-size', (d, i, nodes) => (3 * d.height * fontScale) + "%")
     .attr('y', (d) => d.r - (d.labelSize/2))
     .text((d) => d.data.fieldValue);
 
   mergedLabels.each( (d, i, nodes) => {
-    scaleAndTrimToLabelWidth(nodes[i], d);
+    scaleAndTrimToLabelWidth(nodes[i], d, 3 * d.height * fontScale);
   })
 
   return [
@@ -98,40 +98,41 @@ const getLabelWidth = (datum) =>{
   return 2*radius*Math.sin(arcAngle/2);
 }
 
-const scaleAndTrimToLabelWidth = (node, datum) => {
-  const labelWidth = getLabelWidth(datum);
-  const labelHeight = datum.labelSize;
-  const minFontScale = 25;
+const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
+  const textWidth = 0.80 * getLabelWidth(datum);
+  const textHeight = 0.75 * datum.labelSize;
+  const minFontScale = 10;
 
   let boxWidth = node.getBBox().width;
   let boxHeight = node.getBBox().height;
-  let fontScale = 150;
+  let fontScale = 100;
+  let labelText = datum.data.fieldValue;
 
   //scale to height
-   while ((boxHeight > 0.66 * labelHeight || boxWidth > 0.80 * labelWidth) && fontScale > minFontScale){
-
-    select(node)
-      // eslint-disable-next-line
-      .style('font-size', (d, i, nodes) => fontScale + "%")
-      .text(datum.data.fieldValue);
-
-    fontScale -= 5;
-    boxWidth = node.getBBox().width;
-    boxHeight = node.getBBox().height;
-  }
- 
-
-  //trim to width
-  let labelText = datum.data.fieldValue;
-  while (boxWidth > 0.80 * labelWidth){
-
+   if ((boxHeight > textHeight)){
+    const heightScale = Math.abs((boxHeight -textHeight)/textHeight);
+    fontScale = Math.max(minFontScale, heightScale * initialFontScale)
     select(node)
       .style('font-size', (d, i, nodes) => fontScale + "%")
       .text(labelText);
+  }
+ 
+  boxWidth = node.getBBox().width;
+  //trim to width
+  if(boxWidth > textWidth)
+  {
+    const lengthToTrimTo = Math.trunc(((boxWidth -textWidth)/textWidth) * labelText.length) - 3;
+    console.log("widthScale: %o", ((boxWidth -textWidth)/textWidth));
+    console.log("lengthToTrimTo: %o", lengthToTrimTo)
+    if(lengthToTrimTo > 0){
+      labelText = labelText.substr(0, lengthToTrimTo) + "...";
+    }
+    else{
+      labelText = "...";
+    }
 
-    labelText = labelText.substr(0, labelText.length - 5) + "...";
-    boxWidth = node.getBBox().width;
-    boxHeight = node.getBBox().height;
+    select(node)
+      .text(labelText);
   }
 }
 

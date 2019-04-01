@@ -1,5 +1,7 @@
 import { select, selectAll } from "d3";
 
+import { memoizeWith } from "ramda";
+
 import datumKey from "./datum-key";
 import className from "./class-name";
 
@@ -43,8 +45,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   .select(`g.${className("change-icon-container")}`)
   .select('text.svg-icon')
   .merge(newChangeIcon)
-    .attr('x', (d) => (d.r * Math.cos(baseAngle)))
-    .attr('y', (d) => (d.r * Math.sin(baseAngle)))
+    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle)))
+    .attr('y', (d) => (getEdgePositionY(d.r, baseAngle)))
     .on("click", (d) => {
       const annotation = selectAll(`g.${className("annotation")}[data-key="${datumKey(d)}"]`);
 
@@ -79,8 +81,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   .select(`g.${className("ring-menu")}`)
   .select('circle')
   .merge(newBgCircles)
-    .attr('cx', (d) => (d.r * Math.cos(baseAngle)))
-    .attr('cy', (d) => (d.r * Math.sin(baseAngle)));
+    .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle)))
+    .attr('cy', (d) => (getEdgePositionY(d.r, baseAngle)));
 
   const newX = newRingMenu
   .append('text')
@@ -92,8 +94,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   .select(`g.${className("ring-menu")}`)
   .select('text.svg-icon')
   .merge(newX)
-    .attr('x', (d) => d.r * Math.cos(baseAngle))
-    .attr('y', (d) => (d.r * Math.sin(baseAngle)))
+    .attr('x', (d) => getEdgePositionX(d.r, baseAngle))
+    .attr('y', (d) => (getEdgePositionY(d.r, baseAngle)))
     .on("click", (d) => {
       const annotation = selectAll(`g.${className("annotation")}[data-key="${datumKey(d)}"]`);
 
@@ -116,8 +118,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
       .classed(className("node"), true)
     .append('circle')
       .attr('r', (d) => leafRadius)
-      .attr('cx', (d) => (d.r * Math.cos(baseAngle)) - 1.5*leafRadius)
-      .attr('cy', (d) => (d.r * Math.sin(baseAngle)) - 6*leafRadius);
+      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle)) - 1.5*leafRadius)
+      .attr('cy', (d) => (getEdgePositionY(d.r, baseAngle)) - 6*leafRadius);
 
   annotations
   .select(`g.${className("total-container")}`)
@@ -152,8 +154,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   .append("text")
     .classed(className("annotation-text"), true)
     .style('font-size', (d) => ((2*leafRadius)/16) *100 +"%")
-    .attr('x', (d) => (d.r * Math.cos(baseAngle)) + 1.5*leafRadius)
-    .attr('y', (d) => (d.r * Math.sin(baseAngle)) - 6*leafRadius);
+    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle)) + 1.5*leafRadius)
+    .attr('y', (d) => (getEdgePositionY(d.r, baseAngle)) - 6*leafRadius);
 
   annotations
   .select(`g.${className("total-container")}`)
@@ -170,8 +172,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
       .classed(className("isAdded-fixed"), true)
     .append('circle')
       .attr('r', (d) => leafRadius)
-      .attr('cx', (d) => (d.r * Math.cos(baseAngle)) - 7.5*leafRadius)
-      .attr('cy', (d) => (d.r * Math.sin(baseAngle)));
+      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle)) - 7.5*leafRadius)
+      .attr('cy', (d) => (getEdgePositionY(d.r, baseAngle)));
 
   annotations
   .select(`g.${className("added-container")}`)
@@ -199,8 +201,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   .append("text")
     .classed(className("annotation-text"), true)
     .style('font-size', (d) => ((2*leafRadius)/16) *100 +"%")
-    .attr('x', (d) => (d.r * Math.cos(baseAngle)) - 5.5*leafRadius)
-    .attr('y', (d) => (d.r * Math.sin(baseAngle)));
+    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle)) - 5.5*leafRadius)
+    .attr('y', (d) => (getEdgePositionY(d.r, baseAngle)));
 
   annotations
   .select(`g.${className("added-container")}`)
@@ -217,8 +219,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
       .classed(className("isChanged-fixed"), true)
     .append('circle')
       .attr('r', (d) => leafRadius)
-      .attr('cx', (d) => (d.r * Math.cos(baseAngle)) - 1.5 * leafRadius)
-      .attr('cy', (d) => (d.r * Math.sin(baseAngle)) + 6*leafRadius);
+      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle)) - 1.5 * leafRadius)
+      .attr('cy', (d) => (getEdgePositionY(d.r, baseAngle)) + 6*leafRadius);
 
   annotations
   .select(`g.${className("changed-container")}`)
@@ -246,8 +248,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   .append("text")
     .classed(className("annotation-text"), true)
     .style('font-size', (d) => ((2*leafRadius)/16) *100 + "%")
-    .attr('x', (d) => (d.r * Math.cos(baseAngle)) + leafRadius)
-    .attr('y', (d) => (d.r * Math.sin(baseAngle)) + 6*leafRadius);
+    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle)) + leafRadius)
+    .attr('y', (d) => (getEdgePositionY(d.r, baseAngle)) + 6*leafRadius);
 
   annotations
   .select(`g.${className("changed-container")}`)
@@ -264,8 +266,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
       .classed(className("isRemoved-fixed"), true)
     .append('circle')
       .attr('r', (d) => leafRadius)
-      .attr('cx', (d) => (d.r * Math.cos(baseAngle)) + 5.5*leafRadius)
-      .attr('cy', (d) => (d.r * Math.sin(baseAngle)));
+      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle)) + 5.5*leafRadius)
+      .attr('cy', (d) => (getEdgePositionY(d.r, baseAngle)));
 
   annotations
   .select(`g.${className("removed-container")}`)
@@ -293,8 +295,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   .append("text")
     .classed(className("annotation-text"), true)
     .style('font-size', (d) => ((2*leafRadius)/16) *100 +"%")
-    .attr('x', (d) => (d.r * Math.cos(baseAngle)) + 7.5*leafRadius)
-    .attr('y', (d) => (d.r * Math.sin(baseAngle)));
+    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle)) + 7.5*leafRadius)
+    .attr('y', (d) => (getEdgePositionY(d.r, baseAngle)));
 
   annotations
   .select(`g.${className("removed-container")}`)
@@ -304,5 +306,18 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
 
   return annotations.merge(annotationsEnter);
 }
+
+//memoize is being used here to cache function returns for a specific set of parameters. 
+//i.e. we will evaluate once for a radius of 10 and angle of 60
+//afterwards we will use the cached value for those parameters. 
+const memoizeKey = (r, angle) => [r, angle].join(" ");
+
+const getEdgePositionX = memoizeWith(memoizeKey, (r, angle) => {
+  return r * Math.cos(angle);
+});
+
+const getEdgePositionY = memoizeWith(memoizeKey, (r, angle) => {
+  return r * Math.sin(angle);
+});
 
 export default setupAnnotations;
