@@ -119,14 +119,14 @@
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
-.centerSpan span {
+.centerSpan {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: center !important;
 }
 
 /*Slider styles*/
@@ -192,7 +192,7 @@
   content:"";
   height: 6px;
   background-color: #191919;
-  width: 12px;
+  width: 14px;
   top: -3px;
   left:-15px;
 }
@@ -261,5 +261,5 @@
   height: 6px;
   background-color: #191919;
   width: 40px;
-  top: 12px;
+  top: 11px;
 }

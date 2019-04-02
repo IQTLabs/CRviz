@@ -60,6 +60,10 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
   mergedLabels.each( (d, i, nodes) => {
     scaleAndTrimToLabelWidth(nodes[i], d, 3 * d.height * fontScale);
   })
+  // const groupNodes = nodes.filter((d) => d.depth > 0 && d.height > 0);
+  // const newGroupNodes = nodesEnter.filter((d) => d.depth > 0 && d.height > 0);
+  // const groupData = packedData.descendants().filter((d) => d.height === 1);
+  // appendAggregations(groupNodes, newGroupNodes, groupData, showNodes, leafRadius, fontScale);
 
   return [
     nodes.merge(nodesEnter),
@@ -99,9 +103,10 @@ const getLabelWidth = (datum) =>{
 }
 
 const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
-  const textWidth = 0.80 * getLabelWidth(datum);
-  const textHeight = 0.75 * datum.labelSize;
+  const maxTextWidth = 0.80 * getLabelWidth(datum);
+  const maxTextHeight = 0.80 * datum.labelSize;
   const minFontScale = 10;
+  const maxFontScale = 75;
 
   let boxWidth = node.getBBox().width;
   let boxHeight = node.getBBox().height;
@@ -109,9 +114,10 @@ const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
   let labelText = datum.data.fieldValue;
 
   //scale to height
-   if ((boxHeight > textHeight)){
-    const heightScale = Math.abs((boxHeight -textHeight)/textHeight);
-    fontScale = Math.max(minFontScale, heightScale * initialFontScale)
+   if ((boxHeight > maxTextHeight)){
+    const heightScale = Math.abs((boxHeight - maxTextHeight)/maxTextHeight);
+    const widthScale = Math.abs((boxWidth -maxTextWidth)/maxTextWidth);
+    fontScale = Math.max(minFontScale, Math.min(heightScale * initialFontScale, widthScale *initialFontScale, maxFontScale));
     select(node)
       .style('font-size', (d, i, nodes) => fontScale + "%")
       .text(labelText);
@@ -119,11 +125,9 @@ const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
  
   boxWidth = node.getBBox().width;
   //trim to width
-  if(boxWidth > textWidth)
+  if(boxWidth > maxTextWidth)
   {
-    const lengthToTrimTo = Math.trunc(((boxWidth -textWidth)/textWidth) * labelText.length) - 3;
-    console.log("widthScale: %o", ((boxWidth -textWidth)/textWidth));
-    console.log("lengthToTrimTo: %o", lengthToTrimTo)
+    const lengthToTrimTo = Math.trunc(((boxWidth -maxTextWidth)/maxTextWidth) * labelText.length) - 3;
     if(lengthToTrimTo > 0){
       labelText = labelText.substr(0, lengthToTrimTo) + "...";
     }
@@ -134,6 +138,46 @@ const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
     select(node)
       .text(labelText);
   }
+}
+
+const appendAggregations = (existingGroupNodes, newGroupNodesNodes, groupData, showNodes, leafRadius, fontScale) =>{
+  const newAggregations = newGroupNodesNodes.append("g")
+  .classed(className("aggregation"), true)
+  .attr("display", (d) => !showNodes ? 'none' : null);
+
+  const existingAggregations = existingGroupNodes.select(`g.${className("aggregation")}`);
+
+  const allAggregations = existingAggregations
+  .merge(newAggregations)
+  .data(groupData, datumKey);
+
+  allAggregations.exit().remove();
+
+  const newTotalContainer = allAggregations.enter()
+    .append('g')
+      .classed(className("total-container"), true);
+  newTotalContainer
+    .append('g')
+      .classed(className("node"), true)
+    .append('circle')
+      .attr('r', (d) => leafRadius)
+      .attr('cx', (d) => 0)
+      .attr('cy', (d) => 0);
+
+  const newTotalText = newTotalContainer
+  .append("text")
+    .classed(className("annotation-text"), true)
+    .style('font-size', (d) => (3 * d.height * fontScale) +"%")
+    .attr('x', (d) => 0)
+    .attr('y', (d) => 0)
+    .text((d) => !isNaN(d.value) ? d.value : "0");
+
+  allAggregations
+  .select(`g.${className("total-container")}`)
+  .select('text')
+  .merge(newTotalText)
+    .text((d) => !isNaN(d.value) ? d.value : "0");
+
 }
 
 export default appendCircles;

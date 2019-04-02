@@ -36,6 +36,11 @@ const CUSTOM_DATASET = {
   url: "custom-url"
 };
 
+const UPLOAD_DATASET = {
+  name: "Upload Dataset",
+  url: "upload-dataset"
+};
+
 const authTypes = [
   {'name': '-None-', 'scheme':'None' },
   {'name': 'Username\\Password', 'scheme':'Basic' },
@@ -67,6 +72,7 @@ class DatasetControls extends React.Component {
       selected: null,
       selectedFile: null,
       showUrlEntry: false,
+      showUpload: false,
       url: '',
       authScheme:'',
       token: '',
@@ -103,40 +109,38 @@ class DatasetControls extends React.Component {
     if (isNil(dataset)) {
       return this.resetDataset();
     }
-
+    console.log(dataset);
     this.props.removeDataset({owner: this.props.uuid});
     this.props.removeSearchIndex({owner: this.props.uuid});
     this.props.stopRefresh();
 
     const showUrlEntry = dataset === CUSTOM_DATASET;
+    const showUpload = dataset === UPLOAD_DATASET;
     this.setState({ 
       showUrlEntry: showUrlEntry,
+      showUpload: showUpload,
       url: '',
       authScheme:null,
       token: '',
       username: '',
       password: '',
+      selected: dataset,
+      selectedFile: null,
       refreshInterval: 0,
       refreshTimerRunning: false,
      });
-    if(!showUrlEntry)
+    if(!showUrlEntry && !showUpload)
     {
       const url = dataset.url;
       this.fetchAndSetDataset(url, dataset, null, null, null);
     }
+
+    console.log(this.state.selected);
   }
 
   onUpload = (file) => {
-    this.props.uploadDataset({ 
-      'owner': this.props.uuid, 
-      'file': file,
-      'includeData': true,
-      'includeControls': false,
-    });
-    this.props.stopRefresh();
     this.setState({
-      selected: null,
-      selectedFile: file.name,
+      selectedFile: file,
       refreshInterval: 0,
       refreshTimerRunning: false,
     });
@@ -177,7 +181,29 @@ class DatasetControls extends React.Component {
       token: '',
       username: '',
       password: '',
-     });
+    });
+  }
+
+  onUploadOk = () =>{
+    if(this.state.selectedFile){
+      this.props.uploadDataset({ 
+        'owner': this.props.uuid, 
+        'file': this.state.selectedFile,
+        'includeData': true,
+        'includeControls': false,
+      });
+      this.props.stopRefresh();
+      this.setState({ 
+        showUpload: false,
+      });
+    }
+  }
+
+  onUploadCancel = () => {
+    this.setState({ 
+      selectedFile: null,
+      showUpload: false,
+    });
   }
 
   getDownloadUrl = () => {
@@ -244,20 +270,9 @@ class DatasetControls extends React.Component {
             className={style.selector}
             selected={this.state.selected}
             onChange={this.onSelected}
-            datasets={[...this.props.datasets, POSEIDON_DATASET, CUSTOM_DATASET]}
+            datasets={[...this.props.datasets, POSEIDON_DATASET, CUSTOM_DATASET, UPLOAD_DATASET]}
           />
         </div>
-
-        <div className={style.uploadContainer}>
-          <span className={style.label}>Upload</span>
-          <DatasetUpload
-            ownerUuid={this.props.uuid}
-            className={style.fileUpload}
-            selected={this.state.selectedFile}
-            onChange={this.onUpload}
-          />
-        </div>
-
           <div className={style.utilityContainer}>
           { canDownload &&
             <DatasetDownload
@@ -307,18 +322,20 @@ class DatasetControls extends React.Component {
                 </span>
                 <span>
                   <label> AuthType </label>
-                  <select
-                    onChange={(evt) => this.setState({ authScheme: evt.target.value })}
-                    value={isNil(this.state.authScheme) ? '' : this.state.authScheme}
-                  >
-                    {authTypes.map((at) => {
-                      return (
-                        <option key={at.scheme} value={at.scheme}>
-                          {at.name}
-                        </option>
-                      );
-                    })}
-                  </select>
+                  <label className="select">
+                    <select
+                      onChange={(evt) => this.setState({ authScheme: evt.target.value })}
+                      value={isNil(this.state.authScheme) ? '' : this.state.authScheme}
+                    >
+                      {authTypes.map((at) => {
+                        return (
+                          <option key={at.scheme} value={at.scheme}>
+                            {at.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </label>
                 </span>
                 { this.state.authScheme === 'Bearer' &&
                   <span>
@@ -348,6 +365,29 @@ class DatasetControls extends React.Component {
                     </div>
                   </span>
                 </div>
+              </div>
+            </div>
+          </Modal>
+          <Modal isOpen={ this.state.showUpload } onRequestClose={this.onUploadCancel} contentLabel="Upload a File">
+            <div className={ style.modal }>
+              <div className={ style.modalMain }>
+                  <div className={style.uploadContainer}>
+                    <span className={style.label}>Upload</span>
+                    <DatasetUpload
+                      ownerUuid={this.props.uuid}
+                      className={style.fileUpload}
+                      selected={this.state.selectedFile ? this.state.selectedFile.name : null}
+                      onChange={this.onUpload}
+                    />
+                  </div>
+                  <span className={ style.centerSpan }>
+                    <div className="button circular" title="Ok" onClick={this.onUploadOk}>
+                        <FontAwesomeIcon icon={faCheck} />
+                    </div>
+                    <div className="button circular" title="Cancel" onClick={this.onUploadCancel}>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </div>
+                  </span>
               </div>
             </div>
           </Modal>
