@@ -45,10 +45,10 @@ class DatasetSlider extends React.Component {
       if (isNaN(slot)) return;
       
       const points = this.props.points;
-      if(!this.props.startUuid || this.props.startUuid === "UNSET"){
+      if(points.indexOf(this.props.startUuid) === -1){
         this.props.setStartUuid(points[slot]);
       }
-      else if (!this.props.endUuid || this.props.endUuid === "UNSET"){
+      else if (points.indexOf(this.props.endUuid) === -1){
         this.props.setEndUuid(points[slot]);
       }
     }
