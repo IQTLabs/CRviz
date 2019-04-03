@@ -106,7 +106,7 @@ const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
   const maxTextWidth = 0.80 * getLabelWidth(datum);
   const maxTextHeight = 0.80 * datum.labelSize;
   const minFontScale = 10;
-  const maxFontScale = 75;
+  const maxFontScale = 125;
 
   let boxWidth = node.getBBox().width;
   let boxHeight = node.getBBox().height;
@@ -115,9 +115,20 @@ const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
 
   //scale to height
    if ((boxHeight > maxTextHeight)){
-    const heightScale = Math.abs((boxHeight - maxTextHeight)/maxTextHeight);
-    const widthScale = Math.abs((boxWidth -maxTextWidth)/maxTextWidth);
-    fontScale = Math.max(minFontScale, Math.min(heightScale * initialFontScale, widthScale *initialFontScale, maxFontScale));
+    const heightScale = 1-Math.abs((boxHeight - maxTextHeight)/boxHeight);
+    fontScale = Math.max(minFontScale, heightScale * initialFontScale);
+    if (datum.data.fieldValue === "File server"){
+      console.log("boxHeight: %o", boxHeight);
+      console.log("maxTextHeight: %o", maxTextHeight);
+      console.log("initialFontScale: %o", initialFontScale);
+      console.log("fontScale: %o", fontScale);
+    }
+    select(node)
+      .style('font-size', (d, i, nodes) => fontScale + "%")
+      .text(labelText);
+  } else if(boxHeight < 0.75 * maxTextHeight){
+    const heightScale = 1 + Math.abs((boxHeight - maxTextHeight)/maxTextHeight);
+    fontScale = Math.min(maxFontScale, heightScale * initialFontScale);
     select(node)
       .style('font-size', (d, i, nodes) => fontScale + "%")
       .text(labelText);
@@ -127,16 +138,12 @@ const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
   //trim to width
   if(boxWidth > maxTextWidth)
   {
-    const lengthToTrimTo = Math.trunc(((boxWidth -maxTextWidth)/maxTextWidth) * labelText.length) - 3;
-    if(lengthToTrimTo > 0){
-      labelText = labelText.substr(0, lengthToTrimTo) + "...";
-    }
-    else{
-      labelText = "...";
-    }
-
+    const lengthToTrimTo = Math.trunc(0.75*labelText.length);
+    labelText = labelText.substr(0, lengthToTrimTo) + "..."
     select(node)
-      .text(labelText);
+    .attr('textLength', maxTextWidth)
+    .attr('lengthAdjust', "spacingAndGlyphs")
+    .text(labelText);
   }
 }
 
