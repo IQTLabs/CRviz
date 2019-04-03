@@ -32,15 +32,15 @@
   -webkit-animation-name: delta;
   -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
-  animation: delta 5s infinite;
+  animation: delta 2s infinite;
 }
 
 @keyframes delta {
-  0% {
+  50% {
     -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   },
-  100% {
+  0%, 100% {
 
   }
 }
@@ -61,15 +61,15 @@
   -webkit-animation-name: plus;
   -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
-  animation: plus 5s infinite;
+  animation: plus 2s infinite;
 }
 
 @keyframes plus {
-  0% {
+  50% {
     -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
     clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
   },
-  100% {
+  0%, 100% {
 
   }
 }
@@ -90,15 +90,15 @@
   -webkit-animation-name: minus;
   -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
-  animation: minus 5s infinite;
+  animation: minus 2s infinite;
 }
 
 @keyframes minus {
-  0% {
+  50% {
     -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
     clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
   },
-  100% {
+  0%, 100% {
 
   }
 }
