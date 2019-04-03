@@ -84,7 +84,7 @@ class DatasetControls extends React.Component {
   }
 
   resetDataset = () => {
-    this.props.setDataset({ dataset: [], configuration: {} });
+    this.props.setDataset({ dataset: [], owner: this.props.uuid, source: null, name:"", shortName:"",  configuration: {} });
     this.setState({
       selected: null,
       selectedFile: null
@@ -261,7 +261,19 @@ class DatasetControls extends React.Component {
       POSEIDON_DATASET = {name:"",url:""};
     }
     const canDownload = this.state.selected && !this.state.selectedFile;
-    const canRefresh = this.state.selected && !isNil(this.state.selected.url)
+    const canRefresh = this.state.selected && !isNil(this.state.selected.url) && !this.state.selectedFile;
+    let url = null;
+    try{
+      url = new URL(this.props.source);
+    }
+    catch(err){
+      if(err instanceof TypeError){
+        url = null;
+      }
+      else {
+        throw err;
+      }
+    }
     return (
       <div className={style.dataControls}>
         <div className={style.selectorContainer}>
@@ -271,8 +283,24 @@ class DatasetControls extends React.Component {
             selected={this.state.selected}
             onChange={this.onSelected}
             datasets={[...this.props.datasets, POSEIDON_DATASET, CUSTOM_DATASET, UPLOAD_DATASET]}
+            source={this.props.source}
           />
         </div>
+          <div className={style.datasetSourceContainer}>
+            { this.props.source &&
+              <span>
+               Source:&nbsp; 
+               { url && 
+                <a href={url}>
+                  {this.props.source}
+                </a>
+               }
+               { !url &&
+                this.props.source
+               }
+              </span>
+            }
+          </div>
           <div className={style.utilityContainer}>
           { canDownload &&
             <DatasetDownload
@@ -448,11 +476,13 @@ DatasetControls.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const owner = ownProps.uuid;
+  const fullDatasets = selectDatasets(state)
   return {
-    dataset: selectDataset(state,owner),
+    dataset: (owner in fullDatasets) ? fullDatasets[owner].dataset : [],
+    source: (owner in fullDatasets) ? fullDatasets[owner].source : null,
     isFetching: getIsFetching(state, owner),
     lastUpdated: getLastUpdated(state, owner),
-    fullDatasets: selectDatasets(state),
+    fullDatasets: fullDatasets,
     controls: selectControls(state),
     keyFields: getKeyFields(state),
     ignoredFields: getIgnoredFields(state)

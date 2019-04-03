@@ -25,6 +25,9 @@ const defaultState = {
 };
 const defaultItemState = {
   owner: "",
+  source: null,
+  name: "",
+  shortName: "",
   dataset: [],
   filtered: null,
   values: {},
@@ -151,7 +154,7 @@ const valuesFor = (dataset, configuration) => {
   }, configuration.fields));
 };
 
-const configureDataset = (dataset, initialConfig, keyFields, ignoredFields) => {
+const configureDataset = (dataset, source, name, shortName, initialConfig, keyFields, ignoredFields) => {
   const configuration = configurationFor(
     dataset || [],
     keyFields,
@@ -165,6 +168,9 @@ const configureDataset = (dataset, initialConfig, keyFields, ignoredFields) => {
   const lastUpdated = new Date();
   return {
     dataset: dataset,
+    source: source,
+    name: name,
+    shortName: shortName,
     filtered: null,
     values: values,
     configuration: configuration,
@@ -206,10 +212,13 @@ const reducer = handleActions(
     [setDataset]: (state, { payload }) => {
       const dataset = payload.dataset;
       const owner = payload.owner;
+      const source = payload.source;
+      const name = payload.name;
+      const shortName = payload.shortName;
       const initialConfig = payload.configuration;
       const keyFields = getKeyFields(state);
       const ignoredFields = getIgnoredFields(state);
-      state.datasets[owner] = configureDataset(dataset, initialConfig, keyFields, ignoredFields);
+      state.datasets[owner] = configureDataset(dataset, source, name, shortName, initialConfig, keyFields, ignoredFields);
       return { ...state};
     },
     [setFilteredDataset]: (state, { payload }) => {

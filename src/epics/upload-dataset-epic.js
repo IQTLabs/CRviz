@@ -41,10 +41,11 @@ const uploadDatasetEpic = (action$, store) => {
  */
 const fromReader = (owner, file) => {
   return Observable.create((observer) => {
+    const source = file.name;
     const reader = new window.FileReader();
 
     reader.addEventListener('load', () => {
-      observer.next({ 'owner': owner, 'file': reader.result });
+      observer.next({ 'owner': owner, 'source': source, 'file': reader.result });
       observer.complete();
     });
 
@@ -59,12 +60,14 @@ const fromReader = (owner, file) => {
 
 const fromJson = (payload) =>{
   const owner = payload.owner;
+  const source = payload.source;
   const content = JSON.parse(payload.file);
   const includeData = ('includeData' in payload) ? payload.includeData : true;
   const includeControls = ('includeControls' in payload) ? payload.includeControls: false;
 
   return {
     'owner': owner,
+    'source': source,
     'content': content, 
     'includeData': includeData,
     'includeControls': includeControls,

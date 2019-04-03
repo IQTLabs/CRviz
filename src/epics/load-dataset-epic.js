@@ -44,6 +44,8 @@ const loadDatasetEpic = (action$, store) => {
 // Otherwise, just pass it along.
 const CSVconvert = (data) => {
   const owner = data.owner;
+  const source = data.source;
+
   var lines = data.file.trim().split(/[\r\n]+/g);
   if (lines.length < 2) { // bail if there's not even linebreaks
     return data;
@@ -84,7 +86,7 @@ const CSVconvert = (data) => {
     }
   }
   jsonstring += ']'
-  return { 'owner': owner, 'file': jsonstring };
+  return { 'owner': owner, 'source': source, 'file': jsonstring };
 }
 
 //if we have a naked array or an object not containing a dataset instead of an object containing a dataset
@@ -92,13 +94,14 @@ const CSVconvert = (data) => {
 //schema with what is used elsewhere see https://github.com/CyberReboot/CRviz/issues/33
 const formatPayload = (data) => {
   const owner = data.owner;
+  const source = data.source;
   const content = data.content;
   const datasets = content.datasets;
   const keyFields = content.keyFields || [];
   const ignoredFields = content.ignoredFields || [];
   const controls = content.controls || {};
   const includeData = ('includeData' in data) ? data.includeData : true;
-  const includeControls = ('includeControls' in data) ? data.includeControls: false;
+  const includeControls = ('includeControls' in data) ? data.includeControls : false;
 
   var final = {};
 
@@ -122,11 +125,13 @@ const formatPayload = (data) => {
   } else {
     throw ValidationError('Data in invalid format');
   }
-
-  Object.keys(final).forEach((owner) =>{
+  const keys = Object.keys(final);
+  keys.forEach((owner, idx) =>{
     const dataset = final[owner].dataset;
+    const name = dataset.name || "Series " + idx;
+    const shortName = dataset.shortName || name.substr(0, 1) + idx;
     const initialConfig = final[owner].configuration;
-    final[owner] = configureDataset(dataset, initialConfig, keyFields, ignoredFields);
+    final[owner] =  configureDataset(dataset, source, name, shortName, initialConfig, keyFields, ignoredFields);
   })
 
   data = { 

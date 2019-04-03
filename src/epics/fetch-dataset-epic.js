@@ -21,7 +21,7 @@ const fetchDatasetEpic = (action$, store, ajax = rxAjax) => {
       const header = action.payload.header;
       return ajax({ 'url': url, 'headers':header, 'crossDomain': true, 'responseType': 'json' }).pipe(
         map((result) => { 
-          return { 'owner': owner, 'content': result.response };
+          return { 'owner': owner, 'source': url, 'content': result.response };
         })
         ,map(loadDataset)
         // I believe this was done oddly and debounce should have been used
