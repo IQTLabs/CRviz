@@ -4,9 +4,19 @@
   margin: 0.5rem;
 }
 
-.selectorContainer, .uploadContainer {
+.selectorContainer{
   display: flex;
+  flex: 1;
+  flex-wrap: nowrap;
   align-items: center;
+}
+
+.uploadContainer {
+  display: flex;
+  flex: 1;
+  flex-wrap: nowrap;
+  align-items: center;
+  align-self: flex-start;
 }
 
 .selector {
@@ -21,16 +31,23 @@
 .fileUpload {
   flex: 1;
   display: flex;
-  align-items: center
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .fileUpload label {
   flex: 0;
-  margin-right: 0;
+  margin-right: 2em;
 }
 
 .fileUpload span {
-  flex: 1;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  background-color: #DCDCDC;
+  flex-wrap: nowrap;
+  padding: 0.25em 2em;
 }
 
 .label {
@@ -116,7 +133,7 @@
 .modalMain {
   position:fixed;
   background: white;
-  flex: 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
   border: 1px solid black;
@@ -131,7 +148,7 @@
 
 .modalMain span {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
 }
