@@ -25,9 +25,9 @@ const reducer = handleActions(
       const hierarchyConfig = payload.hierarchyConfig || defaultState.hierarchyConfig;
       const shouldShowNodes = ('shouldShowNodes' in payload) ? !!payload.shouldShowNodes : true;
       const darkTheme = ('darkTheme' in payload) ? !!payload.darkTheme : false;
-      const colorBy = payload.colorBy || defaultState.colorBy
-      const start = payload.start || defaultState.start
-      const end = payload.end || defaultState.end
+      const colorBy = payload.colorBy || defaultState.colorBy;
+      const start = payload.start || state.start;
+      const end = payload.end || state.end;
       return { 
         ...state,
         hierarchyConfig: hierarchyConfig,

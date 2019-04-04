@@ -16,7 +16,9 @@ const uploadDatasetEpic = (action$, store) => {
       mergeMap((action) => {
         const owner = action.payload.owner;
         const file = action.payload.file;
-        return fromReader(owner, file).pipe(
+        const includeData = ('includeData' in action.payload) ? action.payload.includeData : true;
+        const includeControls = ('includeControls' in action.payload) ? action.payload.includeControls: false; 
+        return fromReader(owner, includeData, includeControls, file).pipe(
             debounceTime(500)
             ,map(CSVconvert)
             ,map(fromJson)
@@ -39,13 +41,14 @@ const uploadDatasetEpic = (action$, store) => {
  * Little function to create an observable to read local files.
  * RxJS DOM v5 doesn't have it!?
  */
-const fromReader = (owner, file) => {
+const fromReader = (owner, includeData, includeControls, file) => {
   return Observable.create((observer) => {
     const source = file.name;
     const reader = new window.FileReader();
 
     reader.addEventListener('load', () => {
-      observer.next({ 'owner': owner, 'source': source, 'file': reader.result });
+      observer.next({ 'owner': owner, 'source': source, 'includeData':includeData,
+                      'includeControls': includeControls, 'file': reader.result });
       observer.complete();
     });
 

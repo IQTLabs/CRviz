@@ -71,7 +71,7 @@ class App extends Component {
     const uniqueUuids = datasetAdded || nextProps.uuids.length === 0
                         ? Array.from(new Set(nextProps.uuids.concat(this.state.uuids)))
                         : nextProps.uuids;
-    const startUuid = nextProps.startUuid || this.state.startUuid || uniqueUuids[0];
+    const startUuid = nextProps.startUuid || this.state.startUuid;
     const endUuid = nextProps.endUuid || this.state.endUuid;
     this.setState({
       uuids: uniqueUuids,
@@ -166,7 +166,7 @@ class App extends Component {
     const ignoredFields = this.state.options.data && this.props.ignoredFields;
     const exportData = getDataToExport(datasets, keyFields, ignoredFields, controls)
     const urlObject = window.URL || window.webkitURL || window;
-    const json = JSON.stringify(exportData);
+    const json = JSON.stringify(exportData, null, 2);
     const blob = new Blob([json], {'type': "application/json"});
     const url = urlObject.createObjectURL(blob);;
     return url;
@@ -262,7 +262,7 @@ class App extends Component {
                 <div  key={ uuid } >
                   <div className={style.dataControlHeader}>
                     Series {index}
-                    {index > 0 && <FontAwesomeIcon icon={faMinusCircle} onClick={ () => {this.removeDatasetEntry(uuid)}} />}
+                    {uuids.length > 1 && <FontAwesomeIcon icon={faMinusCircle} onClick={ () => {this.removeDatasetEntry(uuid)}} />}
                   </div>
                   <DatasetControls uuid={ uuid } datasets={ datasets }/>
                 </div>
@@ -447,6 +447,7 @@ const mapStateToProps = state => {
   const uuids = Object.keys(datasets) || [uuidv4()];
   const dataset = datasets[uuids[0]] && datasets[uuids[0]].dataset ? datasets[uuids[0]].dataset : [];
   const controls = selectControls(state);
+
   return {
     dataset: dataset,
     darkTheme: controls.darkTheme,

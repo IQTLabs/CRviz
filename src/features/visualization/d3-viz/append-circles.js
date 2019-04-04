@@ -117,12 +117,6 @@ const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
    if ((boxHeight > maxTextHeight)){
     const heightScale = 1-Math.abs((boxHeight - maxTextHeight)/boxHeight);
     fontScale = Math.max(minFontScale, heightScale * initialFontScale);
-    if (datum.data.fieldValue === "File server"){
-      console.log("boxHeight: %o", boxHeight);
-      console.log("maxTextHeight: %o", maxTextHeight);
-      console.log("initialFontScale: %o", initialFontScale);
-      console.log("fontScale: %o", fontScale);
-    }
     select(node)
       .style('font-size', (d, i, nodes) => fontScale + "%")
       .text(labelText);

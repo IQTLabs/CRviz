@@ -174,7 +174,7 @@ const colorAnnotations = ({ annotations, colorMap, getValue, coloredField, isCol
       .select(`g.${className("total-container")}`)
       .attr('class', (d) => {
         const { disabled, className } = colorMap[getValue(d.data)] || {};
-        console.log(className)
+
         return isColoringGroup
           && equals(d.data.field, coloredField)
           && !disabled

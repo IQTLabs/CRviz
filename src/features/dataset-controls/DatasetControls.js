@@ -11,7 +11,9 @@ import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
 import { removeSearchIndex } from "epics/index-dataset-epic";
-import { showNodes, setHierarchyConfig, colorBy, selectControls } from "domain/controls"
+import {
+  showNodes, setHierarchyConfig, colorBy, selectControls, setStartDataset, setEndDataset
+} from "domain/controls"
 
 import { setError } from "domain/error"
 import { 
@@ -109,7 +111,7 @@ class DatasetControls extends React.Component {
     if (isNil(dataset)) {
       return this.resetDataset();
     }
-    console.log(dataset);
+
     this.props.removeDataset({owner: this.props.uuid});
     this.props.removeSearchIndex({owner: this.props.uuid});
     this.props.stopRefresh();
@@ -133,9 +135,9 @@ class DatasetControls extends React.Component {
     {
       const url = dataset.url;
       this.fetchAndSetDataset(url, dataset, null, null, null);
+      this.setStartOrEnd(this.props.uuid);
     }
 
-    console.log(this.state.selected);
   }
 
   onUpload = (file) => {
@@ -170,6 +172,7 @@ class DatasetControls extends React.Component {
       const url = this.state.url;
       dataset.url = url;
       this.fetchAndSetDataset(url, dataset, this.state.username, this.state.password, this.state.token);
+      this.setStartOrEnd(this.props.uuid);
     }
   }
 
@@ -196,7 +199,18 @@ class DatasetControls extends React.Component {
       this.setState({ 
         showUpload: false,
       });
+
+      this.setStartOrEnd(this.props.uuid);
     }
+  }
+
+  setStartOrEnd = (uuid) =>{
+    if(!this.props.controls.start){
+        this.props.setStartDataset(uuid);
+      }
+      else if(!this.props.controls.end){
+        this.props.setEndDataset(uuid);
+      }
   }
 
   onUploadCancel = () => {
@@ -212,7 +226,7 @@ class DatasetControls extends React.Component {
     const keyFields = this.props.keyFields;
     const ignoredFields = this.props.ignoredFields;
     const urlObject = window.URL || window.webkitURL || window;
-    const json = JSON.stringify(getDataToExport(datasets, keyFields, ignoredFields, controls));
+    const json = JSON.stringify(getDataToExport(datasets, keyFields, ignoredFields, controls), null, 2);
     const blob = new Blob([json], {'type': "application/json"});
     const url = urlObject.createObjectURL(blob);;
     return url;
@@ -454,6 +468,8 @@ DatasetControls.propTypes = {
   fetchDataset: PropTypes.func.isRequired,
   uploadDataset: PropTypes.func.isRequired,
   setDataset: PropTypes.func.isRequired,
+  setStartDataset: PropTypes.func.isRequired,
+  setEndDataset: PropTypes.func.isRequired,
   removeDataset: PropTypes.func.isRequired,
   removeSearchIndex: PropTypes.func.isRequired,
   getIsFetching: PropTypes.func.isRequired,
@@ -493,6 +509,8 @@ const mapDispatchToProps = {
   fetchDataset,
   uploadDataset,
   setDataset,
+  setStartDataset,
+  setEndDataset,
   selectDataset,
   removeDataset,
   removeSearchIndex,
