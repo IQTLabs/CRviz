@@ -60,6 +60,7 @@
 .sliderContainer {
   padding-right: 2em;
   position:absolute;
+  width: 500px;
   bottom:0;
   right:0;
 }
@@ -175,14 +176,6 @@ input[name=hideControls]:checked ~ .canvas {
 
 .accordionHeader:hover {
   color: #C62f39;
-}
-
-.dataControlHeader {
-  font-weight: bold;
-  display: flex;
-  flex-flow: row no-wrap;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .hidden {

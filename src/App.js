@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
-  faCheck, faDizzy, faPlus, faMinusCircle, faHome, faAngleDoubleDown, faAngleDoubleUp,
+  faCheck, faDizzy, faPlus, faHome, faAngleDoubleDown, faAngleDoubleUp,
   faFileExport, faFileImport, faTimes
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -52,7 +52,7 @@ class App extends Component {
     showData: true,
     showGrouping: false,
     showFiltering: false,
-    uuids: [uuidv4()],
+    uuids: [{'owner': uuidv4(), 'name': 'Series 0', 'shortName': 's0'}],
     datasetAdded: false,
     startUuid: null,
     endUuid: null,
@@ -68,9 +68,7 @@ class App extends Component {
 
   componentWillReceiveProps = (nextProps) =>{
     const datasetAdded = this.state.datasetAdded && (nextProps.uuids.length !== this.state.uuids.length)
-    const uniqueUuids = datasetAdded || nextProps.uuids.length === 0
-                        ? Array.from(new Set(nextProps.uuids.concat(this.state.uuids)))
-                        : nextProps.uuids;
+    const uniqueUuids = this.getUniqueDatasetList(datasetAdded, this.state.uuids, nextProps.uuids);
     const startUuid = nextProps.startUuid || this.state.startUuid;
     const endUuid = nextProps.endUuid || this.state.endUuid;
     this.setState({
@@ -79,6 +77,25 @@ class App extends Component {
       endUuid: endUuid,
       datasetAdded: datasetAdded
     });
+  }
+
+  getUniqueDatasetList = (datasetAdded, uuidsFromState, uuidsFromProps) => {
+    let result = [];
+
+    if(datasetAdded || uuidsFromProps.length === 0){
+      const uniqueOwners = new Set();
+      uuidsFromProps.concat(uuidsFromState).forEach((u) => {
+        if(!uniqueOwners.has(u.owner)){
+          uniqueOwners.add(u.owner);
+          result.push(u);
+        }
+      });
+    }
+    else {
+      result = uuidsFromProps;
+    }
+
+    return result;
   }
 
   toggleShowData = () =>{
@@ -193,7 +210,7 @@ class App extends Component {
 
   addDatasetEntry = () => {
     const uuids = this.state.uuids;
-    const newItem = uuidv4()
+    const newItem = { 'owner': uuidv4(), 'name': 'Series ' + uuids.length, 'shortName': 's' + uuids.length };
     uuids.push(newItem);
     this.setState({
       uuids: uuids,
@@ -222,8 +239,8 @@ class App extends Component {
   }
 
   render() {
-    const { dataset, darkTheme, error, lastUpdated} = this.props;
-    const hasDataset = dataset && dataset.length > 0;
+    const { datasetCount, darkTheme, error, lastUpdated} = this.props;
+    const hasDataset = datasetCount > 0;
 
     const uuids = this.state.uuids;
     const startUuid = this.state.startUuid;
@@ -257,14 +274,16 @@ class App extends Component {
             Data  {!showData && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faAngleDoubleUp} />}
           </div>
           <div className={ classNames({ [style.section]: true, [style.hidden]: !showData })}>
-            {uuids.map((uuid, index) => {
+            {uuids.map((uuid) => {
               return(
-                <div  key={ uuid } >
-                  <div className={style.dataControlHeader}>
-                    Series {index}
-                    {uuids.length > 1 && <FontAwesomeIcon icon={faMinusCircle} onClick={ () => {this.removeDatasetEntry(uuid)}} />}
-                  </div>
-                  <DatasetControls uuid={ uuid } datasets={ datasets }/>
+                <div  key={ uuid.owner + "_container" } >
+                  <DatasetControls 
+                    uuid={ uuid.owner }
+                    name={ uuid.name }
+                    shortName={ uuid.shortName }
+                    removeDatasetEntry={ this.removeDatasetEntry }
+                    removable={uuids.length > 1}
+                    datasets={ datasets }/>
                 </div>
               )
             })}
@@ -325,7 +344,7 @@ class App extends Component {
             </span>
           </div>
         </div>
-        { dataset.length===0 && lastUpdated !== null &&
+        { datasetCount === 0 && lastUpdated !== null &&
           <div  className={ style.emptyDataset }>
             <span>
               Current dataset is empty
@@ -336,7 +355,7 @@ class App extends Component {
         <div className={ style.canvas }>
           <Visualization startUid={startUuid} endUid={endUuid} />
         </div>
-        <div className={ classNames({ [style.sliderContainer]: true, [style.hidden]: !hasDataset }) } >
+        <div className={ classNames({ [style.sliderContainer]: true, [style.hidden]: datasetCount < 2 }) } >
           <DatasetSlider points={uuids} startUuid={startUuid} endUuid={endUuid} 
             setStartUuid={this.setStartUuid} setEndUuid={this.setEndUuid} />
         </div>
@@ -444,12 +463,13 @@ class App extends Component {
 
 const mapStateToProps = state => {
   const datasets = selectDatasets(state);
-  const uuids = Object.keys(datasets) || [uuidv4()];
-  const dataset = datasets[uuids[0]] && datasets[uuids[0]].dataset ? datasets[uuids[0]].dataset : [];
+  const uuids = Object.keys(datasets).map(key => ({ 'owner': key, 'name': datasets[key].name, 'shortName': datasets[key].shortName })) 
+                || [{ 'owner': uuidv4(), 'name': "Series 0", 'shortName': "s0" }];
+  const datasetCount = uuids.length;
   const controls = selectControls(state);
 
   return {
-    dataset: dataset,
+    datasetCount: datasetCount,
     darkTheme: controls.darkTheme,
     error: getError(state),
     lastUpdated: getLastUpdated(state, uuids[0]),

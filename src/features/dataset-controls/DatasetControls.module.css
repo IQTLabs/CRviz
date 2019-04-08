@@ -4,6 +4,14 @@
   margin: 0.5rem;
 }
 
+.dataControlHeader {
+  font-weight: bold;
+  display: flex;
+  flex-flow: row no-wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .selectorContainer{
   display: flex;
   flex: 1;

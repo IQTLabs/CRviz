@@ -94,6 +94,8 @@ const CSVconvert = (data) => {
 //schema with what is used elsewhere see https://github.com/CyberReboot/CRviz/issues/33
 const formatPayload = (data) => {
   const owner = data.owner;
+  const initialName = data.name;
+  const initialShortName = data.shortName;
   const source = data.source;
   const content = data.content;
   const datasets = content.datasets;
@@ -128,8 +130,8 @@ const formatPayload = (data) => {
   const keys = Object.keys(final);
   keys.forEach((owner, idx) =>{
     const dataset = final[owner].dataset;
-    const name = dataset.name || "Series " + idx;
-    const shortName = dataset.shortName || name.substr(0, 1) + idx;
+    const name = dataset.name || initialName || "Series " + idx;
+    const shortName = dataset.shortName || initialShortName || name.substr(0, 1) + idx;
     const initialConfig = final[owner].configuration;
     final[owner] =  configureDataset(dataset, source, name, shortName, initialConfig, keyFields, ignoredFields);
   })

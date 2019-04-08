@@ -17,11 +17,13 @@ const fetchDatasetEpic = (action$, store, ajax = rxAjax) => {
     ,debounceTime(500)
     ,mergeMap((action) => {
       const owner = action.payload.owner;
+      const name = action.payload.name;
+      const shortName = action.payload.shortName;
       const url = action.payload.url;
       const header = action.payload.header;
       return ajax({ 'url': url, 'headers':header, 'crossDomain': true, 'responseType': 'json' }).pipe(
         map((result) => { 
-          return { 'owner': owner, 'source': url, 'content': result.response };
+          return { 'owner': owner, 'name': name, 'shortName': shortName, 'source': url, 'content': result.response };
         })
         ,map(loadDataset)
         // I believe this was done oddly and debounce should have been used

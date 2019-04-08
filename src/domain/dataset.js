@@ -411,11 +411,6 @@ const selectDatasetIntersection = (state, startOwner, endOwner) => {
       s.CRVIZ._isAdded = false;
 
       const idx = end.findIndex(e => e.CRVIZ._HASH_KEY === s.CRVIZ._HASH_KEY);
-      const idx2 = end.findIndex(e => e.uid === s.uid && e.IP !== s.IP)
-      if(idx2 !== -1){
-        console.log("s: %o", s);
-        console.log("end[idx]: %o", end[idx2]);
-      }
       if(idx === -1){
         s.CRVIZ._isRemoved = true;
       } else {

@@ -5,7 +5,9 @@ import { isNil } from "ramda";
 import Modal from 'react-modal';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
+import { 
+  faCheck, faTimes, faCog, faMinusCircle 
+} from "@fortawesome/free-solid-svg-icons";
 
 import { fetchDataset, buildAuthHeader } from "epics/fetch-dataset-epic";
 import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
@@ -97,7 +99,13 @@ class DatasetControls extends React.Component {
     this.props.setIsFetching({owner: this.props.uuid, isFetching: true});
     const authHeader = buildAuthHeader(username, password, token);
     if (toURL(url)) {
-      this.props.fetchDataset({ 'owner': this.props.uuid, 'url': url, 'header': authHeader });
+      this.props.fetchDataset({ 
+        'owner': this.props.uuid,
+        name:this.props.name,
+        shortName: this.props.shortName,
+        'url': url,
+        'header': authHeader
+      });
       this.setState({
         selected: dataset,
         selectedFile: null,
@@ -190,7 +198,9 @@ class DatasetControls extends React.Component {
   onUploadOk = () =>{
     if(this.state.selectedFile){
       this.props.uploadDataset({ 
-        'owner': this.props.uuid, 
+        'owner': this.props.uuid,
+        'name':this.props.name,
+        'shortName': this.props.shortName,
         'file': this.state.selectedFile,
         'includeData': true,
         'includeControls': false,
@@ -256,6 +266,10 @@ class DatasetControls extends React.Component {
     this.props.stopRefresh();
   }
 
+  removeDatasetEntry = () =>{
+    this.props.removeDatasetEntry(this.props.uuid);
+  }
+
   onTimedRefreshIntervalChanged = (interval) =>{
     const numInt = parseInt(interval, 10);
     if(!isNaN(numInt)){
@@ -290,6 +304,12 @@ class DatasetControls extends React.Component {
     }
     return (
       <div className={style.dataControls}>
+        <div key={ this.props.uuid + "_label" } className={style.dataControlHeader}>
+          {this.props.name}
+          {this.props.removable && <FontAwesomeIcon icon={faMinusCircle} 
+          onClick={ this.removeDatasetEntry } 
+          />}
+        </div>
         <div className={style.selectorContainer}>
           <span className={style.label}>Dataset</span>
           <DatasetSelector
@@ -479,6 +499,7 @@ DatasetControls.propTypes = {
   colorBy: PropTypes.func.isRequired,
   startRefresh: PropTypes.func.isRequired,
   stopRefresh: PropTypes.func.isRequired,
+  removeDatasetEntry: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
   lastUpdated: PropTypes.instanceOf(Date),
   setError: PropTypes.func.isRequired,
