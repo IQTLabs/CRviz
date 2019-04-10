@@ -60,10 +60,44 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
   mergedLabels.each( (d, i, nodes) => {
     scaleAndTrimToLabelWidth(nodes[i], d, 3 * d.height * fontScale);
   })
-  // const groupNodes = nodes.filter((d) => d.depth > 0 && d.height > 0);
-  // const newGroupNodes = nodesEnter.filter((d) => d.depth > 0 && d.height > 0);
-  // const groupData = packedData.descendants().filter((d) => d.height === 1);
-  // appendAggregations(groupNodes, newGroupNodes, groupData, showNodes, leafRadius, fontScale);
+
+  const newGroupingNodes = nodesEnter.filter((d) => d.height === 1);
+  const newAggregations = newGroupingNodes
+    .append("g")
+    .classed(className("aggregation"), true)
+    .attr("display", (d) => showNodes ? 'none' : null);
+  const newTotalContainer = newAggregations
+    .append('g')
+      .classed(className("total-container"), true);
+  // newTotalContainer
+  //   .append('g')
+  //     .classed(className("node"), true)
+  //   .append('circle')
+  //     .attr('r', (d) => leafRadius)
+  //     .attr('cx', (d) => 0)
+  //     .attr('cy', (d) => 0);
+
+  const newTotalText = newTotalContainer
+  .append("text")
+    .classed(className("annotation-text"), true)
+    .style('font-size', (d) => (3 * d.height * fontScale) +"%")
+    .attr('x', (d) => 0)
+    .attr('y', (d) => 0)
+    .text((d) => !isNaN(d.value) ? d.value : "0");
+
+  const aggregations = nodeRoot.selectAll(`g.${className("aggregation")}`).data(data, datumKey);
+  aggregations
+  .merge(newAggregations)
+    .attr("display", (d, i, nodes) => showNodes || d.data.CRVIZ._containsGroups ? 'none' : null);
+
+  aggregations
+  .select(`g.${className("total-container")}`)
+  .select('text')
+  .merge(newTotalText)
+    .text((d) => !isNaN(d.value) ? d.value : "0");
+
+  //const groupData = packedData.descendants().filter((d) => d.height > 0 && d,height > 0);
+  //appendAggregations(nodeRoot, groupData, showNodes, leafRadius, fontScale);
 
   return [
     nodes.merge(nodesEnter),
@@ -141,44 +175,49 @@ const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
   }
 }
 
-const appendAggregations = (existingGroupNodes, newGroupNodesNodes, groupData, showNodes, leafRadius, fontScale) =>{
-  const newAggregations = newGroupNodesNodes.append("g")
-  .classed(className("aggregation"), true)
-  .attr("display", (d) => !showNodes ? 'none' : null);
+// const appendAggregations = (nodeRoot, groupData, showNodes, leafRadius, fontScale) =>{
 
-  const existingAggregations = existingGroupNodes.select(`g.${className("aggregation")}`);
+//   const groupingNodes = nodeRoot
+//     .selectAll(`g.${className("groupingNode")}`);
+//   const aggregations = groupingNodes
+//     .select(`g.${className("aggregation")}`)
+//     .data(groupData, datumKey);
 
-  const allAggregations = existingAggregations
-  .merge(newAggregations)
-  .data(groupData, datumKey);
+//   //aggregations.exit().remove();
 
-  allAggregations.exit().remove();
+//   const newAggregations = groupingNodes.enter()
+//   .append("g")
+//     .classed(className("aggregation"), true)
+//     .attr("display", (d) => showNodes ? 'none' : null);
 
-  const newTotalContainer = allAggregations.enter()
-    .append('g')
-      .classed(className("total-container"), true);
-  newTotalContainer
-    .append('g')
-      .classed(className("node"), true)
-    .append('circle')
-      .attr('r', (d) => leafRadius)
-      .attr('cx', (d) => 0)
-      .attr('cy', (d) => 0);
 
-  const newTotalText = newTotalContainer
-  .append("text")
-    .classed(className("annotation-text"), true)
-    .style('font-size', (d) => (3 * d.height * fontScale) +"%")
-    .attr('x', (d) => 0)
-    .attr('y', (d) => 0)
-    .text((d) => !isNaN(d.value) ? d.value : "0");
 
-  allAggregations
-  .select(`g.${className("total-container")}`)
-  .select('text')
-  .merge(newTotalText)
-    .text((d) => !isNaN(d.value) ? d.value : "0");
+//   const newTotalContainer = newAggregations
+//     .append('g')
+//       .classed(className("total-container"), true);
+//   newTotalContainer
+//     .append('g')
+//       .classed(className("node"), true)
+//     .append('circle')
+//       .attr('r', (d) => leafRadius)
+//       .attr('cx', (d) => 0)
+//       .attr('cy', (d) => 0);
 
-}
+//   const newTotalText = newTotalContainer
+//   .append("text")
+//     .classed(className("annotation-text"), true)
+//     .style('font-size', (d) => (3 * d.height * fontScale) +"%")
+//     .attr('x', (d) => 0)
+//     .attr('y', (d) => 0)
+//     .text((d) => !isNaN(d.value) ? d.value : "0");
+
+//   aggregations
+//   .select(`g.${className("total-container")}`)
+//   .select('text')
+//   .merge(newTotalText)
+//     .attr("display", (d) => showNodes ? 'none' : null)
+//     .text((d) => !isNaN(d.value) ? d.value : "0");
+
+// }
 
 export default appendCircles;

@@ -67,7 +67,6 @@ class DatasetSlider extends React.Component {
     }
 
     onChange = (e) =>{
-      console.log("Change: %o", e);
       const start = this.props.points[e[0]];
       const end = this.props.points[e[1]];
 

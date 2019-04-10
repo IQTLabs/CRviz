@@ -116,16 +116,26 @@ const countRemoved = (children) => {
   return result;
 };
 
+
+const childrenAreLeaves = (group) =>{
+  return group.reduce((prev, current) => {
+    const containsGroups = current.CRVIZ ?  current.CRVIZ._containsGroups : false;
+    return prev && !containsGroups && !current.values
+  }, true);
+}
+
 /**
  * Convert nest entries into the format accepted by d3.hierarchy
  */
 const entriesToHierarchy = (fieldValue, field, hierarchyConfig, entries) => {
   if (fieldValue === 'Unknown') {
+    const children = chain(getLeaves, entries)
     return {
       fieldValue,
       field,
-      children: chain(getLeaves, entries),
+      children: children,
       CRVIZ:{ 
+        _containsGroups: false,
         _searchResultCount: countSearchResults(entries),
         _addedCount: countAdded(entries),
         _changedCount: countChanged(entries),
@@ -134,22 +144,24 @@ const entriesToHierarchy = (fieldValue, field, hierarchyConfig, entries) => {
     }
   }
 
+  const children =  map((entry) => {
+    if (entry.values) {
+      return entriesToHierarchy(
+        entry.key,
+        head(hierarchyConfig),
+        tail(hierarchyConfig),
+        entry.values
+      );
+    } else {
+      return entry;
+    }
+  }, entries);
   return {
     fieldValue,
     field,
-    children: map((entry) => {
-      if (entry.values) {
-        return entriesToHierarchy(
-          entry.key,
-          head(hierarchyConfig),
-          tail(hierarchyConfig),
-          entry.values
-        );
-      } else {
-        return entry;
-      }
-    }, entries),
+    children: children,
     CRVIZ:{ 
+      _containsGroups: !childrenAreLeaves(entries),
       _searchResultCount: countSearchResults(entries),
       _addedCount: countAdded(entries),
       _changedCount: countChanged(entries),
