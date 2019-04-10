@@ -160,12 +160,14 @@ class App extends Component {
   processOptions = () => {
     if(this.state.options.action === IMPORT)
     {
-      this.props.uploadDataset({
-        'owner': uuidv4(),
-        'file': this.state.selectedFile,
-        'includeData': this.state.options.data,
-        'includeControls': this.state.options.controls,
-      });
+      if(this.state.selectedFile){
+        this.props.uploadDataset({
+          'owner': uuidv4(),
+          'file': this.state.selectedFile,
+          'includeData': this.state.options.data,
+          'includeControls': this.state.options.controls,
+        });
+      }
       this.setState({showOptions: false})
     }
   }
