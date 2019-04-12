@@ -184,6 +184,12 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
         .select(`g.${className("isAdded-fixed")}`)
       const showHide = glyph.classed(className("ringMenuExcluded"));
 
+      const childGlyphs = selectAll(`g.${className("isAdded-fixed")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+
       const added = selectAll(`g.${className("isAdded")}`)
         .filter((e) =>{
           const ancestors = e.ancestors();
@@ -192,6 +198,7 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
 
       if(!added.empty()){
         glyph.classed(className("ringMenuExcluded"), !showHide);
+        childGlyphs.classed(className("ringMenuExcluded"), !showHide);
         added.classed(className("ringMenuExcluded"), !showHide);
       }
     }
@@ -231,6 +238,12 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
         .select(`g.${className("isChanged-fixed")}`)
       const showHide = glyph.classed(className("ringMenuExcluded"));
 
+      const childGlyphs = selectAll(`g.${className("isChanged-fixed")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+
       const changed = selectAll(`g.${className("isChanged")}`)
         .filter((e) =>{
           const ancestors = e.ancestors();
@@ -239,6 +252,7 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
 
       if(!changed.empty()){
         glyph.classed(className("ringMenuExcluded"), !showHide);
+        childGlyphs.classed(className("ringMenuExcluded"), !showHide);
         changed.classed(className("ringMenuExcluded"), !showHide);
       }
     }
@@ -278,6 +292,12 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
         .select(`g.${className("isRemoved-fixed")}`)
       const showHide = glyph.classed(className("ringMenuExcluded"));
 
+      const childGlyphs = selectAll(`g.${className("isRemoved-fixed")}`)
+        .filter((e) =>{
+          const ancestors = e.ancestors();
+          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+        });
+
       const removed = selectAll(`g.${className("isRemoved")}`)
         .filter((e) =>{
           const ancestors = e.ancestors();
@@ -286,6 +306,7 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
 
       if(!removed.empty()){
         glyph.classed(className("ringMenuExcluded"), !showHide);
+        childGlyphs.classed(className("ringMenuExcluded"), !showHide);
         removed.classed(className("ringMenuExcluded"), !showHide);
       }
     }
