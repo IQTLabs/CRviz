@@ -165,7 +165,7 @@ class ComparisonSelector extends React.Component {
 
     const keyFields = this.props.keyFields;
     const ignoredFields = this.props.ignoredFields;
-    const usedFields = keyFields.concat(ignoredFields);
+    const usedFields = keyFields ? keyFields.concat(ignoredFields) : [];
 
     if (isEmpty(this.props.configuration.fields)) {
       return null;

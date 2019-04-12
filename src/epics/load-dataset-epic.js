@@ -138,8 +138,8 @@ const formatPayload = (data) => {
 
   data = { 
           'datasets': includeData ? final : {},
-          'keyFields': includeData ? keyFields : {},
-          'ignoredFields': includeData ? ignoredFields : {},
+          'keyFields': includeData ? keyFields : [],
+          'ignoredFields': includeData ? ignoredFields : [],
           'controls': includeControls ? controls : {}
         };
   return data;

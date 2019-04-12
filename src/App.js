@@ -69,8 +69,8 @@ class App extends Component {
   componentWillReceiveProps = (nextProps) =>{
     const datasetAdded = this.state.datasetAdded && (nextProps.uuids.length !== this.state.uuids.length)
     const uniqueUuids = this.getUniqueDatasetList(datasetAdded, this.state.uuids, nextProps.uuids);
-    const startUuid = nextProps.startUuid || this.state.startUuid;
-    const endUuid = nextProps.endUuid || this.state.endUuid;
+    const startUuid = nextProps.startUuid && uniqueUuids.findIndex(u => u.owner === nextProps.startUuid) !== -1 ? nextProps.startUuid : this.state.startUuid;
+    const endUuid = nextProps.endUuid && uniqueUuids.findIndex(u => u.owner === nextProps.endUuid) !== -1 ? nextProps.endUuid : this.state.endUuid;
     this.setState({
       uuids: uniqueUuids,
       startUuid: startUuid,
