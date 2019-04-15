@@ -22,10 +22,10 @@ const colorBy = createAction("COLOR_BY");
 const reducer = handleActions(
   {
     [setControls]: (state, { payload }) =>{
-      const hierarchyConfig = payload.hierarchyConfig || defaultState.hierarchyConfig;
-      const shouldShowNodes = ('shouldShowNodes' in payload) ? !!payload.shouldShowNodes : true;
-      const darkTheme = ('darkTheme' in payload) ? !!payload.darkTheme : false;
-      const colorBy = payload.colorBy || defaultState.colorBy;
+      const hierarchyConfig = payload.hierarchyConfig || state.hierarchyConfig;
+      const shouldShowNodes = ('shouldShowNodes' in payload) ? !!payload.shouldShowNodes : state.shouldShowNodes;
+      const darkTheme = ('darkTheme' in payload) ? !!payload.darkTheme : state.darkTheme;
+      const colorBy = payload.colorBy || state.colorBy;
       const start = payload.start || state.start;
       const end = payload.end || state.end;
       return { 
@@ -38,9 +38,7 @@ const reducer = handleActions(
         end: end
       }
     },
-    [setStartDataset]: (state, { payload }) => {
-      return { ...state, start: payload }
-    },
+    [setStartDataset]: (state, { payload }) => ({ ...state, start: payload }),
     [setEndDataset]: (state, { payload }) => ({ ...state, end: payload }),
     [setHierarchyConfig]: (state, { payload }) => ({ ...state, hierarchyConfig: payload }),
     [showNodes]: (state, { payload }) => ({ ...state, shouldShowNodes: !!payload }), // Convert payload to boolean for easier debugging

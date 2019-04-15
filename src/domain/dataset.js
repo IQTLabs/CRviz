@@ -68,7 +68,7 @@ const applyHashes = (dataset, configuration) => {
       configuration.hashFields = getHashFields(configuration.fields, configuration.ignoredFields || []);
     }
 
-    addHashKey(configuration.keyFields.length > 0 ? configuration.keyFields : configuration.hashFields, i);
+    addHashKey(Array.isArray(configuration.keyFields) && configuration.keyFields.length > 0 ? configuration.keyFields : configuration.hashFields, i);
     addHashWithoutIgnored(configuration.hashFields, i);
   });
 };
@@ -280,7 +280,7 @@ const reducer = handleActions(
       return { ...state, isFetching};
     },
     [setKeyFields]: (state, { payload }) => { 
-      const keyFields = payload;
+      const keyFields = payload ? payload : state.keyFields;
       const datasets = _selectDatasets(state);
       if(datasets){
         Object.keys(datasets).forEach((key) => {
@@ -293,10 +293,10 @@ const reducer = handleActions(
       return {...state, keyFields: keyFields };
     },
     [setIgnoredFields]: (state, { payload }) => {
-      const ignoredFields = payload;
+      const ignoredFields = payload ? payload : state.ignoredFields;
       const datasets = _selectDatasets(state);
 
-      if(datasets){
+      if(datasets && ignoredFields){
         const allFields = _selectMergedConfiguration(state).fields;
         const hashFields = getHashFields(allFields, ignoredFields);
 

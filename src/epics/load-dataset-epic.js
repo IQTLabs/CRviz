@@ -99,8 +99,8 @@ const formatPayload = (data) => {
   const source = data.source;
   const content = data.content;
   const datasets = content.datasets;
-  const keyFields = content.keyFields || [];
-  const ignoredFields = content.ignoredFields || [];
+  const keyFields = content.keyFields || null;
+  const ignoredFields = content.ignoredFields || null;
   const controls = content.controls || {};
   const includeData = ('includeData' in data) ? data.includeData : true;
   const includeControls = ('includeControls' in data) ? data.includeControls : false;
