@@ -33,6 +33,7 @@
   -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
   animation: delta 2s infinite;
+  animation-delay: 250ms;
 }
 
 @keyframes delta {
@@ -62,6 +63,7 @@
   -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
   animation: plus 2s infinite;
+  animation-delay: 250ms;
 }
 
 @keyframes plus {
@@ -91,6 +93,7 @@
   -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
   animation: minus 2s infinite;
+  animation-delay: 250ms;
 }
 
 @keyframes minus {
