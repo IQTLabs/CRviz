@@ -54,12 +54,8 @@ class DatasetSlider extends React.Component {
       }
     }
 
-    onStartClick = (e) => {
-      this.props.setStartUuid("UNSET");
-    }
-
-    onEndClick = (e) => {
-      this.props.setEndUuid("UNSET");
+    onHandleClick = (e) => {
+      console.log("click event target: %o", e);
     }
 
     onUpdate = (e) =>{
@@ -67,14 +63,20 @@ class DatasetSlider extends React.Component {
     }
 
     onChange = (e) =>{
-      const start = this.props.points[e[0]];
-      const end = this.props.points[e[1]];
-
+      console.log("startUuid: %o", this.props.startUuid);
+      console.log("endUuid: %o", this.props.endUuid);
+      console.log("onChange e: %o", e);
+      const start = e.length > 1 ? this.props.points[e[0]] : null;
+      const end = e.length > 1 ? this.props.points[e[1]] : this.props.points[e[0]];
+      
       if(start){
         this.props.setStartUuid(start.owner);
       }
       if(end && end !== start){
         this.props.setEndUuid(end.owner);
+      }
+      if(end && end === start){
+        this.props.setEndUuid('UNSET');
       }
     }
     
@@ -98,16 +100,17 @@ class DatasetSlider extends React.Component {
       };
 
       const domain = [0, Math.max(points.length -1, 0.1) ];
-      const defaultValues = [];
+      
       const startIdx = points.findIndex( p => p.owner === startUuid);
       const endIdx = points.findIndex( p => p.owner === endUuid);
+      const defaultValues = [startIdx, endIdx];
 
-      if(startIdx >= 0){
-        defaultValues.push(startIdx);
-      }
-      if(endIdx >= 0 && endIdx > startIdx){
-        defaultValues.push(endIdx);
-      }
+      // if(startIdx >= 0){
+      //   defaultValues.push(startIdx);
+      // }
+      // if(endIdx >= 0 && endIdx > startIdx){
+      //   defaultValues.push(endIdx);
+      // }
      
       return (
        <div style={{ margin: "10%", height: 60 }}>
