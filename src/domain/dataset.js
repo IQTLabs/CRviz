@@ -29,6 +29,8 @@ const defaultItemState = {
   name: "",
   shortName: "",
   dataset: [],
+  keyCount: 0,
+  uniqueKeyCount: 0,
   filtered: null,
   values: {},
   configuration: {
@@ -60,6 +62,7 @@ const addHashWithoutIgnored = (fields, obj) => {
 }
 
 const applyHashes = (dataset, configuration) => {
+  const keys = [];
   dataset.forEach((i) => {
     if(!('CRVIZ' in i)){
       i['CRVIZ'] = {};
@@ -70,7 +73,10 @@ const applyHashes = (dataset, configuration) => {
 
     addHashKey(Array.isArray(configuration.keyFields) && configuration.keyFields.length > 0 ? configuration.keyFields : configuration.hashFields, i);
     addHashWithoutIgnored(configuration.hashFields, i);
+    keys.push(i.CRVIZ._HASH_KEY);
   });
+  const uniqueKeys = Array.from(new Set(keys));
+  return {keyCount: keys.length, uniqueKeyCount:uniqueKeys.length}
 };
 
 /**
@@ -161,7 +167,7 @@ const configureDataset = (dataset, source, name, shortName, initialConfig, keyFi
     ignoredFields,
     initialConfig || {}
   );
-  applyHashes(dataset, configuration);
+  const { keyCount, uniqueKeyCount } = applyHashes(dataset, configuration);
 
   const values = valuesFor(dataset, configuration);
   const isFetching = false;
@@ -171,6 +177,8 @@ const configureDataset = (dataset, source, name, shortName, initialConfig, keyFi
     source: source,
     name: name,
     shortName: shortName,
+    keyCount: keyCount,
+    uniqueKeyCount: uniqueKeyCount,
     filtered: null,
     values: values,
     configuration: configuration,
@@ -286,7 +294,9 @@ const reducer = handleActions(
         Object.keys(datasets).forEach((key) => {
           const ds = datasets[key];
           ds.configuration.keyFields = keyFields;
-          applyHashes(ds.dataset, ds.configuration);
+          const { keyCount, uniqueKeyCount } = applyHashes(ds.dataset, ds.configuration);
+          ds.keyCount = keyCount;
+          ds.uniqueKeyCount = uniqueKeyCount;
         });
       }
 
@@ -303,7 +313,9 @@ const reducer = handleActions(
         Object.keys(datasets).forEach((key) => {
           const ds = datasets[key];    
           ds.configuration.hashFields = hashFields
-          applyHashes(ds.dataset, ds.configuration);
+          const { keyCount, uniqueKeyCount } = applyHashes(ds.dataset, ds.configuration);
+          ds.keyCount = keyCount;
+          ds.uniqueKeyCount = uniqueKeyCount;
         });
       }
 

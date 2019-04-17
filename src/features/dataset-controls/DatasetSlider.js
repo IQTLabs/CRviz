@@ -55,7 +55,6 @@ class DatasetSlider extends React.Component {
     }
 
     onHandleClick = (e) => {
-      console.log("click event target: %o", e);
     }
 
     onUpdate = (e) =>{
@@ -63,9 +62,6 @@ class DatasetSlider extends React.Component {
     }
 
     onChange = (e) =>{
-      console.log("startUuid: %o", this.props.startUuid);
-      console.log("endUuid: %o", this.props.endUuid);
-      console.log("onChange e: %o", e);
       const start = e.length > 1 ? this.props.points[e[0]] : null;
       const end = e.length > 1 ? this.props.points[e[1]] : this.props.points[e[0]];
       

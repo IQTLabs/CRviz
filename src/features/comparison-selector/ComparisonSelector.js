@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import { DragDropContext} from 'react-beautiful-dnd';
-
+import ToolTip from 'react-portal-tooltip'
 import {
   compose,
   differenceWith,
@@ -19,8 +19,11 @@ import {
   remove
 } from "ramda";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDumpsterFire } from "@fortawesome/free-solid-svg-icons";
+
 import { 
-  selectMergedConfiguration, selectMergedValues, getFieldId, selectDataset,
+  selectMergedConfiguration, selectMergedValues, getFieldId, selectDatasets,
   setKeyFields, getKeyFields, setIgnoredFields, getIgnoredFields
 } from "domain/dataset";
 import { diffDataset } from "epics/diff-dataset-epic";
@@ -31,6 +34,7 @@ import DropTarget from 'features/drag-drop-utils/DropTarget';
 
 import availableFieldListStyle from 'features/drag-drop-utils/AvailableFieldList.module.css';
 import selectedFieldListStyle from 'features/drag-drop-utils/SelectedFieldList.module.css';
+import style from './ComparisonSelector.module.css';
 
 const KEY_FIELD_LIST_ID = 'KeyFieldList';
 const IGNORED_FIELD_LIST_ID = 'IgnoredFieldList';
@@ -41,7 +45,8 @@ const IGNORED_TARGET_ID = 'IgnoredTarget';
 class ComparisonSelector extends React.Component {
 
   state = {
-    dragState: null
+    dragState: null,
+    showDupeTooltip: false
   }
 
   onDragStart = (dragStart) => {
@@ -141,28 +146,43 @@ class ComparisonSelector extends React.Component {
   }
 
   updateDiff = (keyFields, ignoredFields) => {
-    const toDiff ={
-      'start': {
-        'owner': this.props.startUuid,
-        'dataset': this.props.start
-      },
-      'end':{
-        'owner': this.props.endUuid,
-        'dataset': this.props.end
-      },
-      'configuration': this.props.configuration,
-      'key': keyFields,
-      'ignore': ignoredFields,
-    }
+    if(this.props.start && this.props.end){
+      const toDiff ={
+        'start': {
+          'owner': this.props.startUuid,
+          'dataset': this.props.start
+        },
+        'end':{
+          'owner': this.props.endUuid,
+          'dataset': this.props.end
+        },
+        'configuration': this.props.configuration,
+        'key': keyFields,
+        'ignore': ignoredFields,
+      }
 
-    this.props.diffDataset(toDiff);
+      this.props.diffDataset(toDiff);
+    }
+  }
+
+  showDupeTooltip = () => {
+    this.setState({
+      showDupeTooltip: true
+    })
+  }
+
+  hideDupeTooltip = () => {
+    this.setState({
+      showDupeTooltip: false
+    })
   }
 
   render() {
     if (this.props.configuration === null) {
       return null;
     }
-
+    const keyInfo = this.props.keyInfo;
+    const hasDupes = keyInfo.reduce((total, current) => total + current.duplicateCount, 0);
     const keyFields = this.props.keyFields;
     const ignoredFields = this.props.ignoredFields;
     const usedFields = keyFields ? keyFields.concat(ignoredFields) : [];
@@ -183,12 +203,36 @@ class ComparisonSelector extends React.Component {
 
     return (
       <div>
+        <div className={style.dupeContainer}>
+          {!!hasDupes &&
+            <span className={ style.infoIcon }>
+              <div id="showDupeInfo" onMouseEnter={this.showDupeTooltip} onMouseLeave={this.hideDupeTooltip}>
+                <FontAwesomeIcon icon={faDumpsterFire} color="#cc0000" />
+              </div>
+              <ToolTip active={this.state.showDupeTooltip} position="bottom" parent="#showDupeInfo" tooltipTimeout={250}>
+                <div className={ style.infoPopup }>
+                  Keying on the selected field(s) results in duplicate keys.<br/>
+                  {keyInfo.map( (ki) => {
+                    return(
+                      <div>
+                        <strong>{ki.name} </strong> &mdash; {ki.duplicateCount} duplicates <br/>
+                      </div>
+                      );
+                  })}
+                  This may lead to inaccurate change data being shown. Please
+                  verify your key and underlying data. 
+                </div>
+              </ToolTip>
+            </span>
+          }
+        </div>
         <DragDropContext
           onDragStart={ this.onDragStart }
           onDragUpdate={ this.onDragUpdate }
           onDragEnd={ this.onDragEnd }>
 
           <div style={{ marginBottom: '2rem' }}>
+          
             <SelectedFieldList
               style={ selectedFieldListStyle }
               initialItemText="Key On"
@@ -252,6 +296,7 @@ ComparisonSelector.propTypes = {
   start: PropTypes.array,
   endUuid: PropTypes.string,
   end: PropTypes.array,
+  keyInfo: PropTypes.array.isRequired,
   keyFields: PropTypes.array.isRequired,
   ignoredFields: PropTypes.array.isRequired,
   configuration: PropTypes.shape({
@@ -265,14 +310,26 @@ const findFieldIndex = (list, fieldId) => {
   return index === -1 ? null : index;
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  start: selectDataset(state, ownProps.startUuid),
-  end: selectDataset(state, ownProps.endUuid),
-  keyFields: getKeyFields(state),
-  ignoredFields: getIgnoredFields(state),
-  configuration: selectMergedConfiguration(state),
-  values: selectMergedValues(state)
-});
+const mapStateToProps = (state, ownProps) => {
+  const datasets = selectDatasets(state);
+  const keyInfo = Object.keys(datasets).map(key => 
+    ({ 
+      'owner': key, 
+      'name': datasets[key].name, 
+      'keyCount': isNaN(datasets[key].keyCount) ? 0 : datasets[key].keyCount,
+      'uniqueKeyCount': isNaN(datasets[key].uniqueKeyCount) ? 0 : datasets[key].uniqueKeyCount,
+      'duplicateCount': isNaN(datasets[key].keyCount - datasets[key].uniqueKeyCount) ? 0 : datasets[key].keyCount - datasets[key].uniqueKeyCount }));
+
+  return{
+    start: datasets[ownProps.startUuid],
+    end: datasets[ownProps.endUuid],
+    keyInfo: keyInfo,
+    keyFields: getKeyFields(state),
+    ignoredFields: getIgnoredFields(state),
+    configuration: selectMergedConfiguration(state),
+    values: selectMergedValues(state)
+  }
+};
 
 const mapDispatchToProps = {
   setKeyFields,
