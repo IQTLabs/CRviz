@@ -298,3 +298,14 @@ input[name=hideControls]:checked ~ .canvas {
   flex-wrap: nowrap !important;
   padding: 0.25em 2em;
 }
+
+.activityIndicatorContainer {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 160px;
+  height: 160px;
+}

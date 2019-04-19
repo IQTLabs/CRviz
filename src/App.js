@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Modal from 'react-modal';
 
+import { RingLoader } from 'react-spinners';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
   faCheck, faDizzy, faPlus, faHome, faAngleDoubleDown, faAngleDoubleUp,
@@ -63,7 +64,7 @@ class App extends Component {
       controls: true
     },
     selectedFile: null,
-    exportName: "dataset.json"
+    exportName: "dataset.json",
   }
 
   componentWillReceiveProps = (nextProps) =>{
@@ -75,7 +76,7 @@ class App extends Component {
       uuids: uniqueUuids,
       startUuid: startUuid,
       endUuid: endUuid,
-      datasetAdded: datasetAdded
+      datasetAdded: datasetAdded,
     });
   }
 
@@ -168,7 +169,7 @@ class App extends Component {
           'includeControls': this.state.options.controls,
         });
       }
-      this.setState({showOptions: false})
+      this.setState({showOptions: false })
     }
   }
 
@@ -458,6 +459,14 @@ class App extends Component {
             </div>
           </div>
         </Modal>
+        <div className={style.activityIndicatorContainer}>
+          <RingLoader
+            sizeUnit={"px"}
+            size={150}
+            color={'#0277BD'}
+            loading={this.state.busy}
+          />
+        </div>
       </div>
     );
   }

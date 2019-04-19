@@ -7,7 +7,8 @@ import {
   showNodes,
   useDarkTheme,
   colorBy,
-  selectControls
+  selectControls,
+  showBusy
 } from "./controls";
 import { combineReducers } from "redux";
 import { expect } from "chai"
@@ -25,6 +26,7 @@ describe("Controls reducer", () => {
         'colorBy': { path: ["uid"], displayName: "UID" },
         'start': 't0',
         'end': 'tn',
+        'showBusy': true,
       }
 
       const action = setControls(controls);
@@ -67,6 +69,7 @@ describe("Controls reducer", () => {
         colorBy: null,
         'start': null,
         'end': null,
+        'showBusy': false,
       });
 
       done();
@@ -104,6 +107,24 @@ describe("Controls reducer", () => {
       const action = useDarkTheme(true);
       const result = reducer({}, action);
       expect(selectControls(result).darkTheme).to.equal(true);
+
+      done();
+    });
+  });
+
+  describe("showBusy", () => {
+    it("set showBusy to false", (done) => {
+      const action = showBusy(false);
+      const result = reducer({}, action);
+      expect(selectControls(result).showBusy).to.equal(false);
+
+      done();
+    });
+
+    it("set showBusy to true", (done) => {
+      const action = showBusy(true);
+      const result = reducer({}, action);
+      expect(selectControls(result).showBusy).to.equal(true);
 
       done();
     });
