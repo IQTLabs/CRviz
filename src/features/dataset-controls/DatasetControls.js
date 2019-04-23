@@ -14,7 +14,8 @@ import { startRefresh, stopRefresh } from "epics/refresh-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
 import { removeSearchIndex } from "epics/index-dataset-epic";
 import {
-  showNodes, setHierarchyConfig, colorBy, selectControls, setStartDataset, setEndDataset
+  showNodes, setHierarchyConfig, colorBy, selectControls, setStartDataset,
+  setEndDataset, showBusy
 } from "domain/controls"
 
 import { setError } from "domain/error"
@@ -96,6 +97,7 @@ class DatasetControls extends React.Component {
   }
 
   fetchAndSetDataset = (url, dataset, username, password, token) => {
+    this.props.showBusy(true);
     this.props.setIsFetching({owner: this.props.uuid, isFetching: true});
     const authHeader = buildAuthHeader(username, password, token);
     if (toURL(url)) {
@@ -197,6 +199,7 @@ class DatasetControls extends React.Component {
 
   onUploadOk = () =>{
     if(this.state.selectedFile){
+      this.props.showBusy(true);
       this.props.uploadDataset({ 
         'owner': this.props.uuid,
         'name':this.props.name,
@@ -508,7 +511,8 @@ DatasetControls.propTypes = {
   fullDatasets: PropTypes.object,
   controls: PropTypes.object,
   keyFields: PropTypes.array,
-  ignoredFields: PropTypes.array
+  ignoredFields: PropTypes.array,
+  showBusy: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -542,7 +546,8 @@ const mapDispatchToProps = {
   colorBy,
   startRefresh,
   stopRefresh,
-  setError
+  setError,
+  showBusy
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DatasetControls);

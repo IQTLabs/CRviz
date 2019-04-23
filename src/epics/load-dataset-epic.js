@@ -8,7 +8,7 @@ import { buildIndices } from './index-dataset-epic';
 
 import { setError } from "domain/error"
 import { setDatasets, setKeyFields, setIgnoredFields, configureDataset } from "domain/dataset";
-import { setControls } from "domain/controls";
+import { setControls, showBusy } from "domain/controls";
 
 const loadDataset = createAction("LOAD_DATASET");
 
@@ -25,6 +25,7 @@ const loadDatasetEpic = (action$, store) => {
             ,setIgnoredFields(payload.ignoredFields)
             ,setControls(payload.controls)
             ,buildIndices(payload)
+            ,showBusy(false)
           )
         })
         ,catchError((error) => {

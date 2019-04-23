@@ -30,8 +30,6 @@ const reducer = handleActions(
       const colorBy = payload.colorBy || state.colorBy;
       const start = payload.start || state.start;
       const end = payload.end || state.end;
-      console.log("payload show busy: %o", payload.showBusy);
-      console.log(('showBusy' in payload));
       const showBusy = ('showBusy' in payload) ? !!payload.showBusy : state.showBusy;
       return { 
         ...state,

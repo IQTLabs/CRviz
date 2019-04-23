@@ -14,7 +14,8 @@ import {
   selectDatasets, getLastUpdated, removeDataset,getKeyFields, getIgnoredFields
 } from 'domain/dataset';
 import { 
-  setHierarchyConfig, showNodes, colorBy, selectControls, setStartDataset, setEndDataset
+  setHierarchyConfig, showNodes, colorBy, selectControls, setStartDataset, setEndDataset,
+  showBusy
 } from 'domain/controls';
 import { getError, clearError } from "domain/error";
 import { removeSearchIndex } from "epics/index-dataset-epic";
@@ -161,13 +162,14 @@ class App extends Component {
   processOptions = () => {
     if(this.state.options.action === IMPORT)
     {
+      this.props.showBusy(true);
       if(this.state.selectedFile){
         this.props.uploadDataset({
           'owner': uuidv4(),
           'file': this.state.selectedFile,
           'includeData': this.state.options.data,
           'includeControls': this.state.options.controls,
-        });
+        })
       }
       this.setState({showOptions: false })
     }
@@ -464,7 +466,7 @@ class App extends Component {
             sizeUnit={"px"}
             size={150}
             color={'#0277BD'}
-            loading={this.state.busy}
+            loading={this.props.shouldShowBusy}
           />
         </div>
       </div>
@@ -490,7 +492,8 @@ const mapStateToProps = state => {
     fullDatasets: datasets,
     controls: controls,
     keyFields: getKeyFields(state),
-    ignoredFields: getIgnoredFields(state)
+    ignoredFields: getIgnoredFields(state),
+    shouldShowBusy: controls.showBusy,
   }
 }
 
@@ -503,7 +506,8 @@ const mapDispatchToProps = {
   removeSearchIndex,
   setStartDataset,
   setEndDataset,
-  uploadDataset
+  uploadDataset,
+  showBusy,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
