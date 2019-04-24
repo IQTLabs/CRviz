@@ -1,5 +1,5 @@
 import { ofType } from 'redux-observable';
-import { isNil } from "ramda";
+import { isNil, isEmpty } from "ramda";
 import { of } from "rxjs";
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -69,7 +69,7 @@ const flattenDataset = (ds, cfg) => {
     return flattened;
 
   for(var key in ds){
-    var item = {'id':key};
+    var item = {'CRVIZ_SEARCH_REF':key};
     for(var f in cfg.fields){
       var field = cfg.fields[f];
 
@@ -84,15 +84,18 @@ const flattenDataset = (ds, cfg) => {
 const generateIndex = (payload) => {
   const owner = payload.owner;
   const dataset = payload.dataset;
-  const configuration = payload.configuration || configurationFor(dataset);
+  const configuration = !isNil(payload.configuration) && !isEmpty(payload.configuration) 
+                        ? payload.configuration : configurationFor(dataset);
   var flat = flattenDataset(dataset, configuration);
   const idx = lunr(function () {
-    this.ref('id');
+    this.ref('CRVIZ_SEARCH_REF');
     if(configuration && configuration.fields){
-      configuration.fields.map((field) => { return this.field(field.displayName.toLowerCase()); })
+      const filteredFields = configuration.fields.filter(f => !f.displayName.includes("/"))
+      filteredFields.map((field) => { return this.field(field.displayName.toLowerCase()); })
     }
     flat.map((item) => { return this.add(item); })
   });
+
   return { owner: owner, index: idx };
 };
 
