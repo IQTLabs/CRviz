@@ -305,20 +305,6 @@ class App extends Component {
             </div>
           }
 
-          <div className={style.accordionHeader} onClick={this.toggleShowComparison}>
-            Comparison  {!showComparison && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showComparison && <FontAwesomeIcon  onClick={this.toggleShowComparison} icon={faAngleDoubleUp} />}
-          </div>
-          { hasDataset &&
-            <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
-              <ComparisonSelector startUid={startUuid} endUid={endUuid} />
-            </div>
-          }
-          { !hasDataset && 
-            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
-              Please select datasets to continue
-            </div>
-          }
-
           <div className={style.accordionHeader} onClick={this.toggleShowGrouping}>
             Grouping  {!showGrouping && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showGrouping && <FontAwesomeIcon  onClick={this.toggleShowGrouping} icon={faAngleDoubleUp} />}
           </div>
@@ -338,6 +324,21 @@ class App extends Component {
               Please select a dataset to continue
             </div>
           }
+
+          <div className={style.accordionHeader} onClick={this.toggleShowComparison}>
+            Comparison  {!showComparison && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showComparison && <FontAwesomeIcon  onClick={this.toggleShowComparison} icon={faAngleDoubleUp} />}
+          </div>
+          { hasDataset &&
+            <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
+              <ComparisonSelector startUid={startUuid} endUid={endUuid} />
+            </div>
+          }
+          { !hasDataset && 
+            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
+              Please select datasets to continue
+            </div>
+          }
+          
           <div className={style.footerContainer}>
             <span className={ style.centerSpan }>
                 <div className="button circular" title="Import Dataset" onClick={this.showImportOptions}>
