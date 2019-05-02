@@ -1,15 +1,17 @@
 {
-  "main.css": "/CRviz/static/css/main.b61aca53.chunk.css",
-  "main.js": "/CRviz/static/js/main.1be981d7.chunk.js",
-  "main.js.map": "/CRviz/static/js/main.1be981d7.chunk.js.map",
-  "runtime~main.js": "/CRviz/static/js/runtime~main.407f422a.js",
-  "runtime~main.js.map": "/CRviz/static/js/runtime~main.407f422a.js.map",
-  "static/css/2.9fc783dc.chunk.css": "/CRviz/static/css/2.9fc783dc.chunk.css",
-  "static/js/2.4cd48b47.chunk.js": "/CRviz/static/js/2.4cd48b47.chunk.js",
-  "static/js/2.4cd48b47.chunk.js.map": "/CRviz/static/js/2.4cd48b47.chunk.js.map",
-  "index.html": "/CRviz/index.html",
-  "precache-manifest.ba06afedff61406763a3c41656467b00.js": "/CRviz/precache-manifest.ba06afedff61406763a3c41656467b00.js",
-  "service-worker.js": "/CRviz/service-worker.js",
-  "static/css/2.9fc783dc.chunk.css.map": "/CRviz/static/css/2.9fc783dc.chunk.css.map",
-  "static/css/main.b61aca53.chunk.css.map": "/CRviz/static/css/main.b61aca53.chunk.css.map"
+  "files": {
+    "main.css": "/CRviz/static/css/main.660887c1.chunk.css",
+    "main.js": "/CRviz/static/js/main.1f14c982.chunk.js",
+    "main.js.map": "/CRviz/static/js/main.1f14c982.chunk.js.map",
+    "runtime~main.js": "/CRviz/static/js/runtime~main.764a354c.js",
+    "runtime~main.js.map": "/CRviz/static/js/runtime~main.764a354c.js.map",
+    "static/css/2.9bc12674.chunk.css": "/CRviz/static/css/2.9bc12674.chunk.css",
+    "static/js/2.2b746723.chunk.js": "/CRviz/static/js/2.2b746723.chunk.js",
+    "static/js/2.2b746723.chunk.js.map": "/CRviz/static/js/2.2b746723.chunk.js.map",
+    "index.html": "/CRviz/index.html",
+    "precache-manifest.ba8b28e3e45b7ada599e34ae23ba2589.js": "/CRviz/precache-manifest.ba8b28e3e45b7ada599e34ae23ba2589.js",
+    "service-worker.js": "/CRviz/service-worker.js",
+    "static/css/2.9bc12674.chunk.css.map": "/CRviz/static/css/2.9bc12674.chunk.css.map",
+    "static/css/main.660887c1.chunk.css.map": "/CRviz/static/css/main.660887c1.chunk.css.map"
+  }
 }
