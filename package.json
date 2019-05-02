@@ -25,21 +25,21 @@
     "normalize.css": "^8.0.0",
     "ramda": "^0.26.0",
     "rc": "^1.2.7",
-    "react": "^16.8.1",
+    "react": "^16.8.6",
     "react-beautiful-dnd": "^10.0.3",
-    "react-dom": "^16.8.1",
+    "react-dom": "^16.8.6",
     "react-modal": "^3.5.1",
     "react-portal-tooltip": "^2.4.0",
-    "react-redux": "^6.0.1",
-    "react-scripts": "^2.1.5",
-    "redux": "^4.0.0",
+    "react-redux": "^7.0.3",
+    "react-scripts": "^3.0.0",
+    "redux": "^4.0.1",
     "redux-actions": "^2.2.1",
     "redux-mock-store": "^1.5.1",
     "redux-observable": "^1.0.0-beta.2",
     "request": "^2.84.0",
     "rxjs": "^6.2.0",
     "rxjs-compat": "^6.2.0",
-    "snyk": "^1.124.1",
+    "snyk": "^1.161.0",
     "tar-pack": "^3.4.0",
     "uuid": "^3.3.2"
   },
@@ -53,8 +53,7 @@
     "deploy-experimental": "gh-pages -r https://github.com/rashley-iqt/CRviz -d build",
     "lint": "eslint --ext=js --ext=jsx .",
     "release": "standard-version",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "snyk-protect": "snyk protect"
   },
   "pre-commit": {
     "run": [
@@ -68,7 +67,8 @@
     ],
     "plugins": [
       "@babel/plugin-transform-modules-commonjs",
-      "@babel/plugin-proposal-class-properties"
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-object-rest-spread"
     ],
     "env": {
       "test": {
@@ -112,10 +112,10 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@fortawesome/fontawesome-free": "^5.5.0",
-    "babel-eslint": "^9.0.0",
+    "babel-eslint": "^10.0.1",
     "chai": "^4.1.2",
     "enzyme": "^3.6.0",
-    "enzyme-adapter-react-16": "^1.4.0",
+    "enzyme-adapter-react-16": "^1.12.1",
     "eslint-config-react-app": "^3.0.6",
     "eslint-plugin-flowtype": "^3.0.0",
     "eslint-plugin-import": "^2.12.0",
