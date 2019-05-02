@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.11](https://github.com/CyberReboot/CRviz/compare/v0.2.10...v0.2.11) (2019-05-02)
+
+
+### Bug Fixes
+
+* temporarily disable snyk due to tree size issue ([dc02377](https://github.com/CyberReboot/CRviz/commit/dc02377))
+* temporarily disable snyk due to tree size issue pt 2 ([f5849c3](https://github.com/CyberReboot/CRviz/commit/f5849c3))
+* Update dependencies and correct control to work with React Hooks ([dabc540](https://github.com/CyberReboot/CRviz/commit/dabc540))
+* update snyk to make CI happy ([51da6d6](https://github.com/CyberReboot/CRviz/commit/51da6d6))
+* **package:** update react-beautiful-dnd to version 11.0.0 ([3a9a506](https://github.com/CyberReboot/CRviz/commit/3a9a506))
+* **package:** update react-redux to version 7.0.0 ([6f1194e](https://github.com/CyberReboot/CRviz/commit/6f1194e))
+
+
+
 ## [0.2.10](https://github.com/CyberReboot/CRviz/compare/v0.2.9...v0.2.10) (2019-03-07)
 
 
