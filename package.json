@@ -54,7 +54,6 @@
     "lint": "eslint --ext=js --ext=jsx .",
     "release": "standard-version",
     "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
   },
   "pre-commit": {
     "run": [
