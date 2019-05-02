@@ -53,7 +53,7 @@
     "deploy-experimental": "gh-pages -r https://github.com/rashley-iqt/CRviz -d build",
     "lint": "eslint --ext=js --ext=jsx .",
     "release": "standard-version",
-    "snyk-protect": "snyk protect",
+    "snyk-protect": "snyk protect"
   },
   "pre-commit": {
     "run": [
