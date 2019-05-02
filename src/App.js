@@ -361,6 +361,28 @@ class App extends Component {
         <div className={ style.canvas }>
           <Visualization startUid={startUuid} endUid={endUuid} />
         </div>
+        <div className={classNames({ [style.key]: true, [style.hidden]: datasetCount < 2 }) }>
+          <svg width="100%" height="60">
+            <g>
+              <g class="viz-isAdded-fixed">
+                <circle cx="15" cy="15" r="10"/>
+              </g>
+              <text x="30" y="15">Added</text>
+            </g>
+            <g>
+              <g class="viz-isChanged-fixed">
+                <circle cx="100" cy="15" r="10"/>
+              </g>
+              <text x="115" y="15">Changed</text>
+            </g>
+            <g>
+              <g class="viz-isRemoved-fixed">
+                <circle cx="200" cy="15" r="10"/>
+              </g>
+              <text x="215" y="15">Removed</text>
+            </g>
+          </svg>
+        </div>
         <div className={ classNames({ [style.sliderContainer]: true, [style.hidden]: datasetCount < 2 }) } >
           <DatasetSlider points={uuids} startUuid={startUuid} endUuid={endUuid} 
             setStartUuid={this.setStartUuid} setEndUuid={this.setEndUuid} />

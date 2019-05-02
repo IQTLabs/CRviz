@@ -309,3 +309,15 @@ input[name=hideControls]:checked ~ .canvas {
   width: 160px;
   height: 160px;
 }
+
+.key {
+  padding-right: 2em;
+  position:absolute;
+  width: 405px;
+  bottom:80px;
+  right:0;
+}
+
+.key text {
+  dominant-baseline: middle;
+}

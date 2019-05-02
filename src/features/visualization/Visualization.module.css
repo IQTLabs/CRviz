@@ -46,7 +46,7 @@
   }
 }
 
-.viz :global(.viz-isAdded-fixed) circle {
+:global(.viz-isAdded-fixed) circle {
   fill: black;
   -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
   clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
@@ -76,7 +76,7 @@
   }
 }
 
-.viz :global(.viz-isRemoved-fixed) circle {
+:global(.viz-isRemoved-fixed) circle {
   fill: black;
   -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
   clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
