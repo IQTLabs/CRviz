@@ -1,6 +1,6 @@
 {
   "name": "CRviz",
-  "version": "0.3.1-alpha14",
+  "version": "0.3.1-alpha15",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.3",
