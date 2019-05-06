@@ -187,14 +187,22 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
 
       const childGlyphs = selectAll(`g.${className("isAdded-fixed")}`)
         .filter((e) =>{
-          const ancestors = e.ancestors();
-          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          if(e){
+            const ancestors = e.ancestors();
+            return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          }
+          else 
+            return false;
         });
 
       const added = selectAll(`g.${className("isAdded")}`)
         .filter((e) =>{
-          const ancestors = e.ancestors();
-          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          if(e){
+            const ancestors = e.ancestors();
+            return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          }
+          else 
+            return false;
         });
 
       if(!added.empty()){
@@ -241,14 +249,22 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
 
       const childGlyphs = selectAll(`g.${className("isChanged-fixed")}`)
         .filter((e) =>{
-          const ancestors = e.ancestors();
-          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          if(e){
+            const ancestors = e.ancestors();
+            return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          }
+          else 
+            return false;
         });
 
       const changed = selectAll(`g.${className("isChanged")}`)
         .filter((e) =>{
-          const ancestors = e.ancestors();
-          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          if(e){
+            const ancestors = e.ancestors();
+            return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          }
+          else 
+            return false;
         });
 
       if(!changed.empty()){
@@ -295,14 +311,22 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
 
       const childGlyphs = selectAll(`g.${className("isRemoved-fixed")}`)
         .filter((e) =>{
-          const ancestors = e.ancestors();
-          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          if(e){
+            const ancestors = e.ancestors();
+            return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          }
+          else 
+            return false;
         });
 
       const removed = selectAll(`g.${className("isRemoved")}`)
         .filter((e) =>{
-          const ancestors = e.ancestors();
-          return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          if(e){
+            const ancestors = e.ancestors();
+            return ancestors.findIndex( a => datumKey(a) === dk) !== -1;
+          }
+          else 
+            return false;
         });
 
       if(!removed.empty()){
