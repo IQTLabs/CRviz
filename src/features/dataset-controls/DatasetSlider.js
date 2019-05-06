@@ -68,11 +68,8 @@ class DatasetSlider extends React.Component {
       if(start){
         this.props.setStartUuid(start.owner);
       }
-      if(end && end !== start){
+      if(end){
         this.props.setEndUuid(end.owner);
-      }
-      if(end && end === start){
-        this.props.setEndUuid('UNSET');
       }
     }
     
