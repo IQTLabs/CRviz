@@ -328,14 +328,14 @@ class App extends Component {
           <div className={style.accordionHeader} onClick={this.toggleShowComparison}>
             Comparison  {!showComparison && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showComparison && <FontAwesomeIcon  onClick={this.toggleShowComparison} icon={faAngleDoubleUp} />}
           </div>
-          { hasDataset &&
+          { datasetCount >= 2 &&
             <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
               <ComparisonSelector startUid={startUuid} endUid={endUuid} />
             </div>
           }
-          { !hasDataset && 
+          { datasetCount < 2 && 
             <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
-              Please select datasets to continue
+              Please select at least 2 datasets to continue
             </div>
           }
           
