@@ -76,7 +76,7 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   const newBgCircles = newRingMenu
     .append('circle')
       .classed(className('bg-circle'), true)
-      .attr('r', (d) =>  10*leafRadius)
+      .attr('r', (d) =>  18*d.height*leafRadius)
 
   annotations
   .select(`g.${className("ring-menu")}`)
@@ -88,7 +88,7 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   const newX = newRingMenu
   .append('text')
     .classed('svg-icon', true)
-    .style('font-size', (d) => fontScale + "%")
+    .style('font-size', (d) => 3 * d.height * fontScale + "%")
     .text('\uf00d');
 
   annotations
@@ -118,9 +118,9 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
     .append('g')
       .classed(className("node"), true)
     .append('circle')
-      .attr('r', (d) => leafRadius)
-      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle(d))) - 1.5*leafRadius)
-      .attr('cy', (d) => (getEdgePositionY(d.r, baseAngle(d))) - 6*leafRadius);
+      .attr('r', (d) => 2 * d.height * leafRadius)
+      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle(d))) - 3.5*d.height*leafRadius)
+      .attr('cy', (d) => (getEdgePositionY(d.r, baseAngle(d))) - 10*d.height*leafRadius);
 
   annotations
   .select(`g.${className("total-container")}`)
@@ -154,9 +154,9 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   const newTotalText = newTotalContainer
   .append("text")
     .classed(className("annotation-text"), true)
-    .style('font-size', (d) => ((2*leafRadius)/16) *100 +"%")
-    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle(d))) + 1.5*leafRadius)
-    .attr('y', (d) => (getEdgePositionY(d.r, baseAngle(d))) - 6*leafRadius);
+    .style('font-size', (d) => (2 * d.height * fontScale) + "%")
+    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle(d))) + 3.5*d.height*leafRadius)
+    .attr('y', (d) => (getEdgePositionY(d.r, baseAngle(d))) - 10*d.height*leafRadius);
 
   annotations
   .select(`g.${className("total-container")}`)
@@ -172,8 +172,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
     .append('g')
       .classed(className("isAdded-fixed"), true)
     .append('circle')
-      .attr('r', (d) => leafRadius)
-      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle(d))) - 7.5*leafRadius)
+      .attr('r', (d) => 2 * d.height * leafRadius)
+      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle(d))) - 13.5*d.height*leafRadius)
       .attr('cy', (d) => (getEdgePositionY(d.r, baseAngle(d))));
 
   annotations
@@ -216,8 +216,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   const newAddedText = newAddedContainer
   .append("text")
     .classed(className("annotation-text"), true)
-    .style('font-size', (d) => ((2*leafRadius)/16) *100 +"%")
-    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle(d))) - 5.5*leafRadius)
+    .style('font-size', (d) => (2 * d.height * fontScale) + "%")
+    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle(d))) - 7.5*d.height*leafRadius)
     .attr('y', (d) => (getEdgePositionY(d.r, baseAngle(d))));
 
   annotations
@@ -234,9 +234,9 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
     .append('g')
       .classed(className("isChanged-fixed"), true)
     .append('circle')
-      .attr('r', (d) => leafRadius)
-      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle(d))) - 1.5 * leafRadius)
-      .attr('cy', (d) => (getEdgePositionY(d.r, baseAngle(d))) + 6*leafRadius);
+      .attr('r', (d) => 2 * d.height * leafRadius)
+      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle(d))) - 3.5 * d.height * leafRadius)
+      .attr('cy', (d) => (getEdgePositionY(d.r, baseAngle(d))) + 10 * d.height * leafRadius);
 
   annotations
   .select(`g.${className("changed-container")}`)
@@ -278,9 +278,9 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   const newChangedText = newChangedContainer
   .append("text")
     .classed(className("annotation-text"), true)
-    .style('font-size', (d) => ((2*leafRadius)/16) *100 + "%")
-    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle(d))) + leafRadius)
-    .attr('y', (d) => (getEdgePositionY(d.r, baseAngle(d))) + 6*leafRadius);
+    .style('font-size', (d) => (2 * d.height * fontScale) + "%")
+    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle(d))) + d.height * leafRadius)
+    .attr('y', (d) => (getEdgePositionY(d.r, baseAngle(d))) + 10 * d.height * leafRadius);
 
   annotations
   .select(`g.${className("changed-container")}`)
@@ -296,8 +296,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
     .append('g')
       .classed(className("isRemoved-fixed"), true)
     .append('circle')
-      .attr('r', (d) => leafRadius)
-      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle(d))) + 5.5*leafRadius)
+      .attr('r', (d) => 2 * d.height * leafRadius)
+      .attr('cx', (d) => (getEdgePositionX(d.r, baseAngle(d))) + 6.5*d.height * leafRadius)
       .attr('cy', (d) => (getEdgePositionY(d.r, baseAngle(d))));
 
   annotations
@@ -340,8 +340,8 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   const newRemovedText = newRemovedContainer
   .append("text")
     .classed(className("annotation-text"), true)
-    .style('font-size', (d) => ((2*leafRadius)/16) *100 +"%")
-    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle(d))) + 7.5*leafRadius)
+    .style('font-size', (d) => (2 * d.height * fontScale) + "%")
+    .attr('x', (d) => (getEdgePositionX(d.r, baseAngle(d))) + 13*d.height * leafRadius)
     .attr('y', (d) => (getEdgePositionY(d.r, baseAngle(d))));
 
   annotations
