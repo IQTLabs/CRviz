@@ -62,7 +62,7 @@ if (host.indexOf(':') > -1) {
 
 var POSEIDON_DATASET = {
   name: "Poseidon Network",
-  url: "http://"+hostname+":"+port+"/v1/network"
+  url: "http://"+hostname+":5000/v1/network"
 };
 
 Modal.setAppElement('#root');

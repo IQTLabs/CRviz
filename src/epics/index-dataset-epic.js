@@ -5,7 +5,6 @@ import { mergeMap, map } from 'rxjs/operators';
 
 import { configurationFor } from "domain/dataset";
 
-const getValue = require("get-value");
 const lunr = require("lunr");
 
 const BUILD_INDICES = "BUILD_INDICES";
@@ -73,8 +72,8 @@ const flattenDataset = (ds, cfg) => {
     for(var f in cfg.fields){
       var field = cfg.fields[f];
 
-      var name = field.displayName
-      item[name] = getValue(ds[key], field.displayName);
+      var name = field.displayName.toLowerCase();
+      item[name] = getValueByPath(ds[key], field.path);
     }
     flattened.push(item);
   }
@@ -85,7 +84,7 @@ const generateIndex = (payload) => {
   let indices = [];
   Object.keys(payload.datasets).forEach((owner) => {
     const dataset = payload.datasets[owner].dataset;
-    const configuration = !isNil(payload.datasets[owner].configuration) && !isEmpty(payload.datasets[owner].configuration) 
+    const configuration =  !isNil(payload.datasets[owner].configuration) && !isEmpty(payload.datasets[owner].configuration) 
                         ? payload.datasets[owner].configuration : configurationFor(dataset);
     var flat = flattenDataset(dataset, configuration);
     const idx = lunr(function () {
@@ -102,6 +101,19 @@ const generateIndex = (payload) => {
   
   return indices;
 };
+
+const getValueByPath = (object, path) => {
+  if(object && path.length > 0){
+    let current = object[path[0]];
+    for(var i = 1; i < path.length; i++){
+      current = current[path[i]]
+    }
+    return current;
+  }
+  else{
+    return null;
+  }
+}
 
 export default indexDatasetEpic;
 
