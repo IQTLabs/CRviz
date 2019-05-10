@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Modal from 'react-modal';
 
+import { RingLoader } from 'react-spinners';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
-  faCheck, faDizzy, faPlus, faMinusCircle, faHome, faAngleDoubleDown, faAngleDoubleUp,
+  faCheck, faDizzy, faPlus, faHome, faAngleDoubleDown, faAngleDoubleUp,
   faFileExport, faFileImport, faTimes
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -13,7 +14,8 @@ import {
   selectDatasets, getLastUpdated, removeDataset,getKeyFields, getIgnoredFields
 } from 'domain/dataset';
 import { 
-  setHierarchyConfig, showNodes, colorBy, selectControls, setStartDataset, setEndDataset
+  setHierarchyConfig, showNodes, colorBy, selectControls, setStartDataset, setEndDataset,
+  showBusy
 } from 'domain/controls';
 import { getError, clearError } from "domain/error";
 import { removeSearchIndex } from "epics/index-dataset-epic";
@@ -52,7 +54,7 @@ class App extends Component {
     showData: true,
     showGrouping: false,
     showFiltering: false,
-    uuids: [uuidv4()],
+    uuids: [{'owner': uuidv4(), 'name': 'Series 0', 'shortName': 's0'}],
     datasetAdded: false,
     startUuid: null,
     endUuid: null,
@@ -63,22 +65,39 @@ class App extends Component {
       controls: true
     },
     selectedFile: null,
-    exportName: "dataset.json"
+    exportName: "dataset.json",
   }
 
   componentWillReceiveProps = (nextProps) =>{
     const datasetAdded = this.state.datasetAdded && (nextProps.uuids.length !== this.state.uuids.length)
-    const uniqueUuids = datasetAdded || nextProps.uuids.length === 0
-                        ? Array.from(new Set(nextProps.uuids.concat(this.state.uuids)))
-                        : nextProps.uuids;
-    const startUuid = nextProps.startUuid || this.state.startUuid || uniqueUuids[0];
-    const endUuid = nextProps.endUuid || this.state.endUuid;
+    const uniqueUuids = this.getUniqueDatasetList(datasetAdded, this.state.uuids, nextProps.uuids);
+    const startUuid = nextProps.startUuid && uniqueUuids.findIndex(u => u.owner === nextProps.startUuid) !== -1 ? nextProps.startUuid : this.state.startUuid;
+    const endUuid = nextProps.endUuid && uniqueUuids.findIndex(u => u.owner === nextProps.endUuid) !== -1 ? nextProps.endUuid : this.state.endUuid;
     this.setState({
       uuids: uniqueUuids,
       startUuid: startUuid,
       endUuid: endUuid,
-      datasetAdded: datasetAdded
+      datasetAdded: datasetAdded,
     });
+  }
+
+  getUniqueDatasetList = (datasetAdded, uuidsFromState, uuidsFromProps) => {
+    let result = [];
+
+    if(datasetAdded || uuidsFromProps.length === 0){
+      const uniqueOwners = new Set();
+      uuidsFromProps.concat(uuidsFromState).forEach((u) => {
+        if(!uniqueOwners.has(u.owner)){
+          uniqueOwners.add(u.owner);
+          result.push(u);
+        }
+      });
+    }
+    else {
+      result = uuidsFromProps;
+    }
+
+    return result;
   }
 
   toggleShowData = () =>{
@@ -143,13 +162,16 @@ class App extends Component {
   processOptions = () => {
     if(this.state.options.action === IMPORT)
     {
-      this.props.uploadDataset({
-        'owner': uuidv4(),
-        'file': this.state.selectedFile,
-        'includeData': this.state.options.data,
-        'includeControls': this.state.options.controls,
-      });
-      this.setState({showOptions: false})
+      this.props.showBusy(true);
+      if(this.state.selectedFile){
+        this.props.uploadDataset({
+          'owner': uuidv4(),
+          'file': this.state.selectedFile,
+          'includeData': this.state.options.data,
+          'includeControls': this.state.options.controls,
+        })
+      }
+      this.setState({showOptions: false })
     }
   }
 
@@ -166,7 +188,7 @@ class App extends Component {
     const ignoredFields = this.state.options.data && this.props.ignoredFields;
     const exportData = getDataToExport(datasets, keyFields, ignoredFields, controls)
     const urlObject = window.URL || window.webkitURL || window;
-    const json = JSON.stringify(exportData);
+    const json = JSON.stringify(exportData, null, 2);
     const blob = new Blob([json], {'type': "application/json"});
     const url = urlObject.createObjectURL(blob);;
     return url;
@@ -193,7 +215,7 @@ class App extends Component {
 
   addDatasetEntry = () => {
     const uuids = this.state.uuids;
-    const newItem = uuidv4()
+    const newItem = { 'owner': uuidv4(), 'name': 'Series ' + uuids.length, 'shortName': 's' + uuids.length };
     uuids.push(newItem);
     this.setState({
       uuids: uuids,
@@ -222,8 +244,8 @@ class App extends Component {
   }
 
   render() {
-    const { dataset, darkTheme, error, lastUpdated} = this.props;
-    const hasDataset = dataset && dataset.length > 0;
+    const { datasetCount, darkTheme, error, lastUpdated} = this.props;
+    const hasDataset = datasetCount > 0;
 
     const uuids = this.state.uuids;
     const startUuid = this.state.startUuid;
@@ -257,14 +279,16 @@ class App extends Component {
             Data  {!showData && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showData && <FontAwesomeIcon onClick={this.toggleShowData} icon={faAngleDoubleUp} />}
           </div>
           <div className={ classNames({ [style.section]: true, [style.hidden]: !showData })}>
-            {uuids.map((uuid, index) => {
+            {uuids.map((uuid) => {
               return(
-                <div  key={ uuid } >
-                  <div className={style.dataControlHeader}>
-                    Series {index}
-                    {index > 0 && <FontAwesomeIcon icon={faMinusCircle} onClick={ () => {this.removeDatasetEntry(uuid)}} />}
-                  </div>
-                  <DatasetControls uuid={ uuid } datasets={ datasets }/>
+                <div  key={ uuid.owner + "_container" } >
+                  <DatasetControls 
+                    uuid={ uuid.owner }
+                    name={ uuid.name }
+                    shortName={ uuid.shortName }
+                    removeDatasetEntry={ this.removeDatasetEntry }
+                    removable={uuids.length > 1}
+                    datasets={ datasets }/>
                 </div>
               )
             })}
@@ -278,20 +302,6 @@ class App extends Component {
           { hasDataset &&
             <div className={ classNames({ [style.section]: true, [style.hidden]: !showData }) }>
               <SearchControls />
-            </div>
-          }
-
-          <div className={style.accordionHeader} onClick={this.toggleShowComparison}>
-            Comparison  {!showComparison && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showComparison && <FontAwesomeIcon  onClick={this.toggleShowComparison} icon={faAngleDoubleUp} />}
-          </div>
-          { hasDataset &&
-            <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
-              <ComparisonSelector startUid={startUuid} endUid={endUuid} />
-            </div>
-          }
-          { !hasDataset && 
-            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
-              Please select datasets to continue
             </div>
           }
 
@@ -314,6 +324,21 @@ class App extends Component {
               Please select a dataset to continue
             </div>
           }
+
+          <div className={style.accordionHeader} onClick={this.toggleShowComparison}>
+            Comparison  {!showComparison && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showComparison && <FontAwesomeIcon  onClick={this.toggleShowComparison} icon={faAngleDoubleUp} />}
+          </div>
+          { datasetCount >= 2 &&
+            <div className={ classNames({ [style.section]: true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
+              <ComparisonSelector startUid={startUuid} endUid={endUuid} />
+            </div>
+          }
+          { datasetCount < 2 && 
+            <div className={ classNames({ [style.section]: true, [style.dimSection]:true, [style.hierarchySection]: true, [style.hidden]: !showComparison }) }>
+              Please select at least 2 datasets to continue
+            </div>
+          }
+          
           <div className={style.footerContainer}>
             <span className={ style.centerSpan }>
                 <div className="button circular" title="Import Dataset" onClick={this.showImportOptions}>
@@ -325,7 +350,7 @@ class App extends Component {
             </span>
           </div>
         </div>
-        { dataset.length===0 && lastUpdated !== null &&
+        { datasetCount === 0 && lastUpdated !== null &&
           <div  className={ style.emptyDataset }>
             <span>
               Current dataset is empty
@@ -336,7 +361,29 @@ class App extends Component {
         <div className={ style.canvas }>
           <Visualization startUid={startUuid} endUid={endUuid} />
         </div>
-        <div className={ classNames({ [style.sliderContainer]: true, [style.hidden]: !hasDataset }) } >
+        <div className={classNames({ [style.key]: true, [style.hidden]: datasetCount < 2 }) }>
+          <svg width="100%" height="60">
+            <g>
+              <g className="viz-isAdded-fixed">
+                <circle cx="15" cy="15" r="10"/>
+              </g>
+              <text x="30" y="15">Added</text>
+            </g>
+            <g>
+              <g className="viz-isChanged-fixed">
+                <circle cx="100" cy="15" r="10"/>
+              </g>
+              <text x="115" y="15">Changed</text>
+            </g>
+            <g>
+              <g className="viz-isRemoved-fixed">
+                <circle cx="200" cy="15" r="10"/>
+              </g>
+              <text x="215" y="15">Removed</text>
+            </g>
+          </svg>
+        </div>
+        <div className={ classNames({ [style.sliderContainer]: true, [style.hidden]: datasetCount < 2 }) } >
           <DatasetSlider points={uuids} startUuid={startUuid} endUuid={endUuid} 
             setStartUuid={this.setStartUuid} setEndUuid={this.setEndUuid} />
         </div>
@@ -417,7 +464,9 @@ class App extends Component {
               <div>
                 <span className={ style.centerSpan }>
                   {options.action === IMPORT &&
-                    <div className="button circular" title="Ok" onClick={this.processOptions}>
+                    <div className="button circular" title="Ok" 
+                         disabled={options.action === IMPORT && !this.state.selectedFile} 
+                         onClick={this.processOptions}>
                         <FontAwesomeIcon icon={faCheck} />
                     </div>
                   }
@@ -435,6 +484,14 @@ class App extends Component {
             </div>
           </div>
         </Modal>
+        <div className={style.activityIndicatorContainer}>
+          <RingLoader
+            sizeUnit={"px"}
+            size={150}
+            color={'#0277BD'}
+            loading={this.props.shouldShowBusy}
+          />
+        </div>
       </div>
     );
   }
@@ -442,11 +499,13 @@ class App extends Component {
 
 const mapStateToProps = state => {
   const datasets = selectDatasets(state);
-  const uuids = Object.keys(datasets) || [uuidv4()];
-  const dataset = datasets[uuids[0]] && datasets[uuids[0]].dataset ? datasets[uuids[0]].dataset : [];
+  const uuids = Object.keys(datasets).map(key => ({ 'owner': key, 'name': datasets[key].name, 'shortName': datasets[key].shortName })) 
+                || [{ 'owner': uuidv4(), 'name': "Series 0", 'shortName': "s0" }];
+  const datasetCount = uuids.length;
   const controls = selectControls(state);
+
   return {
-    dataset: dataset,
+    datasetCount: datasetCount,
     darkTheme: controls.darkTheme,
     error: getError(state),
     lastUpdated: getLastUpdated(state, uuids[0]),
@@ -456,7 +515,8 @@ const mapStateToProps = state => {
     fullDatasets: datasets,
     controls: controls,
     keyFields: getKeyFields(state),
-    ignoredFields: getIgnoredFields(state)
+    ignoredFields: getIgnoredFields(state),
+    shouldShowBusy: controls.showBusy,
   }
 }
 
@@ -469,7 +529,8 @@ const mapDispatchToProps = {
   removeSearchIndex,
   setStartDataset,
   setEndDataset,
-  uploadDataset
+  uploadDataset,
+  showBusy,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

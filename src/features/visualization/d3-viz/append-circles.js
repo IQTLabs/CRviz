@@ -53,13 +53,51 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
   const mergedLabels = labels
   .merge(newLabels)
     .filter((d) => d.labelSize)
-    .style('font-size', (d, i, nodes) => (2 * d.height * fontScale) + "%")
+    .style('font-size', (d, i, nodes) => (3 * d.height * fontScale) + "%")
     .attr('y', (d) => d.r - (d.labelSize/2))
     .text((d) => d.data.fieldValue);
 
   mergedLabels.each( (d, i, nodes) => {
-    scaleAndTrimToLabelWidth(nodes[i], d);
+    scaleAndTrimToLabelWidth(nodes[i], d, 3 * d.height * fontScale);
   })
+
+  const newGroupingNodes = nodesEnter.filter((d) => d.height === 1);
+  const newAggregations = newGroupingNodes
+    .append("g")
+    .classed(className("aggregation"), true)
+    .attr("display", (d) => showNodes ? 'none' : null);
+  const newTotalContainer = newAggregations
+    .append('g')
+      .classed(className("total-container"), true);
+  // newTotalContainer
+  //   .append('g')
+  //     .classed(className("node"), true)
+  //   .append('circle')
+  //     .attr('r', (d) => leafRadius)
+  //     .attr('cx', (d) => 0)
+  //     .attr('cy', (d) => 0);
+
+  const newTotalText = newTotalContainer
+  .append("text")
+    .classed(className("annotation-text"), true)
+    .style('font-size', (d) => (3 * d.height * fontScale) +"%")
+    .attr('x', (d) => 0)
+    .attr('y', (d) => 0)
+    .text((d) => !isNaN(d.value) ? d.value : "0");
+
+  const aggregations = nodeRoot.selectAll(`g.${className("aggregation")}`).data(data, datumKey);
+  aggregations
+  .merge(newAggregations)
+    .attr("display", (d, i, nodes) => showNodes || d.data.CRVIZ._containsGroups ? 'none' : null);
+
+  aggregations
+  .select(`g.${className("total-container")}`)
+  .select('text')
+  .merge(newTotalText)
+    .text((d) => !isNaN(d.value) ? d.value : "0");
+
+  //const groupData = packedData.descendants().filter((d) => d.height > 0 && d,height > 0);
+  //appendAggregations(nodeRoot, groupData, showNodes, leafRadius, fontScale);
 
   return [
     nodes.merge(nodesEnter),
@@ -98,41 +136,88 @@ const getLabelWidth = (datum) =>{
   return 2*radius*Math.sin(arcAngle/2);
 }
 
-const scaleAndTrimToLabelWidth = (node, datum) => {
-  const labelWidth = getLabelWidth(datum);
-  const labelHeight = datum.labelSize;
-  const minFontScale = 25;
+const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
+  const maxTextWidth = 0.80 * getLabelWidth(datum);
+  const maxTextHeight = 0.80 * datum.labelSize;
+  const minFontScale = 10;
+  const maxFontScale = 125;
 
   let boxWidth = node.getBBox().width;
   let boxHeight = node.getBBox().height;
-  let fontScale = 150;
+  let fontScale = 100;
+  let labelText = datum.data.fieldValue;
 
   //scale to height
-   while ((boxHeight > 0.66 * labelHeight || boxWidth > 0.80 * labelWidth) && fontScale > minFontScale){
-
-    select(node)
-      // eslint-disable-next-line
-      .style('font-size', (d, i, nodes) => fontScale + "%")
-      .text(datum.data.fieldValue);
-
-    fontScale -= 5;
-    boxWidth = node.getBBox().width;
-    boxHeight = node.getBBox().height;
-  }
- 
-
-  //trim to width
-  let labelText = datum.data.fieldValue;
-  while (boxWidth > 0.80 * labelWidth){
-
+   if ((boxHeight > maxTextHeight)){
+    const heightScale = 1-Math.abs((boxHeight - maxTextHeight)/boxHeight);
+    fontScale = Math.max(minFontScale, heightScale * initialFontScale);
     select(node)
       .style('font-size', (d, i, nodes) => fontScale + "%")
       .text(labelText);
-
-    labelText = labelText.substr(0, labelText.length - 5) + "...";
-    boxWidth = node.getBBox().width;
-    boxHeight = node.getBBox().height;
+  } else if(boxHeight < 0.75 * maxTextHeight){
+    const heightScale = 1 + Math.abs((boxHeight - maxTextHeight)/maxTextHeight);
+    fontScale = Math.min(maxFontScale, heightScale * initialFontScale);
+    select(node)
+      .style('font-size', (d, i, nodes) => fontScale + "%")
+      .text(labelText);
+  }
+ 
+  boxWidth = node.getBBox().width;
+  //trim to width
+  if(boxWidth > maxTextWidth)
+  {
+    const lengthToTrimTo = Math.trunc(0.75*labelText.length);
+    labelText = labelText.substr(0, lengthToTrimTo) + "..."
+    select(node)
+    .attr('textLength', maxTextWidth)
+    .attr('lengthAdjust', "spacingAndGlyphs")
+    .text(labelText);
   }
 }
+
+// const appendAggregations = (nodeRoot, groupData, showNodes, leafRadius, fontScale) =>{
+
+//   const groupingNodes = nodeRoot
+//     .selectAll(`g.${className("groupingNode")}`);
+//   const aggregations = groupingNodes
+//     .select(`g.${className("aggregation")}`)
+//     .data(groupData, datumKey);
+
+//   //aggregations.exit().remove();
+
+//   const newAggregations = groupingNodes.enter()
+//   .append("g")
+//     .classed(className("aggregation"), true)
+//     .attr("display", (d) => showNodes ? 'none' : null);
+
+
+
+//   const newTotalContainer = newAggregations
+//     .append('g')
+//       .classed(className("total-container"), true);
+//   newTotalContainer
+//     .append('g')
+//       .classed(className("node"), true)
+//     .append('circle')
+//       .attr('r', (d) => leafRadius)
+//       .attr('cx', (d) => 0)
+//       .attr('cy', (d) => 0);
+
+//   const newTotalText = newTotalContainer
+//   .append("text")
+//     .classed(className("annotation-text"), true)
+//     .style('font-size', (d) => (3 * d.height * fontScale) +"%")
+//     .attr('x', (d) => 0)
+//     .attr('y', (d) => 0)
+//     .text((d) => !isNaN(d.value) ? d.value : "0");
+
+//   aggregations
+//   .select(`g.${className("total-container")}`)
+//   .select('text')
+//   .merge(newTotalText)
+//     .attr("display", (d) => showNodes ? 'none' : null)
+//     .text((d) => !isNaN(d.value) ? d.value : "0");
+
+// }
 
 export default appendCircles;

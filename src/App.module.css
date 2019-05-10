@@ -60,6 +60,7 @@
 .sliderContainer {
   padding-right: 2em;
   position:absolute;
+  width: 500px;
   bottom:0;
   right:0;
 }
@@ -123,9 +124,10 @@ input[name=hideControls]:checked ~ .canvas {
 .modalMain {
   position:fixed;
   background: white;
-  flex: 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
+  flex-wrap: nowrap;
   border: 1px solid black;
   padding: 1rem;
   margin: 1rem;
@@ -136,9 +138,10 @@ input[name=hideControls]:checked ~ .canvas {
   transform: translate(-50%,-50%);
 }
 
+
 .modalMain span {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row no-wrap;
   align-items: center;
 }
 
@@ -155,6 +158,7 @@ input[name=hideControls]:checked ~ .canvas {
 
 .centerSpan {
   display: flex;
+  flex: 0;
   flex-flow: row wrap;
   align-items: center;
   justify-content: center;
@@ -172,14 +176,6 @@ input[name=hideControls]:checked ~ .canvas {
 
 .accordionHeader:hover {
   color: #C62f39;
-}
-
-.dataControlHeader {
-  font-weight: bold;
-  display: flex;
-  flex-flow: row no-wrap;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .hidden {
@@ -274,22 +270,54 @@ input[name=hideControls]:checked ~ .canvas {
 
 .uploadContainer {
   display: flex;
+  flex: 1;
+  flex-wrap: nowrap;
   align-items: center;
-  flex-flow: row;
+  align-self: flex-start;
+  padding-right: 0.5em;
 }
 
 .fileUpload {
   flex: 1;
   display: flex;
-  align-items: center
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .fileUpload label {
   flex: 0;
-  margin-right: 0;
+  margin-right: 2em;
 }
 
 .fileUpload span {
-  flex: 1;
-  flex-direction: row;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  background-color: #DCDCDC;
+  flex-wrap: nowrap !important;
+  padding: 0.25em 2em;
+}
+
+.activityIndicatorContainer {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 160px;
+  height: 160px;
+}
+
+.key {
+  padding-right: 2em;
+  position:absolute;
+  width: 405px;
+  bottom:80px;
+  right:0;
+}
+
+.key text {
+  dominant-baseline: middle;
 }

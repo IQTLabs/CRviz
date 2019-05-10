@@ -48,8 +48,8 @@ describe("Dataset Reducer", () => {
           ]
         };
         let datasets ={};
-        datasets[owner1] = {'dataset': dataset, 'configuration': configuration }
-        datasets[owner2] = {'dataset': dataset, 'configuration': configuration }
+        datasets[owner1] = {'dataset': dataset, 'source': 'Test', 'name':'Test 0', 'shortName': 'T0', 'configuration': configuration }
+        datasets[owner2] = {'dataset': dataset, 'source': 'Test', 'name':'Test 1', 'shortName': 'T1', 'configuration': configuration }
 
         const action = setDatasets({ 'datasets': datasets });
         const result = reducer({}, action);
@@ -73,7 +73,7 @@ describe("Dataset Reducer", () => {
             ]
           };
 
-          const action1 = setDataset({ 'owner': owner1, 'dataset': dataset1, 'configuration': configuration });
+          const action1 = setDataset({ 'owner': owner1, 'source': 'Test', 'name':'Test 0', 'shortName': 'T0', 'dataset': dataset1, 'configuration': configuration });
           const result = reducer({}, action1);
           const dataset = selectDatasetIntersection(result, owner1, owner2);
           expect(dataset.length).to.equal(2);
@@ -94,7 +94,7 @@ describe("Dataset Reducer", () => {
             ]
           };
 
-          const action2 = setDataset({ 'owner': owner2, 'dataset': dataset2, 'configuration': configuration });
+          const action2 = setDataset({ 'owner': owner2, 'source': 'Test', 'name':'Test 1', 'shortName': 'T1', 'dataset': dataset2, 'configuration': configuration });
           const result = reducer({}, action2);
           const dataset = selectDatasetIntersection(result, owner1, owner2);
           expect(dataset.length).to.equal(2);
@@ -119,8 +119,8 @@ describe("Dataset Reducer", () => {
             ]
           };
 
-          const action1 = setDataset({ 'owner': owner1, 'dataset': dataset1, 'configuration': configuration });
-          const action2 = setDataset({ 'owner': owner2, 'dataset': dataset2, 'configuration': configuration });
+          const action1 = setDataset({ 'owner': owner1, 'source': 'Test', 'name':'Test 0', 'shortName': 'T0', 'dataset': dataset1, 'configuration': configuration });
+          const action2 = setDataset({ 'owner': owner2, 'source': 'Test', 'name':'Test 1', 'shortName': 'T1', 'dataset': dataset2, 'configuration': configuration });
           reducer({}, action1);
           const result2 = reducer({}, action2);
           const dataset = selectDatasetIntersection(result2, owner1, owner2);

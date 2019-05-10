@@ -13,7 +13,8 @@ import {
   propEq,
   sortBy,
   toPairs,
-  uniq
+  uniq,
+  //memoizeWith,
 } from "ramda";
 
 const defaultState = {
@@ -24,7 +25,12 @@ const defaultState = {
 };
 const defaultItemState = {
   owner: "",
+  source: null,
+  name: "",
+  shortName: "",
   dataset: [],
+  keyCount: 0,
+  uniqueKeyCount: 0,
   filtered: null,
   values: {},
   configuration: {
@@ -56,6 +62,7 @@ const addHashWithoutIgnored = (fields, obj) => {
 }
 
 const applyHashes = (dataset, configuration) => {
+  const keys = [];
   dataset.forEach((i) => {
     if(!('CRVIZ' in i)){
       i['CRVIZ'] = {};
@@ -64,9 +71,12 @@ const applyHashes = (dataset, configuration) => {
       configuration.hashFields = getHashFields(configuration.fields, configuration.ignoredFields || []);
     }
 
-    addHashKey(configuration.keyFields.length > 0 ? configuration.keyFields : configuration.hashFields, i);
+    addHashKey(Array.isArray(configuration.keyFields) && configuration.keyFields.length > 0 ? configuration.keyFields : configuration.hashFields, i);
     addHashWithoutIgnored(configuration.hashFields, i);
+    keys.push(i.CRVIZ._HASH_KEY);
   });
+  const uniqueKeys = Array.from(new Set(keys));
+  return {keyCount: keys.length, uniqueKeyCount:uniqueKeys.length}
 };
 
 /**
@@ -150,20 +160,25 @@ const valuesFor = (dataset, configuration) => {
   }, configuration.fields));
 };
 
-const configureDataset = (dataset, initialConfig, keyFields, ignoredFields) => {
+const configureDataset = (dataset, source, name, shortName, initialConfig, keyFields, ignoredFields) => {
   const configuration = configurationFor(
     dataset || [],
     keyFields,
     ignoredFields,
     initialConfig || {}
   );
-  applyHashes(dataset, configuration);
+  const { keyCount, uniqueKeyCount } = applyHashes(dataset, configuration);
 
   const values = valuesFor(dataset, configuration);
   const isFetching = false;
   const lastUpdated = new Date();
   return {
     dataset: dataset,
+    source: source,
+    name: name,
+    shortName: shortName,
+    keyCount: keyCount,
+    uniqueKeyCount: uniqueKeyCount,
     filtered: null,
     values: values,
     configuration: configuration,
@@ -205,10 +220,13 @@ const reducer = handleActions(
     [setDataset]: (state, { payload }) => {
       const dataset = payload.dataset;
       const owner = payload.owner;
+      const source = payload.source;
+      const name = payload.name;
+      const shortName = payload.shortName;
       const initialConfig = payload.configuration;
       const keyFields = getKeyFields(state);
       const ignoredFields = getIgnoredFields(state);
-      state.datasets[owner] = configureDataset(dataset, initialConfig, keyFields, ignoredFields);
+      state.datasets[owner] = configureDataset(dataset, source, name, shortName, initialConfig, keyFields, ignoredFields);
       return { ...state};
     },
     [setFilteredDataset]: (state, { payload }) => {
@@ -270,30 +288,34 @@ const reducer = handleActions(
       return { ...state, isFetching};
     },
     [setKeyFields]: (state, { payload }) => { 
-      const keyFields = payload;
+      const keyFields = payload ? payload : state.keyFields;
       const datasets = _selectDatasets(state);
       if(datasets){
         Object.keys(datasets).forEach((key) => {
           const ds = datasets[key];
           ds.configuration.keyFields = keyFields;
-          applyHashes(ds.dataset, ds.configuration);
+          const { keyCount, uniqueKeyCount } = applyHashes(ds.dataset, ds.configuration);
+          ds.keyCount = keyCount;
+          ds.uniqueKeyCount = uniqueKeyCount;
         });
       }
 
       return {...state, keyFields: keyFields };
     },
     [setIgnoredFields]: (state, { payload }) => {
-      const ignoredFields = payload;
+      const ignoredFields = payload ? payload : state.ignoredFields;
       const datasets = _selectDatasets(state);
 
-      if(datasets){
+      if(datasets && ignoredFields){
         const allFields = _selectMergedConfiguration(state).fields;
         const hashFields = getHashFields(allFields, ignoredFields);
 
         Object.keys(datasets).forEach((key) => {
           const ds = datasets[key];    
           ds.configuration.hashFields = hashFields
-          applyHashes(ds.dataset, ds.configuration);
+          const { keyCount, uniqueKeyCount } = applyHashes(ds.dataset, ds.configuration);
+          ds.keyCount = keyCount;
+          ds.uniqueKeyCount = uniqueKeyCount;
         });
       }
 
@@ -368,27 +390,38 @@ const getIsFetching = (state, owner) => state.dataset.datasets[owner] && state.d
 const getLastUpdated = (state, owner) => state.dataset.datasets[owner] && state.dataset.datasets[owner].lastUpdated ? state.dataset.datasets[owner].lastUpdated : defaultItemState.lastUpdated;
 const getKeyFields = (state) => state.dataset && state.dataset.keyFields ? state.dataset.keyFields : [];
 const getIgnoredFields = (state) => state.dataset && state.dataset.ignoredFields ? state.dataset.ignoredFields : [];
+
+// const memoizeKey = (state, startOwner, endOwner) => {
+//   const startUpdated = state.dataset && state.dataset.datasets[startOwner] ? state.dataset.datasets[startOwner].lastUpdated : "NotUpdated";
+//   const endUpdated = state.dataset && state.dataset.datasets[endOwner] ? state.dataset.datasets[endOwner].lastUpdated : "NotUpdated";
+//   return startOwner+":"+startUpdated+"-"+endOwner+":"+endUpdated
+// };
+
 const selectDatasetIntersection = (state, startOwner, endOwner) => {
   let ds = [];
   const start = selectDataset(state, startOwner);
-  start.forEach((s)=>{
-    s.CRVIZ._isRemoved = false;
-    s.CRVIZ._isChanged = false;
-    s.CRVIZ._isAdded = false;
-  });
   const end = selectDataset(state, endOwner);
-  end.forEach((e)=>{
-    e.CRVIZ._isRemoved = false;
-    e.CRVIZ._isChanged = false;
-    e.CRVIZ._isAdded = false;
-  });
   
   if(start.length > 0 && end.length === 0){
+    start.forEach((s) => {
+      s.CRVIZ._isRemoved = false;
+      s.CRVIZ._isChanged = false;
+      s.CRVIZ._isAdded = false;
+    });
     ds = start;
   } else if(start.length === 0 && end.length > 0){
+    end.forEach((e) => {
+      e.CRVIZ._isRemoved = false;
+      e.CRVIZ._isChanged = false;
+      e.CRVIZ._isAdded = false;
+    });
     ds = end;
   } else if(start.length > 0 && end.length > 0) {
     start.forEach((s) => {
+      s.CRVIZ._isRemoved = false;
+      s.CRVIZ._isChanged = false;
+      s.CRVIZ._isAdded = false;
+
       const idx = end.findIndex(e => e.CRVIZ._HASH_KEY === s.CRVIZ._HASH_KEY);
       if(idx === -1){
         s.CRVIZ._isRemoved = true;
@@ -400,6 +433,9 @@ const selectDatasetIntersection = (state, startOwner, endOwner) => {
       ds.push(s);
     });
     end.forEach((e) => {
+      e.CRVIZ._isRemoved = false;
+      e.CRVIZ._isChanged = false;
+      e.CRVIZ._isAdded = false;
       const idx = ds.findIndex(i => i.CRVIZ._HASH_KEY === e.CRVIZ._HASH_KEY);
       if(idx === -1){
         e.CRVIZ._isAdded = true;
@@ -410,7 +446,7 @@ const selectDatasetIntersection = (state, startOwner, endOwner) => {
     })
   }
   return ds;
-}
+};
 
 
 export default reducer;

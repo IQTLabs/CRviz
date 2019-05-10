@@ -1,10 +1,11 @@
 import React from 'react';
 //import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
 import { connect } from 'react-redux';
 
-import style from "./DatasetControls.module.css";
+import { Slider, Rail, Handles, Tracks, Ticks } from "react-compound-slider";
+
+import { SliderRail, Handle, Track, Tick } from "features/slider-utils/slider-components"; 
 
 class DatasetSlider extends React.Component {
     state = {
@@ -45,124 +46,130 @@ class DatasetSlider extends React.Component {
       if (isNaN(slot)) return;
       
       const points = this.props.points;
-      if(!this.props.startUuid || this.props.startUuid === "UNSET"){
+      if(points.indexOf(this.props.startUuid) === -1){
         this.props.setStartUuid(points[slot]);
       }
-      else if (!this.props.endUuid || this.props.endUuid === "UNSET"){
+      else if (points.indexOf(this.props.endUuid) === -1){
         this.props.setEndUuid(points[slot]);
       }
     }
 
-    onStartClick = (e) => {
-      this.props.setStartUuid("UNSET");
+    onHandleClick = (e) => {
     }
 
-    onEndClick = (e) => {
-      this.props.setEndUuid("UNSET");
+    onUpdate = (e) =>{
+
+    }
+
+    onChange = (e) =>{
+      const start = e.length > 1 ? this.props.points[e[0]] : null;
+      const end = e.length > 1 ? this.props.points[e[1]] : this.props.points[e[0]];
+      
+      if(start){
+        this.props.setStartUuid(start.owner);
+      }
+      if(end){
+        this.props.setEndUuid(end.owner);
+      }
     }
     
-    MinSlider=()=> {
-      return (
-        <div data-slider="min" 
-            onDragStart={this.onDragStart} 
-            onDrag={this.onDrag}
-            onDoubleClick={this.onStartClick}
-            draggable className={
-          classNames({[style.sliderThumb]:true, [style.sliderThumbMin]:true})}>
-        </div>
-      );
-    }
-
-    MaxSlider=()=> {
-      return (
-        <div data-slider="max" 
-            onDragStart={this.onDragStart}  
-            onDrag={this.onDrag}
-            onDoubleClick={this.onEndClick}
-            draggable className={classNames({[style.sliderThumb]:true, [style.sliderThumbMax]:true})}></div>
-      );
-    }
+    formatTicks = (t) => {
+      if(this.props.points && this.props.points[t]){
+        return this.props.points[t].shortName;
+      }
+      else {
+        return "";
+      }
+    };
    
     render() {
       const points = this.props.points;
       const startUuid = this.props.startUuid;
       const endUuid = this.props.endUuid;
-      let scale =[];
-      let slider=[];
-      let currentScale = [];
-      let minThumb = null;
-      let maxThumb = null
-      
-      
-      for (let i = 0; i <= points.length - 1; i++) {
-        let label = "s" + i;
 
-        scale.push(
-          <div 
-            key={points[i]} 
-            className={style.slotScale}>
-            {label}
-          </div>
-        );
-      
-        let currentLabel = "";
-        let clickHandler = null;
-        if (points[i] === startUuid){
-          currentLabel = "Start";
-          minThumb = <this.MinSlider />
-          clickHandler = this.onStartClick;
-          maxThumb = null;
-        } else if(points[i] === endUuid){
-          currentLabel = "End";
-          minThumb = null;
-          maxThumb = <this.MaxSlider />
-          clickHandler = this.onEndClick;
-        } else {
-          minThumb = null;
-          maxThumb = null;
-          clickHandler = this.onSlotClick;
-        }
-        
-        currentScale.push(
-          <div    
-            key={points[i]}
-            data-slot={i}
-            className={style.slotScale}
-            onClick={clickHandler}>
-            {currentLabel}
-          </div>
-        );
-          
-        const lineIsSelected = startUuid !== null && endUuid !== null && 
-          ((i > points.indexOf(startUuid) && i < points.indexOf(endUuid) && points.indexOf(startUuid) < points.indexOf(endUuid)) ||
-            (i < points.indexOf(startUuid) && i > points.indexOf(endUuid) && points.indexOf(startUuid) > points.indexOf(endUuid)));
+      const sliderStyle = {
+        position: "relative",
+        width: "100%"
+      };
 
-        slider.push(
-          <div 
-            data-slot={i}
-            onDragOver={this.onDragOver} 
-            onDragEnter={this.onDragEnter} 
-            onDrop = {this.onDrop}
-            onClick = {this.onSlotClick}
-            key={points[i]} 
-            className={style.slot}>
-              <div  data-slot={i} 
-              className={classNames({
-                [style.line]: true,
-                [style.lineSelected]: lineIsSelected
-              })}/>
-              <span className={style.scaleMark} 
-                data-slot={i}
-                onDrop = {this.onDrop}
-                onClick = {this.onSlotClick}></span>
-              {minThumb}
-              {maxThumb}
-          </div>
-        );
-      }
+      const domain = [0, Math.max(points.length -1, 0.1) ];
+      
+      const startIdx = points.findIndex( p => p.owner === startUuid);
+      const endIdx = points.findIndex( p => p.owner === endUuid);
+      const defaultValues = [startIdx, endIdx];
+
+      // if(startIdx >= 0){
+      //   defaultValues.push(startIdx);
+      // }
+      // if(endIdx >= 0 && endIdx > startIdx){
+      //   defaultValues.push(endIdx);
+      // }
      
       return (
-        <div>
+       <div style={{ margin: "10%", height: 60 }}>
+        <Slider
+          mode={1}
+          step={1}
+          domain={domain}
+          rootStyle={sliderStyle}
+          onUpdate={this.onUpdate}
+          onChange={this.onChange}
+          values={defaultValues}
+        >
+          <Rail>
+            {({ getRailProps }) => <SliderRail getRailProps={getRailProps} />}
+          </Rail>
+          <Handles>
+            {({ handles, getHandleProps }) => (
+              <div className="slider-handles">
+                {handles.map(handle => (
+                  <Handle
+                    key={handle.id}
+                    handle={handle}
+                    domain={domain}
+                    getHandleProps={getHandleProps}
+                  />
+                ))}
+              </div>
+            )}
+          </Handles>
+          <Tracks left={false} right={false}>
+            {({ tracks, getTrackProps }) => (
+              <div className="slider-tracks">
+                {tracks.map(({ id, source, target }) => (
+                  <Track
+                    key={id}
+                    source={source}
+                    target={target}
+                    getTrackProps={getTrackProps}
+                  />
+                ))}
+              </div>
+            )}
+          </Tracks>
+          <Ticks count={points.length}>
+            {({ ticks }) => (
+              <div className="slider-ticks">
+                {ticks.map(tick => (
+                  <Tick key={tick.id} tick={tick} count={ticks.length} format={this.formatTicks} />
+                ))}
+              </div>
+            )}
+          </Ticks>
+        </Slider>
+      </div>
+      );
+    }
+}      
+
+
+
+// const mapStateToProps = (state, ownProps) => {
+
+// }
+
+// const mapDispatchToProps = {
+ /*<div>
           <div>
             <div className={style.sliderContainer}>
              
@@ -180,17 +187,7 @@ class DatasetSlider extends React.Component {
              
             </div>
           </div>
-        </div>
-      );
-    }
-}      
-
-// const mapStateToProps = (state, ownProps) => {
-
-// }
-
-// const mapDispatchToProps = {
-
+        </div>*/
 // };
 
 export default connect(null, null)(DatasetSlider);

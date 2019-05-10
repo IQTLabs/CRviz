@@ -1,12 +1,12 @@
 {
   "name": "CRviz",
-  "version": "0.3.1-alpha7",
+  "version": "0.3.1-alpha17",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.3",
-    "@fortawesome/fontawesome-svg-core": "^1.2.0",
-    "@fortawesome/free-solid-svg-icons": "^5.2.0",
-    "@fortawesome/react-fontawesome": "^0.1.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-solid-svg-icons": "^5.8.1",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "boom": "^7.2.1",
     "classnames": "^2.2.6",
     "cryptiles": "^4.1.2",
@@ -27,21 +27,23 @@
     "normalize.css": "^8.0.0",
     "ramda": "^0.26.0",
     "rc": "^1.2.7",
-    "react": "^16.6.3",
-    "react-beautiful-dnd": "^10.0.3",
-    "react-dom": "^16.6.3",
+    "react": "^16.8.6",
+    "react-beautiful-dnd": "^11.0.0",
+    "react-compound-slider": "^1.2.1",
+    "react-dom": "^16.8.6",
     "react-modal": "^3.5.1",
     "react-portal-tooltip": "^2.4.0",
-    "react-redux": "^6.0.0",
-    "react-scripts": "^2.1.3",
-    "redux": "^4.0.0",
+    "react-redux": "^7.0.3",
+    "react-scripts": "^3.0.0",
+    "react-spinners": "^0.5.4",
+    "redux": "^4.0.1",
     "redux-actions": "^2.2.1",
     "redux-mock-store": "^1.5.1",
     "redux-observable": "^1.0.0-beta.2",
     "request": "^2.84.0",
     "rxjs": "^6.2.0",
     "rxjs-compat": "^6.2.0",
-    "snyk": "^1.94.0",
+    "snyk": "^1.161.0",
     "tar-pack": "^3.4.0",
     "uuid": "^3.3.2"
   },
@@ -52,10 +54,10 @@
     "test": "NODE_ENV=test NODE_PATH=./src nyc mocha --opts ./.mocha --exit --recursive 'src/**/*.test.js*'",
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build",
+    "deploy-experimental": "gh-pages -r https://github.com/rashley-iqt/CRviz -d build",
     "lint": "eslint --ext=js --ext=jsx .",
     "release": "standard-version",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "snyk-protect": "snyk protect"
   },
   "pre-commit": {
     "run": [
@@ -69,7 +71,8 @@
     ],
     "plugins": [
       "@babel/plugin-transform-modules-commonjs",
-      "@babel/plugin-proposal-class-properties"
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-object-rest-spread"
     ],
     "env": {
       "test": {
@@ -113,23 +116,23 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@fortawesome/fontawesome-free": "^5.5.0",
-    "babel-eslint": "^9.0.0",
+    "babel-eslint": "^10.0.1",
     "chai": "^4.1.2",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.4.0",
-    "eslint-config-react-app": "^3.0.6",
+    "eslint-config-react-app": "^4.0.0",
     "eslint-plugin-flowtype": "^3.0.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.9.1",
     "gh-pages": "^2.0.0",
     "jsdom-global": "^3.0.2",
-    "mocha": "^5.2.0",
-    "nyc": "^12.0.2",
+    "mocha": "^6.0.0",
+    "nyc": "^14.0.0",
     "pre-commit": "^1.2.2",
     "react-app-rewire-eslint": "^0.2.3",
-    "sinon": "^6.1.3",
-    "standard-version": "^4.4.0"
+    "sinon": "^7.2.4",
+    "standard-version": "^6.0.1"
   },
   "snyk": true
 }
