@@ -1,14 +1,50 @@
 [
   {
-    "name": "Small (400 nodes)",
+    "name": "Sample: 400 nodes",
     "url": "https://raw.githubusercontent.com/cyberreboot/CRviz/master/sample_data/400.json"
   },
   {
-    "name": "Medium (1400 nodes)",
+    "name": "Sample: 1400 nodes",
     "url": "https://raw.githubusercontent.com/cyberreboot/CRviz/master/sample_data/1400.json"
   },
   {
-    "name": "Large (4000 nodes)",
+    "name": "Sample: 4000 nodes",
     "url": "https://raw.githubusercontent.com/cyberreboot/CRviz/master/sample_data/4000.json"
+  },
+  {
+    "name": "Sample: 500 nodes s0",
+    "url": "https://raw.githubusercontent.com/rashley-iqt/CRviz/Phase-2-Features/sample_data/500_s0.json"
+  },
+  {
+    "name": "Sample: 500 nodes s1",
+    "url": "https://raw.githubusercontent.com/rashley-iqt/CRviz/Phase-2-Features/sample_data/500_s1.json"
+  },
+  {
+    "name": "Sample: 500 nodes s2",
+    "url": "https://raw.githubusercontent.com/rashley-iqt/CRviz/Phase-2-Features/sample_data/500_s2.json"
+  },
+  {
+    "name": "Sample: 1500 nodes s0",
+    "url": "https://raw.githubusercontent.com/rashley-iqt/CRviz/Phase-2-Features/sample_data/1500_s0.json"
+  },
+  {
+    "name": "Sample: 1500 nodes s1",
+    "url": "https://raw.githubusercontent.com/rashley-iqt/CRviz/Phase-2-Features/sample_data/1500_s1.json"
+  },
+  {
+    "name": "Sample: 1500 nodes s2",
+    "url": "https://raw.githubusercontent.com/rashley-iqt/CRviz/Phase-2-Features/sample_data/1500_s2.json"
+  },
+  {
+    "name": "Sample: 5000 nodes s0",
+    "url": "https://raw.githubusercontent.com/rashley-iqt/CRviz/Phase-2-Features/sample_data/5000_s0.json"
+  },
+  {
+    "name": "Sample: 5000 nodes s1",
+    "url": "https://raw.githubusercontent.com/rashley-iqt/CRviz/Phase-2-Features/sample_data/5000_s1.json"
+  },
+  {
+    "name": "Sample: 5000 nodes s2",
+    "url": "https://raw.githubusercontent.com/rashley-iqt/CRviz/Phase-2-Features/sample_data/5000_s2.json"
   }
 ]

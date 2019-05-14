@@ -36,6 +36,10 @@
   flex: 0 0;
 }
 
+.controls .footerContainer {
+  margin-top: auto;
+}
+
 .dimSection {
   justify-content: center;
   opacity: 0.20;
@@ -51,6 +55,14 @@
   transition: transform 0.25s;
   transform: translateZ(0);
   height: 100%
+}
+
+.sliderContainer {
+  padding-right: 2em;
+  position:absolute;
+  width: 500px;
+  bottom:0;
+  right:0;
 }
 
 input[name=hideControls] {
@@ -112,9 +124,10 @@ input[name=hideControls]:checked ~ .canvas {
 .modalMain {
   position:fixed;
   background: white;
-  flex: 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
+  flex-wrap: nowrap;
   border: 1px solid black;
   padding: 1rem;
   margin: 1rem;
@@ -125,9 +138,10 @@ input[name=hideControls]:checked ~ .canvas {
   transform: translate(-50%,-50%);
 }
 
+
 .modalMain span {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row no-wrap;
   align-items: center;
 }
 
@@ -144,6 +158,7 @@ input[name=hideControls]:checked ~ .canvas {
 
 .centerSpan {
   display: flex;
+  flex: 0;
   flex-flow: row wrap;
   align-items: center;
   justify-content: center;
@@ -183,8 +198,126 @@ input[name=hideControls]:checked ~ .canvas {
   transform: translate(-50%,-50%);
 }
 
+.label {
+  font-weight: bold;
+  flex: 0 0 6rem;
+}
+
 .emptyDataset span {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
+}
+
+.selectorContainer {
+  display: flex;
+  align-items: center;
+}
+
+.selector {
+  flex: 1;
+}
+
+.selector select {
+  width: 100%;
+  margin: 0;
+}
+
+.checkboxContainer {
+  margin-left: 2.2rem;
+  margin-bottom: 0.33rem;
+  display: flex;
+  flex-direction: row;
+  flex-grow: 0;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.switch {
+    position: relative; width: 3rem;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.switch input[type=checkbox] {
+    display: none;
+}
+.switchLabel {
+    display: block; overflow: hidden; cursor: pointer;
+    height: 1rem; padding: 0; line-height: 1rem;
+    border: 0px solid #FFFFFF; border-radius: 1.5rem;
+    background-color: #C9C9C9;
+}
+.switchLabel:before {
+    content: "";
+    display: block; width: 1.5rem; height: 1.5rem; margin: -0.25rem;
+    background: #e0e0e0;
+    position: absolute; top: 0; bottom: 0;
+    right: 2rem;
+    border-radius: 1.5rem;
+}
+.switch input[type=checkbox]:checked + .switchLabel {
+    background-color: #DCDCDC;
+}
+.switch input[type=checkbox]:checked + .switchLabel, .switch input[type=checkbox]:checked + .switchLabel:before {
+   border-color: #DCDCDC;
+}
+.switch input[type=checkbox]:checked + .switchLabel .switch-inner {
+    margin-left: 0;
+}
+.switch input[type=checkbox]:checked + .switchLabel:before {
+    right: 0px; 
+    background-color: #0277BD; 
+}
+
+.uploadContainer {
+  display: flex;
+  flex: 1;
+  flex-wrap: nowrap;
+  align-items: center;
+  align-self: flex-start;
+  padding-right: 0.5em;
+}
+
+.fileUpload {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.fileUpload label {
+  flex: 0;
+  margin-right: 2em;
+}
+
+.fileUpload span {
+  white-space: nowrap;
+  flex: 1 1 auto;
+  background-color: #DCDCDC;
+  flex-wrap: nowrap !important;
+  padding: 0.25em 2em;
+}
+
+.activityIndicatorContainer {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 160px;
+  height: 160px;
+}
+
+.key {
+  padding-right: 2em;
+  position:absolute;
+  width: 405px;
+  bottom:80px;
+  right:0;
+}
+
+.key text {
+  dominant-baseline: middle;
 }

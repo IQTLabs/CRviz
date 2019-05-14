@@ -3,7 +3,7 @@ import configureStore from "configure-store";
 
 import { setDataset } from 'domain/dataset'
 import { 
-	buildIndex, 
+	buildIndices, 
 	getSearchIndex,
 	setSearchResults,
 	getSearchResults
@@ -37,8 +37,9 @@ describe("indexDatasetEpic", () => {
 	});
 
 	it("sets the search index", (done) => {
-
-	    const action$ = buildIndex({ 'owner': owner, 'dataset': dataset, 'configuration': configuration });
+		let datasets ={};
+		datasets[owner] = { 'dataset': dataset, 'configuration': configuration };
+	    const action$ = buildIndices({ 'datasets': datasets });
 	    store.dispatch(action$);
 
 	    const expectedConfiguration = {
@@ -55,8 +56,10 @@ describe("indexDatasetEpic", () => {
 
 	it("sets the search index in a config with no fields", (done) => {
 		const emptyConf = {};
+		let datasets ={};
+		datasets[owner] = { 'dataset': dataset, 'configuration': emptyConf };
 
-	    const action$ = buildIndex({ 'owner': owner, 'dataset': dataset, 'configuration': emptyConf });
+	    const action$ = buildIndices({ 'datasets': datasets });
 	    store.dispatch(action$);
 
 	    const expectedFields = ['uid', 'role.role', 'role.confidence'];
