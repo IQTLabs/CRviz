@@ -7,6 +7,8 @@ import classNames from "classnames";
 
 function SelectedField({
   style,
+  initialItemText,
+  subsequentItemText,
   displayName,
   count = 0,
   index,
@@ -21,6 +23,8 @@ function SelectedField({
         return (
           <Field
             style={style}
+            initialItemText={initialItemText}
+            subsequentItemText={subsequentItemText}
             displayName={displayName + " (" + count + ")"}
             dragIndex={dragIndex}
             provided={provided}
@@ -32,7 +36,7 @@ function SelectedField({
   );
 }
 
-function Field({ style, displayName, dragIndex, animated, provided }) {
+function Field({ style, initialItemText, subsequentItemText, displayName, dragIndex, animated, provided }) {
   return (
     <div>
       <div
@@ -48,7 +52,7 @@ function Field({ style, displayName, dragIndex, animated, provided }) {
               [style.animated]: animated
             })}
           >
-            {dragIndex === 0 ? "Group by" : "Then by"}
+            {dragIndex === 0 ? initialItemText : subsequentItemText}
           </span>
           <span className={style.fieldName}>{displayName}</span>
         </div>

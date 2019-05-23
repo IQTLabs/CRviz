@@ -4,9 +4,27 @@
   margin: 0.5rem;
 }
 
-.selectorContainer, .uploadContainer {
+.dataControlHeader {
+  font-weight: bold;
   display: flex;
+  flex-flow: row no-wrap;
   align-items: center;
+  justify-content: space-between;
+}
+
+.selectorContainer{
+  display: flex;
+  flex: 1;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.uploadContainer {
+  display: flex;
+  flex: 1;
+  flex-wrap: nowrap;
+  align-items: center;
+  align-self: flex-start;
 }
 
 .selector {
@@ -21,16 +39,23 @@
 .fileUpload {
   flex: 1;
   display: flex;
-  align-items: center
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .fileUpload label {
   flex: 0;
-  margin-right: 0;
+  margin-right: 2em;
 }
 
 .fileUpload span {
-  flex: 1;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  background-color: #DCDCDC;
+  flex-wrap: nowrap;
+  padding: 0.25em 2em;
 }
 
 .label {
@@ -56,6 +81,20 @@
   display: flex;
   flex-direction: row;
   align-items: center
+}
+
+.datasetSourceContainer {
+  flex: 0;
+  display: flex;
+  flex-direction: row no-wrap;
+  align-items: flex-start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.datasetSourceContainer:hover {
+  overflow: visible;
 }
 
 .urlRefresh {
@@ -102,7 +141,7 @@
 .modalMain {
   position:fixed;
   background: white;
-  flex: 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
   border: 1px solid black;
@@ -117,14 +156,149 @@
 
 .modalMain span {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
-.centerSpan span {
+.centerSpan {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: center !important;
+}
+
+/*Slider styles*/
+.sliderContainer {
+ position: relative;
+}
+
+.sliderSelectedScale {
+}
+.slider {
+  position: relative;
+  user-select:none;
+  margin-top: 10px;  
+}
+
+.sliderScale {
+}
+
+.sliderThumb {
+  position: relative;
+  background-color:transparent;
+  height:20px;
+  width:20px;
+  border-radius:50%;
+  top: 4px;
+  left: 12px;
+  touch-action: none;
+}
+
+.sliderThumbMin {
+  background-color:#DCDCDC;
+}
+
+:global(.darkTheme) .sliderThumbMin {
+  background-color:#E0E0E0;
+}
+
+.sliderThumbMax {
+  background-color: #767777;
+  opacity: 0.99;
+}
+
+:global(.darkTheme) .sliderThumbMax {
+  background-color: #858585;
+  opacity: 0.99;
+}
+
+.sliderThumbMin::after{
+  display:inline-block;
+  position:relative;
+  content:"";
+  height: 6px;
+  background-color: #191919;
+  width: 12px;
+  top: -3px;
+  left:15px;
+}
+
+.sliderThumbMax::before
+{
+  display:inline-block;
+  position:relative;
+  content:"";
+  height: 6px;
+  background-color: #191919;
+  width: 14px;
+  top: -3px;
+  left:-15px;
+}
+
+.slot {
+  text-align: center;
+  display:inline-block;
+  position:relative;
+  width:40px;
+  height:20px;
+  background-color:none;
+}
+
+.slot :hover {
+  height:20px;
+  width:20px;
+  border-radius:50%;
+  border: 1px dotted black;
+  top: 3px;
+  left: 12px;
+}
+
+.scaleMark {
+ position: absolute;
+ border: 0.5px solid #191919;
+ height: 20px;
+ top:0;
+}
+
+.slotScale {
+  text-align: center;
+  display:inline-block;
+  width:40px;
+  height:20px;
+  color: #8D8E8F;
+  user-select: none;
+ 
+}
+
+.slotScale :hover {
+  height:20px;
+  width:20px;
+  border-radius:50%;
+  border: 1px dotted black;
+  top: 4px;
+  left: 12px;
+}
+
+:global(.darkTheme) .slotScale {
+  color: #C9C9C9;
+}
+
+.slot >.sliderThumb {
+  top:0px
+}
+
+.line {
+  position: relative;
+  background-color: #191919;
+  height:2px;
+  width: 40px;
+  top: 12px;
+}
+
+.lineSelected {
+  height: 6px;
+  background-color: #191919;
+  width: 40px;
+  top: 11px;
 }
