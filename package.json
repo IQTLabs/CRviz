@@ -22,7 +22,7 @@
     "hawk": "7.0.10",
     "http-signature": "1.2.0",
     "lodash.debounce": "4.0.8",
-    "lunr": "2.3.3",
+    "lunr": "2.3.6",
     "mini.css": "3.0.1",
     "normalize.css": "8.0.0",
     "ramda": "0.26.0",
