@@ -24,7 +24,7 @@
     "lodash.debounce": "4.0.8",
     "lunr": "2.3.6",
     "mini.css": "3.0.1",
-    "normalize.css": "8.0.0",
+    "normalize.css": "8.0.1",
     "ramda": "0.26.0",
     "rc": "1.2.8",
     "react": "16.8.6",
