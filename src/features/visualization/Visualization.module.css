@@ -18,13 +18,13 @@
   opacity: 1;
 }
 
-.viz :global(.viz-isChanged-fixed) circle {
+:global(.viz-isChanged-fixed) circle {
   fill:black;
   -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
-:global(.darkTheme) .viz :global(.viz-isChanged-fixed) circle {
+:global(.darkTheme) :global(.viz-isChanged-fixed) circle {
   fill:white;
 }
 
@@ -52,7 +52,7 @@
   clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
 }
 
-:global(.darkTheme) .viz :global(.viz-isAdded-fixed) circle {
+:global(.darkTheme) :global(.viz-isAdded-fixed) circle {
   fill: white;
   -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
   clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
@@ -82,7 +82,7 @@
   clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
 }
 
-:global(.darkTheme) .viz :global(.viz-isRemoved-fixed) circle {
+:global(.darkTheme) :global(.viz-isRemoved-fixed) circle {
   fill: white;
   -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
   clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
@@ -356,4 +356,14 @@
 
 :global(.darkTheme) .viz :global(circle.viz-bg-circle){
   fill: rgb(130, 129, 129) !important;
+}
+
+.viz-change-icon-container .svg-icon {
+  color: black;
+  fill: black;
+}
+
+:global(.darkTheme) .viz-change-icon-container {
+  color: white;
+  fill: white;
 }
