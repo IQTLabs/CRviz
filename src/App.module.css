@@ -321,3 +321,7 @@ input[name=hideControls]:checked ~ .canvas {
 .key text {
   dominant-baseline: middle;
 }
+
+:global(.darkTheme) .key text {
+  fill: white;
+}
