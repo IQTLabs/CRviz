@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.3](https://github.com/CyberReboot/CRviz/compare/v0.3.2-beta...v0.3.3) (2019-05-30)
+
+
+### Bug Fixes
+
+* **deps:** remove unused dependency d3-svg-annotation ([8d08516](https://github.com/CyberReboot/CRviz/commit/8d08516)), closes [#352](https://github.com/CyberReboot/CRviz/issues/352)
+* css fix for key ([91fbb40](https://github.com/CyberReboot/CRviz/commit/91fbb40)), closes [#348](https://github.com/CyberReboot/CRviz/issues/348)
+* **package:** update snyk to version 1.166.1 ([a640496](https://github.com/CyberReboot/CRviz/commit/a640496))
+
+
+
 ### [0.3.2-beta](https://github.com/CyberReboot/CRviz/compare/v0.2.11...v0.3.2-beta) (2019-05-14)
 
 
