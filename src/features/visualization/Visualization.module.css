@@ -363,7 +363,7 @@
   fill: black;
 }
 
-:global(.darkTheme) .viz-change-icon-container {
-  color: white;
-  fill: white;
+:global(.darkTheme) .viz :global(.viz-change-icon-container) {
+  color: white !important;
+  fill: white !important;
 }
