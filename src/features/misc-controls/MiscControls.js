@@ -13,15 +13,18 @@ import FieldSelect from "./FieldSelect";
 
 import style from "./MiscControls.module.css";
 
-function MiscControls({
+function MiscControls(props) {
+  const {
   controls,
   configuration,
   values,
   showNodes,
   colorBy,
-  useDarkTheme
-}) {
+  } = props;
   const fields = configuration.fields.filter((f) => f.groupable);
+  const darkThemeChanged = (checked) => {
+    props.useDarkTheme(checked)
+  };
   return (
     <div className={style.container}>
       <div className={`${style.checkboxContainer} input-group`}>
@@ -44,7 +47,7 @@ function MiscControls({
             type="checkbox"
             id="dark-theme-check"
             checked={controls.darkTheme}
-            onChange={(evt) => useDarkTheme(evt.target.checked)}
+            onChange={(evt) => darkThemeChanged(evt.target.checked)}
           />
           <label htmlFor="dark-theme-check" className={ style.switchLabel }> 
           </label>

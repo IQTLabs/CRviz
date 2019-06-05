@@ -1,6 +1,88 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.3.3](https://github.com/CyberReboot/CRviz/compare/v0.3.2-beta...v0.3.3) (2019-05-30)
+
+
+### Bug Fixes
+
+* **deps:** remove unused dependency d3-svg-annotation ([8d08516](https://github.com/CyberReboot/CRviz/commit/8d08516)), closes [#352](https://github.com/CyberReboot/CRviz/issues/352)
+* css fix for key ([91fbb40](https://github.com/CyberReboot/CRviz/commit/91fbb40)), closes [#348](https://github.com/CyberReboot/CRviz/issues/348)
+* **package:** update snyk to version 1.166.1 ([a640496](https://github.com/CyberReboot/CRviz/commit/a640496))
+
+
+
+### [0.3.2-beta](https://github.com/CyberReboot/CRviz/compare/v0.2.11...v0.3.2-beta) (2019-05-14)
+
+
+### Bug Fixes
+
+* **Time series:** only show comparison when there are 2 or more datasets ([2d61f6e](https://github.com/CyberReboot/CRviz/commit/2d61f6e))
+* get rid of viewbox warning ([901df85](https://github.com/CyberReboot/CRviz/commit/901df85))
+* **Export:** Corrects bug with control import caused by existing start value ([9374c7e](https://github.com/CyberReboot/CRviz/commit/9374c7e)), closes [#282](https://github.com/CyberReboot/CRviz/issues/282)
+* **Search:** Change mapping of flattened dataset ([596121b](https://github.com/CyberReboot/CRviz/commit/596121b)), closes [#300](https://github.com/CyberReboot/CRviz/issues/300)
+* **Time Series:** Adds delay to animations to sync them. Closes [#288](https://github.com/CyberReboot/CRviz/issues/288) ([232a163](https://github.com/CyberReboot/CRviz/commit/232a163))
+* **Time Series:** correctly styling child glyphs on click events ([47377bc](https://github.com/CyberReboot/CRviz/commit/47377bc))
+* **Time Series:** corrects bug where dataset uploads were not correctly ([5713d2b](https://github.com/CyberReboot/CRviz/commit/5713d2b)), closes [#277](https://github.com/CyberReboot/CRviz/issues/277)
+* **Time Series:** let start and end datasets be the same. Fixes [#281](https://github.com/CyberReboot/CRviz/issues/281) ([f4674e1](https://github.com/CyberReboot/CRviz/commit/f4674e1))
+* **Time Series:** null check on glyph lookup. fixes [#299](https://github.com/CyberReboot/CRviz/issues/299) ([18c71de](https://github.com/CyberReboot/CRviz/commit/18c71de))
+* corrected bug with showNodes not working correctly ([7a092bf](https://github.com/CyberReboot/CRviz/commit/7a092bf))
+* corrects bug where app crashes on import if no file is selected ([23f0184](https://github.com/CyberReboot/CRviz/commit/23f0184))
+* **Time Series:** fixed bug with incorrect memoization of a method ([874875b](https://github.com/CyberReboot/CRviz/commit/874875b))
+* cleaned up wonkiness of label text ([35b752d](https://github.com/CyberReboot/CRviz/commit/35b752d))
+* corrected calculation of added/changed/removed counts in toHierarchy ([a029c2c](https://github.com/CyberReboot/CRviz/commit/a029c2c)), closes [#262](https://github.com/CyberReboot/CRviz/issues/262)
+* Disable file import OK button until a file is selected ([ad43610](https://github.com/CyberReboot/CRviz/commit/ad43610)), closes [#271](https://github.com/CyberReboot/CRviz/issues/271)
+* fixes [#228](https://github.com/CyberReboot/CRviz/issues/228) - don't reset hierarchyConfig on dataset select ([32eb4ce](https://github.com/CyberReboot/CRviz/commit/32eb4ce))
+* improved blink timing ([34b87d6](https://github.com/CyberReboot/CRviz/commit/34b87d6))
+* Namespaces properties added by CRViz and removes them before export.  fixes [#238](https://github.com/CyberReboot/CRviz/issues/238) ([6385fcf](https://github.com/CyberReboot/CRviz/commit/6385fcf))
+* Performance tuning of grouping operations ([dbeb60d](https://github.com/CyberReboot/CRviz/commit/dbeb60d))
+* Visual cleanup of the file upload dialog ([629da6f](https://github.com/CyberReboot/CRviz/commit/629da6f)), closes [#275](https://github.com/CyberReboot/CRviz/issues/275)
+* **Search:** closes [#258](https://github.com/CyberReboot/CRviz/issues/258) ([2a4eeb7](https://github.com/CyberReboot/CRviz/commit/2a4eeb7))
+* **Time Series:** corrected issue with uploading multiple data ([79d88b8](https://github.com/CyberReboot/CRviz/commit/79d88b8)), closes [#261](https://github.com/CyberReboot/CRviz/issues/261)
+* **Time Series:** fixes [#243](https://github.com/CyberReboot/CRviz/issues/243) ([ab6b024](https://github.com/CyberReboot/CRviz/commit/ab6b024))
+* **Time Sries:** reset properties on Start/End change ([e8d7917](https://github.com/CyberReboot/CRviz/commit/e8d7917)), closes [#246](https://github.com/CyberReboot/CRviz/issues/246)
+
+
+### Features
+
+* **Time Series:** Add key for symbols. closes [#276](https://github.com/CyberReboot/CRviz/issues/276) ([d3cc4c9](https://github.com/CyberReboot/CRviz/commit/d3cc4c9))
+* **Time Series:** Change panel ordering. closes [#296](https://github.com/CyberReboot/CRviz/issues/296) ([49de557](https://github.com/CyberReboot/CRviz/commit/49de557))
+* Add an activity indicator ([43a584e](https://github.com/CyberReboot/CRviz/commit/43a584e)), closes [#291](https://github.com/CyberReboot/CRviz/issues/291)
+* **Time Series:** Adds backend data structures to display an activity Indicator ([007cd81](https://github.com/CyberReboot/CRviz/commit/007cd81))
+* **Time Series:** Move change icon to corner of group label ([cac511f](https://github.com/CyberReboot/CRviz/commit/cac511f))
+* add source info for datasets ([c21c807](https://github.com/CyberReboot/CRviz/commit/c21c807))
+* Move file upload info into a modal dialog triggered by a ([d9ef6d7](https://github.com/CyberReboot/CRviz/commit/d9ef6d7)), closes [#272](https://github.com/CyberReboot/CRviz/issues/272)
+* **Time Series:** Annotation data shown by default only at the top level. ([e5e1cc8](https://github.com/CyberReboot/CRviz/commit/e5e1cc8)), closes [#237](https://github.com/CyberReboot/CRviz/issues/237)
+* **Time Series:** Now supports n datasets! ([752558b](https://github.com/CyberReboot/CRviz/commit/752558b))
+* functioning ability to import data and control state ([46277d7](https://github.com/CyberReboot/CRviz/commit/46277d7))
+
+
+
+## [0.3.0-alpha](https://github.com/CyberReboot/CRviz/compare/v0.2.6...v0.3.0-alpha) (2019-01-26)
+
+
+### Features
+
+* **time series:** add actions to store for containing diffs ([108b4c8](https://github.com/CyberReboot/CRviz/commit/108b4c8))
+* **Time Series:** closes [#217](https://github.com/CyberReboot/CRviz/issues/217) - Dataset Diffing ([7a0f7f8](https://github.com/CyberReboot/CRviz/commit/7a0f7f8))
+* **Time Series:** Time Series comparison interface ([c1abb1e](https://github.com/CyberReboot/CRviz/commit/c1abb1e))
+
+
+
+## [0.2.11](https://github.com/CyberReboot/CRviz/compare/v0.2.10...v0.2.11) (2019-05-02)
+
+
+### Bug Fixes
+
+* temporarily disable snyk due to tree size issue ([dc02377](https://github.com/CyberReboot/CRviz/commit/dc02377))
+* temporarily disable snyk due to tree size issue pt 2 ([f5849c3](https://github.com/CyberReboot/CRviz/commit/f5849c3))
+* Update dependencies and correct control to work with React Hooks ([dabc540](https://github.com/CyberReboot/CRviz/commit/dabc540))
+* update snyk to make CI happy ([51da6d6](https://github.com/CyberReboot/CRviz/commit/51da6d6))
+* **package:** update react-beautiful-dnd to version 11.0.0 ([3a9a506](https://github.com/CyberReboot/CRviz/commit/3a9a506))
+* **package:** update react-redux to version 7.0.0 ([6f1194e](https://github.com/CyberReboot/CRviz/commit/6f1194e))
+
+
 
 ## [0.2.10](https://github.com/CyberReboot/CRviz/compare/v0.2.9...v0.2.10) (2019-03-07)
 
@@ -35,12 +117,39 @@ All notable changes to this project will be documented in this file. See [standa
 <a name="0.2.7"></a>
 ## [0.2.7](https://github.com/CyberReboot/CRviz/compare/v0.2.6...v0.2.7) (2019-02-08)
 
-
-### Bug Fixes
-
 * package.json & package-lock.json to reduce vulnerabilities ([0dd6f01](https://github.com/CyberReboot/CRviz/commit/0dd6f01))
 * package.json & package-lock.json to reduce vulnerabilities ([50541d0](https://github.com/CyberReboot/CRviz/commit/50541d0))
 
+<a name="0.3.0-alpha"></a>
+# [0.3.0-alpha](https://github.com/CyberReboot/CRviz/compare/v0.2.6...v0.3.0-alpha) (2019-01-26)
+
+### Bug Fixes
+
+* package.json & package-lock.json to reduce vulnerabilities ([50541d0](https://github.com/CyberReboot/CRviz/commit/50541d0))
+
+
+### Features
+
+* **time series:** add actions to store for containing diffs ([108b4c8](https://github.com/CyberReboot/CRviz/commit/108b4c8))
+* **Time Series:** closes [#217](https://github.com/CyberReboot/CRviz/issues/217) - Dataset Diffing ([7a0f7f8](https://github.com/CyberReboot/CRviz/commit/7a0f7f8))
+* **Time Series:** Time Series comparison interface ([c1abb1e](https://github.com/CyberReboot/CRviz/commit/c1abb1e))
+
+
+
+<a name="0.3.0-alpha"></a>
+# [0.3.0-alpha](https://github.com/CyberReboot/CRviz/compare/v0.2.6...v0.3.0-alpha) (2019-01-26)
+
+
+### Bug Fixes
+
+* package.json & package-lock.json to reduce vulnerabilities ([50541d0](https://github.com/CyberReboot/CRviz/commit/50541d0))
+
+
+### Features
+
+* **time series:** add actions to store for containing diffs ([108b4c8](https://github.com/CyberReboot/CRviz/commit/108b4c8))
+* **Time Series:** closes [#217](https://github.com/CyberReboot/CRviz/issues/217) - Dataset Diffing ([7a0f7f8](https://github.com/CyberReboot/CRviz/commit/7a0f7f8))
+* **Time Series:** Time Series comparison interface ([c1abb1e](https://github.com/CyberReboot/CRviz/commit/c1abb1e))
 
 
 <a name="0.2.6"></a>

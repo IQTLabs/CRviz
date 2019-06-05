@@ -6,7 +6,7 @@ import { setDataset, selectDataset, selectConfiguration } from 'domain/dataset'
 import { getError } from 'domain/error'
 import { searchDataset } from "./search-dataset-epic"
 import { 
-	buildIndex, 
+	buildIndices, 
 	getSearchIndex,
 	getSearchIndices,
 	removeSearchIndex
@@ -26,8 +26,12 @@ describe("searchDatasetEpic", () => {
 		store  = configureStore();
 		const action$ = setDataset({ 'owner': owner, 'dataset': data });		
 		store.dispatch(action$);
+
 		const config = selectConfiguration(store.getState(), owner);
-		const indexAction$ = buildIndex({ 'owner': owner, 'dataset': data, 'configuration': config });
+		let datasets ={};
+		datasets[owner] = { 'dataset': data, 'configuration': config };
+
+		const indexAction$ = buildIndices({ 'datasets': datasets });
 		store.dispatch(indexAction$);
 	});
 

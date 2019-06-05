@@ -1,0 +1,19 @@
+.infoPopup{
+  opacity: 0.75;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+.dupeContainer {
+  font-weight: bold;
+  display: flex;
+  flex-flow: row no-wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.infoIcon{
+  margin-right: .25em;
+  margin-left: auto;
+  align-self: flex-end;
+}

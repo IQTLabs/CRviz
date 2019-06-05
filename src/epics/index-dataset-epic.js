@@ -5,17 +5,16 @@ import { mergeMap, map } from 'rxjs/operators';
 
 import { configurationFor } from "domain/dataset";
 
-const getValue = require("get-value");
 const lunr = require("lunr");
 
-const BUILD_INDEX = "BUILD_INDEX";
-const BUILD_INDEX_SUCCESS = "BUILD_INDEX_SUCCESS";
+const BUILD_INDICES = "BUILD_INDICES";
+const BUILD_INDICES_SUCCESS = "BUILD_INDICES_SUCCESS";
 const REMOVE_SEARCH_INDEX = "REMOVE_SEARCH_INDEX";
 //const BUILD_INDEX_FAILURE = "BUILD_INDEX_FAILURE";
 const SET_SEARCH_RESULTS = "SET_SEARCH_RESULTS";
 
-const buildIndex = (payload) => ({'type': BUILD_INDEX, 'payload': payload })
-const buildIndexSuccess = (payload) => ({'type': BUILD_INDEX_SUCCESS, 'payload': payload})
+const buildIndices = (payload) => ({'type': BUILD_INDICES, 'payload': payload })
+const buildIndicesSuccess = (payload) => ({'type': BUILD_INDICES_SUCCESS, 'payload': payload})
 const removeSearchIndex = (payload) => ({'type': REMOVE_SEARCH_INDEX, 'payload': payload});
 const setSearchResults = (payload) => ({'type': SET_SEARCH_RESULTS, 'payload': payload })
 
@@ -26,12 +25,12 @@ const getSearchIndices = (state) => state.search.searchIndices || [];
 
 const indexDatasetEpic = (action$, store) => {
   return action$.pipe(
-      ofType(BUILD_INDEX)
+      ofType(BUILD_INDICES)
       ,mergeMap(({ payload }) => {
         return of(payload).pipe(
             map(generateIndex)
             ,map((payload) =>
-              buildIndexSuccess(payload)
+              buildIndicesSuccess(payload)
             )
           );
       })
@@ -40,10 +39,10 @@ const indexDatasetEpic = (action$, store) => {
 
 const searchReducer = (state = { searchIndices: {}, queryString: '', searchResults: null }, action) => {
   switch (action.type) {
-    case BUILD_INDEX_SUCCESS:
-      const biowner = action.payload.owner;
-      const searchIndex = action.payload.index;
-      state.searchIndices[biowner] = searchIndex;
+    case BUILD_INDICES_SUCCESS:
+      action.payload.forEach((item) => {
+        state.searchIndices[item.owner] = item.index;
+      })
       return {...state };
     case 
     SET_SEARCH_RESULTS:
@@ -69,12 +68,12 @@ const flattenDataset = (ds, cfg) => {
     return flattened;
 
   for(var key in ds){
-    var item = {'CRVIZ_SEARCH_REF':key};
+    var item = {'CRVIZ_HASH_KEY':ds[key].CRVIZ["_HASH_KEY"]};
     for(var f in cfg.fields){
       var field = cfg.fields[f];
 
-      var name = field.displayName
-      item[name] = getValue(ds[key], field.displayName);
+      var name = field.displayName.toLowerCase();
+      item[name] = getValueByPath(ds[key], field.path);
     }
     flattened.push(item);
   }
@@ -82,23 +81,40 @@ const flattenDataset = (ds, cfg) => {
 }
 
 const generateIndex = (payload) => {
-  const owner = payload.owner;
-  const dataset = payload.dataset;
-  const configuration = !isNil(payload.configuration) && !isEmpty(payload.configuration) 
-                        ? payload.configuration : configurationFor(dataset);
-  var flat = flattenDataset(dataset, configuration);
-  const idx = lunr(function () {
-    this.ref('CRVIZ_SEARCH_REF');
-    if(configuration && configuration.fields){
-      const filteredFields = configuration.fields.filter(f => !f.displayName.includes("/"))
-      filteredFields.map((field) => { return this.field(field.displayName.toLowerCase()); })
-    }
-    flat.map((item) => { return this.add(item); })
-  });
+  let indices = [];
+  Object.keys(payload.datasets).forEach((owner) => {
+    const dataset = payload.datasets[owner].dataset;
+    const configuration =  !isNil(payload.datasets[owner].configuration) && !isEmpty(payload.datasets[owner].configuration) 
+                        ? payload.datasets[owner].configuration : configurationFor(dataset);
+    var flat = flattenDataset(dataset, configuration);
+    const idx = lunr(function () {
+      this.ref('CRVIZ_HASH_KEY');
+      if(configuration && configuration.fields){
+        const filteredFields = configuration.fields.filter(f => !f.displayName.includes("/"))
+        filteredFields.map((field) => { return this.field(field.displayName.toLowerCase()); })
+      }
+      flat.map((item) => { return this.add(item); })
+    });
 
-  return { owner: owner, index: idx };
+    indices.push({ owner: owner, index: idx })
+  })
+  
+  return indices;
 };
+
+const getValueByPath = (object, path) => {
+  if(object && path.length > 0){
+    let current = object[path[0]];
+    for(var i = 1; i < path.length; i++){
+      current = current[path[i]]
+    }
+    return current;
+  }
+  else{
+    return null;
+  }
+}
 
 export default indexDatasetEpic;
 
-export { buildIndex, searchReducer,  getSearchIndex, removeSearchIndex, getSearchIndices, setSearchResults, getSearchResults, getQueryString };
+export { buildIndices, searchReducer,  getSearchIndex, removeSearchIndex, getSearchIndices, setSearchResults, getSearchResults, getQueryString };

@@ -55,7 +55,35 @@ select {
   word-break: normal;
 }
 
+text.svg-icon{
+  font-family: "Font Awesome 5 Free";
+  cursor: pointer;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
 
+:global(.darkTheme) text.svg-icon{
+  fill: white;
+}
+
+.viz-d3-tip {
+  background: blue;
+}
+
+.viz-d3-tip text {
+  fill: #fff;
+  font-size: 1 em;
+  stroke: none;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.hidden {
+  display: none;
+}
+
+.hiddenSubject path{
+  stroke:transparent;
+}
 
 * {
   box-sizing: border-box;
