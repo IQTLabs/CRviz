@@ -159,6 +159,12 @@
   dominant-baseline: alphabetical;
 }
 
+:global(.darkTheme) .viz :global(.viz-label) {
+  fill: rgba(255, 255, 255, 0.836); /* darken white to reduce contrasting*/
+  text-anchor: middle;
+  dominant-baseline: alphabetical;
+}
+
 .viz :global(.viz-labelShape) {
   fill: black;
   opacity: 0.25;
@@ -363,7 +369,8 @@
   fill: black;
 }
 
-:global(.darkTheme) .viz :global(.viz-change-icon-container) {
+
+:global(.darkTheme) .viz :global(.viz-change-icon-container){
   color: white !important;
   fill: white !important;
 }
