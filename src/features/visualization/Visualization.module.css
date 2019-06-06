@@ -350,9 +350,9 @@
 .viz :global(.viz-ring-menu){
   visibility: visible;
   opacity: 1;
-  transition: opacity 2s ease-in-out;
-  -webkit-transition: opacity 1s ease-in-out;
-  -moz-transition: opacity 1s ease-in-out;
+  transition: opacity 5s ease-in-out;
+  -webkit-transition: opacity 5s ease-in-out;
+  -moz-transition: opacity 5s ease-in-out;
 }
 
 .viz :global(circle.viz-bg-circle){
@@ -364,7 +364,7 @@
   fill: rgb(130, 129, 129) !important;
 }
 
-.viz-change-icon-container .svg-icon {
+.viz :global(.viz-change-icon-container) {
   color: black;
   fill: black;
 }
