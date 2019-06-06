@@ -39,8 +39,11 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   .append('text')
     .classed('svg-icon', true)
     .classed('nag', true)
-	 .style('font-size', (d) => (3 * d.height * fontScale) + "%")
-    .text('\uf06a');//font-awesome
+	 .style('font-size', (d) => (4 * d.height * fontScale) + "%")
+	 .text('\uf05a');//font-awesome information icon circle
+	 //.text("\uf129"); //font-awesome information icon no circle
+
+
 
   annotations
   .select(`g.${className("change-icon-container")}`)
