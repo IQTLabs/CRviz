@@ -72,7 +72,8 @@ describe("loadDatasetEpic", () => {
 				role: { role: "role", confidence: 80 },
 				CRVIZ: {
 		         '_HASH_KEY': "uid1:role:80:",
-		         '_HASH_WITHOUT_IGNORED': "uid1|role|80|"
+		         '_HASH_WITHOUT_IGNORED': "uid1|role|80|",
+		         "_SEARCH_KEY": "uid1:role:80:"
 			    }
 			};
 

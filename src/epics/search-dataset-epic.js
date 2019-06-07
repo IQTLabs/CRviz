@@ -49,13 +49,18 @@ const performSearch = (data) => {
     }
   }
 
-  data.dataset.forEach((el) => { el.CRVIZ._isSearchResult = false; });
-  results.forEach((r) => {
-    const res = data.dataset.find(i => i.CRVIZ["_HASH_KEY"] === r.ref);
-    if(res){
-      res.CRVIZ._isSearchResult = true;
-      data.results.push(res);
-    }
+  Object.keys(data.datasets).forEach((key) => {
+    const ds = data.datasets[key].dataset;
+    ds.forEach((el) => { 
+      el.CRVIZ._isSearchResult = false;
+    })
+    results.forEach((r) => {
+      const res = ds.find(i => i.CRVIZ["_SEARCH_KEY"] === r.ref);
+      if(res){
+        res.CRVIZ._isSearchResult = true;
+        data.results.push(res);
+      }
+    });
   });
 };
 

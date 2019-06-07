@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch,  faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 
-import { selectDataset, selectConfiguration } from "domain/dataset";
+import { selectDatasets, selectMergedConfiguration } from "domain/dataset";
 
 import { getSearchIndices, getSearchResults } from "epics/index-dataset-epic";
 import { searchDataset } from "epics/search-dataset-epic";
@@ -27,12 +27,13 @@ class Search extends React.Component {
       hasSearch: this.state.queryString !== ''
     });
     var data = {
-      dataset: this.props.dataset,
+      datasets: this.props.datasets,
       configuration: this.props.configuration,
       searchIndices: this.props.searchIndices,
       queryString: this.state.queryString,
       results: this.props.results
     }
+    
     this.props.searchDataset(data);
   }
 
@@ -85,7 +86,7 @@ class Search extends React.Component {
 }
 
 Search.propTypes = {
-  dataset: PropTypes.array,
+  datasets: PropTypes.object,
   configuration: PropTypes.object,
   searchIndex: PropTypes.object,
   queryString: PropTypes.string,
@@ -94,10 +95,9 @@ Search.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const hash = Object.keys(state.dataset.datasets)[0] || ""
   return {
-    dataset: selectDataset(state, hash),
-    configuration: selectConfiguration(state, hash),
+    datasets: selectDatasets(state),
+    configuration: selectMergedConfiguration(state),
     searchIndices: getSearchIndices(state),
     queryString: state.search.queryString,
     results: getSearchResults(state)
