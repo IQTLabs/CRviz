@@ -51,7 +51,6 @@ const getHashFields = (allFields, ignoredFields) => {
 }
 
 const addHashKey = (keys, obj) => {
-  //console.log("addHashKey keys: %o", keys);
   const hashKey = keys.reduce( (h, k) => h + path(k.path, obj) + ":", "");
   obj.CRVIZ["_HASH_KEY"] = hashKey;
 }
@@ -59,6 +58,11 @@ const addHashKey = (keys, obj) => {
 const addHashWithoutIgnored = (fields, obj) => {
   const hash = fields.reduce( (h, f) => h + path(f.path, obj) + "|", "");
   obj.CRVIZ["_HASH_WITHOUT_IGNORED"] = hash;
+}
+
+const addSearchKey = (keys, obj) => {
+  const searchKey = keys.reduce( (h, k) => h + path(k.path, obj) + ":", "");
+  obj.CRVIZ["_SEARCH_KEY"] = searchKey;
 }
 
 const applyHashes = (dataset, configuration) => {
@@ -73,6 +77,7 @@ const applyHashes = (dataset, configuration) => {
 
     addHashKey(Array.isArray(configuration.keyFields) && configuration.keyFields.length > 0 ? configuration.keyFields : configuration.hashFields, i);
     addHashWithoutIgnored(configuration.hashFields, i);
+    addSearchKey(configuration.fields, i);
     keys.push(i.CRVIZ._HASH_KEY);
   });
   const uniqueKeys = Array.from(new Set(keys));
