@@ -72,7 +72,7 @@ describe('SearchControls', () => {
         const expectedAction = {
             type: 'SEARCH_DATASET',
             payload: {
-                'dataset': dataset,
+                'datasets': initialState.dataset.datasets,
                 'configuration': configuration,
                 'searchIndices': [],
                 'queryString': 'test',
@@ -123,7 +123,7 @@ describe('SearchControls', () => {
         const expectedAction = {
             type: 'SEARCH_DATASET',
             payload: {
-                dataset: dataset,
+                datasets: initialState.dataset.datasets,
                 configuration: configuration,
                 searchIndices: [],
                 queryString: '',
