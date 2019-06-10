@@ -39,7 +39,7 @@ const setupAnnotations = ({packedData, annotationRoot}) =>{
   .append('text')
     .classed('svg-icon', true)
     .classed('nag', true)
-	 .style('font-size', (d) => (3 * d.height * fontScale) + "%")
+	 .style('font-size', (d) => (4 * d.height * fontScale) + "%")
     .text('\uf06a');//font-awesome
 
   annotations
