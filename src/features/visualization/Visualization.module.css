@@ -378,6 +378,11 @@
             animation: fadein 1s;
 }
 
+:global(.darkTheme) .viz :global(.viz-ring-menu){
+  fill: white !important;
+}
+
+
 .viz :global(circle.viz-bg-circle){
   stroke: transparent;
   fill: white !important;
