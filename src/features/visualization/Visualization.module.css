@@ -159,6 +159,12 @@
   dominant-baseline: alphabetical;
 }
 
+:global(.darkTheme) .viz :global(.viz-label) {
+  fill: rgba(255, 255, 255, 0.836); /* darken white to reduce contrasting*/
+  text-anchor: middle;
+  dominant-baseline: alphabetical;
+}
+
 .viz :global(.viz-labelShape) {
   fill: black;
   opacity: 0.25;
@@ -340,14 +346,42 @@
   }
 }*/
 
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 /*Ring Menu*/
 .viz :global(.viz-ring-menu){
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 2s ease-in-out;
-  -webkit-transition: opacity 1s ease-in-out;
-  -moz-transition: opacity 1s ease-in-out;
+  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 1s; /* Firefox < 16 */
+        -ms-animation: fadein 1s; /* Internet Explorer */
+         -o-animation: fadein 1s; /* Opera < 12.1 */
+            animation: fadein 1s;
 }
+
+:global(.darkTheme) .viz :global(.viz-ring-menu){
+  fill: white !important;
+}
+
 
 .viz :global(circle.viz-bg-circle){
   stroke: transparent;
@@ -358,12 +392,13 @@
   fill: rgb(130, 129, 129) !important;
 }
 
-.viz-change-icon-container .svg-icon {
+.viz :global(.viz-change-icon-container) {
   color: black;
   fill: black;
 }
 
-:global(.darkTheme) .viz-change-icon-container {
-  color: white;
-  fill: white;
+
+:global(.darkTheme) .viz :global(.viz-change-icon-container){
+  color: white !important;
+  fill: white !important;
 }
