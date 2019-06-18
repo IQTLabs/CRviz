@@ -220,6 +220,7 @@ function d3Viz(rootNode) {
 
     nodeRoot.on("click.select", () => {
       const datum = select(d3Event.target).datum();
+      console.log(datum.data)
       let zoomToNode = datum;
       if(datum.height === 0 && datum.parent){
         zoomToNode = datum.parent;
