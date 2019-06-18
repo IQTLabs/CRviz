@@ -1,6 +1,8 @@
 import { map, join, path } from "ramda";
 import { select, event as d3Event } from "d3-selection";
 
+import { setupNotes, NotesOnViz } from '../d3-viz/setup-notes';
+
 const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
   tooltip
     .style("display", "block")
@@ -18,11 +20,22 @@ const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
   // not accurate.
   tooltip.style("display", "none")
 
-  nodeRoot.on("mousemove", () => {
+  /*nodeRoot.on("mousemove", () => {
+      const event = d3Event;
+      showTooltip(event, fields, offsetTop, offsetLeft, tooltip);
+    
+  });*/
+
+  nodeRoot.on("click", () => {
     const event = d3Event;
     showTooltip(event, fields, offsetTop, offsetLeft, tooltip);
 
   });
+
+  /*nodeRoot.on("mousemove", () => {
+    const event = d3Event;
+    showTooltip(event, fields, offsetTop, offsetLeft, tooltip);
+  });*/
 };
 
 const showTooltip = (event, fields, offsetTop, offsetLeft, tooltip) => {
@@ -34,10 +47,13 @@ const showTooltip = (event, fields, offsetTop, offsetLeft, tooltip) => {
     tooltip
       .style("display", "block")
       .style("transform", `translate3d(${ event.x + offsetLeft + 1 }px, ${ event.y + offsetTop + 1 }px, 0)`)
+      
   } else {
     tooltip.style("display", "none");
   }
+
   //tooltip.classed("searchResult", datum.data.isSearchResult);
+
 };
 
 const content = (datum, fields) => {
@@ -46,16 +62,21 @@ const content = (datum, fields) => {
     if(datum.data.CRVIZ._searchResultCount > 0){
       cont += `<br/><span>${datum.data.CRVIZ._searchResultCount} search results</span>`
     }
-    return cont;
+    return setupNotes(cont);
   } else if (datum.height === 0) {
     const pairs = map(
       (field) => [`<strong>${ field.displayName }</strong>`, path(field.path, datum.data)],
       fields
     );
-    return map(join(": "), pairs).join("<br />");
+          
+    //return notes(map(join(": "), pairs).join("<br />")); 
+    //return map(join(": "), pairs).join("<br />");
+    return setupNotes(map(join(": "), pairs).join("<br />"));
   } else {
     return null;
   }
 };
+
+
 
 export default setupTooltip;
