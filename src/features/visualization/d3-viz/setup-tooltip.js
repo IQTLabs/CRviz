@@ -1,6 +1,7 @@
 import { map, join, path } from "ramda";
 import { select, event as d3Event } from "d3-selection";
 
+
 const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
   tooltip
     .style("display", "block")
@@ -18,7 +19,7 @@ const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
   // not accurate.
   tooltip.style("display", "none")
 
-  nodeRoot.on("click", () => {
+  nodeRoot.on("mousemove", () => {
     const event = d3Event;
     showTooltip(event, fields, offsetTop, offsetLeft, tooltip);
 
