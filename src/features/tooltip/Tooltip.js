@@ -1,37 +1,31 @@
 import React from "react";
-//import ReactDOM from 'react-dom'
-//import PropTypes from "prop-types";
+
+//Styling
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTags, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+
+///Redux
 import { connect } from "react-redux";
 import { getPosition } from '../../domain/controls';
 
-/*import { select, event as d3Event } from "d3-selection";
-
-import * as d3 from 'd3';
-
-
-import {
-  compose,
-  differenceWith,
-  eqBy,
-  equals,
-  find,
-  findIndex,
-  identity,
-  insert,
-  isEmpty,
-  isNil,
-  path,
-  remove
-} from "ramda"; */
 
 class TooltipControls extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      position: [0,0],
+      title: "Title",
+      label:"Labels",
+      notes: "Notes...",
+      height:"200px",
+      width:"300px",
+      position: [200,200],
     }
     console.log(props)
   }
+
+  handleChange = event => {
+    this.setState({ username: event.target.value });
+  };
   
 
   render() {
@@ -39,15 +33,32 @@ class TooltipControls extends React.Component {
       display : 'block"',
       position: "fixed",
       top: `${this.props.position[0]}px`,
-      left: `${this.props.position[1]}px`
-      //transform:`transform3d(${this.props.x},${this.props.y},0)`
-      
+      left: `${this.props.position[1]}px`,
+      boxShadow: `0 4px 8px 0 rgba(0,0,0,0.2)`,
+      transition: `0.3s`,
+      borderRadius: `10px`,
+      padding: `5px`,
+      background: `white`,      
     }
+    
 
     return (
       <div style={style}>
-        <div>Data</div>
-        <div>Notes</div>
+         <div >
+              <h1>{this.state.title}</h1>
+              <h6>{this.state.label}</h6>
+          </div>
+         <input
+           type="text"
+           name="notes"
+           placeholder={this.state.Notes}
+           value={this.state.username}
+           onChange={this.handleChange}
+         />
+        <div >
+          <FontAwesomeIcon onClick={{}} style={{margin:"10px"}} icon={faTags} />
+          <FontAwesomeIcon onClick={{}} style={{margin:"10px"}} icon={faTrashAlt} />
+        </div>
       </div>
     );
   }
