@@ -105,8 +105,12 @@ const generateIndex = (payload) => {
 const getValueByPath = (object, path) => {
   if(object && path.length > 0){
     let current = object[path[0]];
+    
     for(var i = 1; i < path.length; i++){
-      current = current[path[i]]
+      if(current[path[i]])
+        current = current[path[i]];
+      else
+        return null;
     }
     return current;
   }
