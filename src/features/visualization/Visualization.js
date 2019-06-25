@@ -17,8 +17,6 @@ var position = [];
 class Visualization extends React.PureComponent {
   componentDidMount() {
     const el = ReactDOM.findDOMNode(this);
-
-    
     this.viz = d3Viz(el);
     this.updateFromProps();
   }
@@ -29,11 +27,9 @@ class Visualization extends React.PureComponent {
     select(el).on('click', function mouseMoveHandler() {
       position = mouse(this)
       console.log(position)
-      //this.props.setPosition(d3.mouse(this));  
     })
    
     this.props.setPosition(position);
-    //console.log(this.props.position)
   }
  
 
