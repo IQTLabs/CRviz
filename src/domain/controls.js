@@ -8,7 +8,8 @@ const defaultState = {
   start: null, // The uuid of the dataset to use as the starting point for comparison
   end: null, // The uuid of the dataset to use as the end point for comparison
   showBusy: false, //display the activity icon
-  position: [0,0]
+  position: [0,0], // The position used for a mouse click
+  datum: null //
 };
 
 // ACTION CREATORS
@@ -22,6 +23,7 @@ const useDarkTheme = createAction("USE_DARK_THEME");
 const colorBy = createAction("COLOR_BY");
 const showBusy = createAction("SHOW_BUSY");
 const setPosition = createAction("POSITION");
+const setSelectedDatum = createAction("SETSELECTEDDATUM")
 
 // REDUCERS
 
@@ -56,6 +58,7 @@ const reducer = handleActions(
     [colorBy]: (state, { payload }) => ({ ...state, colorBy: payload }),
     [showBusy]: (state, { payload }) => ({ ...state, showBusy: !!payload }),
     [setPosition]: (state, { payload }) => ({ ...state, position: payload }),
+    [setSelectedDatum]: (state, { payload }) => ({ ...state, selectedDatum: payload }),
   },
   defaultState
 );
@@ -63,6 +66,7 @@ const reducer = handleActions(
 // SELECTORS
 const selectControls = (state) => state.controls;
 const getPosition = (state) => state.controls.position;
+const getSelectedDatum = (state) => state.controls.selectedDatum;
 
 export default reducer;
-export { setControls, setHierarchyConfig, showNodes, colorBy, useDarkTheme, selectControls, setStartDataset, setEndDataset, showBusy, setPosition, getPosition };
+export { setControls, setHierarchyConfig, showNodes, colorBy, useDarkTheme, selectControls, setStartDataset, setEndDataset, showBusy, setPosition, getPosition, setSelectedDatum, getSelectedDatum };
