@@ -24,6 +24,12 @@ class TooltipControls extends React.Component {
   handleChange = event => {
     this.setState({ notes: event.target.value });
   };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.propsdata) {
+      console.log(this.props.data)
+    }
+  }
   
 
   render() {
@@ -42,7 +48,7 @@ class TooltipControls extends React.Component {
 
     return (
       <div style={style}>
-        <div>{String(this.props.data)}</div>
+        <div>{/*this.props.data*/}</div>
          <div >
               <h1>{this.state.title}</h1>
               <h6>{this.state.label}</h6>

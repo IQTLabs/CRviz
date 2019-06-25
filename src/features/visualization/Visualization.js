@@ -32,7 +32,6 @@ class Visualization extends React.PureComponent {
   }
 
   getData = (data) => {
-    console.log(data);
     this.props.setSelectedDatum(data);
   }
 
