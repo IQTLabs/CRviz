@@ -6,7 +6,7 @@ import { faTags, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 ///Redux
 import { connect } from "react-redux";
-import { getPosition } from '../../domain/controls';
+import { getPosition, getSelectedDatum } from '../../domain/controls';
 
 
 class TooltipControls extends React.Component {
@@ -15,16 +15,14 @@ class TooltipControls extends React.Component {
     this.state = {
       title: "Title",
       label:"Labels",
-      notes: "Notes...",
       height:"200px",
       width:"300px",
       position: [200,200],
     }
-    console.log(props)
   }
 
   handleChange = event => {
-    this.setState({ username: event.target.value });
+    this.setState({ notes: event.target.value });
   };
   
 
@@ -44,6 +42,7 @@ class TooltipControls extends React.Component {
 
     return (
       <div style={style}>
+        <div>{String(this.props.data)}</div>
          <div >
               <h1>{this.state.title}</h1>
               <h6>{this.state.label}</h6>
@@ -51,13 +50,13 @@ class TooltipControls extends React.Component {
          <input
            type="text"
            name="notes"
-           placeholder={this.state.Notes}
-           value={this.state.username}
+           placeholder={'Notes...'}
+           value={this.state.notes}
            onChange={this.handleChange}
          />
         <div >
-          <FontAwesomeIcon onClick={{}} style={{margin:"10px"}} icon={faTags} />
-          <FontAwesomeIcon onClick={{}} style={{margin:"10px"}} icon={faTrashAlt} />
+          <FontAwesomeIcon style={{margin:"10px"}} icon={faTags} />
+          <FontAwesomeIcon style={{margin:"10px"}} icon={faTrashAlt} />
         </div>
       </div>
     );
@@ -65,7 +64,8 @@ class TooltipControls extends React.Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    position: getPosition(state)
+    position: getPosition(state),
+    data: getSelectedDatum(state)
   };
 };
 

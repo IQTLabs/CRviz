@@ -1,5 +1,4 @@
 import { select, event as d3Event } from "d3-selection";
-
 import { ResizeSensor } from "css-element-queries";
 import debounce from "lodash.debounce";
 
@@ -220,7 +219,7 @@ function d3Viz(rootNode) {
 
     nodeRoot.on("click.select", () => {
       const datum = select(d3Event.target).datum();
-      console.log(datum.data)
+      if(datum.data !== undefined) {props.sendData(datum.data)} //Used to send data back to Parent
       let zoomToNode = datum;
       if(datum.height === 0 && datum.parent){
         zoomToNode = datum.parent;
@@ -291,4 +290,4 @@ const findAncestor = (node, hierarchy) => {
   return res;
 };
 
-export default d3Viz;
+export default d3Viz

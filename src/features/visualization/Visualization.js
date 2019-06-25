@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 
 import { selectDatasetIntersection, selectMergedConfiguration } from "domain/dataset";
 import { getQueryString } from "epics/index-dataset-epic";
-import { selectControls, getPosition, setPosition} from "domain/controls";
+import { selectControls, getPosition, setPosition, setSelectedDatum} from "domain/controls";
 
 import d3Viz from './d3-viz';
 import styles from './Visualization.module.css';
@@ -17,21 +17,24 @@ var position = [];
 class Visualization extends React.PureComponent {
   componentDidMount() {
     const el = ReactDOM.findDOMNode(this);
+
+    
     this.viz = d3Viz(el);
     this.updateFromProps();
   }
 
   onClick = () => {
     const el = ReactDOM.findDOMNode(this);
-
     select(el).on('click', function mouseMoveHandler() {
       position = mouse(this)
-      console.log(position)
     })
-   
     this.props.setPosition(position);
   }
- 
+
+  getData = (data) => {
+    console.log(data);
+    this.props.setSelectedDatum(data);
+  }
 
   updateFromProps() {
     this.viz.update({
@@ -41,14 +44,14 @@ class Visualization extends React.PureComponent {
       coloredField: this.props.controls.colorBy,
       data: this.props.dataset || [],
       queryString: this.props.queryString,
-      position: this.props.position
+      position: this.props.position,
+      sendData: this.getData
     });
   }
 
   componentDidUpdate() {
     this.updateFromProps();
   }
-
 
   render() {
     return <div onClick={this.onClick} className={ styles.viz }></div>;
@@ -65,10 +68,8 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 const mapDispatchToProps = (dispatch) => ({
-  setPosition: (position) => dispatch(setPosition(position))
+  setPosition: (position) => dispatch(setPosition(position)),
+  setSelectedDatum: (data) => dispatch(setSelectedDatum(data))
 })
 
-/*const mapDispatchToProps = {
-  setPosition
-};*/
 export default connect(mapStateToProps,mapDispatchToProps)(Visualization);
