@@ -1,8 +1,9 @@
 import { createAction } from "redux-actions";
 import { ofType } from 'redux-observable';
 import { of } from "rxjs";
-import { map, mergeMap, catchError } from 'rxjs/operators';
+import { mergeMap, concatMap, catchError } from 'rxjs/operators';
 import { isNil, is } from "ramda";
+import { resolveRefs } from 'json-refs';
 
 import { buildIndices } from './index-dataset-epic';
 
@@ -17,7 +18,7 @@ const loadDatasetEpic = (action$, store) => {
     ofType(loadDataset.toString())
     ,mergeMap(({ payload }) => {
       return of(payload).pipe(
-        map(formatPayload)
+        concatMap(formatPayload)
         ,mergeMap((payload) => {
           return of(
             setDatasets(payload)
@@ -93,12 +94,13 @@ const CSVconvert = (data) => {
 //if we have a naked array or an object not containing a dataset instead of an object containing a dataset
 //transfer the array into an object's dataset to maintain a consistent
 //schema with what is used elsewhere see https://github.com/CyberReboot/CRviz/issues/33
-const formatPayload = (data) => {
+const formatPayload = async (data) => {
   const owner = data.owner;
   const initialName = data.name;
   const initialShortName = data.shortName;
   const source = data.source;
-  const content = data.content;
+  const result = await resolveRefs(data.content);
+  const content = result.resolved;
   const datasets = content.datasets;
   const keyFields = content.keyFields || null;
   const ignoredFields = content.ignoredFields || null;
