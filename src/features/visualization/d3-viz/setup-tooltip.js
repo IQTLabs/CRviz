@@ -1,6 +1,7 @@
 import { map, join, path } from "ramda";
 import { select, event as d3Event } from "d3-selection";
 
+
 const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
   tooltip
     .style("display", "block")
@@ -11,33 +12,38 @@ const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
 
   const boundingRect = tooltip.node().getBoundingClientRect();
 
-  const offsetLeft = -boundingRect.left + 5;
-  const offsetTop = -boundingRect.top + 5;
+  //const offsetLeft = -boundingRect.left + 5;
+  //const offsetTop = -boundingRect.top + 5;
 
   // Measurements need to be taken before hiding the tooltip, otherwise they are
   // not accurate.
   tooltip.style("display", "none")
 
-  nodeRoot.on("mousemove", () => {
+  /*nodeRoot.on("mousemove", () => {
     const event = d3Event;
     showTooltip(event, fields, offsetTop, offsetLeft, tooltip);
+  });*/
 
-  });
 };
 
 const showTooltip = (event, fields, offsetTop, offsetLeft, tooltip) => {
   const target = select(event.target);
   const datum = target.datum();
   const text = content(datum, fields);
+
+  let transformX = event.x + offsetLeft + 1 
+  let transformY = event.y + offsetTop + 1 
   if (text) {
     tooltip.node().innerHTML = text;
     tooltip
       .style("display", "block")
-      .style("transform", `translate3d(${ event.x + offsetLeft + 1 }px, ${ event.y + offsetTop + 1 }px, 0)`)
+      .style("transform", `translate3d(${ transformX }px, ${ transformY }px, 0)`)
+    //console.log(transformX,transformY)
   } else {
     tooltip.style("display", "none");
   }
-  //tooltip.classed("searchResult", datum.data.isSearchResult);
+
+
 };
 
 const content = (datum, fields) => {
@@ -52,10 +58,13 @@ const content = (datum, fields) => {
       (field) => [`<strong>${ field.displayName }</strong>`, path(field.path, datum.data)],
       fields
     );
+
     return map(join(": "), pairs).join("<br />");
   } else {
     return null;
   }
 };
+
+
 
 export default setupTooltip;

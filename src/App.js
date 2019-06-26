@@ -30,7 +30,8 @@ import Visualization from 'features/visualization/Visualization';
 import DatasetControls from 'features/dataset-controls/DatasetControls';
 import DatasetSlider from 'features/dataset-controls/DatasetSlider';
 import DatasetUpload from 'features/dataset-controls/DatasetUpload';
-import { getDataToExport } from "features/dataset-controls/export"
+import { getDataToExport } from "features/dataset-controls/export";
+import TooltipControls from "features/tooltip/Tooltip";
 
 import style from './App.module.css';
 
@@ -492,6 +493,11 @@ class App extends Component {
             loading={this.props.shouldShowBusy}
           />
         </div>
+  
+          <div >
+            <TooltipControls />
+          </div>
+  
       </div>
     );
   }
