@@ -27,7 +27,8 @@ describe("Controls reducer", () => {
         'start': 't0',
         'end': 'tn',
         'showBusy': true,
-        'position': [0,0]
+        'position': [0,0],
+        'datum': null 
       }
 
       const action = setControls(controls);
@@ -71,7 +72,8 @@ describe("Controls reducer", () => {
         'start': null,
         'end': null,
         'showBusy': false,
-        'position': [0,0]
+        'position': [0,0],
+        'datum': null //
       });
 
       done();
