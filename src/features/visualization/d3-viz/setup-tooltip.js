@@ -12,18 +12,17 @@ const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
 
   const boundingRect = tooltip.node().getBoundingClientRect();
 
-  const offsetLeft = -boundingRect.left + 5;
-  const offsetTop = -boundingRect.top + 5;
+  //const offsetLeft = -boundingRect.left + 5;
+  //const offsetTop = -boundingRect.top + 5;
 
   // Measurements need to be taken before hiding the tooltip, otherwise they are
   // not accurate.
   tooltip.style("display", "none")
 
-  nodeRoot.on("mousemove", () => {
+  /*nodeRoot.on("mousemove", () => {
     const event = d3Event;
     showTooltip(event, fields, offsetTop, offsetLeft, tooltip);
-
-  });
+  });*/
 
 };
 
