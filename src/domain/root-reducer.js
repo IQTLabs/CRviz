@@ -4,11 +4,13 @@ import dataset from "./dataset";
 import controls from "./controls";
 import error from "./error";
 import filter from "./filter";
+import notetaking from "./notetaking";
 
 export default combineReducers({
   dataset,
   search,
   controls,
   error,
-  filter
+  filter,
+  notetaking
 });
