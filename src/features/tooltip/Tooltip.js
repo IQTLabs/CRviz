@@ -65,7 +65,7 @@ function contentEditable(WrappedComponent) {
 
     render() {
       let editOnClick = true;
-      const {editing} = this.state;
+      const { editing } = this.state;
       if (this.props.editOnClick !== undefined) {
         editOnClick = this.props.editOnClick;
       }
@@ -138,7 +138,6 @@ class TooltipControls extends React.Component {
 
     return (
       <div style={style}>
-        <div>{/*this.props.data*/}</div>
         {this.props.data && !this.props.data.fieldValue  &&
             <div>
               <h4><b>UID: </b>{this.props.data.uid} </h4>
@@ -160,14 +159,16 @@ class TooltipControls extends React.Component {
             <h3>{this.props.data.fieldValue} </h3>
           </div>
         }
+        <div>
           <div>
             <EditableH1 value="Title"/>
             <h6>{this.state.label}</h6>
           </div>
           <EditableP value="Take a note..."/>
-        <div >
-          <FontAwesomeIcon style={{margin:"10px"}} icon={faTags} />
-          <FontAwesomeIcon style={{color:"#cc0000",margin:"10px"}} icon={faTrashAlt} />
+          <div >
+            <FontAwesomeIcon style={{margin:"10px"}} icon={faTags} />
+            <FontAwesomeIcon style={{color:"#cc0000",margin:"10px"}} icon={faTrashAlt} />
+          </div>
         </div>
       </div>
     );
