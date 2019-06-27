@@ -20,7 +20,7 @@
     "filtrex": "0.5.4",
     "hawk": "7.0.10",
     "http-signature": "1.2.0",
-    "json-refs": "^3.0.13",
+    "json-refs": "3.0.13",
     "lodash.debounce": "4.0.8",
     "lunr": "2.3.6",
     "mini.css": "3.0.1",
