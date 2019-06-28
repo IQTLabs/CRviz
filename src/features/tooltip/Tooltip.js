@@ -1,92 +1,14 @@
 import React from "react";
+import { addNote, getNotes } from 'domain/notes';
 
 //Styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTags, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faTags, faTrashAlt, faSave } from '@fortawesome/free-solid-svg-icons'
 
 ///Redux
 import { connect } from "react-redux";
-import { getPosition, getSelectedDatum } from '../../domain/controls';
+import { getPosition, getSelectedDatum } from 'domain/controls';
 
-function contentEditable(WrappedComponent) {
-  //https://medium.com/@vraa/inline-edit-using-higher-order-components-in-react-7828687c120c
-  return class extends React.Component {
-
-    state = {
-      editing: false
-    }
-
-    toggleEdit = (e) => {
-      e.stopPropagation();
-      if (this.state.editing) {
-        this.cancel();
-      } else {
-        this.edit();
-      }
-    };
-
-    edit = () => {
-      this.setState({
-        editing: true
-      }, () => {
-        this.domElm.focus();
-      });
-    };
-
-    save = () => {
-      this.setState({
-        editing: false
-      }, () => {
-        if (this.props.onSave && this.isValueChanged()) {
-          console.log('Value is changed', this.domElm.textContent);
-        }
-      });
-    };
-
-    cancel = () => {
-      this.setState({
-        editing: false
-      });
-    };
-
-    isValueChanged = () => {
-      return this.props.value !== this.domElm.textContent
-    };
-
-    handleKeyDown = (e) => {
-      const { key } = e;
-      switch (key) {
-        case 'Enter':
-        case 'Escape':
-          this.save();
-          break;
-      }
-    };
-
-    render() {
-      let editOnClick = true;
-      const { editing } = this.state;
-      if (this.props.editOnClick !== undefined) {
-        editOnClick = this.props.editOnClick;
-      }
-      return (
-        <WrappedComponent
-          className={editing ? 'editing' : ''}
-          onClick={editOnClick ? this.toggleEdit : undefined}
-          contentEditable={editing}
-          ref={(domNode) => {
-            this.domElm = domNode;
-          }}
-          onBlur={this.save}
-          onKeyDown={this.handleKeyDown}
-          {...this.props}
-      >
-        {this.props.value}
-      </WrappedComponent>
-      )
-    }
-  }
-}
 
 class TooltipControls extends React.Component {
   constructor(props){
@@ -97,12 +19,29 @@ class TooltipControls extends React.Component {
       height:"200px",
       width:"300px",
       position: [200,200],
+      note: {
+        title: '',
+        labels: [],
+        content:""
+      }
     }
   }
 
-  handleChange = event => {
-    this.setState({ notes: event.target.value });
-  };
+  handleChangeTitle = (event) => {
+    var note = {...this.state.note}
+    note.title = event.target.value
+    this.setState({note});
+  }
+
+  handleChangeContent = (event) => {
+    var note = {...this.state.note}
+    note.content = event.target.value
+    this.setState({note});
+  }
+  
+  saveNote = () => {
+    console.log(this.state.note)
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.data !== this.props.data) {
@@ -112,11 +51,9 @@ class TooltipControls extends React.Component {
       else{
         console.log(this.props.data);
       }
-      
     }
   }
   
-
   render() {
     const style = {
       display : 'block"',
@@ -132,9 +69,16 @@ class TooltipControls extends React.Component {
       background: `white`,      
     }
 
-    let EditableH1 = contentEditable('h1');
-    let EditableP = contentEditable('p');
-
+    const inputStyle = {
+      backgroundColor:'inherit',
+      border: 'none',
+      display: 'inline',
+      fontFamily: 'inherit',
+      fontSize: 'inherit',
+      padding: '0',
+      margin: '0',
+      width: 'auto'
+    }
 
     return (
       <div style={style}>
@@ -154,20 +98,21 @@ class TooltipControls extends React.Component {
               <h4><b>Vendor: </b>{this.props.data.vendor} </h4>
             </div>
         }
-        {this.props.data && this.props.data.fieldValue && //this.props.data.field in this.props.data &&
+        {this.props.data && this.props.data.fieldValue &&
           <div>
             <h3>{this.props.data.fieldValue} </h3>
           </div>
         }
         <div>
           <div>
-            <EditableH1 value="Title"/>
+            <b><h1><input style={inputStyle} type="text" value={this.state.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
             <h6>{this.state.label}</h6>
           </div>
-          <EditableP value="Take a note..."/>
+          <p><input style={inputStyle} type="text" value={this.state.note.content} onChange={this.handleChangeContent} placeholder="Take a note..."/></p>
           <div >
             <FontAwesomeIcon style={{margin:"10px"}} icon={faTags} />
-            <FontAwesomeIcon style={{color:"#cc0000",margin:"10px"}} icon={faTrashAlt} />
+            <FontAwesomeIcon style={{color:"#47cf38", margin:"10px"}} icon={faSave} onClick={this.saveNote}/>
+            <FontAwesomeIcon style={{color:"#cc0000", margin:"10px"}} icon={faTrashAlt} />
           </div>
         </div>
       </div>
@@ -177,9 +122,14 @@ class TooltipControls extends React.Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     position: getPosition(state),
-    data: getSelectedDatum(state)
+    data: getSelectedDatum(state),
+    notes: getNotes(state)
   };
 };
 
-export default connect(mapStateToProps)(TooltipControls);
+const mapDispatchToProps = {
+  addNote,
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(TooltipControls);
 
