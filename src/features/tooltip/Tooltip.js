@@ -14,33 +14,45 @@ class TooltipControls extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      title: "Title",
       label:"Labels",
       height:"200px",
       width:"300px",
       position: [200,200],
       note: {
-        title: '',
-        labels: [],
-        content:""
+        id:'',
+        note:{
+          title: '',
+          labels: [],
+          content:""
+        }
       }
     }
   }
 
   handleChangeTitle = (event) => {
     var note = {...this.state.note}
-    note.title = event.target.value
+    note.note.title = event.target.value
     this.setState({note});
   }
 
   handleChangeContent = (event) => {
     var note = {...this.state.note}
-    note.content = event.target.value
+    note.note.content = event.target.value
     this.setState({note});
   }
   
-  saveNote = () => {
-    console.log(this.state.note)
+  saveNote = async () => {
+    if(typeof (this.props.data.CRVIZ._SEARCH_KEY) !== 'undefined'){
+      var note = {...this.state.note}
+      note.id = await this.props.data.CRVIZ._SEARCH_KEY
+      this.setState({note});
+
+      this.props.addNote(this.state.note);
+      console.log(this.props.notes)
+    }
+    else{
+      console.log('else')
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -105,10 +117,10 @@ class TooltipControls extends React.Component {
         }
         <div>
           <div>
-            <b><h1><input style={inputStyle} type="text" value={this.state.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
+            <b><h1><input style={inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
             <h6>{this.state.label}</h6>
           </div>
-          <p><input style={inputStyle} type="text" value={this.state.note.content} onChange={this.handleChangeContent} placeholder="Take a note..."/></p>
+          <p><input style={inputStyle} type="text" value={this.state.note.note.content} onChange={this.handleChangeContent} placeholder="Take a note..."/></p>
           <div >
             <FontAwesomeIcon style={{margin:"10px"}} icon={faTags} />
             <FontAwesomeIcon style={{color:"#47cf38", margin:"10px"}} icon={faSave} onClick={this.saveNote}/>
