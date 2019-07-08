@@ -20,7 +20,7 @@ cache:
   - node_modules
 
 script:
-- npm install --no-optional
+- npm ci --no-optional
 - npm run test
 - codecov
 - npm run build
