@@ -4,29 +4,33 @@ import { addNote, getNotes } from 'domain/notes';
 //Styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTags, faTrashAlt, faSave } from '@fortawesome/free-solid-svg-icons'
+import labelStyle from "./Label.module.css";
+
 
 ///Redux
 import { connect } from "react-redux";
 import { getPosition, getSelectedDatum } from 'domain/controls';
 
+const initialState = {
+  label:"Labels",
+  height:"200px",
+  width:"300px",
+  position: [200,200],
+  currentLabel:"",
+  note: {
+    id:'',
+    note:{
+      title: '',
+      labels: [],
+      content:""
+    }
+  }
+};
 
 class TooltipControls extends React.Component {
   constructor(props){
     super(props)
-    this.state = {
-      label:"Labels",
-      height:"200px",
-      width:"300px",
-      position: [200,200],
-      note: {
-        id:'',
-        note:{
-          title: '',
-          labels: [],
-          content:""
-        }
-      }
-    }
+    this.state = initialState;
   }
 
   handleChangeTitle = (event) => {
@@ -40,19 +44,25 @@ class TooltipControls extends React.Component {
     note.note.content = event.target.value
     this.setState({note});
   }
+
+  handleLabels = (event) => {
+    this.setState({currentLabel: event.target.value});
+  }
   
   saveNote = async () => {
-    if(typeof (this.props.data.CRVIZ._SEARCH_KEY) !== 'undefined'){
+    try {
       var note = {...this.state.note}
       note.id = await this.props.data.CRVIZ._SEARCH_KEY
-      this.setState({note});
+      await this.setState({note});
 
       this.props.addNote(this.state.note);
       console.log(this.props.notes)
+    } catch(error){
+      alert('No search key')
     }
-    else{
-      console.log('else')
-    }
+    /*if(typeof (this.props.data.CRVIZ._SEARCH_KEY) !== 'undefined'){ 
+    }*/
+
   }
 
   componentDidUpdate(prevProps) {
@@ -63,6 +73,15 @@ class TooltipControls extends React.Component {
       else{
         console.log(this.props.data);
       }
+    }
+  }
+
+  keyPressed = (event) => {
+    if (event.key === "Enter") {
+      var note = {...this.state.note}
+      note.note.labels.push(this.state.currentLabel)
+      this.setState({note})
+      this.setState({currentLabel:""})
     }
   }
   
@@ -89,8 +108,21 @@ class TooltipControls extends React.Component {
       fontSize: 'inherit',
       padding: '0',
       margin: '0',
-      width: 'auto'
+      width: 'inherit'
     }
+    const inputStyleTag = {
+      
+    }
+
+
+    const Labels = ({labels}) => (
+      <>
+        {labels.map(label => (
+          <div className={labelStyle.tag} key={label}>{label}</div>
+        ))}
+      </>
+    );  
+
 
     return (
       <div style={style}>
@@ -115,10 +147,14 @@ class TooltipControls extends React.Component {
             <h3>{this.props.data.fieldValue} </h3>
           </div>
         }
+        {//typeof (this.props.data.CRVIZ._SEARCH_KEY) !== 'undefined' &&
         <div>
           <div>
             <b><h1><input style={inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
-            <h6>{this.state.label}</h6>
+            <ul className={labelStyle.tags}>
+              <li className={labelStyle.tag}><input className={labelStyle.tagInput} type="text" type="text" value={this.state.currentLabel} onChange={this.handleLabels} onKeyPress={this.keyPressed} placeholder={"+"}/></li>
+              <Labels labels={this.state.note.note.labels}/>
+            </ul>
           </div>
           <p><input style={inputStyle} type="text" value={this.state.note.note.content} onChange={this.handleChangeContent} placeholder="Take a note..."/></p>
           <div >
@@ -127,6 +163,7 @@ class TooltipControls extends React.Component {
             <FontAwesomeIcon style={{color:"#cc0000", margin:"10px"}} icon={faTrashAlt} />
           </div>
         </div>
+        }
       </div>
     );
   }
