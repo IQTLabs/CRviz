@@ -111,8 +111,8 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "7.4.5",
-    "@babel/plugin-proposal-class-properties": "7.4.4",
+    "@babel/core": "7.5.0",
+    "@babel/plugin-proposal-class-properties": "7.5.0",
     "@babel/preset-react": "7.0.0",
     "@babel/register": "7.4.4",
     "@fortawesome/fontawesome-free": "5.9.0",
