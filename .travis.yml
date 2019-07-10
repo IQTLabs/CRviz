@@ -2,13 +2,14 @@ sudo: false
 
 language: node_js
 node_js:
-- '11'
+- '12'
 
 dist: xenial
 
 before_install:
   - sudo apt-get update
   - sudo apt-get install docker-ce
+  - npm cache clean --force
 
 install:
   - npm install -g codecov
@@ -19,7 +20,7 @@ cache:
   - node_modules
 
 script:
-- npm install --no-optional
+- npm ci --no-optional
 - npm run test
 - codecov
 - npm run build
