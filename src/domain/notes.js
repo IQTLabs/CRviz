@@ -12,14 +12,16 @@ const defaultState = {
       }
     }
   },
+  queuedNoted: null
 };
 
 // ACTIONS
 const addNote = createAction("ADD_NOTE");
+const setNote = createAction("SET_NOTE");
 const removeNote = createAction("REMOVE_NOTE");
 const removeAllNotes = createAction("REMOVE_ALL_NOTES");
 
-const addLabel = createAction("ADD_LABEL");
+//const addLabel = createAction("ADD_LABEL");
 const removeLabel = createAction("REMOVE_LABEL");
 //const removeAllLabels = createAction("REMOVE_ALL_LABELS"); //rope this into removeAllNotes
 
@@ -46,18 +48,18 @@ const reducer = handleActions(
         byId: prunedIds,
         byHash: state.byHash
       }
-    }
+    },
   },
   defaultState
 );
 
 // SELECTORS
-const getNotes = (state) => state.notes;
-const getLabels = (state) => state.notes.notes;
+const getAllNotes = (state) => state.notes.byHash;
+
 
 export default reducer;
 
-export { addNote, removeNote,removeAllNotes, getNotes};
+export { addNote,setNote,removeNote,removeAllNotes, getAllNotes};
 
 /*
 * REFERENCE

@@ -1,5 +1,5 @@
 import React from "react";
-import { addNote, getNotes } from 'domain/notes';
+import { addNote, removeNote, getAllNotes,  } from 'domain/notes';
 
 //Styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -11,26 +11,32 @@ import labelStyle from "./Label.module.css";
 import { connect } from "react-redux";
 import { getPosition, getSelectedDatum } from 'domain/controls';
 
-const initialState = {
-  label:"Labels",
-  height:"200px",
-  width:"300px",
-  position: [200,200],
-  currentLabel:"",
-  note: {
-    id:'',
-    note:{
-      title: '',
-      labels: [],
-      content:""
-    }
-  }
-};
-
 class TooltipControls extends React.Component {
   constructor(props){
     super(props)
-    this.state = initialState;
+    this.state = this.initialState;
+  }
+
+  get initialState(){
+    return {
+      label:"Labels",
+      height:"200px",
+      width:"300px",
+      position: [200,200],
+      currentLabel:"",
+      note: {
+        id:'',
+        note:{
+          title: '',
+          labels: [],
+          content:""
+        }
+      }
+    };
+  }
+
+  resetBuilder() {
+    this.setState(this.initialState);
   }
 
   handleChangeTitle = (event) => {
@@ -55,24 +61,23 @@ class TooltipControls extends React.Component {
       note.id = await this.props.data.CRVIZ._SEARCH_KEY
       await this.setState({note});
 
-      this.props.addNote(this.state.note);
+      await this.props.addNote(this.state.note);
       console.log(this.props.notes)
+      this.resetBuilder()
     } catch(error){
       alert('No search key')
     }
-    /*if(typeof (this.props.data.CRVIZ._SEARCH_KEY) !== 'undefined'){ 
-    }*/
-
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.data !== this.props.data) {
-      if(this.props.data.fieldValue){
-        console.log(this.props.data.fieldValue, this.props.data)
-      }
-      else{
-        console.log(this.props.data);
-      }
+  removeNote = async () => {
+    try {
+      var note = {...this.state.note};
+      note.id = await this.props.data.CRVIZ._SEARCH_KEY;
+      this.props.removeNote(this.state.note);
+      this.resetBuilder();
+      console.log(this.props.notes)
+    } catch(error){
+      alert('No note on search key')
     }
   }
 
@@ -83,6 +88,27 @@ class TooltipControls extends React.Component {
       this.setState({note})
       this.setState({currentLabel:""})
     }
+  }
+
+  componentDidUpdate = (prevProps) => {
+      if (prevProps.data !== this.props.data) {
+        if(this.props.data.fieldValue){
+          console.log(this.props.data.fieldValue, this.props.data)
+        }
+      else{
+        console.log(this.props.data);
+        var note = {...this.state.note}
+        note.id = this.props.data.CRVIZ._SEARCH_KEY
+        if (note.id in this.props.notes){          
+          this.setState({
+            note: this.props.notes[note.id]
+          });
+        }
+        else{
+          this.resetBuilder()
+        }
+      }
+    } 
   }
   
   render() {
@@ -110,10 +136,6 @@ class TooltipControls extends React.Component {
       margin: '0',
       width: 'inherit'
     }
-    const inputStyleTag = {
-      
-    }
-
 
     const Labels = ({labels}) => (
       <>
@@ -158,9 +180,8 @@ class TooltipControls extends React.Component {
           </div>
           <p><input style={inputStyle} type="text" value={this.state.note.note.content} onChange={this.handleChangeContent} placeholder="Take a note..."/></p>
           <div >
-            <FontAwesomeIcon style={{margin:"10px"}} icon={faTags} />
             <FontAwesomeIcon style={{color:"#47cf38", margin:"10px"}} icon={faSave} onClick={this.saveNote}/>
-            <FontAwesomeIcon style={{color:"#cc0000", margin:"10px"}} icon={faTrashAlt} />
+            <FontAwesomeIcon style={{color:"#cc0000", margin:"10px"}} icon={faTrashAlt} onClick={this.removeNote} />
           </div>
         </div>
         }
@@ -172,12 +193,13 @@ const mapStateToProps = (state, ownProps) => {
   return {
     position: getPosition(state),
     data: getSelectedDatum(state),
-    notes: getNotes(state)
+    notes: getAllNotes(state),
   };
 };
 
 const mapDispatchToProps = {
   addNote,
+  removeNote,
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(TooltipControls);
