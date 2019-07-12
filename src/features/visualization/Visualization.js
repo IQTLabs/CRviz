@@ -24,6 +24,7 @@ class Visualization extends React.PureComponent {
   }
 
   onClick = () => {
+    //Sends d3 position to redux store using the `setPosition()` function in controls.js
     const el = ReactDOM.findDOMNode(this);
     select(el).on('click', function mouseMoveHandler() {
       position = mouse(this)
@@ -32,7 +33,7 @@ class Visualization extends React.PureComponent {
   }
 
   getData = (data) => {
-    this.props.setSelectedDatum(data);
+    this.props.setSelectedDatum(data); //set redux store datum
   }
 
   updateFromProps() {
@@ -44,7 +45,7 @@ class Visualization extends React.PureComponent {
       data: this.props.dataset || [],
       queryString: this.props.queryString,
       position: this.props.position,
-      sendData: this.getData
+      sendData: this.getData //create and pass parent function prop to child (d3-viz.js) to retrieve datum 
     });
   }
 

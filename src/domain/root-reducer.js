@@ -4,7 +4,7 @@ import dataset from "./dataset";
 import controls from "./controls";
 import error from "./error";
 import filter from "./filter";
-import notetaking from "./notetaking";
+import notes from "./notes";
 
 export default combineReducers({
   dataset,
@@ -12,5 +12,5 @@ export default combineReducers({
   controls,
   error,
   filter,
-  notetaking
+  notes
 });
