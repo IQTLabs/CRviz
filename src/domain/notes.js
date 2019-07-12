@@ -1,30 +1,16 @@
 import { createAction, handleActions } from "redux-actions";
 
 const defaultState = {
-  byId:["1"],
+  byId:[],
   byHash: {
-    "1":  {
-      id:"1",
-      note: { 
-        title: 'item 1',
-        labels: ['weird','red','interesting'],
-        content:"I'm a note!"
-      }
-    }
-  },
-  queuedNoted: null
+  }
 };
 
 // ACTIONS
 const addNote = createAction("ADD_NOTE");
 const setNote = createAction("SET_NOTE");
 const removeNote = createAction("REMOVE_NOTE");
-const removeAllNotes = createAction("REMOVE_ALL_NOTES");
-
-//const addLabel = createAction("ADD_LABEL");
-const removeLabel = createAction("REMOVE_LABEL");
-//const removeAllLabels = createAction("REMOVE_ALL_LABELS"); //rope this into removeAllNotes
-
+const replaceAllNotes = createAction("REPLACE_ALL_NOTES");
 
 // REDUCERS
 const reducer = handleActions(
@@ -40,13 +26,20 @@ const reducer = handleActions(
     },
     [removeNote]: (state, { payload }) => {
       const prunedIds = state.byId.filter(item => {
-        return item !== payload.id // return all the items not matching the action.id
+        return item !== payload.id 
       })
-      delete state.byHash[payload.id] // delete the hash associated with the action.id
+      delete state.byHash[payload.id] 
       
       return {
         byId: prunedIds,
         byHash: state.byHash
+      }
+    },
+
+    [replaceAllNotes]: (state, { payload }) => {
+      state = payload
+      return {
+        state
       }
     },
   },
@@ -55,13 +48,9 @@ const reducer = handleActions(
 
 // SELECTORS
 const getAllNotes = (state) => state.notes.byHash;
+const getNotesStore = (state) => state.notes;
 
 
 export default reducer;
 
-export { addNote,setNote,removeNote,removeAllNotes, getAllNotes};
-
-/*
-* REFERENCE
-* https://hackernoon.com/redux-patterns-add-edit-remove-objects-in-an-array-6ee70cab2456
-*/
+export { addNote,setNote,removeNote,replaceAllNotes, getAllNotes, getNotesStore};

@@ -189,7 +189,7 @@ class TooltipControls extends React.Component {
     );
   }
 }
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
     position: getPosition(state),
     data: getSelectedDatum(state),
