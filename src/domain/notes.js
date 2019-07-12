@@ -8,9 +8,8 @@ const defaultState = {
 
 // ACTIONS
 const addNote = createAction("ADD_NOTE");
-const setNote = createAction("SET_NOTE");
+const setNotes = createAction("SET_NOTE");
 const removeNote = createAction("REMOVE_NOTE");
-const replaceAllNotes = createAction("REPLACE_ALL_NOTES");
 
 // REDUCERS
 const reducer = handleActions(
@@ -36,10 +35,13 @@ const reducer = handleActions(
       }
     },
 
-    [replaceAllNotes]: (state, { payload }) => {
-      state = payload
+    [setNotes]: (state, { payload }) => {
+      const byid = payload.byId || state.byId;
+      const byhash = payload.byHash || state.byHash;
       return {
-        state
+        ...state,
+        byId: byid,
+        byHash: byhash,
       }
     },
   },
@@ -53,4 +55,4 @@ const getNotesStore = (state) => state.notes;
 
 export default reducer;
 
-export { addNote,setNote,removeNote,replaceAllNotes, getAllNotes, getNotesStore};
+export { addNote,setNotes,removeNote, getAllNotes, getNotesStore};

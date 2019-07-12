@@ -10,6 +10,7 @@ import { buildIndices } from './index-dataset-epic';
 import { setError } from "domain/error"
 import { setDatasets, setKeyFields, setIgnoredFields, configureDataset } from "domain/dataset";
 import { setControls, showBusy } from "domain/controls";
+import { setNotes } from "domain/notes";
 
 const loadDataset = createAction("LOAD_DATASET");
 
@@ -25,6 +26,7 @@ const loadDatasetEpic = (action$, store) => {
             ,setKeyFields(payload.keyFields)
             ,setIgnoredFields(payload.ignoredFields)
             ,setControls(payload.controls)
+            ,setNotes(payload.notes)
             ,buildIndices(payload)
             ,showBusy(false)
           )
@@ -105,8 +107,10 @@ const formatPayload = async (data) => {
   const keyFields = content.keyFields || null;
   const ignoredFields = content.ignoredFields || null;
   const controls = content.controls || {};
+  const notes = content.notes || {};
   const includeData = ('includeData' in data) ? data.includeData : true;
   const includeControls = ('includeControls' in data) ? data.includeControls : false;
+  const includeNotes = ('includeNotes' in data) ? data.includeNotes : false;
 
   var final = {};
 
@@ -143,7 +147,8 @@ const formatPayload = async (data) => {
           'datasets': includeData ? final : {},
           'keyFields': includeData ? keyFields : [],
           'ignoredFields': includeData ? ignoredFields : [],
-          'controls': includeControls ? controls : {}
+          'controls': includeControls ? controls : {},
+          'notes': includeNotes ? notes : {}
         };
   return data;
 };
