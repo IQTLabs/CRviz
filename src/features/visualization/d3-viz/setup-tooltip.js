@@ -1,5 +1,10 @@
-import { map, join, path } from "ramda";
-import { select, event as d3Event } from "d3-selection";
+/*
+* REFACTOR 
+* Effectively remove this Tooltip
+*
+*/
+//import { map, join, path } from "ramda";
+//import { select } from "d3-selection";
 
 
 const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
@@ -10,7 +15,7 @@ const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
     .style("top", "0px")
     .style("left", "0px");
 
-  const boundingRect = tooltip.node().getBoundingClientRect();
+  //const boundingRect = tooltip.node().getBoundingClientRect();
 
   //const offsetLeft = -boundingRect.left + 5;
   //const offsetTop = -boundingRect.top + 5;
@@ -25,7 +30,7 @@ const setupTooltip = ({ nodeRoot, tooltip, fields }) => {
   });*/
 
 };
-
+/*
 const showTooltip = (event, fields, offsetTop, offsetLeft, tooltip) => {
   const target = select(event.target);
   const datum = target.datum();
@@ -64,7 +69,7 @@ const content = (datum, fields) => {
     return null;
   }
 };
-
+*/
 
 
 export default setupTooltip;

@@ -3,7 +3,7 @@ import { addNote, removeNote, getAllNotes,  } from 'domain/notes';
 
 //Styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTags, faTrashAlt, faSave } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt, faSave } from '@fortawesome/free-solid-svg-icons'
 import labelStyle from "./Label.module.css";
 
 
