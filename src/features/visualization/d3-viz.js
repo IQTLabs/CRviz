@@ -219,7 +219,10 @@ function d3Viz(rootNode) {
 
     nodeRoot.on("click.select", () => {
       const datum = select(d3Event.target).datum();
-      if(datum.data !== undefined) {props.sendData(datum.data)} //Used to send data back to parent component Visualizations.js
+      if(datum.data !== undefined) {
+        //Used to send data back to parent component Visualizations.js
+        props.sendData(datum.data);
+      };
       let zoomToNode = datum;
       if(datum.height === 0 && datum.parent){
         zoomToNode = datum.parent;
@@ -290,4 +293,4 @@ const findAncestor = (node, hierarchy) => {
   return res;
 };
 
-export default d3Viz
+export default d3Viz;
