@@ -146,18 +146,18 @@ class TooltipControls extends React.Component {
       <div style={style}>
         {this.props.data && !this.props.data.fieldValue  &&
             <div>
-              <h4><b>UID: </b>{this.props.data.uid} </h4>
-              <h4><b>MAC: </b>{this.props.data.mac} </h4>
-              <h4><b>rDNS_host: </b>{this.props.data.rDNS_host} </h4>
-              <h4><b>Subnet: </b>{this.props.data.subnet} </h4>
-              <h4><b>IP: </b>{this.props.data.IP} </h4>
-              <h4><b>Record Source: </b>{this.props.data.record.source} </h4>
-              <h4><b>Record Timestamp: </b>{this.props.data.record.timestamp} </h4>
-              <h4><b>Role: </b>{this.props.data.role.role} </h4>
-              <h4><b>rDNS_domain: </b>{this.props.data.rDNS_domain} </h4>
-              <h4><b>OS: </b>{this.props.data.os.os} </h4>
-              <h4><b>OS Confidence: </b>{this.props.data.os.confidence} </h4>
-              <h4><b>Vendor: </b>{this.props.data.vendor} </h4>
+              <p><b>UID: </b>{this.props.data.uid} </p>
+              <p><b>MAC: </b>{this.props.data.mac} </p>
+              <p><b>rDNS_host: </b>{this.props.data.rDNS_host} </p>
+              <p><b>Subnet: </b>{this.props.data.subnet} </p>
+              <p><b>IP: </b>{this.props.data.IP} </p>
+              <p><b>Record Source: </b>{this.props.data.record.source} </p>
+              <p><b>Record Timestamp: </b>{this.props.data.record.timestamp} </p>
+              <p><b>Role: </b>{this.props.data.role.role} </p>
+              <p><b>rDNS_domain: </b>{this.props.data.rDNS_domain} </p>
+              <p><b>OS: </b>{this.props.data.os.os} </p>
+              <p><b>OS Confidence: </b>{this.props.data.os.confidence} </p>
+              <p><b>Vendor: </b>{this.props.data.vendor} </p>
             </div>
         }
         {this.props.data && this.props.data.fieldValue &&
