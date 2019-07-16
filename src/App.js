@@ -194,7 +194,7 @@ class App extends Component {
     const notes = this.state.options.notes && this.props.notes;
     const keyFields = this.state.options.data && this.props.keyFields;
     const ignoredFields = this.state.options.data && this.props.ignoredFields;
-    const exportData = getDataToExport(datasets, keyFields, ignoredFields, controls,notes)
+    const exportData = getDataToExport(datasets, keyFields, ignoredFields, controls,notes);
     const urlObject = window.URL || window.webkitURL || window;
     const json = JSON.stringify(exportData, null, 2);
     const blob = new Blob([json], {'type': "application/json"});

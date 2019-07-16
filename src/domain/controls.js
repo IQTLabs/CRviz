@@ -23,13 +23,13 @@ const useDarkTheme = createAction("USE_DARK_THEME");
 const colorBy = createAction("COLOR_BY");
 const showBusy = createAction("SHOW_BUSY");
 const setPosition = createAction("POSITION");
-const setSelectedDatum = createAction("SETSELECTEDDATUM")
+const setSelectedDatum = createAction("SETSELECTEDDATUM");
 
 // REDUCERS
 
 const reducer = handleActions(
   {
-    [setControls]: (state, { payload }) =>{
+    [setControls]: (state, { payload }) => {
       const hierarchyConfig = payload.hierarchyConfig || state.hierarchyConfig;
       const shouldShowNodes = ('shouldShowNodes' in payload) ? !!payload.shouldShowNodes : state.shouldShowNodes;
       const darkTheme = ('darkTheme' in payload) ? !!payload.darkTheme : state.darkTheme;
