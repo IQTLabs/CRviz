@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.6](https://github.com/CyberReboot/CRviz/compare/v0.3.5...v0.3.6) (2019-07-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency d3 to v5.9.7 ([8287a54](https://github.com/CyberReboot/CRviz/commit/8287a54))
+* **deps:** update dependency react-compound-slider to v2.1.0 ([41d1735](https://github.com/CyberReboot/CRviz/commit/41d1735))
+* **deps:** update dependency react-modal to v3.8.2 ([b7b7224](https://github.com/CyberReboot/CRviz/commit/b7b7224))
+
+
+
 ### [0.3.5](https://github.com/CyberReboot/CRviz/compare/v0.3.4...v0.3.5) (2019-06-27)
 
 

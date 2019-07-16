@@ -1,6 +1,6 @@
 {
   "name": "CRviz",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome": "1.1.8",
@@ -29,21 +29,21 @@
     "rc": "1.2.8",
     "react": "16.8.6",
     "react-beautiful-dnd": "11.0.4",
-    "react-compound-slider": "2.1.0",
+    "react-compound-slider": "2.2.0",
     "react-dom": "16.8.6",
     "react-modal": "3.8.2",
     "react-portal-tooltip": "2.4.7",
     "react-redux": "7.1.0",
     "react-scripts": "3.0.1",
     "react-spinners": "0.5.8",
-    "redux": "4.0.2",
+    "redux": "4.0.4",
     "redux-actions": "2.6.5",
     "redux-mock-store": "1.5.3",
     "redux-observable": "1.1.0",
     "request": "2.88.0",
     "rxjs": "6.5.2",
     "rxjs-compat": "6.5.2",
-    "snyk": "1.192.4",
+    "snyk": "1.193.0",
     "tar-pack": "3.4.1",
     "uuid": "3.3.2"
   },
@@ -111,7 +111,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "7.5.0",
+    "@babel/core": "7.5.4",
     "@babel/plugin-proposal-class-properties": "7.5.0",
     "@babel/preset-react": "7.0.0",
     "@babel/register": "7.4.4",
