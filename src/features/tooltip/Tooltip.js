@@ -1,5 +1,5 @@
 import React from "react";
-import { addNote, removeNote, getNotesIndexedByHash,  } from 'domain/notes';
+import { addNote, removeNote, getNotesIndexedByHash } from 'domain/notes';
 
 //Styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

@@ -224,6 +224,7 @@ function d3Viz(rootNode) {
         props.sendData(datum.data);
       };
       let zoomToNode = datum;
+      
       if(datum.height === 0 && datum.parent){
         zoomToNode = datum.parent;
       }
