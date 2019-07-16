@@ -1,5 +1,5 @@
 import React from "react";
-import { addNote, removeNote, getAllNotes,  } from 'domain/notes';
+import { addNote, removeNote, getNotesIndexedByHash,  } from 'domain/notes';
 
 //Styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -62,7 +62,6 @@ class TooltipControls extends React.Component {
       await this.setState({note});
 
       await this.props.addNote(this.state.note);
-      console.log(this.props.notes)
       this.resetBuilder()
     } catch(error){
       alert('No search key')
@@ -75,7 +74,6 @@ class TooltipControls extends React.Component {
       note.id = await this.props.data.CRVIZ._SEARCH_KEY;
       this.props.removeNote(this.state.note);
       this.resetBuilder();
-      console.log(this.props.notes)
     } catch(error){
       alert('No note on search key')
     }
@@ -93,10 +91,8 @@ class TooltipControls extends React.Component {
   componentDidUpdate = (prevProps) => {
       if (prevProps.data !== this.props.data) {
         if(this.props.data.fieldValue){
-          console.log(this.props.data.fieldValue, this.props.data)
         }
       else{
-        console.log(this.props.data);
         var note = {...this.state.note}
         note.id = this.props.data.CRVIZ._SEARCH_KEY
         if (note.id in this.props.notes){          
@@ -169,7 +165,7 @@ class TooltipControls extends React.Component {
             <h3>{this.props.data.fieldValue} </h3>
           </div>
         }
-        {//typeof (this.props.data.CRVIZ._SEARCH_KEY) !== 'undefined' &&
+        {
         <div>
           <div>
             <b><h1><input style={inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
@@ -193,7 +189,7 @@ const mapStateToProps = (state) => {
   return {
     position: getPosition(state),
     data: getSelectedDatum(state),
-    notes: getAllNotes(state),
+    notes: getNotesIndexedByHash(state),
   };
 };
 

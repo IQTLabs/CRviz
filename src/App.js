@@ -17,7 +17,7 @@ import {
   setHierarchyConfig, showNodes, colorBy, selectControls, setStartDataset, setEndDataset,
   showBusy
 } from 'domain/controls';
-import { getNotesStore } from "./domain/notes";
+import { getAllNotes } from "./domain/notes";
 import { getError, clearError } from "domain/error";
 import { removeSearchIndex } from "epics/index-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
@@ -194,7 +194,7 @@ class App extends Component {
     const notes = this.state.options.notes && this.props.notes;
     const keyFields = this.state.options.data && this.props.keyFields;
     const ignoredFields = this.state.options.data && this.props.ignoredFields;
-    const exportData = getDataToExport(datasets, keyFields, ignoredFields, controls,notes);
+    const exportData = getDataToExport(datasets, keyFields, ignoredFields, controls,notes)
     const urlObject = window.URL || window.webkitURL || window;
     const json = JSON.stringify(exportData, null, 2);
     const blob = new Blob([json], {'type': "application/json"});
@@ -540,7 +540,7 @@ const mapStateToProps = state => {
     endUuid: controls.end,
     fullDatasets: datasets,
     controls: controls,
-    notes: getNotesStore(state),
+    notes: getAllNotes(state),
     keyFields: getKeyFields(state),
     ignoredFields: getIgnoredFields(state),
     shouldShowBusy: controls.showBusy,

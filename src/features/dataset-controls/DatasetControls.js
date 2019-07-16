@@ -18,7 +18,7 @@ import {
   setEndDataset, showBusy
 } from "domain/controls";
 
-import { getNotesStore } from 'domain/notes';
+import { getAllNotes } from 'domain/notes';
 
 import { setError } from "domain/error"
 import { 
@@ -530,7 +530,7 @@ const mapStateToProps = (state, ownProps) => {
     controls: selectControls(state),
     keyFields: getKeyFields(state),
     ignoredFields: getIgnoredFields(state),
-    notes: getNotesStore(state)
+    notes: getAllNotes(state)
   };
 }
 

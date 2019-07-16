@@ -49,10 +49,10 @@ const reducer = handleActions(
 );
 
 // SELECTORS
-const getAllNotes = (state) => state.notes.byHash;
-const getNotesStore = (state) => state.notes;
+const getNotesIndexedByHash = (state) => state.notes.byHash;
+const getAllNotes = (state) => state.notes;
 
 
 export default reducer;
 
-export { addNote,setNotes,removeNote, getAllNotes, getNotesStore};
+export { addNote,setNotes,removeNote, getNotesIndexedByHash, getAllNotes};
