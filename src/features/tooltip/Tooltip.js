@@ -14,6 +14,10 @@ class TooltipControls extends React.Component {
   constructor(props){
     super(props)
     this.state = this.initialState;
+    /*this.state = {
+      ...this.state, 
+      showNote:false
+    }*/
   }
 
   get initialState(){
@@ -23,7 +27,6 @@ class TooltipControls extends React.Component {
       width:"300px",
       position: [200,200],
       currentLabel:"",
-      showNote: false,
       note: {
         id:'',
         note:{
@@ -68,7 +71,7 @@ class TooltipControls extends React.Component {
       await this.setState({note});
 
       await this.props.addNote(this.state.note);
-      this.resetBuilder()
+      //this.resetBuilder()
     } catch(error){
       alert('No search key')
     }
@@ -95,20 +98,16 @@ class TooltipControls extends React.Component {
   }
 
   componentDidUpdate = (prevProps) => {
-      if (prevProps.data !== this.props.data) {
-        if(this.props.data.fieldValue){
-        }
+    if (prevProps.data !== this.props.data) {
+      var note = {...this.state.note}
+      note.id = this.props.data.CRVIZ._SEARCH_KEY
+      if (note.id in this.props.notes){          
+        this.setState({
+          note: this.props.notes[note.id]
+        }); 
+      }
       else{
-        var note = {...this.state.note}
-        note.id = this.props.data.CRVIZ._SEARCH_KEY
-        if (note.id in this.props.notes){          
-          this.setState({
-            note: this.props.notes[note.id]
-          });
-        }
-        else{
-          this.resetBuilder()
-        }
+        this.resetBuilder()
       }
     } 
   }
