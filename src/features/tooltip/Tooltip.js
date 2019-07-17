@@ -2,10 +2,9 @@ import React from "react";
 import { addNote, removeNote, getNotesIndexedByHash } from 'domain/notes';
 
 //Styling
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faSave } from '@fortawesome/free-solid-svg-icons'
-import labelStyle from "./Label.module.css";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt, faSave, faAngleDoubleDown, faAngleDoubleUp } from '@fortawesome/free-solid-svg-icons';
+import appStyle from '../../App.module.css';
 
 ///Redux
 import { connect } from "react-redux";
@@ -24,6 +23,7 @@ class TooltipControls extends React.Component {
       width:"300px",
       position: [200,200],
       currentLabel:"",
+      showNote: false,
       note: {
         id:'',
         note:{
@@ -53,6 +53,12 @@ class TooltipControls extends React.Component {
 
   handleLabels = (event) => {
     this.setState({currentLabel: event.target.value});
+  }
+
+  toggleShowNote = () =>{
+    this.setState({
+      showNote: !this.state.showNote,
+    });
   }
   
   saveNote = async () => {
@@ -111,77 +117,73 @@ class TooltipControls extends React.Component {
     const style = {
       display : 'block"',
       position: "fixed",
-      //top: `${this.props.position[0]}px`,
-      //left: `${this.props.position[1]}px`,
       top: `${10}px`,
       right: `${10}px`,
       boxShadow: `0 4px 8px 0 rgba(0,0,0,0.2)`,
       transition: `0.3s`,
       borderRadius: `10px`,
       padding: `5px`,
-      background: `white`,      
+      background: `white`,
+      width:"290px"     
     }
 
     const inputStyle = {
-      backgroundColor:'inherit',
-      border: 'none',
+      background: 'white',
       display: 'inline',
       fontFamily: 'inherit',
       fontSize: 'inherit',
-      padding: '0',
-      margin: '0',
-      width: 'inherit'
+      padding: '0.5rem 0.75rem',
+      width: '80%'
     }
 
-    const Labels = ({labels}) => (
-      <>
-        {labels.map(label => (
-          <div className={labelStyle.tag} key={label}>{label}</div>
-        ))}
-      </>
-    );  
-
+    const showNote = this.state.showNote;
 
     return (
-      <div style={style}>
-        {this.props.data && !this.props.data.fieldValue  &&
+      <>{this.props.data &&
+        <div style={style}>
+          {this.props.data && !this.props.data.fieldValue  &&
+              <div>
+                <p><b>UID: </b>{this.props.data.uid} </p>
+                <p><b>MAC: </b>{this.props.data.mac} </p>
+                <p><b>rDNS_host: </b>{this.props.data.rDNS_host} </p>
+                <p><b>Subnet: </b>{this.props.data.subnet} </p>
+                <p><b>IP: </b>{this.props.data.IP} </p>
+                <p><b>Record Source: </b>{this.props.data.record.source} </p>
+                <p><b>Record Timestamp: </b>{this.props.data.record.timestamp} </p>
+                <p><b>Role: </b>{this.props.data.role.role} </p>
+                <p><b>rDNS_domain: </b>{this.props.data.rDNS_domain} </p>
+                <p><b>OS: </b>{this.props.data.os.os} </p>
+                <p><b>OS Confidence: </b>{this.props.data.os.confidence} </p>
+                <p><b>Vendor: </b>{this.props.data.vendor} </p>
+              </div>
+          }
+          {this.props.data && this.props.data.fieldValue &&
             <div>
-              <p><b>UID: </b>{this.props.data.uid} </p>
-              <p><b>MAC: </b>{this.props.data.mac} </p>
-              <p><b>rDNS_host: </b>{this.props.data.rDNS_host} </p>
-              <p><b>Subnet: </b>{this.props.data.subnet} </p>
-              <p><b>IP: </b>{this.props.data.IP} </p>
-              <p><b>Record Source: </b>{this.props.data.record.source} </p>
-              <p><b>Record Timestamp: </b>{this.props.data.record.timestamp} </p>
-              <p><b>Role: </b>{this.props.data.role.role} </p>
-              <p><b>rDNS_domain: </b>{this.props.data.rDNS_domain} </p>
-              <p><b>OS: </b>{this.props.data.os.os} </p>
-              <p><b>OS Confidence: </b>{this.props.data.os.confidence} </p>
-              <p><b>Vendor: </b>{this.props.data.vendor} </p>
+              <h3>{this.props.data.fieldValue} </h3>
             </div>
-        }
-        {this.props.data && this.props.data.fieldValue &&
+          }
+          <p className={appStyle.accordionHeader} onClick={this.toggleShowNote}>
+            Notes {!showNote && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showNote && <FontAwesomeIcon  onClick={this.toggleShowNote} icon={faAngleDoubleUp} />}
+          </p>
+          
+          {showNote == true &&
           <div>
-            <h3>{this.props.data.fieldValue} </h3>
+            <div>
+              <b><h1><input style={inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
+            </div>
+            <p><textarea style={inputStyle} type="text" value={this.state.note.note.content} onChange={this.handleChangeContent} placeholder="Take a note..."/></p>
+            <div style={{textAlign:"center"}}>
+              <label className="button circular">
+                <FontAwesomeIcon style={{margin:"2.5px"}} icon={faSave} onClick={this.saveNote}/>
+              </label>
+              <label className="button circular">
+                <FontAwesomeIcon style={{margin:"2.5px"}} icon={faTrashAlt} onClick={this.removeNote} />
+              </label>
+            </div>
           </div>
-        }
-        {
-        <div>
-          <div>
-            <b><h1><input style={inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
-            <ul className={labelStyle.tags}>
-              <li className={labelStyle.tag}><input className={labelStyle.tagInput} type="text" type="text" value={this.state.currentLabel} onChange={this.handleLabels} onKeyPress={this.keyPressed} placeholder={"+"}/></li>
-              <Labels labels={this.state.note.note.labels}/>
-            </ul>
-          </div>
-          <p><input style={inputStyle} type="text" value={this.state.note.note.content} onChange={this.handleChangeContent} placeholder="Take a note..."/></p>
-          <div >
-            <FontAwesomeIcon style={{color:"#47cf38", margin:"10px"}} icon={faSave} onClick={this.saveNote}/>
-            <FontAwesomeIcon style={{color:"#cc0000", margin:"10px"}} icon={faTrashAlt} onClick={this.removeNote} />
-          </div>
-        </div>
-        }
-      </div>
+          }
+        </div>}
+      </>
     );
   }
 }
