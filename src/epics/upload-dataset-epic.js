@@ -20,7 +20,8 @@ const uploadDatasetEpic = (action$, store) => {
         const file = action.payload.file;
         const includeData = ('includeData' in action.payload) ? action.payload.includeData : true;
         const includeControls = ('includeControls' in action.payload) ? action.payload.includeControls: false; 
-        return fromReader(owner, name, shortName, includeData, includeControls, file).pipe(
+        const includeNotes = ('includeNotes' in action.payload) ? action.payload.includeNotes: false; 
+        return fromReader(owner, name, shortName, includeData, includeControls, includeNotes ,file).pipe(
             debounceTime(500)
             ,map(CSVconvert)
             ,map(fromJson)
@@ -43,14 +44,14 @@ const uploadDatasetEpic = (action$, store) => {
  * Little function to create an observable to read local files.
  * RxJS DOM v5 doesn't have it!?
  */
-const fromReader = (owner, name, shortName, includeData, includeControls, file) => {
+const fromReader = (owner, name, shortName, includeData, includeControls, includeNotes, file) => {
   return Observable.create((observer) => {
     const source = file.name;
     const reader = new window.FileReader();
 
     reader.addEventListener('load', () => {
       observer.next({ 'owner': owner, 'name': name, 'shortName': shortName, 'source': source, 'includeData':includeData,
-                      'includeControls': includeControls, 'file': reader.result });
+                      'includeControls': includeControls,'includeNotes':includeNotes, 'file': reader.result });
       observer.complete();
     });
 
@@ -71,6 +72,7 @@ const fromJson = (payload) =>{
   const content = JSON.parse(payload.file);
   const includeData = ('includeData' in payload) ? payload.includeData : true;
   const includeControls = ('includeControls' in payload) ? payload.includeControls: false;
+  const includeNotes = ('includeNotes' in payload) ? payload.includeNotes: false;
 
   return {
     'owner': owner,
@@ -80,6 +82,7 @@ const fromJson = (payload) =>{
     'content': content, 
     'includeData': includeData,
     'includeControls': includeControls,
+    'includeNotes': includeNotes,
   };
 }
 

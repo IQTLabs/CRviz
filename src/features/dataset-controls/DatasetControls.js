@@ -16,7 +16,9 @@ import { removeSearchIndex } from "epics/index-dataset-epic";
 import {
   showNodes, setHierarchyConfig, colorBy, selectControls, setStartDataset,
   setEndDataset, showBusy
-} from "domain/controls"
+} from "domain/controls";
+
+import { getAllNotes } from 'domain/notes';
 
 import { setError } from "domain/error"
 import { 
@@ -238,8 +240,9 @@ class DatasetControls extends React.Component {
     const controls = this.props.controls;
     const keyFields = this.props.keyFields;
     const ignoredFields = this.props.ignoredFields;
+    const notes = this.props.notes;
     const urlObject = window.URL || window.webkitURL || window;
-    const json = JSON.stringify(getDataToExport(datasets, keyFields, ignoredFields, controls), null, 2);
+    const json = JSON.stringify(getDataToExport(datasets, keyFields, ignoredFields, controls, notes), null, 2);
     const blob = new Blob([json], {'type': "application/json"});
     const url = urlObject.createObjectURL(blob);;
     return url;
@@ -526,7 +529,8 @@ const mapStateToProps = (state, ownProps) => {
     fullDatasets: fullDatasets,
     controls: selectControls(state),
     keyFields: getKeyFields(state),
-    ignoredFields: getIgnoredFields(state)
+    ignoredFields: getIgnoredFields(state),
+    notes: getAllNotes(state)
   };
 }
 

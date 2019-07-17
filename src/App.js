@@ -17,6 +17,7 @@ import {
   setHierarchyConfig, showNodes, colorBy, selectControls, setStartDataset, setEndDataset,
   showBusy
 } from 'domain/controls';
+import { getAllNotes } from "./domain/notes";
 import { getError, clearError } from "domain/error";
 import { removeSearchIndex } from "epics/index-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
@@ -30,11 +31,13 @@ import Visualization from 'features/visualization/Visualization';
 import DatasetControls from 'features/dataset-controls/DatasetControls';
 import DatasetSlider from 'features/dataset-controls/DatasetSlider';
 import DatasetUpload from 'features/dataset-controls/DatasetUpload';
-import { getDataToExport } from "features/dataset-controls/export"
+import { getDataToExport } from "features/dataset-controls/export";
+import TooltipControls from "features/tooltip/Tooltip";
 
 import style from './App.module.css';
 
 import datasets from './datasets';
+
 
 const uuidv4 = require('uuid/v4');
 
@@ -43,10 +46,12 @@ const IMPORT = "import";
 const EXPORT = "export";
 const DATA = "data";
 const CONTROLS = "controls";
+const NOTES = "notes";
 const defaultOptions = {
       action: "",
       data: true,
-      controls: true
+      controls: true,
+      notes: true
     }
 class App extends Component {
 
@@ -59,10 +64,11 @@ class App extends Component {
     startUuid: null,
     endUuid: null,
     showOptions: false,
-    options:{
+    options: {
       action: "",
       data: true,
-      controls: true
+      controls: true,
+      notes: true,
     },
     selectedFile: null,
     exportName: "dataset.json",
@@ -169,6 +175,7 @@ class App extends Component {
           'file': this.state.selectedFile,
           'includeData': this.state.options.data,
           'includeControls': this.state.options.controls,
+          'includeNotes': this.state.options.notes,
         })
       }
       this.setState({showOptions: false })
@@ -184,9 +191,10 @@ class App extends Component {
   getDownloadUrl = () => {
     const datasets = this.state.options.data && this.props.fullDatasets;
     const controls = this.state.options.controls && this.props.controls;
+    const notes = this.state.options.notes && this.props.notes;
     const keyFields = this.state.options.data && this.props.keyFields;
     const ignoredFields = this.state.options.data && this.props.ignoredFields;
-    const exportData = getDataToExport(datasets, keyFields, ignoredFields, controls)
+    const exportData = getDataToExport(datasets, keyFields, ignoredFields, controls,notes)
     const urlObject = window.URL || window.webkitURL || window;
     const json = JSON.stringify(exportData, null, 2);
     const blob = new Blob([json], {'type': "application/json"});
@@ -460,6 +468,19 @@ class App extends Component {
                   </div>
                   <label >Controls</label>
                 </div>
+                <div className={`${style.checkboxContainer} input-group`}>
+                  <div className={ style.switch }>
+                    <input
+                      type="checkbox"
+                      id="notes-check"
+                      checked={options.notes}
+                      onChange={(evt) => this.setOptions(NOTES, evt.target.checked)}
+                    />
+                    <label htmlFor="notes-check" className={ style.switchLabel }>
+                    </label>
+                  </div>
+                  <label>Notes</label>
+                </div>
               </div>
               <div>
                 <span className={ style.centerSpan }>
@@ -492,6 +513,11 @@ class App extends Component {
             loading={this.props.shouldShowBusy}
           />
         </div>
+  
+          <div >
+            <TooltipControls />
+          </div>
+  
       </div>
     );
   }
@@ -514,6 +540,7 @@ const mapStateToProps = state => {
     endUuid: controls.end,
     fullDatasets: datasets,
     controls: controls,
+    notes: getAllNotes(state),
     keyFields: getKeyFields(state),
     ignoredFields: getIgnoredFields(state),
     shouldShowBusy: controls.showBusy,
