@@ -4,10 +4,9 @@ import {
   setNotes,
   removeNote, 
   getAllNotes, 
-  getNotesIndexedByHash
 } from "./notes";
 import { combineReducers } from "redux";
-import { expect, assert } from "chai"
+import { expect } from "chai"
 
 const reducer = combineReducers({ notes });
 
@@ -66,7 +65,7 @@ describe("Notes reducer", () => {
 
       const remove_action = removeNote(note.id);
 
-      var result = reducer({}, add_action);
+      reducer({}, add_action);
       var result = reducer({}, remove_action);
 
       expect(getAllNotes(result)).to.deep.equal(emptyState);

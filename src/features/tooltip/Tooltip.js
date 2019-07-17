@@ -166,7 +166,7 @@ class TooltipControls extends React.Component {
             Notes {!showNote && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showNote && <FontAwesomeIcon  onClick={this.toggleShowNote} icon={faAngleDoubleUp} />}
           </p>
           
-          {showNote == true &&
+          {showNote === true &&
           <div>
             <div>
               <b><h1><input style={inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
