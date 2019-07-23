@@ -1,10 +1,9 @@
   
 .shown {
     transition: 1s;
-    line-height: 2.5rem;
-    text-align: center;
+    line-height: 2rem;
+    border-radius: 10px;
     display: block;
-    font-weight: bold;
 }
   
 :global(.darkTheme) .shown {
@@ -12,13 +11,14 @@
 }
   
 .hidden {
+    transition: all 0.1;
     margin-left: -40px;
-    margin-top: 0%;
     padding-right: 40px;
+    padding-left: 10px;
     transition: 1s;
-    display : block;
-    position: fixed;
-    line-height: 2.5rem;
+    line-height: 2rem;
+    border-radius: 10px;
+    display: block;
     background-color: white !important;
     border-radius: 10px;
     box-shadow: 4px 0px 0px 0px rgba(0,0,0,0.2)

@@ -165,8 +165,8 @@ class TooltipControls extends React.Component {
         <div style={ this.state.show ? style.show : style.hide }>
           {this.props.data && !this.props.data.fieldValue  &&
             <>
-              <p >
-                  {!this.state.show && <div className={tooltipStyle.hidden}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleLeft} /> </div>}{this.state.show && <FontAwesomeIcon  className={tooltipStyle.shown} onClick={this.handleShowHide} icon={faAngleDoubleRight} />}
+              <p>
+                {!this.state.show && <div className={tooltipStyle.hidden}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleLeft} /> </div>}{this.state.show && <div className={tooltipStyle.shown}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleRight} /></div>}
               </p>
               <div>
                 <p><b>UID: </b>{this.props.data.uid} </p>
