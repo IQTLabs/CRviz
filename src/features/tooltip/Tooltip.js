@@ -15,10 +15,6 @@ class TooltipControls extends React.Component {
   constructor(props){
     super(props)
     this.state = this.initialState;
-    /*this.state = {
-      ...this.state, 
-      showNote:false
-    }*/
   }
 
   get initialState(){
