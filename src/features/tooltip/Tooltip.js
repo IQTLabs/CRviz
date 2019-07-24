@@ -28,7 +28,6 @@ class TooltipControls extends React.Component {
       width:"300px",
       position: [200,200],
       currentLabel:"",
-      //show: true,
       note: {
         id:'',
         note:{
@@ -190,15 +189,15 @@ class TooltipControls extends React.Component {
               <h3>{this.props.data.fieldValue} </h3>
             </div>
           }
-          <p className={appStyle.accordionHeader} onClick={this.toggleShowNote}>
-            Notes {!showNote && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showNote && <FontAwesomeIcon  onClick={this.toggleShowNote} icon={faAngleDoubleUp} />}
-          </p>
+          {!this.props.data.fieldValue  &&
+            <p className={appStyle.accordionHeader} onClick={this.toggleShowNote}>
+              Notes {!showNote && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showNote && <FontAwesomeIcon  onClick={this.toggleShowNote} icon={faAngleDoubleUp} />}
+            </p>
+          }
           
           {showNote === true &&
           <div>
-            <div>
-              <b><h1><input style={inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
-            </div>
+            <b><h1><input style={inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
             <p><textarea style={inputStyle} type="text" value={this.state.note.note.content} onChange={this.handleChangeContent} placeholder="Take a note..."/></p>
             <div style={{textAlign:"center"}}>
               <label className="button circular">
