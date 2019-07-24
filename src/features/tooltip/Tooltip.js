@@ -15,6 +15,10 @@ class TooltipControls extends React.Component {
   constructor(props){
     super(props)
     this.state = this.initialState;
+    this.state = {
+      ...this,
+      show:true
+    }
   }
 
   get initialState(){
@@ -24,7 +28,7 @@ class TooltipControls extends React.Component {
       width:"300px",
       position: [200,200],
       currentLabel:"",
-      show: true,
+      //show: true,
       note: {
         id:'',
         note:{
