@@ -44,7 +44,7 @@
     "request": "2.88.0",
     "rxjs": "6.5.2",
     "rxjs-compat": "6.5.2",
-    "snyk": "1.196.0",
+    "snyk": "1.198.0",
     "tar-pack": "3.4.1",
     "uuid": "3.3.2"
   },
@@ -125,7 +125,7 @@
     "eslint-plugin-flowtype": "3.12.1",
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-jsx-a11y": "6.2.3",
-    "eslint-plugin-react": "7.14.2",
+    "eslint-plugin-react": "7.14.3",
     "gh-pages": "2.0.1",
     "jsdom-global": "3.0.2",
     "mocha": "6.2.0",

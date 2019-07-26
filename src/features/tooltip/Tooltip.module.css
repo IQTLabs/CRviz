@@ -1,0 +1,26 @@
+  
+.shown {
+    transition: 1s;
+    line-height: 2rem;
+    border-radius: 10px;
+    display: block;
+}
+  
+:global(.darkTheme) .shown {
+    background-color: #666666;
+}
+  
+.hidden {
+    transition: all 0.1;
+    margin-left: -40px;
+    padding-right: 40px;
+    padding-left: 10px;
+    transition: 1s;
+    line-height: 2rem;
+    border-radius: 10px;
+    display: block;
+    background-color: white !important;
+    border-radius: 10px;
+    box-shadow: 4px 0px 0px 0px rgba(0,0,0,0.2)
+
+}  

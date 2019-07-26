@@ -3,8 +3,9 @@ import { addNote, removeNote, getNotesIndexedByHash } from 'domain/notes';
 
 //Styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faSave, faAngleDoubleDown, faAngleDoubleUp } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faSave, faAngleDoubleDown, faAngleDoubleUp, faAngleDoubleRight, faAngleDoubleLeft} from '@fortawesome/free-solid-svg-icons';
 import appStyle from '../../App.module.css';
+import tooltipStyle from './Tooltip.module.css';
 
 ///Redux
 import { connect } from "react-redux";
@@ -14,10 +15,10 @@ class TooltipControls extends React.Component {
   constructor(props){
     super(props)
     this.state = this.initialState;
-    /*this.state = {
-      ...this.state, 
-      showNote:false
-    }*/
+    this.state = {
+      ...this,
+      show:true
+    }
   }
 
   get initialState(){
@@ -36,6 +37,12 @@ class TooltipControls extends React.Component {
         }
       }
     };
+  }
+
+  handleShowHide = () => {
+    this.setState({
+      show: !this.state.show
+    });
   }
 
   resetBuilder() {
@@ -114,16 +121,30 @@ class TooltipControls extends React.Component {
   
   render() {
     const style = {
-      display : 'block"',
-      position: "fixed",
-      top: `${10}px`,
-      right: `${10}px`,
-      boxShadow: `0 4px 8px 0 rgba(0,0,0,0.2)`,
-      transition: `0.3s`,
-      borderRadius: `10px`,
-      padding: `5px`,
-      background: `white`,
-      width:"290px"     
+      show:{
+        display : 'block"',
+        position: "fixed",
+        top: `${10}px`,
+        right: `${10}px`,
+        boxShadow: `0 4px 8px 0 rgba(0,0,0,0.2)`,
+        transition: `0.3s`,
+        borderRadius: `10px`,
+        padding: `5px`,
+        background: `white`,
+        width:"290px"  
+      },
+      hide:{
+        display : 'block"',
+        position: "fixed",
+        top: `${10}px`,
+        right: `${-275}px`,
+        boxShadow: `0 4px 8px 0 rgba(0,0,0,0.2)`,
+        transition: `0.3s`,
+        borderRadius: `10px`,
+        padding: `5px`,
+        background: `white`,
+        width:"290px"  
+      }
     }
 
     const inputStyle = {
@@ -137,10 +158,16 @@ class TooltipControls extends React.Component {
 
     const showNote = this.state.showNote;
 
+
     return (
       <>{this.props.data &&
-        <div style={style}>
+        <div style={ this.state.show ? style.show : style.hide }>
+          <p>
+            {!this.state.show && <div className={tooltipStyle.hidden}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleLeft} /> </div>}{this.state.show && <div className={tooltipStyle.shown}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleRight} /></div>}
+          </p>
           {this.props.data && !this.props.data.fieldValue  &&
+            <>
+              
               <div>
                 <p><b>UID: </b>{this.props.data.uid} </p>
                 <p><b>MAC: </b>{this.props.data.mac} </p>
@@ -155,21 +182,22 @@ class TooltipControls extends React.Component {
                 <p><b>OS Confidence: </b>{this.props.data.os.confidence} </p>
                 <p><b>Vendor: </b>{this.props.data.vendor} </p>
               </div>
+            </>
           }
           {this.props.data && this.props.data.fieldValue &&
             <div>
               <h3>{this.props.data.fieldValue} </h3>
             </div>
           }
-          <p className={appStyle.accordionHeader} onClick={this.toggleShowNote}>
-            Notes {!showNote && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showNote && <FontAwesomeIcon  onClick={this.toggleShowNote} icon={faAngleDoubleUp} />}
-          </p>
+          {!this.props.data.fieldValue  &&
+            <p className={appStyle.accordionHeader} onClick={this.toggleShowNote}>
+              Notes {!showNote && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showNote && <FontAwesomeIcon  onClick={this.toggleShowNote} icon={faAngleDoubleUp} />}
+            </p>
+          }
           
           {showNote === true &&
           <div>
-            <div>
-              <b><h1><input style={inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
-            </div>
+            <b><h1><input style={inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
             <p><textarea style={inputStyle} type="text" value={this.state.note.note.content} onChange={this.handleChangeContent} placeholder="Take a note..."/></p>
             <div style={{textAlign:"center"}}>
               <label className="button circular">
