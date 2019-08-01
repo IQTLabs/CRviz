@@ -5,10 +5,12 @@
     border-radius: 10px;
     display: block;
 }
+
   
 :global(.darkTheme) .shown {
     background-color: #666666;
 }
+
   
 .hidden {
     transition: all 0.1;
@@ -21,6 +23,49 @@
     display: block;
     background-color: white !important;
     border-radius: 10px;
-    box-shadow: 4px 0px 0px 0px rgba(0,0,0,0.2)
+    box-shadow: 4px 0px 0px 0px rgba(0;0;0;0.2);
+}
 
-}  
+  
+
+.show {
+    display : block;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0;0;0;0.2);
+    transition: 0.3s;
+    border-radius: 10px;
+    padding: 5px;
+    background: white;
+    width:290px  
+}
+
+:global(.darkTheme) .show {
+    background-color: #666666;
+}
+
+      
+.hide {
+    display : block;
+    position: fixed;
+    top: 10px;
+    right: -275px;
+    box-shadow: 0 4px 8px 0 rgba(0;0;0;0.2);
+    transition: 0.3s;
+    border-radius: 10px;
+    padding: 5px;
+    background: white;
+    width:290px  
+}
+    
+
+.inputStyle {
+    background: white;
+    display: inline;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0.5rem 0.75rem;
+    width: 80%
+}
+    
