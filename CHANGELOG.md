@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.7](https://github.com/CyberReboot/CRviz/compare/v0.3.6...v0.3.7) (2019-08-01)
+
+
+### Bug Fixes
+
+* allow tooltip to hide on root/groups with fieldValues ([c2c4e9f](https://github.com/CyberReboot/CRviz/commit/c2c4e9f))
+* persistence of show/hide tooltip status ([3928c43](https://github.com/CyberReboot/CRviz/commit/3928c43))
+* remoe note feature for root/group fieldValues ([1df874d](https://github.com/CyberReboot/CRviz/commit/1df874d))
+* **controls.test:** add tests for position and datum ([acc645b](https://github.com/CyberReboot/CRviz/commit/acc645b))
+* **deps:** Merge pull request [#432](https://github.com/CyberReboot/CRviz/issues/432) from CyberReboot/renovate/react-beautiful-dnd-11.x ([ac9c48d](https://github.com/CyberReboot/CRviz/commit/ac9c48d))
+* **deps:** pin dependency @fortawesome/free-brands-svg-icons to 5.9.0 ([446a734](https://github.com/CyberReboot/CRviz/commit/446a734))
+* **deps:** update dependency css-element-queries to v1.2.1 ([41d7c98](https://github.com/CyberReboot/CRviz/commit/41d7c98))
+* **deps:** update dependency react-modal to v3.9.1 ([aac48b1](https://github.com/CyberReboot/CRviz/commit/aac48b1))
+* **deps:** update dependency react-spinners to v0.5.12 ([51691d7](https://github.com/CyberReboot/CRviz/commit/51691d7))
+* **deps:** update dependency react-spinners to v0.5.13 ([c7517df](https://github.com/CyberReboot/CRviz/commit/c7517df))
+* **deps:** update dependency snyk to v1.193.2 ([6cb0803](https://github.com/CyberReboot/CRviz/commit/6cb0803))
+* **deps:** update dependency snyk to v1.193.3 ([604935d](https://github.com/CyberReboot/CRviz/commit/604935d))
+* **deps:** update dependency snyk to v1.195.0 ([2028284](https://github.com/CyberReboot/CRviz/commit/2028284))
+* **deps:** update dependency snyk to v1.195.1 ([0ba165b](https://github.com/CyberReboot/CRviz/commit/0ba165b))
+* **deps:** update dependency snyk to v1.196.0 ([59aa4ae](https://github.com/CyberReboot/CRviz/commit/59aa4ae))
+* **deps:** update dependency snyk to v1.198.0 ([663ac1d](https://github.com/CyberReboot/CRviz/commit/663ac1d))
+* add social media links ([99d1aea](https://github.com/CyberReboot/CRviz/commit/99d1aea)), closes [#421](https://github.com/CyberReboot/CRviz/issues/421)
+* **design:** address rashley-iqt changes request ([5aa13ae](https://github.com/CyberReboot/CRviz/commit/5aa13ae))
+* **persistence of notes:** user doesn't have to click away to get note to work ([209d2b7](https://github.com/CyberReboot/CRviz/commit/209d2b7))
+* **tooltip:** overlap between d3 sliding dataset and notetip ([2788ad7](https://github.com/CyberReboot/CRviz/commit/2788ad7))
+
+
+### Features
+
+* add show/hide functionality to tooltip ([f3b66d5](https://github.com/CyberReboot/CRviz/commit/f3b66d5))
+* **add and remove notes:** add and remove notes in the  tooltip ([1652fcb](https://github.com/CyberReboot/CRviz/commit/1652fcb))
+* **add notes to store!:** add notes with id to store ([82714d7](https://github.com/CyberReboot/CRviz/commit/82714d7))
+* **annotation:** Merge pull request [#415](https://github.com/CyberReboot/CRviz/issues/415) from hopetambala/master ([848f4ad](https://github.com/CyberReboot/CRviz/commit/848f4ad)), closes [#162](https://github.com/CyberReboot/CRviz/issues/162)
+* **labels:** add ability to add labels to notes ([6894288](https://github.com/CyberReboot/CRviz/commit/6894288))
+* **tooltip data:** add ability to click on a node or element for tooltip data ([70b38a1](https://github.com/CyberReboot/CRviz/commit/70b38a1))
+* **upload:** get notes to be uploaded as well! ([2deea19](https://github.com/CyberReboot/CRviz/commit/2deea19))
+* add position action to tooltip ([72fb69f](https://github.com/CyberReboot/CRviz/commit/72fb69f))
+
 ### [0.3.6](https://github.com/CyberReboot/CRviz/compare/v0.3.5...v0.3.6) (2019-07-11)
 
 
