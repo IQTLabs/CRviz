@@ -4,7 +4,7 @@ import { path } from "d3-path";
 import datumKey from "./datum-key";
 import className from "./class-name";
 
-const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }) => {
+const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch, notes }) => {
   const data = packedData.descendants();
   const firstLeaf = packedData.leaves()[0];
   const leafRadius = firstLeaf.r || 0;
@@ -20,6 +20,7 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
   nodesEnter
     .merge(nodes)
     .attr('data-key', datumKey)
+    //.style("fill", (d) => hasNotes(d,notes))
     .classed(className("rootNode"), (d) => d.depth === 0)
     .classed(className("groupingNode"), (d) => d.depth > 0 && d.height > 0)
     .classed(className("containsSearchResult"), (d) => hasSearch && d.data.CRVIZ._searchResultCount > 0 && d.depth > 0 && d.height > 0)
@@ -28,6 +29,7 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
     .classed(className("isChanged"), (d) => d.data.CRVIZ._isChanged && d.depth > 0 && d.height === 0)
     .classed(className("isAdded"), (d) => d.data.CRVIZ._isAdded && d.depth > 0 && d.height === 0)
     .classed(className("isRemoved"), (d) => d.data.CRVIZ._isRemoved && d.depth > 0 && d.height === 0)
+    .classed(className('isNoted'), (d) => hasNotes(d,notes))
     .classed(className("searchExcluded"), (d) => hasSearch && !d.data.CRVIZ._isSearchResult && d.depth > 0 && d.height === 0)
     .classed(className("leafNode"), (d) => d.height === 0)
     .attr("transform", (d) => `translate(${[d.x, d.y].join(",")})`)
@@ -175,6 +177,15 @@ const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
   }
 }
 
+const hasNotes = (datum, notes) =>{
+  const datum_key = datum.data.CRVIZ._SEARCH_KEY;
+    if(datum_key in notes){
+      return true
+    }
+    else {
+      return false
+    }
+}
 // const appendAggregations = (nodeRoot, groupData, showNodes, leafRadius, fontScale) =>{
 
 //   const groupingNodes = nodeRoot

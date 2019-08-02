@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { selectDatasetIntersection, selectMergedConfiguration } from "domain/dataset";
 import { getQueryString } from "epics/index-dataset-epic";
 import { selectControls, getPosition, setPosition, setSelectedDatum} from "domain/controls";
+import { getNotesIndexedByHash } from 'domain/notes';
 
 import d3Viz from './d3-viz';
 import styles from './Visualization.module.css';
@@ -24,7 +25,6 @@ class Visualization extends React.PureComponent {
   }
 
   onClick = () => {
-    //Sends d3 position to redux store using the `setPosition()` function in controls.js
     const el = ReactDOM.findDOMNode(this);
     select(el).on('click', function mouseMoveHandler() {
       position = mouse(this)
@@ -45,7 +45,8 @@ class Visualization extends React.PureComponent {
       data: this.props.dataset || [],
       queryString: this.props.queryString,
       position: this.props.position,
-      sendData: this.getData //create and pass parent function prop to child (d3-viz.js) to retrieve datum 
+      sendData: this.getData, //create and pass parent function prop to child (d3-viz.js) to retrieve datum 
+      notes:this.props.notes
     });
   }
 
@@ -64,7 +65,8 @@ const mapStateToProps = (state, ownProps) => {
     configuration: selectMergedConfiguration(state),
     controls: selectControls(state),
     queryString: getQueryString(state),
-    position: getPosition(state)
+    position: getPosition(state),
+    notes: getNotesIndexedByHash(state)
   };
 };
 const mapDispatchToProps = (dispatch) => ({
