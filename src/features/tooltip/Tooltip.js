@@ -1,5 +1,5 @@
 import React from "react";
-import { addNote, removeNote, getNotesIndexedByHash } from 'domain/notes';
+
 
 //Styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +10,7 @@ import tooltipStyle from './Tooltip.module.css';
 ///Redux
 import { connect } from "react-redux";
 import { getPosition, getSelectedDatum } from 'domain/controls';
+import { addNote, removeNote, getNotesIndexedByHash } from 'domain/notes';
 
 class TooltipControls extends React.Component {
   constructor(props){
@@ -191,7 +192,7 @@ class TooltipControls extends React.Component {
           }
           {!this.props.data.fieldValue  &&
             <p className={appStyle.accordionHeader} onClick={this.toggleShowNote}>
-              Notes {!showNote && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showNote && <FontAwesomeIcon  onClick={this.toggleShowNote} icon={faAngleDoubleUp} />}
+              Note {!showNote && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showNote && <FontAwesomeIcon  onClick={this.toggleShowNote} icon={faAngleDoubleUp} />}
             </p>
           }
           
