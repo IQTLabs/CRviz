@@ -25,6 +25,7 @@ import { uploadDataset } from "epics/upload-dataset-epic";
 import Header from 'features/header/Header';
 import HierarchySelector from 'features/hierarchy-selector/HierarchySelector';
 import ComparisonSelector from 'features/comparison-selector/ComparisonSelector';
+import NoteSelector from 'features/note-selector/NoteSelector';
 import MiscControls from 'features/misc-controls/MiscControls';
 import SearchControls from 'features/search/SearchControls';
 import Visualization from 'features/visualization/Visualization';
@@ -110,6 +111,7 @@ class App extends Component {
     this.setState({
       showData: !this.state.showData,
       showComparison: false,
+      showNotes:false,
       showGrouping: false,
       showFiltering: false,
     });
@@ -119,6 +121,16 @@ class App extends Component {
     this.setState({
       showData: false,
       showComparison: !this.state.showComparison,
+      showGrouping: false,
+      showFiltering: false
+    });
+  }
+
+  toggleShowNotes = () =>{
+    this.setState({
+      showData: false,
+      showComparison: false,
+      showNotes: !this.state.showNotes,
       showGrouping: false,
       showFiltering: false
     });
@@ -260,6 +272,7 @@ class App extends Component {
     const endUuid = this.state.endUuid;
     const showData = this.state.showData;
     const showComparison = this.state.showComparison;
+    const showNotes = this.state.showNotes;
     const showGrouping = this.state.showGrouping;
     const showOptions = this.state.showOptions;
     const options = this.state.options;
@@ -346,6 +359,15 @@ class App extends Component {
               Please select at least 2 datasets to continue
             </div>
           }
+          <div className={style.accordionHeader} onClick={this.toggleShowNotes}>
+            Notes  {!showNotes && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showNotes && <FontAwesomeIcon  onClick={this.toggleShowNotes} icon={faAngleDoubleUp} />}
+          </div>
+          { showNotes &&
+            <div> 
+              <NoteSelector />
+            </div>
+          }
+
           
           <div className={style.footerContainer}>
             <span className={ style.centerSpan }>
@@ -357,6 +379,8 @@ class App extends Component {
                 </div>
             </span>
           </div>
+
+          
         </div>
         { datasetCount === 0 && lastUpdated !== null &&
           <div  className={ style.emptyDataset }>
@@ -365,6 +389,8 @@ class App extends Component {
             </span>
           </div>
         }
+
+        
 
         <div className={ style.canvas }>
           <Visualization startUid={startUuid} endUid={endUuid} />
