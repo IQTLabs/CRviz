@@ -25,7 +25,7 @@ import { uploadDataset } from "epics/upload-dataset-epic";
 import Header from 'features/header/Header';
 import HierarchySelector from 'features/hierarchy-selector/HierarchySelector';
 import ComparisonSelector from 'features/comparison-selector/ComparisonSelector';
-import NoteSelector from 'features/note-selector/NoteSelector';
+import NoteSelectorList from 'features/note-selector/NoteSelector';
 import MiscControls from 'features/misc-controls/MiscControls';
 import SearchControls from 'features/search/SearchControls';
 import Visualization from 'features/visualization/Visualization';
@@ -364,7 +364,7 @@ class App extends Component {
           </div>
           { showNotes &&
             <div> 
-              <NoteSelector />
+              <NoteSelectorList />
             </div>
           }
 
