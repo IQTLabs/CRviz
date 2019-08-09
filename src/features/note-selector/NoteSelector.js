@@ -12,23 +12,20 @@ class Note extends React.Component {
     hover: false
   };
 
-  hoverOn (e)  {
+  hoverOn = () => {
     this.setState({ hover: true });
-    console.log(this.state.hover)
   }
 
-  hoverOff (e)  { 
+  hoverOff = () => { 
     this.setState({ hover: false });    
-    console.log(this.state.hover)
   }
 
   render() {
     return (
       <li
-        //onMouseEnter={this.hoverOn}
-        //onMouseLeave={this.hoverOff}
-        onMouseEnter={this.hoverOn.bind(this)}
-        onMouseLeave={this.hoverOff.bind(this)}
+     
+        onMouseEnter={this.hoverOn}
+        onMouseLeave={this.hoverOff}
         className={style.tag}
       >
         {this.props.note_title}
@@ -39,19 +36,12 @@ class Note extends React.Component {
 
 class NoteSelectorList extends React.Component {
   render() {
-    const Notes = ({notes}) => (
-      <>
-        {Object.values(notes).map(note => {
-          console.log(note)
+    return (
+      <ul className={style.tags}>
+        {Object.values(this.props.notes).map(note => {
           return <Note key={`note-${note.id}`} index={note.id} note_title={note.note.title} />;
         })}
-      </>
-    );
-
-    return (
-        <ul className={style.tags}>
-            <Notes notes={this.props.notes}/>
-        </ul>
+      </ul>
     );
   }
 }
