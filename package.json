@@ -44,7 +44,7 @@
     "request": "2.88.0",
     "rxjs": "6.5.2",
     "rxjs-compat": "6.5.2",
-    "snyk": "1.215.0",
+    "snyk": "1.216.0",
     "tar-pack": "3.4.1",
     "uuid": "3.3.2"
   },
@@ -132,7 +132,7 @@
     "nyc": "14.1.1",
     "pre-commit": "1.2.2",
     "react-app-rewire-eslint": "0.2.3",
-    "sinon": "7.3.2",
+    "sinon": "7.4.1",
     "standard-version": "7.0.0"
   },
   "snyk": true
