@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { selectDatasetIntersection, selectMergedConfiguration } from "domain/dataset";
 import { getQueryString } from "epics/index-dataset-epic";
 import { selectControls, getPosition, setPosition, setSelectedDatum} from "domain/controls";
-import { getNotesIndexedByHash } from 'domain/notes';
+import { getNotesIndexedByHash, getNotesHoverStatus } from 'domain/notes';
 
 import d3Viz from './d3-viz';
 import styles from './Visualization.module.css';
@@ -46,7 +46,8 @@ class Visualization extends React.PureComponent {
       queryString: this.props.queryString,
       position: this.props.position,
       sendData: this.getData, //create and pass parent function prop to child (d3-viz.js) to retrieve datum 
-      notes:this.props.notes
+      notes:this.props.notes,
+      hoverStatus: this.props.hoverStatus
     });
   }
 
@@ -66,7 +67,8 @@ const mapStateToProps = (state, ownProps) => {
     controls: selectControls(state),
     queryString: getQueryString(state),
     position: getPosition(state),
-    notes: getNotesIndexedByHash(state)
+    notes: getNotesIndexedByHash(state),
+    hoverStatus: getNotesHoverStatus(state)
   };
 };
 const mapDispatchToProps = (dispatch) => ({

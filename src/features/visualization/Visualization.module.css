@@ -14,8 +14,9 @@
   fill: black;
 }
 
-:global(.viz-isNoted) circle {
-  fill: red !important;
+:global(.viz-isNotNoted) circle {
+  /*fill: red !important;*/
+  opacity: 0.2;
 }
 
 .viz :global(.viz-node.viz-searchResult) circle {

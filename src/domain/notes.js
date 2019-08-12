@@ -3,13 +3,15 @@ import { createAction, handleActions } from "redux-actions";
 const defaultState = {
   byId:[],
   byHash: {
-  }
+  },
+  hoverStatus:false
 };
 
 // ACTIONS
 const addNote = createAction("ADD_NOTE");
 const setNotes = createAction("SET_NOTE");
 const removeNote = createAction("REMOVE_NOTE");
+const toggleNotesHover = createAction("TOGGLE_NOTES_HOVER");
 
 // REDUCERS
 const reducer = handleActions(
@@ -44,6 +46,13 @@ const reducer = handleActions(
         byHash: byhash,
       }
     },
+    [toggleNotesHover]: (state, { payload }) => {
+      const hoverStatus = payload;
+      return {
+        ...state,
+        hoverStatus: hoverStatus,
+      }
+    },
   },
   defaultState
 );
@@ -51,8 +60,9 @@ const reducer = handleActions(
 // SELECTORS
 const getNotesIndexedByHash = (state) => state.notes.byHash;
 const getAllNotes = (state) => state.notes;
+const getNotesHoverStatus = (state) => state.notes.hoverStatus;
 
 
 export default reducer;
 
-export { addNote,setNotes,removeNote, getNotesIndexedByHash, getAllNotes};
+export { addNote,setNotes,removeNote, getNotesIndexedByHash, getAllNotes, toggleNotesHover, getNotesHoverStatus};

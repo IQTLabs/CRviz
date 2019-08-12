@@ -37,7 +37,7 @@ describe("Notes reducer", () => {
               content:" I'm the Content of a note"
             } 
           }
-        }
+        },
       };
 
       expect(getAllNotes(result)).to.deep.equal(defaultState);
@@ -58,7 +58,7 @@ describe("Notes reducer", () => {
       const emptyState = {
         byId:[],
         byHash: {
-        }
+        },
       };
 
       const add_action = addNote(note);
@@ -79,7 +79,8 @@ describe("Notes reducer", () => {
       const notes = {
         'byId':[],
         'byHash': {
-        }
+        },
+        'hoverStatus':false
       }
 
       const action = setNotes(notes);

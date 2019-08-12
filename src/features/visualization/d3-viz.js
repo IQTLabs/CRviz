@@ -164,6 +164,9 @@ function d3Viz(rootNode) {
     state.packedData = pack(hierarchy);
   };
 
+  //const hasnonotes = true; //toggle for notes
+  //const hasnonotes = props.hoverStatus;
+
   const rerender = (props, state) => {
     const [nodes] = appendCircles({
       nodeRoot: nodeRoot,
@@ -171,7 +174,8 @@ function d3Viz(rootNode) {
       packedData: state.packedData,
       showNodes: props.showNodes,
       hasSearch: props.queryString !== '',
-      notes: props.notes
+      notes: props.notes,
+      hasNoNotes: props.hoverStatus
     });
 
     setupTooltip({
