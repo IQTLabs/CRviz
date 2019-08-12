@@ -117,7 +117,6 @@
     "@babel/preset-react": "7.0.0",
     "@babel/register": "7.5.5",
     "@fortawesome/fontawesome-free": "5.10.1",
-    "babel-eslint": "10.0.2",
     "chai": "4.2.0",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.14.0",
