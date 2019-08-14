@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.8](https://github.com/CyberReboot/CRviz/compare/v0.3.7...v0.3.8) (2019-08-02)
+
+
+### Bug Fixes
+* added dark theme for Notes Panel ([7c9b002](https://github.com/CyberReboot/CRviz/commit/7c9b00226c12a8a6809926593cac7f08ed9c40fc))
+* downgrdeded dependency gh-pages to v2.0.0 ([0c84cc1](https://github.com/CyberReboot/CRviz/commit/0c84cc17a4ec06b90c17f8dda3619604edf9e35a)) 
+
 ### [0.3.7](https://github.com/CyberReboot/CRviz/compare/v0.3.6...v0.3.7) (2019-08-01)
 
 
