@@ -25,7 +25,6 @@ class Note extends React.Component {
   render() {
     return (
       <li
-     
         onMouseEnter={this.setHoveredNoteId}
         onMouseLeave={this.props.hoverOff}
         className={style.tag}
