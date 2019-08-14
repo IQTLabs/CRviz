@@ -80,7 +80,8 @@ describe("Notes reducer", () => {
         'byId':[],
         'byHash': {
         },
-        'hoverStatus':false
+        'hoverStatus':false,
+        'hoveredNoteId':''
       }
 
       const action = setNotes(notes);

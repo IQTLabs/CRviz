@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import { 
   toggleNotesHover,
+  setNoteHovered,
   getNotesIndexedByHash
 } from "domain/notes";
 
@@ -16,11 +17,16 @@ class Note extends React.Component {
     };
   }
 
+  setHoveredNoteId = () =>{ 
+    this.props.hoverMethod(this.props.index);
+    this.props.hoverOn();
+  }
+
   render() {
     return (
       <li
      
-        onMouseEnter={this.props.hoverOn}
+        onMouseEnter={this.setHoveredNoteId}
         onMouseLeave={this.props.hoverOff}
         className={style.tag}
       >
@@ -42,7 +48,7 @@ class NoteSelectorList extends React.Component {
     return (
       <ul className={style.tags}>
         {Object.values(this.props.notes).map(note => {
-          return <Note key={`note-${note.id}`} index={note.id} note_title={note.note.title} hoverOn={this.hoverOn} hoverOff={this.hoverOff} />;
+          return <Note key={`${note.id}`} index={note.id} note_title={note.note.title} hoverOn={this.hoverOn} hoverOff={this.hoverOff} hoverMethod={this.props.setNoteHovered} />;
         })}
       </ul>
     );
@@ -56,7 +62,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  toggleNotesHover
+  toggleNotesHover,
+  setNoteHovered
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NoteSelectorList);

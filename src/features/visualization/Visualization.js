@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { selectDatasetIntersection, selectMergedConfiguration } from "domain/dataset";
 import { getQueryString } from "epics/index-dataset-epic";
 import { selectControls, getPosition, setPosition, setSelectedDatum} from "domain/controls";
-import { getNotesIndexedByHash, getNotesHoverStatus } from 'domain/notes';
+import { getNotesIndexedByHash, getNotesHoverStatus, getNoteHoveredId } from 'domain/notes';
 
 import d3Viz from './d3-viz';
 import styles from './Visualization.module.css';
@@ -18,8 +18,6 @@ var position = [];
 class Visualization extends React.PureComponent {
   componentDidMount() {
     const el = ReactDOM.findDOMNode(this);
-
-    
     this.viz = d3Viz(el);
     this.updateFromProps();
   }
@@ -33,7 +31,7 @@ class Visualization extends React.PureComponent {
   }
 
   getData = (data) => {
-    this.props.setSelectedDatum(data); //set redux store datum
+    this.props.setSelectedDatum(data);
   }
 
   updateFromProps() {
@@ -45,7 +43,8 @@ class Visualization extends React.PureComponent {
       data: this.props.dataset || [],
       queryString: this.props.queryString,
       position: this.props.position,
-      sendData: this.getData, //create and pass parent function prop to child (d3-viz.js) to retrieve datum 
+      sendData: this.getData,
+      noteIdHovered:this.props.noteIdHovered,
       notes:this.props.notes,
       hoverStatus: this.props.hoverStatus
     });
@@ -67,6 +66,7 @@ const mapStateToProps = (state, ownProps) => {
     controls: selectControls(state),
     queryString: getQueryString(state),
     position: getPosition(state),
+    noteIdHovered: getNoteHoveredId(state),
     notes: getNotesIndexedByHash(state),
     hoverStatus: getNotesHoverStatus(state)
   };

@@ -4,7 +4,7 @@ import { path } from "d3-path";
 import datumKey from "./datum-key";
 import className from "./class-name";
 
-const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch, notes, hasNoNotes }) => {
+const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch, noteIdHovered,hasNoNotes }) => {
   const data = packedData.descendants();
   const firstLeaf = packedData.leaves()[0];
   const leafRadius = firstLeaf.r || 0;
@@ -29,7 +29,7 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch, 
     .classed(className("isChanged"), (d) => d.data.CRVIZ._isChanged && d.depth > 0 && d.height === 0)
     .classed(className("isAdded"), (d) => d.data.CRVIZ._isAdded && d.depth > 0 && d.height === 0)
     .classed(className("isRemoved"), (d) => d.data.CRVIZ._isRemoved && d.depth > 0 && d.height === 0)
-    .classed(className('isNotNoted'), (d) => has_NoNotes(d,notes) && hasNoNotes)
+    .classed(className('isNotNoted'), (d) => has_NoNotes(d,noteIdHovered) && hasNoNotes)
     .classed(className("searchExcluded"), (d) => hasSearch && !d.data.CRVIZ._isSearchResult && d.depth > 0 && d.height === 0)
     .classed(className("leafNode"), (d) => d.height === 0)
     .attr("transform", (d) => `translate(${[d.x, d.y].join(",")})`)
@@ -177,18 +177,20 @@ const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
   }
 }
 
-const has_NoNotes = (datum, notes) =>{
+const has_NoNotes = (datum, noteIdHovered) =>{
+  const note_key = noteIdHovered;
+  //alert(`${note_key}`);
   const datum_key = datum.data.CRVIZ._SEARCH_KEY;
-    if (datum.parent !== undefined) {
-      if(datum_key in notes){
-        //if node has notes, don't make opaque
-        return false
-      }
-      else {
-        //if node doesn't have notes, make opaque
-        return true
-      }
+  if (datum.parent !== undefined) {
+    if(note_key === datum_key){
+      //if node has notes, don't make opaque
+      return false;
     }
+    else {
+      //if node doesn't have notes, make opaque
+      return true;
+    }
+  }
 }
 
 export default appendCircles;

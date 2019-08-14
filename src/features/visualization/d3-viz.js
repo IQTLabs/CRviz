@@ -174,7 +174,7 @@ function d3Viz(rootNode) {
       packedData: state.packedData,
       showNodes: props.showNodes,
       hasSearch: props.queryString !== '',
-      notes: props.notes,
+      noteIdHovered: props.noteIdHovered,
       hasNoNotes: props.hoverStatus
     });
 
