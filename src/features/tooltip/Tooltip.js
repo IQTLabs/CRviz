@@ -121,47 +121,11 @@ class TooltipControls extends React.Component {
   }
   
   render() {
-    const style = {
-      show:{
-        display : 'block"',
-        position: "fixed",
-        top: `${10}px`,
-        right: `${10}px`,
-        boxShadow: `0 4px 8px 0 rgba(0,0,0,0.2)`,
-        transition: `0.3s`,
-        borderRadius: `10px`,
-        padding: `5px`,
-        background: `white`,
-        width:"290px"  
-      },
-      hide:{
-        display : 'block"',
-        position: "fixed",
-        top: `${10}px`,
-        right: `${-275}px`,
-        boxShadow: `0 4px 8px 0 rgba(0,0,0,0.2)`,
-        transition: `0.3s`,
-        borderRadius: `10px`,
-        padding: `5px`,
-        background: `white`,
-        width:"290px"  
-      }
-    }
-
-    const inputStyle = {
-      background: 'white',
-      display: 'inline',
-      fontFamily: 'inherit',
-      fontSize: 'inherit',
-      padding: '0.5rem 0.75rem',
-      width: '80%'
-    }
 
     const showNote = this.state.showNote;
 
 
-    return (
-      <>{this.props.data &&
+    return (<>{this.props.data &&
         <div style={ this.state.show ? style.show : style.hide }>
           <div>
             {!this.state.show && <p className={tooltipStyle.hidden}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleLeft} /> </p>}{this.state.show && <p className={tooltipStyle.shown}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleRight} /></p>}
