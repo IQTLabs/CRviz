@@ -31,3 +31,14 @@
 .tag:hover::after {
     border-left-color: rgb(65, 65, 65); 
 }
+
+:global(.darkTheme) .tag {
+  color: white;
+  background-color: rgb(130, 129, 129);
+}
+
+:global(.darkTheme) .tag:hover {
+  /*background-color: #cc0000;*/
+  background-color: white;
+  color: black;
+}
