@@ -14,6 +14,11 @@
   fill: black;
 }
 
+:global(.viz-isNotNoted) circle {
+  /*fill: red !important;*/
+  opacity: 0.2;
+}
+
 .viz :global(.viz-node.viz-searchResult) circle {
   opacity: 1;
 }
@@ -123,6 +128,8 @@
 .viz :global(.viz-rootNode) circle {
   fill: transparent;
 }
+
+
 
 .viz :global(.viz-groupingNode) circle {
   opacity: 0.2;
