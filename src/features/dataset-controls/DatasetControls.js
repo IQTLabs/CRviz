@@ -74,20 +74,37 @@ class DatasetControls extends React.Component {
   constructor(props) {
     super(props);
 
+    const initialDS = props.initialDataSource;
+    const idsUrl = !!initialDS ? new URL(initialDS.url) : null;
+    const requiresAuth = !!idsUrl && idsUrl.protocol === "https:"
+    const authScheme = requiresAuth ? 'Basic' : '';
+
     this.state = {
       dataset: null,
-      selected: null,
+      selected: initialDS,
       selectedFile: null,
-      showUrlEntry: false,
+      showUrlEntry: requiresAuth,
       showUpload: false,
-      url: '',
-      authScheme:'',
+      url: idsUrl ? idsUrl.href : '',
+      authScheme:authScheme,
       token: '',
       username: '',
       password: '',
       refreshInterval: 0,
       refreshTimerRunning: false
     };
+
+    this.datasets = [...this.props.datasets, CUSTOM_DATASET, UPLOAD_DATASET]
+    if (port !== '80') {
+      this.datasets.push(POSEIDON_DATASET)
+    }
+    if(initialDS){
+      this.datasets.push(initialDS)
+    }
+
+    if(initialDS && !requiresAuth){
+      this.fetchAndSetDataset(initialDS.url, initialDS, null, null, null);
+    }
   }
 
   resetDataset = () => {
@@ -105,15 +122,15 @@ class DatasetControls extends React.Component {
     if (toURL(url)) {
       this.props.fetchDataset({ 
         'owner': this.props.uuid,
-        name:this.props.name,
-        shortName: this.props.shortName,
+        'name':this.props.name,
+        'shortName': this.props.shortName,
         'url': url,
         'header': authHeader
       });
-      this.setState({
-        selected: dataset,
-        selectedFile: null,
-      });
+      // this.setState({
+      //   selected: dataset,
+      //   selectedFile: null,
+      // });
     } else {
       this.props.setError(new Error("Please enter a valid URL."));
     }
@@ -178,7 +195,7 @@ class DatasetControls extends React.Component {
 
   onUrlOk = () => {
     this.setState({ showUrlEntry: false });
-    const dataset = CUSTOM_DATASET;
+    const dataset = this.state.selected;
     if(!isNil(this.state.url))
     {
       const url = this.state.url;
@@ -291,9 +308,6 @@ class DatasetControls extends React.Component {
   }
 
   render() {
-    if (port === '80') {
-      POSEIDON_DATASET = {name:"",url:""};
-    }
     const canDownload = this.state.selected && !this.state.selectedFile;
     const canRefresh = this.state.selected && !isNil(this.state.selected.url) && !this.state.selectedFile;
     let url = null;
@@ -322,7 +336,7 @@ class DatasetControls extends React.Component {
             className={style.selector}
             selected={this.state.selected}
             onChange={this.onSelected}
-            datasets={[...this.props.datasets, POSEIDON_DATASET, CUSTOM_DATASET, UPLOAD_DATASET]}
+            datasets={this.datasets}
             source={this.props.source}
           />
         </div>

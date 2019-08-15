@@ -56,24 +56,38 @@ const defaultOptions = {
     }
 class App extends Component {
 
-  state = {
-    showData: true,
-    showGrouping: false,
-    showFiltering: false,
-    uuids: [{'owner': uuidv4(), 'name': 'Series 0', 'shortName': 's0'}],
-    datasetAdded: false,
-    startUuid: null,
-    endUuid: null,
-    showOptions: false,
-    options: {
-      action: "",
-      data: true,
-      controls: true,
-      notes: true,
-    },
-    selectedFile: null,
-    exportName: "dataset.json",
+  constructor(props) {
+    super(props);
+
+    const url = new URL(window.location);
+    const params = new URLSearchParams(url.search);
+    const ds_uri = params.get("dataSourceUrl");
+    const ds_name = params.get("dataSourceName") || ds_uri || ""; 
+     
+    const initial_data_source = {'name': ds_name, 'url': ds_uri };
+
+    this.state = {
+      showData: true,
+      showGrouping: false,
+      showFiltering: false,
+      uuids: [{'owner': uuidv4(), 'name': 'Series 0', 'shortName': 's0'}],
+      datasetAdded: false,
+      startUuid: null,
+      endUuid: null,
+      showOptions: false,
+      options: {
+        action: "",
+        data: true,
+        controls: true,
+        notes: true,
+      },
+      selectedFile: null,
+      exportName: "dataset.json",
+      initialDataSource: ds_uri ? initial_data_source : null,
+    };
   }
+
+  
 
   componentWillReceiveProps = (nextProps) =>{
     const datasetAdded = this.state.datasetAdded && (nextProps.uuids.length !== this.state.uuids.length)
@@ -276,6 +290,7 @@ class App extends Component {
     const showGrouping = this.state.showGrouping;
     const showOptions = this.state.showOptions;
     const options = this.state.options;
+    const initialDataSource = this.state.initialDataSource;
 
     return (
       <div className={
@@ -309,7 +324,8 @@ class App extends Component {
                     shortName={ uuid.shortName }
                     removeDatasetEntry={ this.removeDatasetEntry }
                     removable={uuids.length > 1}
-                    datasets={ datasets }/>
+                    datasets={ datasets }
+                    initialDataSource={initialDataSource}/>
                 </div>
               )
             })}
