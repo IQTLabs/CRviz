@@ -1,0 +1,44 @@
+.tags {
+  list-style: none;
+  margin: 10px 5px 5px 5px;
+  overflow: hidden; 
+  padding: 0;
+}
+  
+.tags li {
+  float: left; 
+}
+
+.tag {
+  background: #eee;
+  border-radius: 6px 6px 6px 6px;
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  padding: 0 20px 0 20px;
+  position: relative;
+  margin: 0 10px 10px 0;
+  text-decoration: none;
+  -webkit-transition: color 0.2s;
+}
+
+.tag:hover {
+  /*background-color: #cc0000;*/
+  background-color: rgb(65, 65, 65);
+  color: white;
+}
+
+.tag:hover::after {
+    border-left-color: rgb(65, 65, 65); 
+}
+
+:global(.darkTheme) .tag {
+  color: white;
+  background-color: rgb(130, 129, 129);
+}
+
+:global(.darkTheme) .tag:hover {
+  /*background-color: #cc0000;*/
+  background-color: white;
+  color: black;
+}

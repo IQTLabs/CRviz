@@ -1,5 +1,5 @@
 import React from "react";
-import { addNote, removeNote, getNotesIndexedByHash } from 'domain/notes';
+
 
 //Styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +10,7 @@ import tooltipStyle from './Tooltip.module.css';
 ///Redux
 import { connect } from "react-redux";
 import { getPosition, getSelectedDatum } from 'domain/controls';
+import { addNote, removeNote, getNotesIndexedByHash } from 'domain/notes';
 
 class TooltipControls extends React.Component {
   constructor(props){
@@ -129,10 +130,9 @@ class TooltipControls extends React.Component {
       {this.props.data &&
         <div className={ this.state.show ? tooltipStyle.show : tooltipStyle.hide }>
           <div>
-            {!this.state.show && <div className={tooltipStyle.hidden}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleLeft} /> </div>}{this.state.show && <div className={tooltipStyle.shown}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleRight} /></div>}
+            {!this.state.show && <p className={tooltipStyle.hidden}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleLeft} /> </p>}{this.state.show && <p className={tooltipStyle.shown}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleRight} /></p>}
           </div>
           {this.props.data && !this.props.data.fieldValue  &&
-            <>
               <div>
                 <p><b>UID: </b>{this.props.data.uid} </p>
                 <p><b>MAC: </b>{this.props.data.mac} </p>
@@ -147,7 +147,6 @@ class TooltipControls extends React.Component {
                 <p><b>OS Confidence: </b>{this.props.data.os.confidence} </p>
                 <p><b>Vendor: </b>{this.props.data.vendor} </p>
               </div>
-            </>
           }
           {this.props.data && this.props.data.fieldValue &&
             <div>
@@ -174,7 +173,8 @@ class TooltipControls extends React.Component {
             </div>
           </div>
           }
-        </div>}
+        </div>
+        }
       </>
     );
   }
