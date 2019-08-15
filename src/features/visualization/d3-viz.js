@@ -164,13 +164,18 @@ function d3Viz(rootNode) {
     state.packedData = pack(hierarchy);
   };
 
+  //const hasnonotes = true; //toggle for notes
+  //const hasnonotes = props.hoverStatus;
+
   const rerender = (props, state) => {
     const [nodes] = appendCircles({
       nodeRoot: nodeRoot,
       labelRoot: labelRoot,
       packedData: state.packedData,
       showNodes: props.showNodes,
-      hasSearch: props.queryString !== ''
+      hasSearch: props.queryString !== '',
+      noteIdHovered: props.noteIdHovered,
+      hasNoNotes: props.hoverStatus
     });
 
     setupTooltip({
@@ -219,6 +224,7 @@ function d3Viz(rootNode) {
 
     nodeRoot.on("click.select", () => {
       const datum = select(d3Event.target).datum();
+      console.log(datum)
       if(datum.data !== undefined) {
         //Used to send data back to parent component Visualizations.js
         props.sendData(datum.data);
