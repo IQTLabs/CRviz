@@ -224,7 +224,6 @@ function d3Viz(rootNode) {
 
     nodeRoot.on("click.select", () => {
       const datum = select(d3Event.target).datum();
-      console.log(datum)
       if(datum.data !== undefined) {
         //Used to send data back to parent component Visualizations.js
         props.sendData(datum.data);
