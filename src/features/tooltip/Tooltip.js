@@ -124,7 +124,6 @@ class TooltipControls extends React.Component {
   render() {
 
     const showNote = this.state.showNote;
-    console.log("props.fields: %o", this.props.fields)
 
     return (
       <>
