@@ -157,11 +157,11 @@ class TooltipControls extends React.Component {
             <b><h1><input className={tooltipStyle.inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
             <p><textarea className={tooltipStyle.inputStyle} type="text" value={this.state.note.note.content} onChange={this.handleChangeContent} placeholder="Take a note..."/></p>
             <div style={{textAlign:"center"}}>
-              <label className="button circular">
-                <FontAwesomeIcon style={{margin:"2.5px"}} icon={faSave} onClick={this.saveNote}/>
+              <label className="button circular" onClick={this.saveNote}>
+                <FontAwesomeIcon style={{margin:"2.5px"}} icon={faSave} />
               </label>
-              <label className="button circular">
-                <FontAwesomeIcon style={{margin:"2.5px"}} icon={faTrashAlt} onClick={this.removeNote} />
+              <label className="button circular" onClick={this.removeNote}>
+                <FontAwesomeIcon style={{margin:"2.5px"}} icon={faTrashAlt}  />
               </label>
             </div>
           </div>
