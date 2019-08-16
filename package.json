@@ -1,6 +1,6 @@
 {
   "name": "CRviz",
-  "version": "0.3.9-dev",
+  "version": "0.3.10-dev",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome": "1.1.8",
@@ -44,7 +44,7 @@
     "request": "2.88.0",
     "rxjs": "6.5.2",
     "rxjs-compat": "6.5.2",
-    "snyk": "1.216.4",
+    "snyk": "1.217.0",
     "tar-pack": "3.4.1",
     "uuid": "3.3.2"
   },

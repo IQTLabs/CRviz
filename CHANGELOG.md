@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.9](https://github.com/CyberReboot/CRviz/compare/v0.3.10...v0.3.9) (2019-08-16)
+
+### [0.3.11](https://github.com/CyberReboot/CRviz/compare/v0.3.10...v0.3.11) (2019-08-16)
+
+### [0.3.10](https://github.com/CyberReboot/CRviz/compare/v0.3.8...v0.3.10) (2019-08-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency snyk to v1.216.5 ([be4f007](https://github.com/CyberReboot/CRviz/commit/be4f007))
+*  make p a child of div (not the other way around) ([e30b993](https://github.com/CyberReboot/CRviz/commit/e30b993))
+* merge conflict ([d3afc92](https://github.com/CyberReboot/CRviz/commit/d3afc92))
+* update tests to reflect new changes to state ([cb7bae2](https://github.com/CyberReboot/CRviz/commit/cb7bae2))
+
+
+### Features
+
+* add ability to hover on all notes ([a3b7e1b](https://github.com/CyberReboot/CRviz/commit/a3b7e1b))
+* get hovered notes to work :grin: ([4183273](https://github.com/CyberReboot/CRviz/commit/4183273))
+* list of notes added to left-handed container ([54daf64](https://github.com/CyberReboot/CRviz/commit/54daf64))
+
 ### [0.3.8](https://github.com/CyberReboot/CRviz/compare/v0.3.7...v0.3.8) (2019-08-02)
 
 
