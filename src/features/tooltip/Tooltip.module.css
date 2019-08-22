@@ -21,9 +21,13 @@
     line-height: 2rem;
     border-radius: 10px;
     display: block;
-    background-color: white !important;
+    background-color: white;
     border-radius: 10px;
     box-shadow: 4px 0px 0px 0px rgba(0;0;0;0.2);
+}
+
+:global(.darkTheme) .hidden {
+    background-color: #666666;
 }
 
   
@@ -38,14 +42,15 @@
     border-radius: 10px;
     padding: 5px;
     background: white;
-    width:290px  
+    width:290px ;
+    max-height:70%; 
+    overflow-y: auto;
 }
 
 :global(.darkTheme) .show {
     background-color: #666666;
 }
 
-      
 .hide {
     display : block;
     position: fixed;
@@ -56,9 +61,28 @@
     border-radius: 10px;
     padding: 5px;
     background: white;
-    width:290px  
+    width:290px ;
+    max-height:70%; 
+}
+
+:global(.darkTheme) .hide {
+    background-color: #666666;
+}
+
+.detailPanel {
+    
 }
     
+.detailText {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+}
+
+.detailText:hover {
+    white-space: normal;
+    overflow: visible;
+}
 
 .inputStyle {
     background: white;
@@ -68,4 +92,9 @@
     padding: 0.5rem 0.75rem;
     width: 80%
 }
-    
+
+.section {
+  border-bottom: 2px dashed rgba(125, 125, 125, 0.5);
+  padding: 1rem 0;
+  flex: 0 0;
+}
