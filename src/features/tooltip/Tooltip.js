@@ -30,6 +30,8 @@ class TooltipControls extends React.Component {
       width:"300px",
       position: [200,200],
       currentLabel:"",
+      showNote: false,
+      showDetails: true,
       note: {
         id:'',
         note:{
@@ -70,6 +72,12 @@ class TooltipControls extends React.Component {
   toggleShowNote = () =>{
     this.setState({
       showNote: !this.state.showNote,
+    });
+  }
+
+  toggleShowDetails = () =>{
+    this.setState({
+      showDetails: !this.state.showDetails,
     });
   }
   
@@ -124,6 +132,7 @@ class TooltipControls extends React.Component {
   render() {
 
     const showNote = this.state.showNote;
+    const showDetails = this.state.showDetails;
 
     return (
       <>
@@ -132,17 +141,22 @@ class TooltipControls extends React.Component {
           <div>
             {!this.state.show && <p className={tooltipStyle.hidden}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleLeft} /> </p>}{this.state.show && <p className={tooltipStyle.shown}><FontAwesomeIcon onClick={this.handleShowHide} icon={faAngleDoubleRight} /></p>}
           </div>
-          {this.props.data && !this.props.data.fieldValue  &&
-              <div>
+          {!this.props.data.fieldValue  &&
+            <p className={appStyle.accordionHeader} onClick={this.toggleShowDetails}>
+              Details {!showDetails && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showDetails && <FontAwesomeIcon icon={faAngleDoubleUp} />}
+            </p>
+          }
+          {showDetails && this.props.data && !this.props.data.fieldValue  &&
+              <div className={ tooltipStyle.detailPanel }>
                 {this.props.fields.map((field)=>{
                   return(
-                    <p><b>{field.displayName}: </b>{path(field.path, this.props.data)} </p>
+                    <p className={ tooltipStyle.detailText }><b>{field.displayName}: </b>{path(field.path, this.props.data)} </p>
                     );
                 })}
               </div>
           }
           {this.props.data && this.props.data.fieldValue &&
-            <div>
+            <div className={ tooltipStyle.detailPanel }>
               <h3>{this.props.data.fieldValue} </h3>
             </div>
           }
@@ -152,7 +166,7 @@ class TooltipControls extends React.Component {
             </p>
           }
           
-          {showNote === true &&
+          {showNote &&
           <div>
             <b><h1><input className={tooltipStyle.inputStyle} type="text" value={this.state.note.note.title} onChange={this.handleChangeTitle} placeholder="Title"/></h1></b>
             <p><textarea className={tooltipStyle.inputStyle} type="text" value={this.state.note.note.content} onChange={this.handleChangeContent} placeholder="Take a note..."/></p>
