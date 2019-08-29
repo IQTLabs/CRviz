@@ -16,6 +16,20 @@ All notable changes to this project will be documented in this file. See [standa
 * clickable area for saving/deleting icon ([bdb5f6f](https://github.com/CyberReboot/CRviz/commit/bdb5f6f))
 * makes notes panel collapsible and scrollable ([b566e74](https://github.com/CyberReboot/CRviz/commit/b566e74)), closes [#499](https://github.com/CyberReboot/CRviz/issues/499)
 
+### [0.3.10](https://github.com/CyberReboot/CRviz/compare/v0.3.9...v0.3.10) (2019-08-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency react-redux to v7.1.1 ([f2f4574](https://github.com/CyberReboot/CRviz/commit/f2f4574))
+* **deps:** update dependency react-redux to v7.1.1 ([b1e3696](https://github.com/CyberReboot/CRviz/commit/b1e3696))
+* **deps:** update dependency react-spinners to v0.6.1 ([89e6de4](https://github.com/CyberReboot/CRviz/commit/89e6de4))
+* **deps:** update dependency snyk to v1.217.0 ([513a47f](https://github.com/CyberReboot/CRviz/commit/513a47f))
+* **deps:** update dependency snyk to v1.221.0 ([839b37a](https://github.com/CyberReboot/CRviz/commit/839b37a))
+* **deps:** update dependency snyk to v1.221.1 ([c5df553](https://github.com/CyberReboot/CRviz/commit/c5df553))
+* clickable area for saving/deleting icon ([bdb5f6f](https://github.com/CyberReboot/CRviz/commit/bdb5f6f))
+* makes notes panel collapsible and scrollable ([b566e74](https://github.com/CyberReboot/CRviz/commit/b566e74)), closes [#499](https://github.com/CyberReboot/CRviz/issues/499)
+
 ### [0.3.9](https://github.com/CyberReboot/CRviz/compare/v0.3.10...v0.3.9) (2019-08-16)
 
 ### [0.3.11](https://github.com/CyberReboot/CRviz/compare/v0.3.10...v0.3.11) (2019-08-16)
