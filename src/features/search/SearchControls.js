@@ -18,7 +18,7 @@ const defaultState = {
   hasSearch: false
 }
 
-class Search extends React.Component {
+export class Search extends React.Component {
 
   state = defaultState
 
