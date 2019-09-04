@@ -42,7 +42,7 @@
     "redux-mock-store": "1.5.3",
     "redux-observable": "1.1.0",
     "request": "2.88.0",
-    "rxjs": "6.5.2",
+    "rxjs": "6.5.3",
     "rxjs-compat": "6.5.2",
     "snyk": "1.223.0",
     "tar-pack": "3.4.1",
