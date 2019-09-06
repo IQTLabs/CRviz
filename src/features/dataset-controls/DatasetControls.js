@@ -54,19 +54,6 @@ const authTypes = [
   {'name': 'Token', 'scheme':'Bearer' },
 ];
 
-var host = window.location.host;
-var hostname = window.location.hostname;
-var port = '80';
-const radix = 10;
-if (host.indexOf(':') > -1) {
-  port = String(parseInt(host.split(":")[1], radix)-1);
-}
-
-var POSEIDON_DATASET = {
-  name: "Poseidon Network",
-  url: "http://"+hostname+":5000/v1/network"
-};
-
 Modal.setAppElement('#root');
 
 class DatasetControls extends React.Component {
@@ -95,9 +82,6 @@ class DatasetControls extends React.Component {
     };
 
     this.datasets = [...this.props.datasets, CUSTOM_DATASET, UPLOAD_DATASET]
-    if (port !== '80') {
-      this.datasets.push(POSEIDON_DATASET)
-    }
     if(initialDS){
       this.datasets.push(initialDS)
     }
