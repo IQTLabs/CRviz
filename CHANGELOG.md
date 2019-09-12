@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.11](https://github.com/CyberReboot/CRviz/compare/v0.3.10...v0.3.11) (2019-09-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency snyk to v1.222.0 ([45cfbf3](https://github.com/CyberReboot/CRviz/commit/45cfbf3))
+* **deps:** update dependency snyk to v1.223.0 ([3e06f5b](https://github.com/CyberReboot/CRviz/commit/3e06f5b))
+
 ### [0.3.10](https://github.com/CyberReboot/CRviz/compare/v0.3.9...v0.3.10) (2019-08-29)
 
 
