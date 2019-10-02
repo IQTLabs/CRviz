@@ -15,7 +15,6 @@
 }
 
 :global(.viz-isNotNoted) circle {
-  /*fill: red !important;*/
   opacity: 0.2;
 }
 
@@ -129,8 +128,6 @@
   fill: transparent;
 }
 
-
-
 .viz :global(.viz-groupingNode) circle {
   opacity: 0.2;
 }
@@ -162,12 +159,6 @@
 
 .viz :global(.viz-label) {
   fill: black;
-  text-anchor: middle;
-  dominant-baseline: alphabetical;
-}
-
-:global(.darkTheme) .viz :global(.viz-label) {
-  fill: rgba(255, 255, 255, 0.836); /* darken white to reduce contrasting*/
   text-anchor: middle;
   dominant-baseline: alphabetical;
 }
@@ -332,26 +323,6 @@
     transform: rotateX(0deg); 
   }
 }
-/*@keyframes nag { 
-  0% { 
-    transform: translateX(0px) rotateX(0deg); 
-  },
-  5% {
-    transform: translateX(-3px) rotateX(-5deg);
-  },
-  10%{
-    transform: translateX(0px) rotateX(0deg); 
-  },
-  15% {
-    transform: translateX(3px) rotateX(5deg); 
-  },
-  20% {
-    transform: translateX(0px) rotateX(0deg); 
-  },
-  100% { 
-    transform: translateX(0px) rotateX(0deg); 
-  }
-}*/
 
 @keyframes fadein {
   from { opacity: 0; }
