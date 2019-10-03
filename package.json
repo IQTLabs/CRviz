@@ -44,7 +44,7 @@
     "request": "2.88.0",
     "rxjs": "6.5.3",
     "rxjs-compat": "6.5.3",
-    "snyk": "1.230.4",
+    "snyk": "^1.230.5",
     "tar-pack": "3.4.1",
     "uuid": "3.3.3"
   },
@@ -58,7 +58,8 @@
     "deploy-experimental": "gh-pages -r https://github.com/rashley-iqt/CRviz -d build",
     "lint": "eslint --ext=js --ext=jsx .",
     "release": "standard-version",
-    "snyk-protect": "snyk protect"
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "pre-commit": {
     "run": [
