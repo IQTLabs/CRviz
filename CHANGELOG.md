@@ -17,21 +17,6 @@ All notable changes to this project will be documented in this file. See [standa
 * **deps:** update dependency snyk to v1.230.2 ([31345da](https://github.com/CyberReboot/CRviz/commit/31345da))
 * **deps:** update react monorepo to v16.10.1 ([00c81fa](https://github.com/CyberReboot/CRviz/commit/00c81fa))
 
-### [0.3.12](https://github.com/CyberReboot/CRviz/compare/v0.3.11...v0.3.12) (2019-10-03)
-
-
-### Bug Fixes
-
-* **deps:** update dependency @fortawesome/react-fontawesome to v0.1.5 ([d28c3c1](https://github.com/CyberReboot/CRviz/commit/d28c3c1))
-* **deps:** update dependency react-scripts to v3.1.2 ([04db49f](https://github.com/CyberReboot/CRviz/commit/04db49f))
-* **deps:** update dependency redux-observable to v1.2.0 ([c6b280f](https://github.com/CyberReboot/CRviz/commit/c6b280f))
-* **deps:** update dependency snyk to v1.227.0 ([f066f9e](https://github.com/CyberReboot/CRviz/commit/f066f9e))
-* **deps:** update dependency snyk to v1.228.2 ([8a81dc2](https://github.com/CyberReboot/CRviz/commit/8a81dc2))
-* **deps:** update dependency snyk to v1.228.3 ([560b37e](https://github.com/CyberReboot/CRviz/commit/560b37e))
-* **deps:** update dependency snyk to v1.228.5 ([89f9384](https://github.com/CyberReboot/CRviz/commit/89f9384))
-* **deps:** update dependency snyk to v1.230.2 ([31345da](https://github.com/CyberReboot/CRviz/commit/31345da))
-* **deps:** update react monorepo to v16.10.1 ([00c81fa](https://github.com/CyberReboot/CRviz/commit/00c81fa))
-
 ### [0.3.11](https://github.com/CyberReboot/CRviz/compare/v0.3.10...v0.3.11) (2019-09-12)
 
 
