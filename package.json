@@ -23,7 +23,7 @@
     "http-signature": "1.2.0",
     "json-refs": "3.0.13",
     "lodash.debounce": "4.0.8",
-    "lunr": "2.3.6",
+    "lunr": "2.3.7",
     "mini.css": "3.0.1",
     "normalize.css": "8.0.1",
     "ramda": "0.26.1",
