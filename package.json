@@ -44,7 +44,7 @@
     "request": "2.88.0",
     "rxjs": "6.5.3",
     "rxjs-compat": "6.5.3",
-    "snyk": "1.234.0",
+    "snyk": "1.234.2",
     "tar-pack": "3.4.1",
     "uuid": "3.3.3"
   },
@@ -112,14 +112,14 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "7.6.3",
+    "@babel/core": "7.6.4",
     "@babel/plugin-proposal-class-properties": "7.5.5",
     "@babel/preset-react": "7.6.3",
     "@babel/register": "7.6.2",
     "@fortawesome/fontawesome-free": "5.11.2",
     "chai": "4.2.0",
     "enzyme": "3.10.0",
-    "enzyme-adapter-react-16": "1.14.0",
+    "enzyme-adapter-react-16": "1.15.1",
     "eslint-config-react-app": "5.0.2",
     "eslint-plugin-flowtype": "4.3.0",
     "eslint-plugin-import": "2.18.2",
