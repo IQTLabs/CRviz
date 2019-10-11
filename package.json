@@ -119,7 +119,7 @@
     "@fortawesome/fontawesome-free": "5.11.2",
     "chai": "4.2.0",
     "enzyme": "3.10.0",
-    "enzyme-adapter-react-16": "1.14.0",
+    "enzyme-adapter-react-16": "1.15.1",
     "eslint-config-react-app": "5.0.2",
     "eslint-plugin-flowtype": "4.3.0",
     "eslint-plugin-import": "2.18.2",
