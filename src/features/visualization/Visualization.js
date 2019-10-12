@@ -46,7 +46,8 @@ class Visualization extends React.PureComponent {
       sendData: this.getData,
       noteIdHovered:this.props.noteIdHovered,
       notes:this.props.notes,
-      hoverStatus: this.props.hoverStatus
+      hoverStatus: this.props.hoverStatus,
+      resetNodeStyles: this.props.resetNodeStyles,
     });
   }
 
