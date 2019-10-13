@@ -54,6 +54,26 @@ const defaultOptions = {
       controls: true,
       notes: true
     }
+
+const getUniqueDatasetList = (datasetAdded, uuidsFromState, uuidsFromProps) => {
+  let result = [];
+
+  if(datasetAdded || uuidsFromProps.length === 0){
+    const uniqueOwners = new Set();
+    uuidsFromProps.concat(uuidsFromState).forEach((u) => {
+      if(!uniqueOwners.has(u.owner)){
+        uniqueOwners.add(u.owner);
+        result.push(u);
+      }
+    });
+  }
+  else {
+    result = uuidsFromProps;
+  }
+
+  return result;
+}
+
 class App extends Component {
 
   constructor(props) {
@@ -84,41 +104,29 @@ class App extends Component {
       selectedFile: null,
       exportName: "dataset.json",
       initialDataSource: ds_uri ? initial_data_source : null,
+      resetNodeStyles: false,
     };
   }
 
-  
-
-  componentWillReceiveProps = (nextProps) =>{
-    const datasetAdded = this.state.datasetAdded && (nextProps.uuids.length !== this.state.uuids.length)
-    const uniqueUuids = this.getUniqueDatasetList(datasetAdded, this.state.uuids, nextProps.uuids);
-    const startUuid = nextProps.startUuid && uniqueUuids.findIndex(u => u.owner === nextProps.startUuid) !== -1 ? nextProps.startUuid : this.state.startUuid;
-    const endUuid = nextProps.endUuid && uniqueUuids.findIndex(u => u.owner === nextProps.endUuid) !== -1 ? nextProps.endUuid : this.state.endUuid;
-    this.setState({
+  static getDerivedStateFromProps = (nextProps, prevState) =>{
+    const datasetAdded = prevState.datasetAdded && (nextProps.uuids.length !== prevState.uuids.length)
+    const uniqueUuids = getUniqueDatasetList(datasetAdded, prevState.uuids, nextProps.uuids);
+    const startUuid = nextProps.startUuid && uniqueUuids.findIndex(u => u.owner === nextProps.startUuid) !== -1 ? nextProps.startUuid : prevState.startUuid;
+    const endUuid = nextProps.endUuid && uniqueUuids.findIndex(u => u.owner === nextProps.endUuid) !== -1 ? nextProps.endUuid : prevState.endUuid;
+    return {
       uuids: uniqueUuids,
       startUuid: startUuid,
       endUuid: endUuid,
       datasetAdded: datasetAdded,
-    });
+    };
   }
 
-  getUniqueDatasetList = (datasetAdded, uuidsFromState, uuidsFromProps) => {
-    let result = [];
-
-    if(datasetAdded || uuidsFromProps.length === 0){
-      const uniqueOwners = new Set();
-      uuidsFromProps.concat(uuidsFromState).forEach((u) => {
-        if(!uniqueOwners.has(u.owner)){
-          uniqueOwners.add(u.owner);
-          result.push(u);
-        }
+  componentDidUpdate = (prevProps) => {
+    if(this.state.resetNodeStyles){
+      this.setState({
+        resetNodeStyles: false,
       });
     }
-    else {
-      result = uuidsFromProps;
-    }
-
-    return result;
   }
 
   toggleShowData = () =>{
@@ -176,6 +184,9 @@ class App extends Component {
     this.props.colorBy(null);
     this.props.setHierarchyConfig([]);
     this.props.showNodes(true);
+    this.setState({
+      resetNodeStyles: true,
+    });
   }
 
   showImportOptions = () => {
@@ -409,7 +420,7 @@ class App extends Component {
         
 
         <div className={ style.canvas }>
-          <Visualization startUid={startUuid} endUid={endUuid} />
+          <Visualization startUid={startUuid} endUid={endUuid} resetNodeStyles={this.state.resetNodeStyles}/>
         </div>
         <div className={classNames({ [style.key]: true, [style.hidden]: datasetCount < 2 }) }>
           <svg width="100%" height="60">
