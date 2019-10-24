@@ -1,17 +1,24 @@
 {
   "files": {
     "main.css": "/CRviz/static/css/main.b1702f35.chunk.css",
-    "main.js": "/CRviz/static/js/main.e7708922.chunk.js",
-    "main.js.map": "/CRviz/static/js/main.e7708922.chunk.js.map",
-    "runtime-main.js": "/CRviz/static/js/runtime-main.799e4e13.js",
-    "runtime-main.js.map": "/CRviz/static/js/runtime-main.799e4e13.js.map",
+    "main.js": "/CRviz/static/js/main.2d39071c.chunk.js",
+    "main.js.map": "/CRviz/static/js/main.2d39071c.chunk.js.map",
+    "runtime-main.js": "/CRviz/static/js/runtime-main.9658f570.js",
+    "runtime-main.js.map": "/CRviz/static/js/runtime-main.9658f570.js.map",
     "static/css/2.6f6b93ba.chunk.css": "/CRviz/static/css/2.6f6b93ba.chunk.css",
-    "static/js/2.23ec925e.chunk.js": "/CRviz/static/js/2.23ec925e.chunk.js",
-    "static/js/2.23ec925e.chunk.js.map": "/CRviz/static/js/2.23ec925e.chunk.js.map",
+    "static/js/2.bea07089.chunk.js": "/CRviz/static/js/2.bea07089.chunk.js",
+    "static/js/2.bea07089.chunk.js.map": "/CRviz/static/js/2.bea07089.chunk.js.map",
     "index.html": "/CRviz/index.html",
-    "precache-manifest.c67332540636e0ec0e754ef7258eede5.js": "/CRviz/precache-manifest.c67332540636e0ec0e754ef7258eede5.js",
+    "precache-manifest.959e9f7c79ad95b9d4d69a9ba3eb325b.js": "/CRviz/precache-manifest.959e9f7c79ad95b9d4d69a9ba3eb325b.js",
     "service-worker.js": "/CRviz/service-worker.js",
     "static/css/2.6f6b93ba.chunk.css.map": "/CRviz/static/css/2.6f6b93ba.chunk.css.map",
     "static/css/main.b1702f35.chunk.css.map": "/CRviz/static/css/main.b1702f35.chunk.css.map"
-  }
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9658f570.js",
+    "static/css/2.6f6b93ba.chunk.css",
+    "static/js/2.bea07089.chunk.js",
+    "static/css/main.b1702f35.chunk.css",
+    "static/js/main.2d39071c.chunk.js"
+  ]
 }
