@@ -89,6 +89,8 @@
   flex-direction: row no-wrap;
   align-items: flex-start;
   white-space: nowrap;
+  word-wrap: break-word;
+  word-break: break-all;     
   overflow: hidden;
   text-overflow: clip;
 }

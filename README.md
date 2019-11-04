@@ -24,6 +24,12 @@ docker build -t crviz .
 docker run -dp 80:5000 crviz
 ```
 
+Note that if changes are made on the host machine, the build served by the docker container will not be updated. To stop the running deployment and kill the docker server:
+
+```
+docker stop crviz
+```
+
 ### Without Docker
 1. Install or update npm (`sudo apt install npm`, `npm install -g npm`)
 2. Clone CRViz repo `git clone https://github.com/CyberReboot/CRviz.git`
