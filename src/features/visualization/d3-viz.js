@@ -175,7 +175,8 @@ function d3Viz(rootNode) {
       showNodes: props.showNodes,
       hasSearch: props.queryString !== '',
       noteIdHovered: props.noteIdHovered,
-      hasNoNotes: props.hoverStatus
+      hasNoNotes: props.hoverStatus,
+      resetNodeStyles: props.resetNodeStyles,
     });
 
     setupTooltip({

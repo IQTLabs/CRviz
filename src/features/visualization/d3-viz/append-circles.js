@@ -4,7 +4,7 @@ import { path } from "d3-path";
 import datumKey from "./datum-key";
 import className from "./class-name";
 
-const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch, noteIdHovered,hasNoNotes }) => {
+const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch, noteIdHovered,hasNoNotes, resetNodeStyles }) => {
   const data = packedData.descendants();
   const firstLeaf = packedData.leaves()[0];
   const leafRadius = firstLeaf.r || 0;
@@ -32,6 +32,9 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch, 
     .classed(className('isNotNoted'), (d) => has_NoNotes(d,noteIdHovered) && hasNoNotes)
     .classed(className("searchExcluded"), (d) => hasSearch && !d.data.CRVIZ._isSearchResult && d.depth > 0 && d.height === 0)
     .classed(className("leafNode"), (d) => d.height === 0)
+    .classed(className("ringMenuExcluded"), (d, i, nodes) => {
+        const n = select(nodes[i]);
+        return n.classed(className("ringMenuExcluded")) && !resetNodeStyles})
     .attr("transform", (d) => `translate(${[d.x, d.y].join(",")})`)
     .attr("display", (d) => !showNodes && d.height === 0 ? 'none' : null)
     .order();
@@ -71,13 +74,6 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch, 
   const newTotalContainer = newAggregations
     .append('g')
       .classed(className("total-container"), true);
-  // newTotalContainer
-  //   .append('g')
-  //     .classed(className("node"), true)
-  //   .append('circle')
-  //     .attr('r', (d) => leafRadius)
-  //     .attr('cx', (d) => 0)
-  //     .attr('cy', (d) => 0);
 
   const newTotalText = newTotalContainer
   .append("text")
@@ -97,9 +93,6 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch, 
   .select('text')
   .merge(newTotalText)
     .text((d) => !isNaN(d.value) ? d.value : "0");
-
-  //const groupData = packedData.descendants().filter((d) => d.height > 0 && d,height > 0);
-  //appendAggregations(nodeRoot, groupData, showNodes, leafRadius, fontScale);
 
   return [
     nodes.merge(nodesEnter),
