@@ -44,7 +44,7 @@ class Note extends React.Component {
 
 class NoteSelectorList extends React.Component {
   clickedOn = () => {
-    if (this.clicked == false) {
+    if (this.clicked === false) {
       this.props.toggleNotesHover(false);
       this.clicked = true;
     } else {
@@ -58,7 +58,7 @@ class NoteSelectorList extends React.Component {
   }
 
   hoverOff = () => {
-    if(this.clicked == true) {
+    if(this.clicked === true) {
       this.props.toggleNotesHover(true);
     } else {
       this.props.toggleNotesHover(false);
