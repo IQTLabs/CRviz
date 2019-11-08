@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.14](https://github.com/CyberReboot/CRviz/compare/v0.3.13...v0.3.14) (2019-11-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency react-beautiful-dnd to v12 ([f457fd3](https://github.com/CyberReboot/CRviz/commit/f457fd3))
+* **deps:** update dependency react-compound-slider to v2.4.0 ([409c727](https://github.com/CyberReboot/CRviz/commit/409c727))
+* **deps:** update dependency react-modal to v3.11.1 ([5f449f9](https://github.com/CyberReboot/CRviz/commit/5f449f9))
+* **deps:** update dependency snyk to v1.239.5 ([5bf4052](https://github.com/CyberReboot/CRviz/commit/5bf4052))
+* **deps:** update dependency snyk to v1.240.0 ([31483b4](https://github.com/CyberReboot/CRviz/commit/31483b4))
+* **deps:** update dependency snyk to v1.240.2 ([0e818a0](https://github.com/CyberReboot/CRviz/commit/0e818a0))
+* **deps:** update dependency snyk to v1.240.3 ([3165839](https://github.com/CyberReboot/CRviz/commit/3165839))
+* **deps:** update dependency snyk to v1.242.0 ([62c2f5d](https://github.com/CyberReboot/CRviz/commit/62c2f5d))
+
 ### [0.3.13](https://github.com/CyberReboot/CRviz/compare/v0.3.12...v0.3.13) (2019-10-24)
 
 
