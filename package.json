@@ -132,7 +132,7 @@
     "pre-commit": "1.2.2",
     "react-app-rewire-eslint": "0.2.3",
     "sinon": "7.5.0",
-    "standard-version": "7.0.0"
+    "standard-version": "7.0.1"
   },
   "snyk": true
 }
