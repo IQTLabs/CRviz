@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.16](https://github.com/CyberReboot/CRviz/compare/v0.3.15...v0.3.16) (2019-11-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency d3 to v5.14.2 ([59773d6](https://github.com/CyberReboot/CRviz/commit/59773d62faf6a99aa43ec3a5cb911990244265d9))
+* **deps:** update dependency react-beautiful-dnd to v12.1.0 ([9fa5f5d](https://github.com/CyberReboot/CRviz/commit/9fa5f5df5b2781f5f640c6e4ba64f9c34c795fac))
+* **deps:** update dependency react-beautiful-dnd to v12.1.1 ([a4773a5](https://github.com/CyberReboot/CRviz/commit/a4773a5ea38d8e1f6470c8b8278c160047dd7cd9))
+* **deps:** update dependency snyk to v1.247.1 ([b1b5b77](https://github.com/CyberReboot/CRviz/commit/b1b5b77b6834da579a437da7c10e27e5599fd366))
+* **deps:** update dependency snyk to v1.250.0 ([d909789](https://github.com/CyberReboot/CRviz/commit/d90978995678b28a3bdb1d5b4c3b5fb39206173b))
+* **deps:** update dependency snyk to v1.251.0 ([c6c779d](https://github.com/CyberReboot/CRviz/commit/c6c779d931eeac47b754735b2e564f7c817f9520))
+* **deps:** update react monorepo to v16.12.0 ([30ab20b](https://github.com/CyberReboot/CRviz/commit/30ab20b721318953b3c6956d48d4242de0c280ac))
+
 ### [0.3.15](https://github.com/CyberReboot/CRviz/compare/v0.3.14...v0.3.15) (2019-11-08)
 
 ### [0.3.14](https://github.com/CyberReboot/CRviz/compare/v0.3.13...v0.3.14) (2019-11-08)
