@@ -29,7 +29,7 @@
     "ramda": "0.26.1",
     "rc": "1.2.8",
     "react": "16.12.0",
-    "react-beautiful-dnd": "12.1.1",
+    "react-beautiful-dnd": "12.2.0",
     "react-compound-slider": "2.4.0",
     "react-dom": "16.12.0",
     "react-modal": "3.11.1",
