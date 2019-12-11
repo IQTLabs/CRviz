@@ -120,9 +120,9 @@
     "chai": "4.2.0",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.15.1",
-    "eslint": "^6.7.2",
+    "eslint": "6.7.2",
     "eslint-config-react-app": "5.1.0",
-    "eslint-plugin-flowtype": "^3.13.0",
+    "eslint-plugin-flowtype": "3.13.0",
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.17.0",
@@ -133,7 +133,7 @@
     "pre-commit": "1.2.2",
     "sinon": "7.5.0",
     "standard-version": "7.0.1",
-    "typescript": "^3.7.3"
+    "typescript": "3.7.3"
   },
   "snyk": true
 }
