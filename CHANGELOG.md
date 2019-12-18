@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.17](https://github.com/CyberReboot/CRviz/compare/v0.3.16...v0.3.17) (2019-12-18)
+
+
+### Bug Fixes
+
+* package.json & package-lock.json to reduce vulnerabilities ([cd5b2ed](https://github.com/CyberReboot/CRviz/commit/cd5b2ede49ba97af143bd2094274aa16e9d92869))
+* **deps:** update dependency css-element-queries to v1.2.2 ([b2b7df2](https://github.com/CyberReboot/CRviz/commit/b2b7df259791a7383705fd9429bfece2219312b4))
+* **deps:** update dependency snyk to v1.251.2 ([3f8e1f6](https://github.com/CyberReboot/CRviz/commit/3f8e1f6ee2fdd87cc72defd244808357e56af23e))
+* **deps:** update dependency snyk to v1.254.0 ([298e0fc](https://github.com/CyberReboot/CRviz/commit/298e0fc3bd9f03785550270d54526a63869f1638))
+* **deps:** update dependency snyk to v1.256.0 ([1b39df6](https://github.com/CyberReboot/CRviz/commit/1b39df634c42f75bdd93bfa4dc41340b7b6ab908))
+
 ### [0.3.16](https://github.com/CyberReboot/CRviz/compare/v0.3.15...v0.3.16) (2019-11-21)
 
 
