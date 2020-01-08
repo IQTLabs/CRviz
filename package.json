@@ -131,7 +131,7 @@
     "mocha": "7.0.0",
     "nyc": "15.0.0",
     "pre-commit": "1.2.2",
-    "sinon": "8.0.2",
+    "sinon": "8.0.4",
     "standard-version": "7.0.1",
     "typescript": "3.7.4"
   },
