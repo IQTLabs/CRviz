@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.18](https://github.com/CyberReboot/CRviz/compare/v0.3.17...v0.3.18) (2020-01-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency react-spinners to v0.7.2 ([46c79d9](https://github.com/CyberReboot/CRviz/commit/46c79d95b54c2ebbcbe3dbdae09cd27057ef9597))
+* **deps:** update dependency redux to v4.0.5 ([407ab03](https://github.com/CyberReboot/CRviz/commit/407ab0336552688b1c7182b2e7812fb02c6c5b38))
+* **deps:** update dependency rxjs to v6.5.4 ([1913d98](https://github.com/CyberReboot/CRviz/commit/1913d98ad488714db9c88df77eb89672f11b737e))
+* **deps:** update dependency rxjs-compat to v6.5.4 ([d3a8d4c](https://github.com/CyberReboot/CRviz/commit/d3a8d4c1523f3cf1fd713a4bc4ec97c41bc47629))
+* **deps:** update dependency snyk to v1.264.0 ([5471bb1](https://github.com/CyberReboot/CRviz/commit/5471bb105113eea7e07e80d2cb57e011d67c2967))
+* **deps:** update dependency snyk to v1.265.0 ([311986d](https://github.com/CyberReboot/CRviz/commit/311986d6c826908817059b578681e450c87de01a))
+* **deps:** update dependency snyk to v1.269.0 ([c06d4f4](https://github.com/CyberReboot/CRviz/commit/c06d4f48ddc1dc6b62894aaed7b13e75b7435b85))
+
 ### [0.3.17](https://github.com/CyberReboot/CRviz/compare/v0.3.16...v0.3.17) (2019-12-18)
 
 
