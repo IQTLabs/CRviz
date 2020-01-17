@@ -133,7 +133,7 @@
     "pre-commit": "1.2.2",
     "sinon": "8.1.0",
     "standard-version": "7.0.1",
-    "typescript": "3.7.4"
+    "typescript": "3.7.5"
   },
   "snyk": true
 }
