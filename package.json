@@ -41,7 +41,7 @@
     "redux-actions": "2.6.5",
     "redux-mock-store": "1.5.4",
     "redux-observable": "1.2.0",
-    "request": "2.88.0",
+    "request": "2.88.2",
     "rxjs": "6.5.4",
     "rxjs-compat": "6.5.4",
     "snyk": "1.290.2",
