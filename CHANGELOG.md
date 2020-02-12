@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.19](https://github.com/CyberReboot/CRviz/compare/v0.3.18...v0.3.19) (2020-02-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ramda to v0.27.0 ([3f32d1a](https://github.com/CyberReboot/CRviz/commit/3f32d1a99f55f8f5d2c71bbb4cab3c370c84203d))
+* **deps:** update dependency request to v2.88.2 ([0e70886](https://github.com/CyberReboot/CRviz/commit/0e70886087daf89cb64b86ab4399e864369c08d8))
+* **deps:** update dependency snyk to v1.290.2 ([45f9ad6](https://github.com/CyberReboot/CRviz/commit/45f9ad683bddaedeb7144be9b1eb2236770199b2))
+* **deps:** update dependency snyk to v1.291.0 ([461e921](https://github.com/CyberReboot/CRviz/commit/461e92198376ac0f115cbad054c293579deb4ec1))
+* package.json & package-lock.json to reduce vulnerabilities ([94ded48](https://github.com/CyberReboot/CRviz/commit/94ded4864fb4392e9bd9be8ebfb83963a65487a6))
+* **deps:** update dependency uuid to v3.4.0 ([f7db9be](https://github.com/CyberReboot/CRviz/commit/f7db9bef137cf4ff9a14c3865d14900310251836))
+
 ### [0.3.18](https://github.com/CyberReboot/CRviz/compare/v0.3.17...v0.3.18) (2020-01-15)
 
 
