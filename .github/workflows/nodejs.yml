@@ -1,6 +1,6 @@
-name: Node.js CI
+name: Unit Tests
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -21,3 +21,10 @@ jobs:
     - run: npm test
       env:
         CI: true
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1.0.5
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+      if: github.repository == 'cyberreboot/crviz'
