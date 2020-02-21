@@ -28,6 +28,6 @@ jobs:
         docker buildx build \
           -t cyberreboot/crviz:${{ steps.change_version.outputs.VERSION }} .
         docker buildx build \
-          -f Dockerfile.gh
+          -f Dockerfile.gh \
           -t cyberreboot/crviz-gh:${{ steps.change_version.outputs.VERSION }} . 
       if: github.repository == 'cyberreboot/crviz'
