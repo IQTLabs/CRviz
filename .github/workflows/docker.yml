@@ -25,6 +25,6 @@ jobs:
       env:
         DOCKER_CLI_EXPERIMENTAL: enabled
       run: |
-        docker buildx build 
+        docker buildx build \
           -t cyberreboot/crviz:${{ steps.change_version.outputs.VERSION }} . 
       if: github.repository == 'cyberreboot/crviz'
