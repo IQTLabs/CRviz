@@ -1,0 +1,100 @@
+  
+.shown {
+    transition: 1s;
+    line-height: 2rem;
+    border-radius: 10px;
+    display: block;
+}
+
+  
+:global(.darkTheme) .shown {
+    background-color: #666666;
+}
+
+  
+.hidden {
+    transition: all 0.1;
+    margin-left: -40px;
+    padding-right: 40px;
+    padding-left: 10px;
+    transition: 1s;
+    line-height: 2rem;
+    border-radius: 10px;
+    display: block;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 4px 0px 0px 0px rgba(0;0;0;0.2);
+}
+
+:global(.darkTheme) .hidden {
+    background-color: #666666;
+}
+
+  
+
+.show {
+    display : block;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0;0;0;0.2);
+    transition: 0.3s;
+    border-radius: 10px;
+    padding: 5px;
+    background: white;
+    width:290px ;
+    max-height:70%; 
+    overflow-y: auto;
+}
+
+:global(.darkTheme) .show {
+    background-color: #666666;
+}
+
+.hide {
+    display : block;
+    position: fixed;
+    top: 10px;
+    right: -275px;
+    box-shadow: 0 4px 8px 0 rgba(0;0;0;0.2);
+    transition: 0.3s;
+    border-radius: 10px;
+    padding: 5px;
+    background: white;
+    width:290px ;
+    max-height:70%; 
+}
+
+:global(.darkTheme) .hide {
+    background-color: #666666;
+}
+
+.detailPanel {
+    
+}
+    
+.detailText {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+}
+
+.detailText:hover {
+    white-space: normal;
+    overflow: visible;
+}
+
+.inputStyle {
+    background: white;
+    display: inline;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0.5rem 0.75rem;
+    width: 80%
+}
+
+.section {
+  border-bottom: 2px dashed rgba(125, 125, 125, 0.5);
+  padding: 1rem 0;
+  flex: 0 0;
+}

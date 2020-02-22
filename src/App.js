@@ -17,6 +17,7 @@ import {
   setHierarchyConfig, showNodes, colorBy, selectControls, setStartDataset, setEndDataset,
   showBusy
 } from 'domain/controls';
+import { getAllNotes } from "./domain/notes";
 import { getError, clearError } from "domain/error";
 import { removeSearchIndex } from "epics/index-dataset-epic";
 import { uploadDataset } from "epics/upload-dataset-epic";
@@ -24,17 +25,20 @@ import { uploadDataset } from "epics/upload-dataset-epic";
 import Header from 'features/header/Header';
 import HierarchySelector from 'features/hierarchy-selector/HierarchySelector';
 import ComparisonSelector from 'features/comparison-selector/ComparisonSelector';
+import NoteSelectorList from 'features/note-selector/NoteSelector';
 import MiscControls from 'features/misc-controls/MiscControls';
 import SearchControls from 'features/search/SearchControls';
 import Visualization from 'features/visualization/Visualization';
 import DatasetControls from 'features/dataset-controls/DatasetControls';
 import DatasetSlider from 'features/dataset-controls/DatasetSlider';
 import DatasetUpload from 'features/dataset-controls/DatasetUpload';
-import { getDataToExport } from "features/dataset-controls/export"
+import { getDataToExport } from "features/dataset-controls/export";
+import TooltipControls from "features/tooltip/Tooltip";
 
 import style from './App.module.css';
 
 import datasets from './datasets';
+
 
 const uuidv4 = require('uuid/v4');
 
@@ -43,67 +47,93 @@ const IMPORT = "import";
 const EXPORT = "export";
 const DATA = "data";
 const CONTROLS = "controls";
+const NOTES = "notes";
 const defaultOptions = {
       action: "",
       data: true,
-      controls: true
+      controls: true,
+      notes: true
     }
-class App extends Component {
 
-  state = {
-    showData: true,
-    showGrouping: false,
-    showFiltering: false,
-    uuids: [{'owner': uuidv4(), 'name': 'Series 0', 'shortName': 's0'}],
-    datasetAdded: false,
-    startUuid: null,
-    endUuid: null,
-    showOptions: false,
-    options:{
-      action: "",
-      data: true,
-      controls: true
-    },
-    selectedFile: null,
-    exportName: "dataset.json",
+const getUniqueDatasetList = (datasetAdded, uuidsFromState, uuidsFromProps) => {
+  let result = [];
+
+  if(datasetAdded || uuidsFromProps.length === 0){
+    const uniqueOwners = new Set();
+    uuidsFromProps.concat(uuidsFromState).forEach((u) => {
+      if(!uniqueOwners.has(u.owner)){
+        uniqueOwners.add(u.owner);
+        result.push(u);
+      }
+    });
+  }
+  else {
+    result = uuidsFromProps;
   }
 
-  componentWillReceiveProps = (nextProps) =>{
-    const datasetAdded = this.state.datasetAdded && (nextProps.uuids.length !== this.state.uuids.length)
-    const uniqueUuids = this.getUniqueDatasetList(datasetAdded, this.state.uuids, nextProps.uuids);
-    const startUuid = nextProps.startUuid && uniqueUuids.findIndex(u => u.owner === nextProps.startUuid) !== -1 ? nextProps.startUuid : this.state.startUuid;
-    const endUuid = nextProps.endUuid && uniqueUuids.findIndex(u => u.owner === nextProps.endUuid) !== -1 ? nextProps.endUuid : this.state.endUuid;
-    this.setState({
+  return result;
+}
+
+class App extends Component {
+
+  constructor(props) {
+    super(props);
+
+    const url = new URL(window.location);
+    const params = new URLSearchParams(url.search);
+    const ds_uri = params.get("dataSourceUrl");
+    const ds_name = params.get("dataSourceName") || ds_uri || ""; 
+     
+    const initial_data_source = {'name': ds_name, 'url': ds_uri };
+
+    this.state = {
+      showData: true,
+      showGrouping: false,
+      showFiltering: false,
+      uuids: [{'owner': uuidv4(), 'name': 'Series 0', 'shortName': 's0'}],
+      datasetAdded: false,
+      startUuid: null,
+      endUuid: null,
+      showOptions: false,
+      options: {
+        action: "",
+        data: true,
+        controls: true,
+        notes: true,
+      },
+      selectedFile: null,
+      exportName: "dataset.json",
+      initialDataSource: ds_uri ? initial_data_source : null,
+      resetNodeStyles: false,
+    };
+  }
+
+  static getDerivedStateFromProps = (nextProps, prevState) =>{
+    const datasetAdded = prevState.datasetAdded && (nextProps.uuids.length !== prevState.uuids.length)
+    const uniqueUuids = getUniqueDatasetList(datasetAdded, prevState.uuids, nextProps.uuids);
+    const startUuid = nextProps.startUuid && uniqueUuids.findIndex(u => u.owner === nextProps.startUuid) !== -1 ? nextProps.startUuid : prevState.startUuid;
+    const endUuid = nextProps.endUuid && uniqueUuids.findIndex(u => u.owner === nextProps.endUuid) !== -1 ? nextProps.endUuid : prevState.endUuid;
+    return {
       uuids: uniqueUuids,
       startUuid: startUuid,
       endUuid: endUuid,
       datasetAdded: datasetAdded,
-    });
+    };
   }
 
-  getUniqueDatasetList = (datasetAdded, uuidsFromState, uuidsFromProps) => {
-    let result = [];
-
-    if(datasetAdded || uuidsFromProps.length === 0){
-      const uniqueOwners = new Set();
-      uuidsFromProps.concat(uuidsFromState).forEach((u) => {
-        if(!uniqueOwners.has(u.owner)){
-          uniqueOwners.add(u.owner);
-          result.push(u);
-        }
+  componentDidUpdate = (prevProps) => {
+    if(this.state.resetNodeStyles){
+      this.setState({
+        resetNodeStyles: false,
       });
     }
-    else {
-      result = uuidsFromProps;
-    }
-
-    return result;
   }
 
   toggleShowData = () =>{
     this.setState({
       showData: !this.state.showData,
       showComparison: false,
+      showNotes:false,
       showGrouping: false,
       showFiltering: false,
     });
@@ -113,6 +143,16 @@ class App extends Component {
     this.setState({
       showData: false,
       showComparison: !this.state.showComparison,
+      showGrouping: false,
+      showFiltering: false
+    });
+  }
+
+  toggleShowNotes = () =>{
+    this.setState({
+      showData: false,
+      showComparison: false,
+      showNotes: !this.state.showNotes,
       showGrouping: false,
       showFiltering: false
     });
@@ -144,6 +184,9 @@ class App extends Component {
     this.props.colorBy(null);
     this.props.setHierarchyConfig([]);
     this.props.showNodes(true);
+    this.setState({
+      resetNodeStyles: true,
+    });
   }
 
   showImportOptions = () => {
@@ -169,6 +212,7 @@ class App extends Component {
           'file': this.state.selectedFile,
           'includeData': this.state.options.data,
           'includeControls': this.state.options.controls,
+          'includeNotes': this.state.options.notes,
         })
       }
       this.setState({showOptions: false })
@@ -184,9 +228,10 @@ class App extends Component {
   getDownloadUrl = () => {
     const datasets = this.state.options.data && this.props.fullDatasets;
     const controls = this.state.options.controls && this.props.controls;
+    const notes = this.state.options.notes && this.props.notes;
     const keyFields = this.state.options.data && this.props.keyFields;
     const ignoredFields = this.state.options.data && this.props.ignoredFields;
-    const exportData = getDataToExport(datasets, keyFields, ignoredFields, controls)
+    const exportData = getDataToExport(datasets, keyFields, ignoredFields, controls,notes)
     const urlObject = window.URL || window.webkitURL || window;
     const json = JSON.stringify(exportData, null, 2);
     const blob = new Blob([json], {'type': "application/json"});
@@ -252,9 +297,11 @@ class App extends Component {
     const endUuid = this.state.endUuid;
     const showData = this.state.showData;
     const showComparison = this.state.showComparison;
+    const showNotes = this.state.showNotes;
     const showGrouping = this.state.showGrouping;
     const showOptions = this.state.showOptions;
     const options = this.state.options;
+    const initialDataSource = this.state.initialDataSource;
 
     return (
       <div className={
@@ -288,7 +335,8 @@ class App extends Component {
                     shortName={ uuid.shortName }
                     removeDatasetEntry={ this.removeDatasetEntry }
                     removable={uuids.length > 1}
-                    datasets={ datasets }/>
+                    datasets={ datasets }
+                    initialDataSource={initialDataSource}/>
                 </div>
               )
             })}
@@ -338,6 +386,15 @@ class App extends Component {
               Please select at least 2 datasets to continue
             </div>
           }
+          <div className={style.accordionHeader} onClick={this.toggleShowNotes}>
+            Notes  {!showNotes && <FontAwesomeIcon icon={faAngleDoubleDown} />}{showNotes && <FontAwesomeIcon  onClick={this.toggleShowNotes} icon={faAngleDoubleUp} />}
+          </div>
+          { showNotes &&
+            <div> 
+              <NoteSelectorList />
+            </div>
+          }
+
           
           <div className={style.footerContainer}>
             <span className={ style.centerSpan }>
@@ -349,6 +406,8 @@ class App extends Component {
                 </div>
             </span>
           </div>
+
+          
         </div>
         { datasetCount === 0 && lastUpdated !== null &&
           <div  className={ style.emptyDataset }>
@@ -358,8 +417,10 @@ class App extends Component {
           </div>
         }
 
+        
+
         <div className={ style.canvas }>
-          <Visualization startUid={startUuid} endUid={endUuid} />
+          <Visualization startUid={startUuid} endUid={endUuid} resetNodeStyles={this.state.resetNodeStyles}/>
         </div>
         <div className={classNames({ [style.key]: true, [style.hidden]: datasetCount < 2 }) }>
           <svg width="100%" height="60">
@@ -460,6 +521,19 @@ class App extends Component {
                   </div>
                   <label >Controls</label>
                 </div>
+                <div className={`${style.checkboxContainer} input-group`}>
+                  <div className={ style.switch }>
+                    <input
+                      type="checkbox"
+                      id="notes-check"
+                      checked={options.notes}
+                      onChange={(evt) => this.setOptions(NOTES, evt.target.checked)}
+                    />
+                    <label htmlFor="notes-check" className={ style.switchLabel }>
+                    </label>
+                  </div>
+                  <label>Notes</label>
+                </div>
               </div>
               <div>
                 <span className={ style.centerSpan }>
@@ -492,6 +566,11 @@ class App extends Component {
             loading={this.props.shouldShowBusy}
           />
         </div>
+  
+          <div >
+            <TooltipControls />
+          </div>
+  
       </div>
     );
   }
@@ -514,6 +593,7 @@ const mapStateToProps = state => {
     endUuid: controls.end,
     fullDatasets: datasets,
     controls: controls,
+    notes: getAllNotes(state),
     keyFields: getKeyFields(state),
     ignoredFields: getIgnoredFields(state),
     shouldShowBusy: controls.showBusy,

@@ -1,0 +1,33 @@
+name: Docker Build
+
+on: [push, pull_request]
+
+jobs:
+  buildx:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+    - name: Change for master
+      id: change_version
+      run: if [ "${{ steps.get_version.outputs.VERSION }}" == "master" ]; then echo ::set-output name=VERSION::latest; else echo ::set-output name=VERSION::${{ steps.get_version.outputs.VERSION }}; fi
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: crazy-max/ghaction-docker-buildx@v1.0.5
+      with:
+        version: latest
+
+    - name: Build
+      env:
+        DOCKER_CLI_EXPERIMENTAL: enabled
+      run: |
+        docker buildx build \
+          -t cyberreboot/crviz:${{ steps.change_version.outputs.VERSION }} .
+        docker buildx build \
+          -f Dockerfile.gh \
+          -t cyberreboot/crviz-gh:${{ steps.change_version.outputs.VERSION }} . 
+      if: github.repository == 'cyberreboot/crviz'

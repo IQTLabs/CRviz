@@ -68,7 +68,7 @@ const flattenDataset = (ds, cfg) => {
     return flattened;
 
   for(var key in ds){
-    var item = {'CRVIZ_HASH_KEY':ds[key].CRVIZ["_HASH_KEY"]};
+    var item = {'CRVIZ_SEARCH_KEY':ds[key].CRVIZ["_SEARCH_KEY"]};
     for(var f in cfg.fields){
       var field = cfg.fields[f];
 
@@ -88,7 +88,7 @@ const generateIndex = (payload) => {
                         ? payload.datasets[owner].configuration : configurationFor(dataset);
     var flat = flattenDataset(dataset, configuration);
     const idx = lunr(function () {
-      this.ref('CRVIZ_HASH_KEY');
+      this.ref('CRVIZ_SEARCH_KEY');
       if(configuration && configuration.fields){
         const filteredFields = configuration.fields.filter(f => !f.displayName.includes("/"))
         filteredFields.map((field) => { return this.field(field.displayName.toLowerCase()); })
@@ -105,8 +105,12 @@ const generateIndex = (payload) => {
 const getValueByPath = (object, path) => {
   if(object && path.length > 0){
     let current = object[path[0]];
+    
     for(var i = 1; i < path.length; i++){
-      current = current[path[i]]
+      if(current[path[i]])
+        current = current[path[i]];
+      else
+        return null;
     }
     return current;
   }

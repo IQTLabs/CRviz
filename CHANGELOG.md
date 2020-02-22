@@ -2,6 +2,252 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.19](https://github.com/CyberReboot/CRviz/compare/v0.3.18...v0.3.19) (2020-02-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ramda to v0.27.0 ([3f32d1a](https://github.com/CyberReboot/CRviz/commit/3f32d1a99f55f8f5d2c71bbb4cab3c370c84203d))
+* **deps:** update dependency request to v2.88.2 ([0e70886](https://github.com/CyberReboot/CRviz/commit/0e70886087daf89cb64b86ab4399e864369c08d8))
+* **deps:** update dependency snyk to v1.290.2 ([45f9ad6](https://github.com/CyberReboot/CRviz/commit/45f9ad683bddaedeb7144be9b1eb2236770199b2))
+* **deps:** update dependency snyk to v1.291.0 ([461e921](https://github.com/CyberReboot/CRviz/commit/461e92198376ac0f115cbad054c293579deb4ec1))
+* package.json & package-lock.json to reduce vulnerabilities ([94ded48](https://github.com/CyberReboot/CRviz/commit/94ded4864fb4392e9bd9be8ebfb83963a65487a6))
+* **deps:** update dependency uuid to v3.4.0 ([f7db9be](https://github.com/CyberReboot/CRviz/commit/f7db9bef137cf4ff9a14c3865d14900310251836))
+
+### [0.3.18](https://github.com/CyberReboot/CRviz/compare/v0.3.17...v0.3.18) (2020-01-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency react-spinners to v0.7.2 ([46c79d9](https://github.com/CyberReboot/CRviz/commit/46c79d95b54c2ebbcbe3dbdae09cd27057ef9597))
+* **deps:** update dependency redux to v4.0.5 ([407ab03](https://github.com/CyberReboot/CRviz/commit/407ab0336552688b1c7182b2e7812fb02c6c5b38))
+* **deps:** update dependency rxjs to v6.5.4 ([1913d98](https://github.com/CyberReboot/CRviz/commit/1913d98ad488714db9c88df77eb89672f11b737e))
+* **deps:** update dependency rxjs-compat to v6.5.4 ([d3a8d4c](https://github.com/CyberReboot/CRviz/commit/d3a8d4c1523f3cf1fd713a4bc4ec97c41bc47629))
+* **deps:** update dependency snyk to v1.264.0 ([5471bb1](https://github.com/CyberReboot/CRviz/commit/5471bb105113eea7e07e80d2cb57e011d67c2967))
+* **deps:** update dependency snyk to v1.265.0 ([311986d](https://github.com/CyberReboot/CRviz/commit/311986d6c826908817059b578681e450c87de01a))
+* **deps:** update dependency snyk to v1.269.0 ([c06d4f4](https://github.com/CyberReboot/CRviz/commit/c06d4f48ddc1dc6b62894aaed7b13e75b7435b85))
+
+### [0.3.17](https://github.com/CyberReboot/CRviz/compare/v0.3.16...v0.3.17) (2019-12-18)
+
+
+### Bug Fixes
+
+* package.json & package-lock.json to reduce vulnerabilities ([cd5b2ed](https://github.com/CyberReboot/CRviz/commit/cd5b2ede49ba97af143bd2094274aa16e9d92869))
+* **deps:** update dependency css-element-queries to v1.2.2 ([b2b7df2](https://github.com/CyberReboot/CRviz/commit/b2b7df259791a7383705fd9429bfece2219312b4))
+* **deps:** update dependency snyk to v1.251.2 ([3f8e1f6](https://github.com/CyberReboot/CRviz/commit/3f8e1f6ee2fdd87cc72defd244808357e56af23e))
+* **deps:** update dependency snyk to v1.254.0 ([298e0fc](https://github.com/CyberReboot/CRviz/commit/298e0fc3bd9f03785550270d54526a63869f1638))
+* **deps:** update dependency snyk to v1.256.0 ([1b39df6](https://github.com/CyberReboot/CRviz/commit/1b39df634c42f75bdd93bfa4dc41340b7b6ab908))
+
+### [0.3.16](https://github.com/CyberReboot/CRviz/compare/v0.3.15...v0.3.16) (2019-11-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency d3 to v5.14.2 ([59773d6](https://github.com/CyberReboot/CRviz/commit/59773d62faf6a99aa43ec3a5cb911990244265d9))
+* **deps:** update dependency react-beautiful-dnd to v12.1.0 ([9fa5f5d](https://github.com/CyberReboot/CRviz/commit/9fa5f5df5b2781f5f640c6e4ba64f9c34c795fac))
+* **deps:** update dependency react-beautiful-dnd to v12.1.1 ([a4773a5](https://github.com/CyberReboot/CRviz/commit/a4773a5ea38d8e1f6470c8b8278c160047dd7cd9))
+* **deps:** update dependency snyk to v1.247.1 ([b1b5b77](https://github.com/CyberReboot/CRviz/commit/b1b5b77b6834da579a437da7c10e27e5599fd366))
+* **deps:** update dependency snyk to v1.250.0 ([d909789](https://github.com/CyberReboot/CRviz/commit/d90978995678b28a3bdb1d5b4c3b5fb39206173b))
+* **deps:** update dependency snyk to v1.251.0 ([c6c779d](https://github.com/CyberReboot/CRviz/commit/c6c779d931eeac47b754735b2e564f7c817f9520))
+* **deps:** update react monorepo to v16.12.0 ([30ab20b](https://github.com/CyberReboot/CRviz/commit/30ab20b721318953b3c6956d48d4242de0c280ac))
+
+### [0.3.15](https://github.com/CyberReboot/CRviz/compare/v0.3.14...v0.3.15) (2019-11-08)
+
+### [0.3.14](https://github.com/CyberReboot/CRviz/compare/v0.3.13...v0.3.14) (2019-11-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency react-beautiful-dnd to v12 ([f457fd3](https://github.com/CyberReboot/CRviz/commit/f457fd3))
+* **deps:** update dependency react-compound-slider to v2.4.0 ([409c727](https://github.com/CyberReboot/CRviz/commit/409c727))
+* **deps:** update dependency react-modal to v3.11.1 ([5f449f9](https://github.com/CyberReboot/CRviz/commit/5f449f9))
+* **deps:** update dependency snyk to v1.239.5 ([5bf4052](https://github.com/CyberReboot/CRviz/commit/5bf4052))
+* **deps:** update dependency snyk to v1.240.0 ([31483b4](https://github.com/CyberReboot/CRviz/commit/31483b4))
+* **deps:** update dependency snyk to v1.240.2 ([0e818a0](https://github.com/CyberReboot/CRviz/commit/0e818a0))
+* **deps:** update dependency snyk to v1.240.3 ([3165839](https://github.com/CyberReboot/CRviz/commit/3165839))
+* **deps:** update dependency snyk to v1.242.0 ([62c2f5d](https://github.com/CyberReboot/CRviz/commit/62c2f5d))
+
+### [0.3.13](https://github.com/CyberReboot/CRviz/compare/v0.3.12...v0.3.13) (2019-10-24)
+
+
+### Bug Fixes
+
+* Properly resets styles on reset ([b8e12f3](https://github.com/CyberReboot/CRviz/commit/b8e12f3))
+
+### [0.3.12](https://github.com/CyberReboot/CRviz/compare/v0.3.11...v0.3.12) (2019-10-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fortawesome/react-fontawesome to v0.1.5 ([d28c3c1](https://github.com/CyberReboot/CRviz/commit/d28c3c1))
+* **deps:** update dependency react-scripts to v3.1.2 ([04db49f](https://github.com/CyberReboot/CRviz/commit/04db49f))
+* **deps:** update dependency redux-observable to v1.2.0 ([c6b280f](https://github.com/CyberReboot/CRviz/commit/c6b280f))
+* **deps:** update dependency snyk to v1.227.0 ([f066f9e](https://github.com/CyberReboot/CRviz/commit/f066f9e))
+* **deps:** update dependency snyk to v1.228.2 ([8a81dc2](https://github.com/CyberReboot/CRviz/commit/8a81dc2))
+* **deps:** update dependency snyk to v1.228.3 ([560b37e](https://github.com/CyberReboot/CRviz/commit/560b37e))
+* **deps:** update dependency snyk to v1.228.5 ([89f9384](https://github.com/CyberReboot/CRviz/commit/89f9384))
+* **deps:** update dependency snyk to v1.230.2 ([31345da](https://github.com/CyberReboot/CRviz/commit/31345da))
+* **deps:** update react monorepo to v16.10.1 ([00c81fa](https://github.com/CyberReboot/CRviz/commit/00c81fa))
+
+### [0.3.11](https://github.com/CyberReboot/CRviz/compare/v0.3.10...v0.3.11) (2019-09-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency snyk to v1.222.0 ([45cfbf3](https://github.com/CyberReboot/CRviz/commit/45cfbf3))
+* **deps:** update dependency snyk to v1.223.0 ([3e06f5b](https://github.com/CyberReboot/CRviz/commit/3e06f5b))
+
+### [0.3.10](https://github.com/CyberReboot/CRviz/compare/v0.3.9...v0.3.10) (2019-08-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency react-redux to v7.1.1 ([f2f4574](https://github.com/CyberReboot/CRviz/commit/f2f4574))
+* **deps:** update dependency react-redux to v7.1.1 ([b1e3696](https://github.com/CyberReboot/CRviz/commit/b1e3696))
+* **deps:** update dependency react-spinners to v0.6.1 ([89e6de4](https://github.com/CyberReboot/CRviz/commit/89e6de4))
+* **deps:** update dependency snyk to v1.217.0 ([513a47f](https://github.com/CyberReboot/CRviz/commit/513a47f))
+* **deps:** update dependency snyk to v1.221.0 ([839b37a](https://github.com/CyberReboot/CRviz/commit/839b37a))
+* **deps:** update dependency snyk to v1.221.1 ([c5df553](https://github.com/CyberReboot/CRviz/commit/c5df553))
+* clickable area for saving/deleting icon ([bdb5f6f](https://github.com/CyberReboot/CRviz/commit/bdb5f6f))
+* makes notes panel collapsible and scrollable ([b566e74](https://github.com/CyberReboot/CRviz/commit/b566e74)), closes [#499](https://github.com/CyberReboot/CRviz/issues/499)
+
+### [0.3.10](https://github.com/CyberReboot/CRviz/compare/v0.3.9...v0.3.10) (2019-08-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency react-redux to v7.1.1 ([f2f4574](https://github.com/CyberReboot/CRviz/commit/f2f4574))
+* **deps:** update dependency react-redux to v7.1.1 ([b1e3696](https://github.com/CyberReboot/CRviz/commit/b1e3696))
+* **deps:** update dependency react-spinners to v0.6.1 ([89e6de4](https://github.com/CyberReboot/CRviz/commit/89e6de4))
+* **deps:** update dependency snyk to v1.217.0 ([513a47f](https://github.com/CyberReboot/CRviz/commit/513a47f))
+* **deps:** update dependency snyk to v1.221.0 ([839b37a](https://github.com/CyberReboot/CRviz/commit/839b37a))
+* **deps:** update dependency snyk to v1.221.1 ([c5df553](https://github.com/CyberReboot/CRviz/commit/c5df553))
+* clickable area for saving/deleting icon ([bdb5f6f](https://github.com/CyberReboot/CRviz/commit/bdb5f6f))
+* makes notes panel collapsible and scrollable ([b566e74](https://github.com/CyberReboot/CRviz/commit/b566e74)), closes [#499](https://github.com/CyberReboot/CRviz/issues/499)
+
+### [0.3.9](https://github.com/CyberReboot/CRviz/compare/v0.3.10...v0.3.9) (2019-08-16)
+
+### [0.3.11](https://github.com/CyberReboot/CRviz/compare/v0.3.10...v0.3.11) (2019-08-16)
+
+### [0.3.10](https://github.com/CyberReboot/CRviz/compare/v0.3.8...v0.3.10) (2019-08-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency snyk to v1.216.5 ([be4f007](https://github.com/CyberReboot/CRviz/commit/be4f007))
+*  make p a child of div (not the other way around) ([e30b993](https://github.com/CyberReboot/CRviz/commit/e30b993))
+* merge conflict ([d3afc92](https://github.com/CyberReboot/CRviz/commit/d3afc92))
+* update tests to reflect new changes to state ([cb7bae2](https://github.com/CyberReboot/CRviz/commit/cb7bae2))
+
+
+### Features
+
+* add ability to hover on all notes ([a3b7e1b](https://github.com/CyberReboot/CRviz/commit/a3b7e1b))
+* get hovered notes to work :grin: ([4183273](https://github.com/CyberReboot/CRviz/commit/4183273))
+* list of notes added to left-handed container ([54daf64](https://github.com/CyberReboot/CRviz/commit/54daf64))
+
+### [0.3.8](https://github.com/CyberReboot/CRviz/compare/v0.3.7...v0.3.8) (2019-08-02)
+
+
+### Bug Fixes
+* added dark theme for Notes Panel ([7c9b002](https://github.com/CyberReboot/CRviz/commit/7c9b00226c12a8a6809926593cac7f08ed9c40fc))
+* downgrdeded dependency gh-pages to v2.0.0 ([0c84cc1](https://github.com/CyberReboot/CRviz/commit/0c84cc17a4ec06b90c17f8dda3619604edf9e35a)) 
+
+### [0.3.7](https://github.com/CyberReboot/CRviz/compare/v0.3.6...v0.3.7) (2019-08-01)
+
+
+### Bug Fixes
+
+* allow tooltip to hide on root/groups with fieldValues ([c2c4e9f](https://github.com/CyberReboot/CRviz/commit/c2c4e9f))
+* persistence of show/hide tooltip status ([3928c43](https://github.com/CyberReboot/CRviz/commit/3928c43))
+* remoe note feature for root/group fieldValues ([1df874d](https://github.com/CyberReboot/CRviz/commit/1df874d))
+* **controls.test:** add tests for position and datum ([acc645b](https://github.com/CyberReboot/CRviz/commit/acc645b))
+* **deps:** Merge pull request [#432](https://github.com/CyberReboot/CRviz/issues/432) from CyberReboot/renovate/react-beautiful-dnd-11.x ([ac9c48d](https://github.com/CyberReboot/CRviz/commit/ac9c48d))
+* **deps:** pin dependency @fortawesome/free-brands-svg-icons to 5.9.0 ([446a734](https://github.com/CyberReboot/CRviz/commit/446a734))
+* **deps:** update dependency css-element-queries to v1.2.1 ([41d7c98](https://github.com/CyberReboot/CRviz/commit/41d7c98))
+* **deps:** update dependency react-modal to v3.9.1 ([aac48b1](https://github.com/CyberReboot/CRviz/commit/aac48b1))
+* **deps:** update dependency react-spinners to v0.5.12 ([51691d7](https://github.com/CyberReboot/CRviz/commit/51691d7))
+* **deps:** update dependency react-spinners to v0.5.13 ([c7517df](https://github.com/CyberReboot/CRviz/commit/c7517df))
+* **deps:** update dependency snyk to v1.193.2 ([6cb0803](https://github.com/CyberReboot/CRviz/commit/6cb0803))
+* **deps:** update dependency snyk to v1.193.3 ([604935d](https://github.com/CyberReboot/CRviz/commit/604935d))
+* **deps:** update dependency snyk to v1.195.0 ([2028284](https://github.com/CyberReboot/CRviz/commit/2028284))
+* **deps:** update dependency snyk to v1.195.1 ([0ba165b](https://github.com/CyberReboot/CRviz/commit/0ba165b))
+* **deps:** update dependency snyk to v1.196.0 ([59aa4ae](https://github.com/CyberReboot/CRviz/commit/59aa4ae))
+* **deps:** update dependency snyk to v1.198.0 ([663ac1d](https://github.com/CyberReboot/CRviz/commit/663ac1d))
+* add social media links ([99d1aea](https://github.com/CyberReboot/CRviz/commit/99d1aea)), closes [#421](https://github.com/CyberReboot/CRviz/issues/421)
+* **design:** address rashley-iqt changes request ([5aa13ae](https://github.com/CyberReboot/CRviz/commit/5aa13ae))
+* **persistence of notes:** user doesn't have to click away to get note to work ([209d2b7](https://github.com/CyberReboot/CRviz/commit/209d2b7))
+* **tooltip:** overlap between d3 sliding dataset and notetip ([2788ad7](https://github.com/CyberReboot/CRviz/commit/2788ad7))
+
+
+### Features
+
+* add show/hide functionality to tooltip ([f3b66d5](https://github.com/CyberReboot/CRviz/commit/f3b66d5))
+* **add and remove notes:** add and remove notes in the  tooltip ([1652fcb](https://github.com/CyberReboot/CRviz/commit/1652fcb))
+* **add notes to store!:** add notes with id to store ([82714d7](https://github.com/CyberReboot/CRviz/commit/82714d7))
+* **annotation:** Merge pull request [#415](https://github.com/CyberReboot/CRviz/issues/415) from hopetambala/master ([848f4ad](https://github.com/CyberReboot/CRviz/commit/848f4ad)), closes [#162](https://github.com/CyberReboot/CRviz/issues/162)
+* **labels:** add ability to add labels to notes ([6894288](https://github.com/CyberReboot/CRviz/commit/6894288))
+* **tooltip data:** add ability to click on a node or element for tooltip data ([70b38a1](https://github.com/CyberReboot/CRviz/commit/70b38a1))
+* **upload:** get notes to be uploaded as well! ([2deea19](https://github.com/CyberReboot/CRviz/commit/2deea19))
+* add position action to tooltip ([72fb69f](https://github.com/CyberReboot/CRviz/commit/72fb69f))
+
+### [0.3.6](https://github.com/CyberReboot/CRviz/compare/v0.3.5...v0.3.6) (2019-07-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency d3 to v5.9.7 ([8287a54](https://github.com/CyberReboot/CRviz/commit/8287a54))
+* **deps:** update dependency react-compound-slider to v2.1.0 ([41d1735](https://github.com/CyberReboot/CRviz/commit/41d1735))
+* **deps:** update dependency react-modal to v3.8.2 ([b7b7224](https://github.com/CyberReboot/CRviz/commit/b7b7224))
+
+
+
+### [0.3.5](https://github.com/CyberReboot/CRviz/compare/v0.3.4...v0.3.5) (2019-06-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency snyk to v1.179.0 ([f73f7a5](https://github.com/CyberReboot/CRviz/commit/f73f7a5))
+* **deps:** update dependency snyk to v1.179.1 ([7bd125f](https://github.com/CyberReboot/CRviz/commit/7bd125f))
+* **deps:** update dependency snyk to v1.180.0 ([76c1bf1](https://github.com/CyberReboot/CRviz/commit/76c1bf1))
+* **deps:** update dependency snyk to v1.184.0 ([679e919](https://github.com/CyberReboot/CRviz/commit/679e919))
+
+
+### Features
+
+* adds ability to use JSON refs in accordance with RFC 6901 ([bfac420](https://github.com/CyberReboot/CRviz/commit/bfac420)), closes [#355](https://github.com/CyberReboot/CRviz/issues/355)
+
+
+
+### [0.3.4](https://github.com/CyberReboot/CRviz/compare/v0.3.3...v0.3.4) (2019-06-13)
+
+
+### Bug Fixes
+
+* **dark theme exit icon:** switch color to white when going into dark theme ([b7c60b2](https://github.com/CyberReboot/CRviz/commit/b7c60b2))
+* **deps:** update dependency react-beautiful-dnd to v11.0.4 ([a731dc8](https://github.com/CyberReboot/CRviz/commit/a731dc8))
+* **deps:** update dependency react-redux to v7.1.0 ([0510ec2](https://github.com/CyberReboot/CRviz/commit/0510ec2))
+* **deps:** update dependency snyk to v1.171.1 ([78db250](https://github.com/CyberReboot/CRviz/commit/78db250))
+* **deps:** update dependency snyk to v1.173.1 ([6fd56ce](https://github.com/CyberReboot/CRviz/commit/6fd56ce))
+* **deps:** update dependency snyk to v1.175.2 ([74e156e](https://github.com/CyberReboot/CRviz/commit/74e156e))
+* **deps:** update dependency snyk to v1.177.0 ([6a73140](https://github.com/CyberReboot/CRviz/commit/6a73140))
+* **deps:** update dependency snyk to v1.178.0 ([b6bf644](https://github.com/CyberReboot/CRviz/commit/b6bf644))
+* **deps:** update dependency snyk to v1.178.1 ([ffe2950](https://github.com/CyberReboot/CRviz/commit/ffe2950))
+* **viz styling:**  fix styling to touch icon container ([82534ae](https://github.com/CyberReboot/CRviz/commit/82534ae))
+
+
+
+### [0.3.3](https://github.com/CyberReboot/CRviz/compare/v0.3.2-beta...v0.3.3) (2019-05-30)
+
+
+### Bug Fixes
+
+* **deps:** remove unused dependency d3-svg-annotation ([8d08516](https://github.com/CyberReboot/CRviz/commit/8d08516)), closes [#352](https://github.com/CyberReboot/CRviz/issues/352)
+* css fix for key ([91fbb40](https://github.com/CyberReboot/CRviz/commit/91fbb40)), closes [#348](https://github.com/CyberReboot/CRviz/issues/348)
+* **package:** update snyk to version 1.166.1 ([a640496](https://github.com/CyberReboot/CRviz/commit/a640496))
+
+
+
 ### [0.3.2-beta](https://github.com/CyberReboot/CRviz/compare/v0.2.11...v0.3.2-beta) (2019-05-14)
 
 

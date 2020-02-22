@@ -16,7 +16,9 @@ import { removeSearchIndex } from "epics/index-dataset-epic";
 import {
   showNodes, setHierarchyConfig, colorBy, selectControls, setStartDataset,
   setEndDataset, showBusy
-} from "domain/controls"
+} from "domain/controls";
+
+import { getAllNotes } from 'domain/notes';
 
 import { setError } from "domain/error"
 import { 
@@ -52,19 +54,6 @@ const authTypes = [
   {'name': 'Token', 'scheme':'Bearer' },
 ];
 
-var host = window.location.host;
-var hostname = window.location.hostname;
-var port = '80';
-const radix = 10;
-if (host.indexOf(':') > -1) {
-  port = String(parseInt(host.split(":")[1], radix)-1);
-}
-
-var POSEIDON_DATASET = {
-  name: "Poseidon Network",
-  url: "http://"+hostname+":5000/v1/network"
-};
-
 Modal.setAppElement('#root');
 
 class DatasetControls extends React.Component {
@@ -72,20 +61,34 @@ class DatasetControls extends React.Component {
   constructor(props) {
     super(props);
 
+    const initialDS = props.initialDataSource;
+    const idsUrl = !!initialDS ? new URL(initialDS.url) : null;
+    const requiresAuth = !!idsUrl && idsUrl.protocol === "https:"
+    const authScheme = requiresAuth ? 'Basic' : '';
+
     this.state = {
       dataset: null,
-      selected: null,
+      selected: initialDS,
       selectedFile: null,
-      showUrlEntry: false,
+      showUrlEntry: requiresAuth,
       showUpload: false,
-      url: '',
-      authScheme:'',
+      url: idsUrl ? idsUrl.href : '',
+      authScheme:authScheme,
       token: '',
       username: '',
       password: '',
       refreshInterval: 0,
       refreshTimerRunning: false
     };
+
+    this.datasets = [...this.props.datasets, CUSTOM_DATASET, UPLOAD_DATASET]
+    if(initialDS){
+      this.datasets.push(initialDS)
+    }
+
+    if(initialDS && !requiresAuth){
+      this.fetchAndSetDataset(initialDS.url, initialDS, null, null, null);
+    }
   }
 
   resetDataset = () => {
@@ -103,15 +106,15 @@ class DatasetControls extends React.Component {
     if (toURL(url)) {
       this.props.fetchDataset({ 
         'owner': this.props.uuid,
-        name:this.props.name,
-        shortName: this.props.shortName,
+        'name':this.props.name,
+        'shortName': this.props.shortName,
         'url': url,
         'header': authHeader
       });
-      this.setState({
-        selected: dataset,
-        selectedFile: null,
-      });
+      // this.setState({
+      //   selected: dataset,
+      //   selectedFile: null,
+      // });
     } else {
       this.props.setError(new Error("Please enter a valid URL."));
     }
@@ -176,7 +179,7 @@ class DatasetControls extends React.Component {
 
   onUrlOk = () => {
     this.setState({ showUrlEntry: false });
-    const dataset = CUSTOM_DATASET;
+    const dataset = this.state.selected;
     if(!isNil(this.state.url))
     {
       const url = this.state.url;
@@ -238,8 +241,9 @@ class DatasetControls extends React.Component {
     const controls = this.props.controls;
     const keyFields = this.props.keyFields;
     const ignoredFields = this.props.ignoredFields;
+    const notes = this.props.notes;
     const urlObject = window.URL || window.webkitURL || window;
-    const json = JSON.stringify(getDataToExport(datasets, keyFields, ignoredFields, controls), null, 2);
+    const json = JSON.stringify(getDataToExport(datasets, keyFields, ignoredFields, controls, notes), null, 2);
     const blob = new Blob([json], {'type': "application/json"});
     const url = urlObject.createObjectURL(blob);;
     return url;
@@ -288,9 +292,6 @@ class DatasetControls extends React.Component {
   }
 
   render() {
-    if (port === '80') {
-      POSEIDON_DATASET = {name:"",url:""};
-    }
     const canDownload = this.state.selected && !this.state.selectedFile;
     const canRefresh = this.state.selected && !isNil(this.state.selected.url) && !this.state.selectedFile;
     let url = null;
@@ -319,7 +320,7 @@ class DatasetControls extends React.Component {
             className={style.selector}
             selected={this.state.selected}
             onChange={this.onSelected}
-            datasets={[...this.props.datasets, POSEIDON_DATASET, CUSTOM_DATASET, UPLOAD_DATASET]}
+            datasets={this.datasets}
             source={this.props.source}
           />
         </div>
@@ -526,7 +527,8 @@ const mapStateToProps = (state, ownProps) => {
     fullDatasets: fullDatasets,
     controls: selectControls(state),
     keyFields: getKeyFields(state),
-    ignoredFields: getIgnoredFields(state)
+    ignoredFields: getIgnoredFields(state),
+    notes: getAllNotes(state)
   };
 }
 

@@ -4,7 +4,7 @@ import { path } from "d3-path";
 import datumKey from "./datum-key";
 import className from "./class-name";
 
-const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }) => {
+const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch, noteIdHovered,hasNoNotes, resetNodeStyles }) => {
   const data = packedData.descendants();
   const firstLeaf = packedData.leaves()[0];
   const leafRadius = firstLeaf.r || 0;
@@ -20,6 +20,7 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
   nodesEnter
     .merge(nodes)
     .attr('data-key', datumKey)
+    //.style("fill", (d) => hasNotes(d,notes))
     .classed(className("rootNode"), (d) => d.depth === 0)
     .classed(className("groupingNode"), (d) => d.depth > 0 && d.height > 0)
     .classed(className("containsSearchResult"), (d) => hasSearch && d.data.CRVIZ._searchResultCount > 0 && d.depth > 0 && d.height > 0)
@@ -28,8 +29,12 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
     .classed(className("isChanged"), (d) => d.data.CRVIZ._isChanged && d.depth > 0 && d.height === 0)
     .classed(className("isAdded"), (d) => d.data.CRVIZ._isAdded && d.depth > 0 && d.height === 0)
     .classed(className("isRemoved"), (d) => d.data.CRVIZ._isRemoved && d.depth > 0 && d.height === 0)
+    .classed(className('isNotNoted'), (d) => has_NoNotes(d,noteIdHovered) && hasNoNotes)
     .classed(className("searchExcluded"), (d) => hasSearch && !d.data.CRVIZ._isSearchResult && d.depth > 0 && d.height === 0)
     .classed(className("leafNode"), (d) => d.height === 0)
+    .classed(className("ringMenuExcluded"), (d, i, nodes) => {
+        const n = select(nodes[i]);
+        return n.classed(className("ringMenuExcluded")) && !resetNodeStyles})
     .attr("transform", (d) => `translate(${[d.x, d.y].join(",")})`)
     .attr("display", (d) => !showNodes && d.height === 0 ? 'none' : null)
     .order();
@@ -69,13 +74,6 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
   const newTotalContainer = newAggregations
     .append('g')
       .classed(className("total-container"), true);
-  // newTotalContainer
-  //   .append('g')
-  //     .classed(className("node"), true)
-  //   .append('circle')
-  //     .attr('r', (d) => leafRadius)
-  //     .attr('cx', (d) => 0)
-  //     .attr('cy', (d) => 0);
 
   const newTotalText = newTotalContainer
   .append("text")
@@ -95,9 +93,6 @@ const appendCircles = ({ nodeRoot, labelRoot, packedData, showNodes, hasSearch }
   .select('text')
   .merge(newTotalText)
     .text((d) => !isNaN(d.value) ? d.value : "0");
-
-  //const groupData = packedData.descendants().filter((d) => d.height > 0 && d,height > 0);
-  //appendAggregations(nodeRoot, groupData, showNodes, leafRadius, fontScale);
 
   return [
     nodes.merge(nodesEnter),
@@ -175,49 +170,20 @@ const scaleAndTrimToLabelWidth = (node, datum, initialFontScale) => {
   }
 }
 
-// const appendAggregations = (nodeRoot, groupData, showNodes, leafRadius, fontScale) =>{
-
-//   const groupingNodes = nodeRoot
-//     .selectAll(`g.${className("groupingNode")}`);
-//   const aggregations = groupingNodes
-//     .select(`g.${className("aggregation")}`)
-//     .data(groupData, datumKey);
-
-//   //aggregations.exit().remove();
-
-//   const newAggregations = groupingNodes.enter()
-//   .append("g")
-//     .classed(className("aggregation"), true)
-//     .attr("display", (d) => showNodes ? 'none' : null);
-
-
-
-//   const newTotalContainer = newAggregations
-//     .append('g')
-//       .classed(className("total-container"), true);
-//   newTotalContainer
-//     .append('g')
-//       .classed(className("node"), true)
-//     .append('circle')
-//       .attr('r', (d) => leafRadius)
-//       .attr('cx', (d) => 0)
-//       .attr('cy', (d) => 0);
-
-//   const newTotalText = newTotalContainer
-//   .append("text")
-//     .classed(className("annotation-text"), true)
-//     .style('font-size', (d) => (3 * d.height * fontScale) +"%")
-//     .attr('x', (d) => 0)
-//     .attr('y', (d) => 0)
-//     .text((d) => !isNaN(d.value) ? d.value : "0");
-
-//   aggregations
-//   .select(`g.${className("total-container")}`)
-//   .select('text')
-//   .merge(newTotalText)
-//     .attr("display", (d) => showNodes ? 'none' : null)
-//     .text((d) => !isNaN(d.value) ? d.value : "0");
-
-// }
+const has_NoNotes = (datum, noteIdHovered) =>{
+  const note_key = noteIdHovered;
+  //alert(`${note_key}`);
+  const datum_key = datum.data.CRVIZ._SEARCH_KEY;
+  if (datum.parent !== undefined) {
+    if(note_key === datum_key){
+      //if node has notes, don't make opaque
+      return false;
+    }
+    else {
+      //if node doesn't have notes, make opaque
+      return true;
+    }
+  }
+}
 
 export default appendCircles;

@@ -27,6 +27,8 @@ describe("Controls reducer", () => {
         'start': 't0',
         'end': 'tn',
         'showBusy': true,
+        'position': [0,0],
+        'datum': null 
       }
 
       const action = setControls(controls);
@@ -62,15 +64,7 @@ describe("Controls reducer", () => {
       const action = setHierarchyConfig(hierarchyConfig);
       const result = reducer({}, action);
 
-      expect(selectControls(result)).to.deep.equal({
-        hierarchyConfig: hierarchyConfig,
-        shouldShowNodes: true,
-        darkTheme: false,
-        colorBy: null,
-        'start': null,
-        'end': null,
-        'showBusy': false,
-      });
+      expect(selectControls(result).hierarchyConfig).to.deep.equal(hierarchyConfig);
 
       done();
     });

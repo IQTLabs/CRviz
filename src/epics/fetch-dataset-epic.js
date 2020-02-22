@@ -36,6 +36,7 @@ const fetchDatasetEpic = (action$, store, ajax = rxAjax) => {
       );
     })
     ,catchError((error) => {
+      //console.log("error xhr: %o", error)
       const newErr = new Error("Error fetching dataset: " + error.message);
       return of(setError(newErr));
     })

@@ -72,7 +72,7 @@ describe('SearchControls', () => {
         const expectedAction = {
             type: 'SEARCH_DATASET',
             payload: {
-                'dataset': dataset,
+                'datasets': initialState.dataset.datasets,
                 'configuration': configuration,
                 'searchIndices': [],
                 'queryString': 'test',
@@ -116,32 +116,41 @@ describe('SearchControls', () => {
 
     it('clears the search', (done) => {
         const newState = {
-          queryString: 'uid',
-          searchIndices: [],
-          hasSearch: true
+            'dataset':{
+                'datasets': {}
+            },
+            'search':{
+                queryString: 'uid',
+                searchIndices: [],
+                hasSearch: true
+            }
         }
         const expectedAction = {
             type: 'SEARCH_DATASET',
             payload: {
-                dataset: dataset,
+                datasets: initialState.dataset.datasets,
                 configuration: configuration,
                 searchIndices: [],
                 queryString: '',
                 results: []
             }
         }
+        newState.dataset.datasets[owner] = { 'dataset': dataset, 'configuration': configuration }
+        const epicMiddleware = createEpicMiddleware();
+        const mockStore = configureMockStore([epicMiddleware]);
+        store  = mockStore(newState);
+
         const fakeDispatch = (evt) =>{
             expect(evt).to.deep.equal(expectedAction);
             done();
         }
         store.dispatch = fakeDispatch;
         const wrapper = mount( 
-            <Provider store={store}>
-                <SearchControls />
-            </Provider>
+                <SearchControls store={store} />
         );
-        const newWrap = wrapper.setState(newState).setProps({results: dataset});
-        expect(newWrap.state().queryString).not.to.equal(expectedAction.payload.queryString);
+        
+        const newWrap = wrapper.setProps({results: dataset});
+        expect(store.getState().search.queryString).not.to.equal(expectedAction.payload.queryString);
         newWrap.findWhere(n => n.hasClass('button')).last().simulate('click');
     });
 

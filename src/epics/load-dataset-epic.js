@@ -1,14 +1,16 @@
 import { createAction } from "redux-actions";
 import { ofType } from 'redux-observable';
 import { of } from "rxjs";
-import { map, mergeMap, catchError } from 'rxjs/operators';
+import { mergeMap, concatMap, catchError } from 'rxjs/operators';
 import { isNil, is } from "ramda";
+import { resolveRefs } from 'json-refs';
 
 import { buildIndices } from './index-dataset-epic';
 
 import { setError } from "domain/error"
 import { setDatasets, setKeyFields, setIgnoredFields, configureDataset } from "domain/dataset";
 import { setControls, showBusy } from "domain/controls";
+import { setNotes } from "domain/notes";
 
 const loadDataset = createAction("LOAD_DATASET");
 
@@ -17,13 +19,14 @@ const loadDatasetEpic = (action$, store) => {
     ofType(loadDataset.toString())
     ,mergeMap(({ payload }) => {
       return of(payload).pipe(
-        map(formatPayload)
+        concatMap(formatPayload)
         ,mergeMap((payload) => {
           return of(
             setDatasets(payload)
             ,setKeyFields(payload.keyFields)
             ,setIgnoredFields(payload.ignoredFields)
             ,setControls(payload.controls)
+            ,setNotes(payload.notes)
             ,buildIndices(payload)
             ,showBusy(false)
           )
@@ -93,18 +96,21 @@ const CSVconvert = (data) => {
 //if we have a naked array or an object not containing a dataset instead of an object containing a dataset
 //transfer the array into an object's dataset to maintain a consistent
 //schema with what is used elsewhere see https://github.com/CyberReboot/CRviz/issues/33
-const formatPayload = (data) => {
+const formatPayload = async (data) => {
   const owner = data.owner;
   const initialName = data.name;
   const initialShortName = data.shortName;
   const source = data.source;
-  const content = data.content;
+  const result = await resolveRefs(data.content);
+  const content = result.resolved;
   const datasets = content.datasets;
   const keyFields = content.keyFields || null;
   const ignoredFields = content.ignoredFields || null;
   const controls = content.controls || {};
+  const notes = content.notes || {};
   const includeData = ('includeData' in data) ? data.includeData : true;
   const includeControls = ('includeControls' in data) ? data.includeControls : false;
+  const includeNotes = ('includeNotes' in data) ? data.includeNotes : false;
 
   var final = {};
 
@@ -141,7 +147,8 @@ const formatPayload = (data) => {
           'datasets': includeData ? final : {},
           'keyFields': includeData ? keyFields : [],
           'ignoredFields': includeData ? ignoredFields : [],
-          'controls': includeControls ? controls : {}
+          'controls': includeControls ? controls : {},
+          'notes': includeNotes ? notes : {}
         };
   return data;
 };

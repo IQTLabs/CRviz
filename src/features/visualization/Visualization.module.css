@@ -14,17 +14,21 @@
   fill: black;
 }
 
+:global(.viz-isNotNoted) circle {
+  opacity: 0.2;
+}
+
 .viz :global(.viz-node.viz-searchResult) circle {
   opacity: 1;
 }
 
-.viz :global(.viz-isChanged-fixed) circle {
+:global(.viz-isChanged-fixed) circle {
   fill:black;
   -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
-:global(.darkTheme) .viz :global(.viz-isChanged-fixed) circle {
+:global(.darkTheme) :global(.viz-isChanged-fixed) circle {
   fill:white;
 }
 
@@ -52,7 +56,7 @@
   clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
 }
 
-:global(.darkTheme) .viz :global(.viz-isAdded-fixed) circle {
+:global(.darkTheme) :global(.viz-isAdded-fixed) circle {
   fill: white;
   -webkit-clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
   clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0% 66%, 0% 33%);
@@ -82,7 +86,7 @@
   clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
 }
 
-:global(.darkTheme) .viz :global(.viz-isRemoved-fixed) circle {
+:global(.darkTheme) :global(.viz-isRemoved-fixed) circle {
   fill: white;
   -webkit-clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
   clip-path: polygon(0% 33%, 100% 33%, 100% 66%, 0% 66%);
@@ -319,35 +323,43 @@
     transform: rotateX(0deg); 
   }
 }
-/*@keyframes nag { 
-  0% { 
-    transform: translateX(0px) rotateX(0deg); 
-  },
-  5% {
-    transform: translateX(-3px) rotateX(-5deg);
-  },
-  10%{
-    transform: translateX(0px) rotateX(0deg); 
-  },
-  15% {
-    transform: translateX(3px) rotateX(5deg); 
-  },
-  20% {
-    transform: translateX(0px) rotateX(0deg); 
-  },
-  100% { 
-    transform: translateX(0px) rotateX(0deg); 
-  }
-}*/
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
 /*Ring Menu*/
 .viz :global(.viz-ring-menu){
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 2s ease-in-out;
-  -webkit-transition: opacity 1s ease-in-out;
-  -moz-transition: opacity 1s ease-in-out;
+  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 1s; /* Firefox < 16 */
+        -ms-animation: fadein 1s; /* Internet Explorer */
+         -o-animation: fadein 1s; /* Opera < 12.1 */
+            animation: fadein 1s;
 }
+
+:global(.darkTheme) .viz :global(.viz-ring-menu){
+  fill: white !important;
+}
+
 
 .viz :global(circle.viz-bg-circle){
   stroke: transparent;
@@ -356,4 +368,15 @@
 
 :global(.darkTheme) .viz :global(circle.viz-bg-circle){
   fill: rgb(130, 129, 129) !important;
+}
+
+.viz :global(.viz-change-icon-container) {
+  color: black;
+  fill: black;
+}
+
+
+:global(.darkTheme) .viz :global(.viz-change-icon-container){
+  color: white !important;
+  fill: white !important;
 }
