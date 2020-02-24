@@ -52,7 +52,7 @@
     "start": "REACT_APP_VERSION=$npm_package_version PORT=5000 react-scripts start",
     "build": "REACT_APP_VERSION=$npm_package_version react-scripts build",
     "coverage": "nyc report --reporter=text-lcov > coverage/coverage.lcov && codecov",
-    "test": "NODE_ENV=test NODE_PATH=./src nyc mocha --opts ./.mocha --exit --recursive 'src/**/*.test.js*'",
+    "test": "NODE_ENV=test NODE_PATH=./src nyc mocha src/**/*.test.js*",
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build",
     "deploy-experimental": "gh-pages -r https://github.com/rashley-iqt/CRviz -d build",
