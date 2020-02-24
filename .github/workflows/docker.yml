@@ -21,13 +21,21 @@ jobs:
       with:
         version: latest
 
-    - name: Build
+    - name: Build Docker
+      run: |
+        docker build \
+          -t cyberreboot/crviz:${{ steps.change_version.outputs.VERSION }} .  && \
+        docker build \
+          -f Dockerfile.gh \
+          -t cyberreboot/crviz-gh:${{ steps.change_version.outputs.VERSION }} .
+      if: github.repository == 'cyberreboot/crviz' && github.event_name == 'pull_request'
+
+    - name: Push Docker
       env:
         DOCKER_CLI_EXPERIMENTAL: enabled
       run: |
         docker buildx build \
+          --platform linux/amd64,linux/arm/v7,linux/arm64 \
+          --push \
           -t cyberreboot/crviz:${{ steps.change_version.outputs.VERSION }} .
-        docker buildx build \
-          -f Dockerfile.gh \
-          -t cyberreboot/crviz-gh:${{ steps.change_version.outputs.VERSION }} . 
-      if: github.repository == 'cyberreboot/crviz'
+      if: github.repository == 'cyberreboot/crviz' && github.event_name == 'push'
