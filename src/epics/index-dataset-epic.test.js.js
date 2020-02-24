@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import configureStore from "configure-store";
+import { v4 as uuidv4 } from 'uuid';
 
 import { setDataset } from 'domain/dataset'
 import { 
@@ -8,8 +9,6 @@ import {
 	setSearchResults,
 	getSearchResults
 } from "./index-dataset-epic"
-
-const uuidv4 = require('uuid/v4');
 
 describe("indexDatasetEpic", () => {
 	let store;

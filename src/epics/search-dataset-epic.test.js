@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import configureStore from "configure-store";
 import { QueryParseError } from 'lunr';
+import { v4 as uuidv4 } from 'uuid';
 
 import { setDataset, selectDatasets, selectConfiguration } from 'domain/dataset'
 import { getError } from 'domain/error'
@@ -11,8 +12,6 @@ import {
 	getSearchIndices,
 	removeSearchIndex
 } from "./index-dataset-epic"
-
-const uuidv4 = require('uuid/v4');
 
 describe("searchDatasetEpic", () => {
 	let store;
