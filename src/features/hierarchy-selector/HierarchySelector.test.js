@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux'
 import { createEpicMiddleware } from 'redux-observable';
+import { v4 as uuidv4 } from 'uuid';
 
 import configureMockStore from 'redux-mock-store';
 import { expect } from "chai"
@@ -9,7 +10,6 @@ import { expect } from "chai"
 import { valuesFor } from "domain/dataset"
 
 import HierarchySelector from './HierarchySelector';
-const uuidv4 = require('uuid/v4');
 
 const dataset = [
           { 'uid': "uid1", 'role': { 'role': "role", 'confidence': 80 } },

@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import configureStore from "configure-store";
+import { v4 as uuidv4 } from 'uuid';
 
 import { 
 	setDataset,
@@ -8,8 +9,6 @@ import {
 	applyHashes
 } from 'domain/dataset'
 import { diffDataset } from "./diff-dataset-epic"
-
-const uuidv4 = require('uuid/v4');
 
 describe("diffDatasetEpic", () => {
 	let store;
