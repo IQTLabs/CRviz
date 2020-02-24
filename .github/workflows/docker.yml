@@ -30,6 +30,13 @@ jobs:
           -t cyberreboot/crviz-gh:${{ steps.change_version.outputs.VERSION }} .
       if: github.repository == 'cyberreboot/crviz' && github.event_name == 'pull_request'
 
+    - name: Docker Login
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_TOKEN }}
+      run: |
+        echo "${DOCKER_PASSWORD}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      if: github.repository == 'cyberreboot/crviz' && github.event_name == 'push'
+
     - name: Push Docker
       env:
         DOCKER_CLI_EXPERIMENTAL: enabled
