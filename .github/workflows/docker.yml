@@ -26,8 +26,10 @@ jobs:
         DOCKER_CLI_EXPERIMENTAL: enabled
       run: |
         docker buildx build \
-          -t cyberreboot/crviz:${{ steps.change_version.outputs.VERSION }} .
+          --platform linux/amd64,linux/arm/v7,linux/arm64 \
+          --push \
+          -t cyberreboot/crviz:${{ steps.change_version.outputs.VERSION }} .  && \
         docker buildx build \
           -f Dockerfile.gh \
-          -t cyberreboot/crviz-gh:${{ steps.change_version.outputs.VERSION }} . 
-      if: github.repository == 'cyberreboot/crviz'
+          -t cyberreboot/crviz-gh:${{ steps.change_version.outputs.VERSION }} .
+      if: github.repository == 'cyberreboot/crviz' && github.event_name == 'push'
