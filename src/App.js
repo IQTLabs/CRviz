@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Modal from 'react-modal';
+import { v4 as uuidv4 } from 'uuid';
 
 import { RingLoader } from 'react-spinners';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,9 +39,6 @@ import TooltipControls from "features/tooltip/Tooltip";
 import style from './App.module.css';
 
 import datasets from './datasets';
-
-
-const uuidv4 = require('uuid/v4');
 
 Modal.setAppElement('#root');
 const IMPORT = "import";

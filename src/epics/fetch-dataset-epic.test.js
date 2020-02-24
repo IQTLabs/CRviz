@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import configureMockStore from 'redux-mock-store';
 import { createEpicMiddleware } from 'redux-observable';
 import { of, throwError } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 
 import rootEpic from './root-epic'
 import { setError } from 'domain/error'
@@ -9,8 +10,6 @@ import { loadDataset } from "./load-dataset-epic"
 import { fetchDataset, buildAuthHeader } from "./fetch-dataset-epic"
 
 import fetchDatasetEpic from "./fetch-dataset-epic"
-
-const uuidv4 = require('uuid/v4');
 
 //use dependency injection to test this epic without having to hit a real URL
 //so that we can get consisten test results regardless of connectivity

@@ -1,13 +1,12 @@
 import { expect } from 'chai';
 import configureMockStore from 'redux-mock-store';
 import { createEpicMiddleware } from 'redux-observable';
+import { v4 as uuidv4 } from 'uuid';
 
 import rootEpic from './root-epic'
 import { applyHashes, configurationFor } from 'domain/dataset'
 import { loadDataset, CSVconvert } from "./load-dataset-epic"
 import { fromJson } from "./upload-dataset-epic"
-
-const uuidv4 = require('uuid/v4');
 
 describe("loadDatasetEpic", () => {
 	let store;

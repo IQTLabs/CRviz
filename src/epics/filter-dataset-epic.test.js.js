@@ -1,11 +1,10 @@
 import { expect } from 'chai';
 import configureStore from "configure-store";
+import { v4 as uuidv4 } from 'uuid';
 
 import { setDataset, selectFilteredDataset } from 'domain/dataset'
 import { setFilter } from 'domain/filter'
 import { filterDataset } from "./filter-dataset-epic"
-
-const uuidv4 = require('uuid/v4');
 
 describe("filterDatasetEpic", () => {
 	let store;
