@@ -1,8 +1,0 @@
-itdev/CRviz:
-  Build:
-    - docker build --quiet=false -t "$DISTELLI_DOCKER_REPO:$DISTELLI_RELREVISION" --build-arg CI_COMMIT=$DISTELLI_RELREVISION $DISTELLI_DOCKER_PATH
-  AfterBuildSuccess:
-    - docker push "$DISTELLI_DOCKER_REPO:$DISTELLI_RELREVISION"
-    - auto_deploy
-  Start:
-    - /s/deploys/run_recipe
