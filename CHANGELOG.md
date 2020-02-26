@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.20](https://github.com/CyberReboot/CRviz/compare/v0.3.19...v0.3.20) (2020-02-26)
+
+### Changes
+
+### Features
+* add multi-arch Docker images ([a34478e](https://github.com/CyberReboot/CRviz/commit/a34478e69e0b9f522a7e1e8528bdccae3ffb55de))
+* convert from Travis CI to Github actions ([933c797](https://github.com/CyberReboot/CRviz/commit/933c7975f82f8000b7cfe19f2ec1feec2d050ee0))
+
+### Bug Fixes
+* remove deprecated Mocha config ([e7b1dd0](https://github.com/CyberReboot/CRviz/commit/e7b1dd0e2b778d91bc4922df52eca3443b22f2c0))
+* remove unused dependency Snyk ([7e7637f](https://github.com/CyberReboot/CRviz/commit/7e7637f22d02fa245cb9525ec73f18263e0659fe))
+
+#### Dependency Updates
+* update dependency react-scripts to v3.4.0 ([2c4252e](https://github.com/CyberReboot/CRviz/commit/2c4252ecd94afd70f8d7289db18ee58b1c06651d))
+* update dependency react-redux to v7.2.0 ([29532e6](https://github.com/CyberReboot/CRviz/commit/29532e65bc308043ad7fe4b1f2d46a67dd19ef61))
+* update dependency typescript to v3.8.2 ([3ac8141](https://github.com/CyberReboot/CRviz/commit/3ac8141f7def769e0a32c57f888e701ede74d720))
+* update dependency ramda to v0.27.0 ([2f219d1](https://github.com/CyberReboot/CRviz/commit/2f219d1f8e1cfab8eed1b6aff188c4d5c198cefa))
+* update dependency react-beautiful-dnd to v13 ([2b51c6b](https://github.com/CyberReboot/CRviz/commit/2b51c6b1e4becf8ea0614ea6085cd9aea0b370ed))
+* update dependency react-modal to v3.11.2 ([e3c8773](https://github.com/CyberReboot/CRviz/commit/e3c87731321ed61bbbf1ed1ba5e7b22dc705cbb3))
+* update dependency json-refs to v3.0.15 ([48accea](https://github.com/CyberReboot/CRviz/commit/48acceaee995c6faccc148c77ac0fff39c5517c1))
+* update dependency uuid to v7.1.0 ([f19cebc](https://github.com/CyberReboot/CRviz/commit/f19cebcbccd780e9f135ba1391defd6e10f0563e))
+
 ### [0.3.19](https://github.com/CyberReboot/CRviz/compare/v0.3.18...v0.3.19) (2020-02-12)
 
 
