@@ -1,6 +1,27 @@
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+### [0.3.21](https://github.com/CyberReboot/CRviz/compare/v0.3.20...v0.3.21) (2020-03-25)
+
+### Changes
+
+#### Dependency Updates
+* update dependency eslint-plugin-flowtype to v4.7.0 ([2845032](https://github.com/CyberReboot/CRviz/commit/2845032f0adc40c3d52ad4971a3db8c880f71ba3))
+* update dependency Font Awesome ([102a934](https://github.com/CyberReboot/CRviz/commit/102a934976a903bbacad78fe401abcf68ff738ad))
+* update dependency @babel/preset-react to v7.9.4 ([4f6bbbc](https://github.com/CyberReboot/CRviz/commit/4f6bbbc777b1e53388ca4a55ffe3f050fb704269))
+* update dependency eslint-config-react-app to v5.2.1 ([2819e05](https://github.com/CyberReboot/CRviz/commit/2819e05c3c69657adfe3da3a5cc772a1e91aa4db))
+* update dependency react-scripts to v3.4.1 ([4d05472](https://github.com/CyberReboot/CRviz/commit/4d054726fa7ecfa6e565a551f18bf9cac731ad61))
+* update dependency babel monorepo to v7.8.7 ([8e880a8](https://github.com/CyberReboot/CRviz/commit/8e880a8cc5cfc2405f71456a4192def557eb055d))
+* update dependency react monorepo to v16.13.1 ([a8af4e3](https://github.com/CyberReboot/CRviz/commit/a8af4e3551a48a0394c708da60ca74690d691ddd))
+* update dependency mocha to v7.1.1 ([ffbc23d](https://github.com/CyberReboot/CRviz/commit/ffbc23d8cdc0cc4992bbea4ca20b16d120b2e4d5))
+* update dependency sinon to v9.0.1 ([4439adc](https://github.com/CyberReboot/CRviz/commit/4439adc3588d2bba958a4457d6b024ba6fc9d7df))
+* update dependency react-spinners to v0.8.1 ([075785c](https://github.com/CyberReboot/CRviz/commit/075785c4e4855bdf3baa06477227a01084f3faa3))
+* update dependency eslint-plugin-react to v7.19.0 ([3ca7d64](https://github.com/CyberReboot/CRviz/commit/3ca7d64ba2c33a0a4c980c7f685f685532cf2f4a))
+* update dependency @fortawesome/react-fontawesome to v0.1.9 ([9033edd](https://github.com/CyberReboot/CRviz/commit/9033eddbda844f3a2700ae980c1135bec2e52b8a))
+* update dependency @babel/core to v7.8.7 ([78cf35a](https://github.com/CyberReboot/CRviz/commit/78cf35aa71b60273fdc68508ed549457d9e70894))
+* update dependency uuid to v7.0.2 ([14a978c](https://github.com/CyberReboot/CRviz/commit/14a978ce20b8f62df5f4235c1c5beb696fcf443b))
+* update dependency typescript to v3.8.3 ([c8dbf93](hhttps://github.com/CyberReboot/CRviz/commit/c8dbf93e8e702fb40c85385e7faf23091a429c52))
+
 
 ### [0.3.20](https://github.com/CyberReboot/CRviz/compare/v0.3.19...v0.3.20) (2020-02-26)
 
