@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { isNil } from "ramda";
 import Modal from 'react-modal';
+import { v4 as uuidv4 } from 'uuid';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
@@ -35,8 +36,6 @@ import DatasetTimedRefresh from "./DatasetTimedRefresh";
 import { getDataToExport } from "./export"
 
 import style from "./DatasetControls.module.css";
-
-const uuidv4 = require('uuid/v4');
 
 const CUSTOM_DATASET = {
   name: "Custom URL",

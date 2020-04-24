@@ -26,8 +26,7 @@ import {
 
 import { combineReducers } from "redux";
 import { expect } from "chai"
-
-const uuidv4 = require('uuid/v4');
+import { v4 as uuidv4 } from 'uuid';
 
 const reducer = combineReducers({ dataset });
 
