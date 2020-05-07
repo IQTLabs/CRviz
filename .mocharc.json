@@ -1,0 +1,21 @@
+{
+  "diff": true,
+  "extension": ["js", "jsx"],
+  "opts": false,
+  "package": "./package.json",
+  "reporter": "spec",
+  "slow": 75,
+  "timeout": 2000,
+  "ui": "bdd",
+  "watch-files": ["lib/**/*.js", "test/**/*.js"],
+  "watch-ignore": ["lib/vendor"],
+  "recursive": true,
+  "exit": true,
+  "ignore":["node_modules"],
+  "require":["@babel/core",
+             "@babel/register",
+             "jsdom",
+             "./src/test/test-dom.js",
+             "./src/test/ignore-styles.js"
+           ]
+}
