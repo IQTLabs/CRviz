@@ -128,7 +128,7 @@
     "gh-pages": "3.0.0",
     "jsdom-global": "3.0.2",
     "mocha": "7.2.0",
-    "nyc": "15.0.1",
+    "nyc": "15.1.0",
     "pre-commit": "1.2.2",
     "sinon": "9.0.2",
     "standard-version": "8.0.0",
