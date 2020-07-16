@@ -46,7 +46,8 @@
     "rxjs": "6.6.0",
     "rxjs-compat": "6.6.0",
     "tar-pack": "3.4.1",
-    "uuid": "8.2.0"
+    "uuid": "8.2.0",
+    "snyk": "^1.362.1"
   },
   "scripts": {
     "start": "REACT_APP_VERSION=$npm_package_version PORT=5000 react-scripts start",
@@ -57,7 +58,9 @@
     "deploy": "gh-pages -d build",
     "deploy-experimental": "gh-pages -r https://github.com/rashley-iqt/CRviz -d build",
     "lint": "eslint --ext=js --ext=jsx .",
-    "release": "standard-version"
+    "release": "standard-version",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "pre-commit": {
     "run": [
@@ -133,5 +136,6 @@
     "sinon": "9.0.2",
     "standard-version": "8.0.2",
     "typescript": "3.9.6"
-  }
+  },
+  "snyk": true
 }

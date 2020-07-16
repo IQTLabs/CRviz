@@ -1,0 +1,18 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.16.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - react-scripts > @babel/core > lodash:
+        patched: '2020-07-16T21:33:09.526Z'
+    - react-scripts > eslint > lodash:
+        patched: '2020-07-16T21:33:09.526Z'
+    - react-scripts > eslint-plugin-flowtype > lodash:
+        patched: '2020-07-16T21:33:09.526Z'
+    - react-scripts > babel-preset-react-app > @babel/core > lodash:
+        patched: '2020-07-16T21:33:09.526Z'
+    - react-scripts > eslint > inquirer > lodash:
+        patched: '2020-07-16T21:33:09.526Z'
+    - react-scripts > eslint > table > lodash:
+        patched: '2020-07-16T21:33:09.526Z'
