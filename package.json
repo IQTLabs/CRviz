@@ -1,6 +1,6 @@
 {
   "name": "CRviz",
-  "version": "0.3.22",
+  "version": "0.3.22-dev",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome": "1.1.8",
@@ -135,7 +135,6 @@
     "pre-commit": "1.2.2",
     "sinon": "9.0.2",
     "standard-version": "8.0.2",
-    "typescript": "3.9.6"
-  },
-  "snyk": true
+    "typescript": "3.9.7"
+  }
 }
