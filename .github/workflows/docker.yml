@@ -25,18 +25,18 @@ jobs:
     - name: Build Docker
       run: |
         docker build \
-          -t cyberreboot/crviz:${{ steps.change_version.outputs.VERSION }} .  && \
+          -t iqtlabs/crviz:${{ steps.change_version.outputs.VERSION }} .  && \
         docker build \
           -f Dockerfile.gh \
-          -t cyberreboot/crviz-gh:${{ steps.change_version.outputs.VERSION }} .
-      if: github.repository == 'cyberreboot/crviz' && github.event_name == 'pull_request'
+          -t iqtlabs/crviz-gh:${{ steps.change_version.outputs.VERSION }} .
+      if: github.repository == 'iqtlabs/crviz' && github.event_name == 'pull_request'
 
     - name: Docker Login
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_TOKEN }}
       run: |
         echo "${DOCKER_PASSWORD}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-      if: github.repository == 'cyberreboot/crviz' && github.event_name == 'push'
+      if: github.repository == 'iqtlabs/crviz' && github.event_name == 'push'
 
     - name: Push Docker
       env:
@@ -45,5 +45,5 @@ jobs:
         docker buildx build \
           --platform linux/amd64,linux/arm/v7,linux/arm64 \
           --push \
-          -t cyberreboot/crviz:${{ steps.change_version.outputs.VERSION }} .
-      if: github.repository == 'cyberreboot/crviz' && github.event_name == 'push'
+          -t iqtlabs/crviz:${{ steps.change_version.outputs.VERSION }} .
+      if: github.repository == 'iqtlabs/crviz' && github.event_name == 'push'

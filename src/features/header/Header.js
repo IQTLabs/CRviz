@@ -45,7 +45,7 @@ class Header extends React.Component {
 			        Copyright © 2017-2019 IQT Labs LLC.
 			      </div>
 			      <div  className={ style.socialContainer }>
-			      	<a href="https://github.com/CyberReboot/" alt="github.com/CyberReboot" target="_blank" rel="noopener noreferrer">
+			      	<a href="https://github.com/IQTLabs/" alt="github.com/IQTLabs" target="_blank" rel="noopener noreferrer">
 			      		<FontAwesomeIcon color="#7d7d7d" icon={faGithub} />
 			      	</a>
 			      	<a href="https://twitter.com/_cyberreboot" alt="twitter.com/_cyberreboot" target="_blank" rel="noopener noreferrer">
