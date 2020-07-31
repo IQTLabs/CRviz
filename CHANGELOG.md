@@ -1,6 +1,31 @@
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+### [0.3.22](https://github.com/CyberReboot/CRviz/compare/v0.3.21...v0.3.22) (2020-07-16)
+
+### Changes
+
+#### Dependency Updates
+* update dependency eslint v6.8.0 ([1d93539](https://github.com/CyberReboot/CRviz/commit/1d935392be298565cddbb836e94e5fbae8cb2e9a))
+* update dependency mocha to v8.0.1 ([da601a2](https://github.com/CyberReboot/CRviz/commit/da601a21f0351c8bb6b0ac84b7741436af150d52))
+* update dependency Font Awesome to 5.14.0 ([a2514d7](https://github.com/CyberReboot/CRviz/commit/a2514d747e8d633fa00f754c5fd0f8c3f994328c))
+* update dependency babel monorepo to v7.10.5 ([319b723](https://github.com/CyberReboot/CRviz/commit/319b723d6f6a19bd54984c8834205c8173877176)
+* update dependency rxjs to v6.6.0 ([41f072e](https://github.com/CyberReboot/CRviz/commit/41f072e7591b18d25e243552e5684cf260758e7a))
+* update dependency rxjs-compat to v6.6.0 ([ce16485](https://github.com/CyberReboot/CRviz/commit/ce164852687a45d259a1ad8391f067aa0439002e))
+ update dependency typescript to v3.9.6 ([f6a805](https://github.com/CyberReboot/CRviz/commit/f6a8058c8bb35d12a5d5db17fd03d765a6aa3636))
+* update dependency eslint-plugin-flowtype to v5.2.0 ([e626e9c](https://github.com/CyberReboot/CRviz/commit/e626e9c650f91ee721054a045cf9731a9eaf9871))
+* update dependency eslint-plugin-react to v7.20.3 ([0737f50](https://github.com/CyberReboot/CRviz/commit/0737f504a52a725c6165a1af7d4d08d2230c97d6))
+* update dependency eslint-plugin-import to v2.22.0 ([e83a8be](https://github.com/CyberReboot/CRviz/commit/e83a8be1be435e6f55cf5af798dc753083534b3b))
+* update dependency uuid to v8.2.0 ([efd5ee9](https://github.com/CyberReboot/CRviz/commit/efd5ee99b61fa2c48939544b8ef828a51b081b62))
+* update dependency gh-pages to v3.1.0 ([1ddba12](https://github.com/CyberReboot/CRviz/commit/1ddba12d083f0d7b1159c24f267a3ac5617f8766))
+* update dependency react-spinners to v0.9.0 ([17aabf8](https://github.com/CyberReboot/CRviz/commit/17aabf84d53855ddcb36aa8cd1d38dca67e24133))
+* update dependency eslint-plugin-jsx-a11y to v6.3.1 ([69831ae](https://github.com/CyberReboot/CRviz/commit/69831ae574a71be68cbbdf40f8630b77e71caa5c))
+* update dependency nyc to v15.1.0 ([51a5208](https://github.com/CyberReboot/CRviz/commit/51a520889ac78fd3cb2ad6bce4ea8de1a406c16c))
+* update dependency @babel/core to v7.10.2 ([0708273](https://github.com/CyberReboot/CRviz/commit/070827365971d6a8357909145164bb77b4c577b5))
+* update dependency d3 to v5.16.0 ([b1662ef](https://github.com/CyberReboot/CRviz/commit/b1662ef1ac14fc8e568e55a997d0d9d6e01846a4))
+* update dependency sinon to v9.0.2 ([923d2a5](https://github.com/CyberReboot/CRviz/commit/923d2a516950d8a172014fafb796a0245fd2d95d))
+
+
 ### [0.3.21](https://github.com/CyberReboot/CRviz/compare/v0.3.20...v0.3.21) (2020-03-25)
 
 ### Changes

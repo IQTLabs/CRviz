@@ -27,4 +27,4 @@ jobs:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-      if: github.repository == 'iqtlabs/crviz'
+      if: github.repository == 'cyberreboot/crviz'
