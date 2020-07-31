@@ -95,7 +95,7 @@ const CSVconvert = (data) => {
 
 //if we have a naked array or an object not containing a dataset instead of an object containing a dataset
 //transfer the array into an object's dataset to maintain a consistent
-//schema with what is used elsewhere see https://github.com/CyberReboot/CRviz/issues/33
+//schema with what is used elsewhere see https://github.com/IQTLabs/CRviz/issues/33
 const formatPayload = async (data) => {
   const owner = data.owner;
   const initialName = data.name;

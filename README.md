@@ -1,15 +1,13 @@
 # CRviz
 
-[![Build Status](https://travis-ci.org/CyberReboot/CRviz.svg?branch=master)](https://travis-ci.org/CyberReboot/CRviz)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6fe34768060e4f75a9ad8d20c0c31fec)](https://www.codacy.com/app/CyberReboot/CRviz?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CyberReboot/CRviz&amp;utm_campaign=Badge_Grade)
-[![codecov](https://codecov.io/gh/CyberReboot/CRviz/branch/master/graph/badge.svg?token=ORXmFYC3MM)](https://codecov.io/gh/CyberReboot/CRviz)
-[![Docker Hub Downloads](https://img.shields.io/docker/pulls/cyberreboot/crviz.svg)](https://hub.docker.com/u/cyberreboot)
+[![codecov](https://codecov.io/gh/IQTLabs/CRviz/branch/master/graph/badge.svg?token=ORXmFYC3MM)](https://codecov.io/gh/IQTLabs/CRviz)
+[![Docker Hub Downloads](https://img.shields.io/docker/pulls/iqtlabs/crviz.svg)](https://hub.docker.com/u/iqtlabs)
 
 CRviz is our first attempt at visualizing networks differently. It's still an early prototype, and it's still under development. That said, we want to share the tool in this formative stage both because we think that our approach has the potential to improve the scalability and legibility of network data, and also because we're actively looking for feedback. So please send us your suggestions and comments!
 
 For more details, please see this [blog post](https://blog.cyberreboot.org/crviz-scalable-design-for-network-visualization-14689133fd91).
 
-For a live demo, please check out https://cyberreboot.github.io/CRviz/
+For a live demo, please check out https://iqtlabs.github.io/CRviz/
 
 ## Build and run
 
@@ -32,7 +30,7 @@ docker stop crviz
 
 ### Without Docker
 1. Install or update npm (`sudo apt install npm`, `npm install -g npm`)
-2. Clone CRViz repo `git clone https://github.com/CyberReboot/CRviz.git`
+2. Clone CRViz repo `git clone https://github.com/IQTLabs/CRviz.git`
 3. `cd CRViz`
 4. Run `npm install && npm run build`
 

@@ -8,7 +8,7 @@ RUN git config --global user.name "rashley-iqt"
 COPY . /app
 WORKDIR /app
 RUN sed -i '2i\
-  "homepage": "https:\/\/cyberreboot.github.io\/CRviz", \
+  "homepage": "https:\/\/iqtlabs.github.io\/CRviz", \
 ' package.json
 
 RUN npm i npm@latest -g
