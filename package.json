@@ -43,7 +43,7 @@
     "redux-mock-store": "1.5.4",
     "redux-observable": "1.2.0",
     "request": "2.88.2",
-    "rxjs": "6.6.0",
+    "rxjs": "6.6.2",
     "rxjs-compat": "6.6.0",
     "tar-pack": "3.4.1",
     "uuid": "8.3.0"
