@@ -132,6 +132,6 @@
     "pre-commit": "1.2.2",
     "sinon": "9.0.3",
     "standard-version": "9.0.0",
-    "typescript": "3.9.7"
+    "typescript": "4.0.2"
   }
 }
