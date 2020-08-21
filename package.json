@@ -24,7 +24,7 @@
     "json-refs": "3.0.15",
     "lodash.clonedeep": "4.5.0",
     "lodash.debounce": "4.0.8",
-    "lunr": "2.3.8",
+    "lunr": "2.3.9",
     "mini.css": "3.0.1",
     "normalize.css": "8.0.1",
     "ramda": "0.27.1",
