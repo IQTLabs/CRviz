@@ -46,7 +46,7 @@
     "rxjs": "6.6.3",
     "rxjs-compat": "6.6.3",
     "tar-pack": "3.4.1",
-    "uuid": "8.3.0"
+    "uuid": "8.3.1"
   },
   "scripts": {
     "start": "REACT_APP_VERSION=$npm_package_version PORT=5000 react-scripts start",
