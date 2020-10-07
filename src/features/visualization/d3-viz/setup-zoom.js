@@ -1,5 +1,4 @@
 import { zoom, zoomTransform } from "d3-zoom";
-import { event as d3Event } from "d3-selection";
 import { zoomIdentity } from "d3-zoom";
 
 const setupZoom = ({
@@ -21,8 +20,7 @@ const setupZoom = ({
 
   const zoomBehavior = zoom();
 
-  zoomBehavior.on("zoom", () => {
-    const event = d3Event;
+  zoomBehavior.on("zoom", (event, d) => {
     state.transform = event.transform;
     zoomToTransform(event.transform)
   });
