@@ -1,6 +1,24 @@
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+### [0.3.23](https://github.com/IQTLabs/CRviz/compare/v0.3.22...v0.3.23) (2020-07-16)
+
+### Changes
+* Repo moved from CyberReboot to IQTLabs ([0b03f0a](https://github.com/IQTLabs/CRviz/commit/0b03f0af7e30908094660e7474ecbc73a2bd9a2d))
+
+#### Dependency Updates
+* update dependency @babel/core to v7.11.1 ([d73aa58](https://github.com/IQTLabs/CRviz/commit/d73aa58b36f861c9dcedd73929597bff1cbdb486))
+* update dependency mocha to v8.1.1 ([632c500](https://github.com/IQTLabs/CRviz/commit/632c50016614c95ddbb88e41966b07fec4026ce6))
+* update dependency rxjs to v6.6.2 ([5591784](https://github.com/IQTLabs/CRviz/commit/5591784e608667446f92fb242cf4d549a668e5f5))
+* update dependency rxjs-compat to v6.6.2 ([527215f](https://github.com/IQTLabs/CRviz/commit/527215f975645a7ad8cdaeaff058cf615e05c118))
+* update dependency ramda to v0.27.1 ([2930d9f](https://github.com/IQTLabs/CRviz/commit/2930d9f83ac93777299f27dff83f4e865e34037d))
+* update dependency eslint-plugin-react to v7.20.5 ([171a325](https://github.com/IQTLabs/CRviz/commit/171a32516e5238113469fbadc1ed7c75ff0364f4))
+* update dependency uuid to v8.3.0 ([0b18c93](https://github.com/IQTLabs/CRviz/commit/0b18c93a7e1b6bee1f57b2060d36762e5e6904a1))
+* update dependency react-redux to v7.2.1 ([27edaa8](https://github.com/IQTLabs/CRviz/commit/27edaa8f72e9a2a00e9003d0f04e59c14bbb2b92))
+* update dependency lodash to v4.17.19 ([99d1dde](https://github.com/IQTLabs/CRviz/commit/99d1ddec0b279c94a26c2424b218217497e29eb1))
+* update dependency typescript to v3.9.7 ([2693111](https://github.com/IQTLabs/CRviz/commit/2693111c1de4f580ca0e2e731bb92250a1ea3dc3))
+
+
 ### [0.3.22](https://github.com/CyberReboot/CRviz/compare/v0.3.21...v0.3.22) (2020-07-16)
 
 ### Changes
