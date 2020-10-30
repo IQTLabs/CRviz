@@ -1,7 +1,7 @@
 {
   "extends": "react-app",
   "rules": {
-      "no-unused-vars": [1, {"args": "none", "ignoreVarsPattern": "_"}],
+      "no-unused-vars": [1, {"args": "none", "varsIgnorePattern": "_"}],
       "jsx-a11y/href-no-hash": [0]
   }
 }
