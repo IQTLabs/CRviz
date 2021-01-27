@@ -1,6 +1,14 @@
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+### [0.3.26](https://github.com/IQTLabs/CRviz/compare/v0.3.25...v0.3.26) (2021-01-27)
+
+#### Dependency Updates
+* update dependency sinon to v9.2.4 ([14f0817](https://github.com/IQTLabs/CRviz/commit/14f081758a5e73b0cb750fb03b6812e20e96d546))
+* update dependency d3 to v6.5.0 ([b96a871](https://github.com/IQTLabs/CRviz/commit/b96a8719bc1f0886851b2954571bf36a5fa53c24))
+* update dependency enzyme-adapter-react-16 to v1.15.6 ([b31e66f](https://github.com/IQTLabs/CRviz/commit/b31e66f71937faddb5cbc9d57c1cd791804b9fac))
+* update dependency eslint to v7.18.0 ([60d8c28](https://github.com/IQTLabs/CRviz/commit/60d8c2845443c25410313ba57617f27bebd76749))
+
 ### [0.3.25](https://github.com/IQTLabs/CRviz/compare/v0.3.24...v0.3.25) (2021-01-14)
 
 #### Dependency Updates
