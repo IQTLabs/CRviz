@@ -9,6 +9,7 @@
     "@fortawesome/free-solid-svg-icons": "5.15.2",
     "@fortawesome/react-fontawesome": "0.1.14",
     "boom": "7.3.0",
+    "chokidar": "^3.4.3",
     "classnames": "2.2.6",
     "cryptiles": "4.1.3",
     "css-element-queries": "1.2.3",
