@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci --no-optional
@@ -22,7 +22,7 @@ jobs:
       env:
         CI: true
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1.0.6
+      uses: codecov/codecov-action@v1.2.1
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:

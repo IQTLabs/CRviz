@@ -1,6 +1,70 @@
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+### [0.3.26](https://github.com/IQTLabs/CRviz/compare/v0.3.25...v0.3.26) (2021-01-27)
+
+#### Dependency Updates
+* update dependency sinon to v9.2.4 ([14f0817](https://github.com/IQTLabs/CRviz/commit/14f081758a5e73b0cb750fb03b6812e20e96d546))
+* update dependency d3 to v6.5.0 ([b96a871](https://github.com/IQTLabs/CRviz/commit/b96a8719bc1f0886851b2954571bf36a5fa53c24))
+* update dependency enzyme-adapter-react-16 to v1.15.6 ([b31e66f](https://github.com/IQTLabs/CRviz/commit/b31e66f71937faddb5cbc9d57c1cd791804b9fac))
+* update dependency eslint to v7.18.0 ([60d8c28](https://github.com/IQTLabs/CRviz/commit/60d8c2845443c25410313ba57617f27bebd76749))
+
+### [0.3.25](https://github.com/IQTLabs/CRviz/compare/v0.3.24...v0.3.25) (2021-01-14)
+
+#### Dependency Updates
+* update dependency hawk to v9.0.0 ([13526a1](https://github.com/IQTLabs/CRviz/commit/13526a113989e31d7c2a1f43ad9c4f22790f7b00))
+* update dependency ini from 1.3.5 to 1.3.7 ([a4139e7](https://github.com/IQTLabs/CRviz/commit/a4139e783fb29f7494a2e4ee72ff209deeee7687))
+* update dependency typescript to v4.1.3 ([4dd6790](https://github.com/IQTLabs/CRviz/commit/4dd6790623220a40d16350405627098f10662d66))
+* update dependency @actions/setup-node action to v2 ([acbae6b](https://github.com/IQTLabs/CRviz/commit/acbae6b1b8b7d18b97320f47834777292a27a8a2))
+* update dependency node-notifier from 8.0.0 to 8.0.1 ([dbb343d](https://github.com/IQTLabs/CRviz/commit/dbb343da9e28236c2a4db617a20b9fc1b508fe34))
+* update dependency @fortawesome/react-fontawesome to v0.1.14 ([0badb4d](https://github.com/IQTLabs/CRviz/commit/0badb4d10b7b882b8c0ab2449f8dab6d59a0d742))
+* update dependency eslint-plugin-react to v7.22.0 ([7155ca8](https://github.com/IQTLabs/CRviz/commit/7155ca8cf21b26183e506fa876154113792ab9ac))
+* update dependency react-spinners to v0.10.4 ([b0f1896](https://github.com/IQTLabs/CRviz/commit/b0f1896655a1445a1423df944af9bad74ead640c))
+* update dependency eslint to v7.17.0 ([1a96dd6](https://github.com/IQTLabs/CRviz/commit/1a96dd6cf812ff769836315e41a905f07452178c))
+* update dependency codecov/codecov-action action to v1.2.1 ([dcb2b59](https://github.com/IQTLabs/CRviz/commit/dcb2b597b30336021924531a8964fa03a760bba2))
+* update dependency Font Awesome to v5.15.2 ([3af4a3f](https://github.com/IQTLabs/CRviz/commit/3af4a3f349728699263863df96986ec4dde84488))
+* update dependency sinon to v9.2.3 ([6556c89](https://github.com/IQTLabs/CRviz/commit/6556c897b1970534067ed9d7a6b5a9734aa0c209))
+
+
+### [0.3.24](https://github.com/IQTLabs/CRviz/compare/v0.3.23...v0.3.24) (2020-12-10)
+
+### Changes
+* corrected linting options for new version of eslint ([d6cb6e8](https://github.com/IQTLabs/CRviz/commit/d6cb6e851e1095ffd55dea4af50345e0839f446b))
+* switch to using docker buildx action ([e2f49e1](https://github.com/IQTLabs/CRviz/commit/e2f49e1028f8f3a19643b5e36d9d4559d4087a1f))
+
+#### Dependency Updates
+* update dependency babel monorepo to v7.12.10 ([6f50b7a](https://github.com/IQTLabs/CRviz/commit/6f50b7a6bb3fbd9f33ab89ce861998509aced83d))
+* update dependency d3 to v6.3.1 ([8d24a90](https://github.com/IQTLabs/CRviz/commit/8d24a90b8f29682de6cb3f3e655946c6983082db))
+* update dependency uuid to v8.3.2 ([203119f](https://github.com/IQTLabs/CRviz/commit/203119f253fbc88d9fecf41b4915155810d57cb8))
+* update dependency eslint to v7.15.0 ([dec98de](https://github.com/IQTLabs/CRviz/commit/dec98de6c88313903f7381649353909a470ae3f4))
+* update dependency react-scripts to v4.0.1 ([576f04c](https://github.com/IQTLabs/CRviz/commit/576f04c592bc3b9f2576b89b8f4514fb0cec53b1))
+* update dependency react-modal to v3.12.1 ([f7daeec](https://github.com/IQTLabs/CRviz/commit/f7daeec38cf9cac11cc541c657c77537738ffbf9))
+* update dependency @fortawesome/react-fontawesome to v0.1.13 ([2a4e0f3](https://github.com/IQTLabs/CRviz/commit/2a4e0f3db3863e926635ffa356bfa0fe282441ae))
+* update dependency typescript to v4.1.2 ([e599bda](https://github.com/IQTLabs/CRviz/commit/e599bda749919f844e2ac5b1e4b5d58c04b67ad9))
+* update dependency react-compound-slider to v3.3.1 ([0f484d4](https://github.com/IQTLabs/CRviz/commit/0f484d4aee4de4efe891bdaf744d2adcbb1916f4))
+* update dependency codecov/codecov-action action to v1.0.15 ([b4a90c1](https://github.com/IQTLabs/CRviz/commit/b4a90c1eaba343cb409427b34d3566861ba46d06))
+* update dependency @babel/preset-react to v7.12.5 ([3df6086](https://github.com/IQTLabs/CRviz/commit/3df608669bd9c1cf1aa75e5a05a0c9934aadad79))
+* pin dependency readdirp to 3.5.0 ([1ed5420](https://github.com/IQTLabs/CRviz/commit/1ed5420923f792d965fc88cc1b3f8a547adbd957))
+* update dependency mocha to v8.2.1 ([c65f759](https://github.com/IQTLabs/CRviz/commit/c65f759ddb23682e3b8dc6169903dc05d120f423))
+* update dependency react-redux to v7.2.2 ([e7ed0bb](https://github.com/IQTLabs/CRviz/commit/e7ed0bb020ec06739abbcbb5e2f57e144c5294a8))
+* update dependency eslint-config-react-app to v6.0.0 ([66c44ba](https://github.com/IQTLabs/CRviz/commit/66c44baf53925fb28e660a9e27939a9c616393bd))
+* update dependency eslint-plugin-jsx-a11y to v6.4.1 ([84e29e9](https://github.com/IQTLabs/CRviz/commit/84e29e9e13afad3187922319aecc4a8b62a94978))
+* update dependency hawk to v8.0.1 ([7ad5614](https://github.com/IQTLabs/CRviz/commit/7ad5614f1c334435e14a878c3920d3b6c1601fe3))
+* update dependency react monorepo to v17.0.1 ([9e0ed4a](https://github.com/IQTLabs/CRviz/commit/9e0ed4a37e7a41b26d77e90dd1c699c22e757c76))
+* update dependency Font Awesome to v5.15.1 ([267e616](https://github.com/IQTLabs/CRviz/commit/267e6167bd83770a69d152eb491be31a493777a4))
+* update dependency eslint-plugin-import to v2.22.1 ([adcf5c9](https://github.com/IQTLabs/CRviz/commit/adcf5c9f8f2c41f0ad9b7bee35bf4563ad5e458b))
+* update dependency eslint-plugin-react to v7.21.5 ([f810db7](https://github.com/IQTLabs/CRviz/commit/f810db799084f1da9cb526aa96bfeb8f0c74a3fe))
+* update dependency @babel/core to v7.12.3 ([d54a3e3](https://github.com/IQTLabs/CRviz/commit/d54a3e36196528d2c2903b56c59d9dec6213a2d1))
+* update dependency http-signature to v1.3.5 ([d695ab3](https://github.com/IQTLabs/CRviz/commit/d695ab350b7200f3399a8cf4eadc502a5c608856))
+* update dependency rxjs-compat to v6.6.3 ([7245c3e](https://github.com/IQTLabs/CRviz/commit/7245c3eee8021a5af3376eedc9fe55b924981eb8))
+* update dependency rxjs to v6.6.3 ([e65d8a5](https://github.com/IQTLabs/CRviz/commit/e65d8a572e15790b04495b777de56f2cd09e2a93))
+* update dependency d3-scale-chromatic to v2.0.0 ([a82a8df](https://github.com/IQTLabs/CRviz/commit/a82a8df2eeb04f773f9b1cace7bd2f5a60b7bee3))
+* update dependency lunr to v2.3.9 ([ca1d7f2](https://github.com/IQTLabs/CRviz/commit/ca1d7f257759a0e2f10503973ba1aced20902054))
+* update dependency debug to v4.3.1 ([472412d](https://github.com/IQTLabs/CRviz/commit/472412df597e1f11f07a958871145b5fcc9d2188))
+* update dependency sinon to v9.0.3 ([7ccef54](https://github.com/IQTLabs/CRviz/commit/7ccef54ed6677e5877cef10edace4718d4718947))
+* update dependency enzyme-adapter-react-16 to v1.15.3 ([7d86bc3](https://github.com/IQTLabs/CRviz/commit/7d86bc3f03a9cfa37eef8a9e427e2ef74f25d325))
+
+
 ### [0.3.23](https://github.com/IQTLabs/CRviz/compare/v0.3.22...v0.3.23) (2020-07-16)
 
 ### Changes
