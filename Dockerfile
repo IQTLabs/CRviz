@@ -13,7 +13,7 @@ WORKDIR /app
 
 RUN npm i npm@latest -g
 RUN npm cache clean --force
-RUN npm ci --no-optional
+RUN npm install
 RUN npm run build
 RUN npm i -g serve
 
