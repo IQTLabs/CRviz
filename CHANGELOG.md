@@ -1,6 +1,24 @@
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+### [0.3.27](https://github.com/IQTLabs/CRviz/compare/v0.3.26...v0.3.27) (2021-02-25)
+
+### Changes
+* updated copyright info ([7e3de1e](https://github.com/IQTLabs/CRviz/commit/7e3de1e093ded2b70155e6a68db6531bff715d3f))
+
+#### Dependency Updates
+* update dependency rxjs-compat to v6.6.6 ([106d489](https://github.com/IQTLabs/CRviz/commit/106d489f9e57b1e330e2c4f19fb106ee766725b7))
+* update dependency rxjs to v6.6.6 ([9d831e7](https://github.com/IQTLabs/CRviz/commit/9d831e79182ebcb688960f311991541026021865))
+* update dependency eslint-plugin-flowtype to v5.3.1 ([ad22eaa](https://github.com/IQTLabs/CRviz/commit/ad22eaa642c7d4d8cd62c24a16ba0b5f53bfde46))
+* update dependency typescript to v4.2.2 ([0f7fdba](https://github.com/IQTLabs/CRviz/commit/0f7fdba5ffa5413b6a8f514fcb6698524b4a4abd))
+* update dependency react-scripts to v4.0.3 ([aba62cd](https://github.com/IQTLabs/CRviz/commit/aba62cdaad9a5e67abcb786c0525e7f37f36d9fa))
+* update dependency react-spinners to v0.10.6 ([c04f3dc](https://github.com/IQTLabs/CRviz/commit/c04f3dc51c665b07d4b5846151b92f64ed3ca75f))
+* update dependency eslint to v7.20.0 ([e7570d7](https://github.com/IQTLabs/CRviz/commit/e7570d752894183beb03773eb49f4f753d1e00c6))
+* update dependency mocha to v8.3.0 ([6317e24](https://github.com/IQTLabs/CRviz/commit/6317e24a59de1ab9a6ce935a077fe9b845e88939))
+* update dependency chai to v4.3.0 ([49fc3f2](https://github.com/IQTLabs/CRviz/commit/49fc3f2ccd0814e271f2f4bd665fc5269922fd90))
+* update dependency babel monorepo to v7.12.13 ([6ff33fd](https://github.com/IQTLabs/CRviz/commit/6ff33fd4b74c3bdfe232f22d166024680150c8cd))
+
+
 ### [0.3.26](https://github.com/IQTLabs/CRviz/compare/v0.3.25...v0.3.26) (2021-01-27)
 
 #### Dependency Updates
