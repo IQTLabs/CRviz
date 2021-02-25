@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/CRviz/static/css/main.d5c15d9a.chunk.css",
-    "main.js": "/CRviz/static/js/main.1b43333d.chunk.js",
-    "main.js.map": "/CRviz/static/js/main.1b43333d.chunk.js.map",
-    "runtime-main.js": "/CRviz/static/js/runtime-main.66424a79.js",
-    "runtime-main.js.map": "/CRviz/static/js/runtime-main.66424a79.js.map",
+    "main.js": "/CRviz/static/js/main.dae1be26.chunk.js",
+    "main.js.map": "/CRviz/static/js/main.dae1be26.chunk.js.map",
+    "runtime-main.js": "/CRviz/static/js/runtime-main.3244315d.js",
+    "runtime-main.js.map": "/CRviz/static/js/runtime-main.3244315d.js.map",
     "static/css/2.f219a89e.chunk.css": "/CRviz/static/css/2.f219a89e.chunk.css",
-    "static/js/2.b5eb5588.chunk.js": "/CRviz/static/js/2.b5eb5588.chunk.js",
-    "static/js/2.b5eb5588.chunk.js.map": "/CRviz/static/js/2.b5eb5588.chunk.js.map",
+    "static/js/2.1d93871e.chunk.js": "/CRviz/static/js/2.1d93871e.chunk.js",
+    "static/js/2.1d93871e.chunk.js.map": "/CRviz/static/js/2.1d93871e.chunk.js.map",
     "index.html": "/CRviz/index.html",
     "static/css/2.f219a89e.chunk.css.map": "/CRviz/static/css/2.f219a89e.chunk.css.map",
     "static/css/main.d5c15d9a.chunk.css.map": "/CRviz/static/css/main.d5c15d9a.chunk.css.map",
-    "static/js/2.b5eb5588.chunk.js.LICENSE.txt": "/CRviz/static/js/2.b5eb5588.chunk.js.LICENSE.txt"
+    "static/js/2.1d93871e.chunk.js.LICENSE.txt": "/CRviz/static/js/2.1d93871e.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.66424a79.js",
+    "static/js/runtime-main.3244315d.js",
     "static/css/2.f219a89e.chunk.css",
-    "static/js/2.b5eb5588.chunk.js",
+    "static/js/2.1d93871e.chunk.js",
     "static/css/main.d5c15d9a.chunk.css",
-    "static/js/main.1b43333d.chunk.js"
+    "static/js/main.dae1be26.chunk.js"
   ]
 }
