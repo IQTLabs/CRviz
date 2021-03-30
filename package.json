@@ -112,10 +112,10 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "7.13.13",
+    "@babel/core": "7.13.14",
     "@babel/plugin-proposal-class-properties": "7.13.0",
     "@babel/preset-react": "7.13.13",
-    "@babel/register": "7.13.8",
+    "@babel/register": "7.13.14",
     "@fortawesome/fontawesome-free": "5.15.3",
     "chai": "4.3.4",
     "enzyme": "3.11.0",
