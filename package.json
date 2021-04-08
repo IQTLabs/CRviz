@@ -133,6 +133,6 @@
     "pre-commit": "1.2.2",
     "readdirp": "3.6.0",
     "sinon": "10.0.0",
-    "typescript": "4.2.3"
+    "typescript": "4.2.4"
   }
 }
